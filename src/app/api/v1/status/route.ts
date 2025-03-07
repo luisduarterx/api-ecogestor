@@ -2,7 +2,7 @@ import {
   getMaxConnections,
   getOppenedConnections,
   getServerVersion,
-} from "@/libs/prisma";
+} from "infra/prisma";
 
 export async function GET(request: Request) {
   const maxCnn: any = await getMaxConnections();
