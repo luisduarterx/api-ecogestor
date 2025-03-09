@@ -1,5 +1,6 @@
 import { EmailSchema } from "@/libs/zod/userSchema";
 import { checkPassword } from "@/models/password";
+import { generateToken, validateToken } from "@/models/session";
 import { findUserByEmail } from "@/models/users";
 
 export async function POST(request: Request) {
@@ -39,13 +40,15 @@ export async function POST(request: Request) {
       );
     }
 
-    return new Response(
-      JSON.stringify({ authentication: true, message: "Entrou" }),
-    );
     //gerar token com userID
+    const token = await generateToken(user?.id as number);
 
     //criar sessao
+    localStorage.setItem(token, token);
 
     //redirecionar
+    return new Response(
+      JSON.stringify({ authentication: true, message: "Entrou", token: token }),
+    );
   } catch (error) {}
 }

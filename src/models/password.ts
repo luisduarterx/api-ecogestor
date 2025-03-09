@@ -10,7 +10,3 @@ export async function checkPassword(pass: string, hash: string) {
   const result = await bcrypt.compare(pass, hash);
   return result;
 }
-
-export async function generateToken(id: number) {
-  // criaçao do token
-}
