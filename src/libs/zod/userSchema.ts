@@ -8,3 +8,5 @@ export const UserSchema = z.object({
   telefone: z.string().optional(),
   rankID: z.number().optional(),
 });
+
+export const EmailSchema = z.string().email();
