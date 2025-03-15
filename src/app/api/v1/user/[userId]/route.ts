@@ -1,14 +1,14 @@
 import { findUserById } from "@/models/users";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
-  request: Request,
-  { params }: { params: { userId: number } },
+  request: NextRequest,
+  { params }: { params: Promise<{ userId: string }> },
 ) {
   try {
-    const id = Number(params.userId);
+    const id = Number((await params).userId);
     if (!id || typeof Number(id) !== "number") {
-      return new Response(
+      return new NextResponse(
         JSON.stringify({ error: true, message: "usuário invalido" }),
         { status: 404 },
       );
@@ -17,15 +17,15 @@ export async function GET(
     const user = await findUserById(id);
 
     if (!user || "error" in user) {
-      return new Response(
+      return new NextResponse(
         JSON.stringify({ error: true, message: user.message }),
         { status: 404 },
       );
     }
 
-    return new Response(JSON.stringify(user), { status: 200 });
+    return new NextResponse(JSON.stringify(user), { status: 200 });
   } catch (error) {
-    return new Response(
+    return new NextResponse(
       JSON.stringify({ error: true, message: "Erro interno do servidor" }),
       { status: 500 },
     );

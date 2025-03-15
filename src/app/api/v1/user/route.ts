@@ -1,10 +1,6 @@
 import { UserSchema } from "@/libs/zod/userSchema";
 import { createUser, CreateUserResponse } from "@/models/users";
 
-export async function GET(request: Request) {
-  return Response.json({});
-}
-
 export async function POST(request: Request) {
   // Criar novo usuario
   try {

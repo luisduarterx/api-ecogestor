@@ -1,9 +1,20 @@
 import { Prisma, User } from "@prisma/client";
 import { prisma } from "infra/prisma";
 import { hashPassword } from "./password";
+import { error } from "console";
 export type CreateUserResponse = User | { error: boolean; message: string };
-
-export async function createUser(data: any) {
+type ErrorResponse = {
+  error: boolean;
+  message: string;
+};
+type CreateUserData = {
+  nome: string;
+  email: string;
+  senha: string;
+  telefone?: string;
+  rankID?: number;
+};
+export async function createUser(data: CreateUserData) {
   try {
     data.senha = await hashPassword(data.senha);
 
@@ -45,8 +56,40 @@ export async function findUserByEmail(email: string) {
       },
     });
 
-    if (user) {
-      return user;
+    if (!user) {
+      return { error: true, message: "usuario nao encontrado" };
     }
-  } catch (error) {}
+    return user;
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      return { error: true, message: error.message };
+    }
+    return {
+      error: true,
+      message: "Erro desconhecido ao consultar banco de dados.",
+    };
+  }
+}
+export async function findUserById(id: number) {
+  try {
+    const user: User | null = await prisma.user.findFirst({ where: { id } });
+    if (!user) {
+      return { error: true, message: "usuario nao encontrado" };
+    }
+    return {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      telefone: user.telefone,
+      rankID: user.rankID,
+    };
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      return { error: true, message: error.message };
+    }
+    return {
+      error: true,
+      message: "Erro desconhecido ao consultar banco de dados.",
+    };
+  }
 }

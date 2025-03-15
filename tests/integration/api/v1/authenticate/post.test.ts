@@ -23,13 +23,13 @@ test("test POST to /api/v1/authenticate incorrect data", async () => {
       senha: "1233",
     }),
   });
-  expect(response.status).toBe(403);
+  expect(response.status).toBe(400);
 });
 test("test POST to /api/v1/authenticate  valid data", async () => {
   const response = await fetch("http://localhost:3000/api/v1/authenticate", {
     method: "POST",
     body: JSON.stringify({
-      email: "octaquare@gmail.com",
+      email: "kaylanysantos1406@gmail.com",
       senha: "1233",
     }),
   });
