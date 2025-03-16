@@ -3,10 +3,10 @@ import { NextResponse } from "next/server";
 
 export async function GET(
   request: Request,
-  context: { params: { userId: string } },
+  { params }: { params: { userId: number } },
 ) {
   try {
-    const id = Number(context.params.userId);
+    const id = Number(params.userId);
     if (!id || typeof Number(id) !== "number") {
       return new Response(
         JSON.stringify({ error: true, message: "usuário invalido" }),
