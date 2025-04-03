@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { validateToken } from "./models/session";
+import { findUserById } from "./models/users";
+import { findUserFeatures } from "./models/utils/hasPermission";
 
 export async function middleware(request: NextRequest) {
   let authHeader = request.headers.get("Authorization");
@@ -25,7 +27,15 @@ export async function middleware(request: NextRequest) {
       });
     }
     console.log("✅ Acesso Autorizado!");
-    return NextResponse.next();
+
+    const requestHeader = new Headers(request.headers);
+    requestHeader.set("user-id", String(tokenIsValid.payload.id));
+
+    return NextResponse.next({
+      request: {
+        headers: requestHeader,
+      },
+    });
   } catch (error) {
     console.log("🚫 Acesso Negado");
     return new NextResponse(

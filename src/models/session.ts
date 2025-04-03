@@ -1,9 +1,12 @@
 import jwt from "jsonwebtoken";
 import * as jose from "jose";
 
+type UserPermissions = {
+  name: string;
+};
 export async function generateToken(id: number) {
   const payload = {
-    id: id,
+    id,
   };
   return jwt.sign(payload, process.env.SECRET_JWT as string, {
     expiresIn: "5 hours",
