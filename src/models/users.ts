@@ -8,6 +8,7 @@ export type CreateUserResponse = User | { error: boolean; message: string };
 export type DeleteUserResponse =
   | { id: number; name: string; email: string }
   | { error: boolean; message: string };
+
 type safeUser = {
   permissions: { name: string }[];
   id: number;
@@ -62,6 +63,68 @@ export async function createUser(data: CreateUserData) {
       return { error: true, message };
     }
     return { error: true, message: "erro desconhecidos" };
+  }
+}
+export async function deleteUser(id: number) {
+  try {
+    const user = await prisma.user.delete({
+      where: { id },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+      },
+    });
+
+    return user;
+  } catch (error) {
+    console.log(error);
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      let message: string;
+      switch (error.code) {
+        case "P2025":
+          message = "Registro nao encontrado ";
+          break;
+
+        default:
+          message = "Erro desconhecido no banco de dados";
+      }
+      return { error: true, message };
+    }
+    return { error: true, message: "erro desconhecidos" };
+  }
+}
+export async function updateUser(
+  id: number,
+  data: {
+    name?: string;
+    email?: string;
+    telefone?: string;
+    rankID?: number;
+    permissions?: number[];
+  },
+) {
+  try {
+    const user = await prisma.user.update({
+      where: { id },
+      data: {
+        name: data.name,
+        email: data.email,
+        telefone: data.telefone,
+        rankID: data.rankID,
+        permissions: data.permissions
+          ? {
+              set: data.permissions.map((pid: number) => ({ id: pid })),
+            }
+          : undefined,
+      },
+      include: {
+        permissions: true,
+      },
+    });
+    return user;
+  } catch (error) {
+    return error;
   }
 }
 export async function findUserByEmail(email: string) {
@@ -123,34 +186,5 @@ export async function findUserById(id: number) {
       error: true,
       message: "Erro desconhecido ao consultar banco de dados.",
     };
-  }
-}
-export async function deleteUser(id: number) {
-  try {
-    const user = await prisma.user.delete({
-      where: { id },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-      },
-    });
-
-    return user;
-  } catch (error) {
-    console.log(error);
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      let message: string;
-      switch (error.code) {
-        case "P2025":
-          message = "Registro nao encontrado ";
-          break;
-
-        default:
-          message = "Erro desconhecido no banco de dados";
-      }
-      return { error: true, message };
-    }
-    return { error: true, message: "erro desconhecidos" };
   }
 }

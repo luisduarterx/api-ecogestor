@@ -78,3 +78,4 @@ export async function DELETE(request: Request) {
     return NextResponse.json({ error });
   }
 }
+export async function PUT(request: Request) {}
