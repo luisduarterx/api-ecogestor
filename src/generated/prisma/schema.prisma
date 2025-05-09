@@ -1,0 +1,273 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         Int          @id @default(autoincrement())
+  nome       String
+  email      String       @unique
+  senha      String
+  telefone   String
+  cargoID    Int
+  cargo      Cargo        @relation(fields: [cargoID], references: [id])
+  pedidos    Pedido[]
+  permissoes Permissoes[] @relation("UserPermissions")
+}
+
+model Permissoes {
+  id        Int     @id @default(autoincrement())
+  nome      String  @unique
+  descricao String?
+  users     User[]  @relation("UserPermissions")
+}
+
+model Cargo {
+  id    Int    @id @default(autoincrement())
+  nome  String @unique
+  users User[]
+}
+
+enum TipoRegistro {
+  FISICA
+  JURIDICA
+}
+
+enum TipoPedido {
+  COMPRA
+  VENDA
+}
+
+enum TipoStatusPedido {
+  ABERTO
+  FECHADO
+  PAGO
+}
+
+enum TipoMovimentacao {
+  ENTRADA
+  SAIDA
+}
+
+enum FormaPagamento {
+  DINHEIRO
+  PIX
+  TRANSFERENCIA
+  ABATER
+}
+
+enum CategoriaMovimentacao {
+  PEDIDO
+  ABASTECIMENTO
+  RETIRADA
+  DESPESA
+}
+
+model Registro {
+  id              Int              @id @default(autoincrement())
+  nome_razao      String
+  apelido         String?
+  tipo            TipoRegistro
+  fisica          PessoaFisica?
+  juridica        PessoaJuridica?
+  tabelaID        Int
+  tabela          Tabela           @relation(fields: [tabelaID], references: [id])
+  dados_pagamento DadosPagamento?
+  pedidos         Pedido[]
+  email           String?
+  endereco        Endereco?
+  telefone        String?
+  criadoEm        DateTime         @default(now())
+  saldo           SaldoFinanceiro?
+}
+
+model PessoaFisica {
+  id         Int       @id
+  cpf        String    @unique
+  nascimento DateTime?
+  registro   Registro  @relation(fields: [id], references: [id])
+}
+
+model PessoaJuridica {
+  id       Int      @id
+  cnpj     String   @unique
+  ie       String?
+  fantasia String?
+  registro Registro @relation(fields: [id], references: [id])
+}
+
+model SaldoFinanceiro {
+  id       Int      @id @default(autoincrement())
+  regID    Int      @unique
+  registro Registro @relation(fields: [regID], references: [id])
+  saldo    Decimal
+}
+
+model Endereco {
+  id          Int      @id @default(autoincrement())
+  regID       Int      @unique
+  registro    Registro @relation(fields: [regID], references: [id])
+  estado      String?
+  cidade      String?
+  bairro      String?
+  logradouro  String?
+  numero      String?
+  complemento String?
+}
+
+model DadosPagamento {
+  id       Int      @id @default(autoincrement())
+  banco    String?
+  agencia  Int?
+  conta    Int?
+  chave    String?
+  cpf      String?
+  regID    Int      @unique
+  registro Registro @relation(fields: [regID], references: [id])
+}
+
+model Tabela {
+  id        Int              @id @default(autoincrement())
+  nome      String           @unique
+  materiais PrecoPorTabela[]
+  registros Registro[]
+  updatedAt DateTime         @default(now()) @updatedAt
+}
+
+model PrecoPorTabela {
+  id         Int      @id @default(autoincrement())
+  v_compra   Decimal
+  materialID Int
+  tabelaID   Int
+  editadoEm  DateTime @default(now()) @updatedAt
+  material   Material @relation(fields: [materialID], references: [id])
+  tabela     Tabela   @relation(fields: [tabelaID], references: [id])
+}
+
+model Material {
+  id            Int                   @id @default(autoincrement())
+  nome          String
+  catID         Int
+  v_venda       Decimal
+  estoque       Decimal
+  criado_em     DateTime              @default(now())
+  editado_em    DateTime              @default(now()) @updatedAt
+  categoria     CategoriaMaterial     @relation(fields: [catID], references: [id])
+  preco_tabela  PrecoPorTabela[]
+  items         ItemPedido[]
+  movimentacoes MovimentacaoEstoque[]
+}
+
+model CategoriaMaterial {
+  id        Int        @id @default(autoincrement())
+  name      String
+  materiais Material[]
+}
+
+model ItemPedido {
+  id         Int      @id @default(autoincrement())
+  pedidoID   Int
+  materialID Int
+  preco      Decimal
+  quantidade Decimal
+  tara       Decimal
+  impureza   Decimal
+  pedido     Pedido   @relation(fields: [pedidoID], references: [id])
+  material   Material @relation(fields: [materialID], references: [id])
+}
+
+model Pedido {
+  id          Int              @id @default(autoincrement())
+  regID       Int
+  tipo        TipoPedido
+  valor_total Decimal          @default(0)
+  status      TipoStatusPedido
+  userID      Int
+  criado_em   DateTime         @default(now())
+  registro    Registro         @relation(fields: [regID], references: [id])
+  user        User             @relation(fields: [userID], references: [id])
+  items       ItemPedido[]
+  pagamentos  Pagamento[]
+}
+
+model Pagamento {
+  id        Int                   @id @default(autoincrement())
+  pedidoID  Int
+  contaID   Int
+  valor     Decimal
+  forma     FormaPagamento
+  data      DateTime              @default(now())
+  categoria CategoriaMovimentacao
+  descricao String?
+  pedido    Pedido                @relation(fields: [pedidoID], references: [id])
+  conta     Conta                 @relation(fields: [contaID], references: [id])
+}
+
+model Conta {
+  id            Int                      @id @default(autoincrement())
+  nome          String
+  saldo         Decimal
+  pagamentos    Pagamento[]
+  movimentacoes MovimentacaoFinanceira[]
+}
+
+model MovimentacaoFinanceira {
+  id               Int                   @id @default(autoincrement())
+  contaID          Int
+  tipoMovimentacao TipoMovimentacao
+  valor            Decimal
+  descricao        String?
+  data             DateTime              @default(now())
+  categoria        CategoriaMovimentacao
+  origemId         Int?
+  conta            Conta                 @relation(fields: [contaID], references: [id])
+}
+
+enum TipoMovimentacaoEstoque {
+  VENDA
+  COMPRA
+  ENTRADA_MANUAL
+  SAIDA_MANUAL
+  ENTRADA_CONVERSAO
+  SAIDA_CONVERSAO
+}
+
+enum OrigemMovimentacaoEstoque {
+  PEDIDO
+  AJUSTE
+  CONVERSAO
+}
+
+model MovimentacaoEstoque {
+  id                 Int                       @id @default(autoincrement())
+  materialID         Int
+  tipo               TipoMovimentacaoEstoque
+  quantidade         Decimal
+  createdAt          DateTime                  @default(now())
+  origemID           Int?
+  origemTipo         OrigemMovimentacaoEstoque
+  material           Material                  @relation(fields: [materialID], references: [id])
+  conversaoEstoque   ConversaoEstoque?         @relation(fields: [conversaoEstoqueId], references: [id])
+  conversaoEstoqueId Int?
+}
+
+model ConversaoEstoque {
+  id            Int                   @id @default(autoincrement())
+  mat_origemID  Int
+  mat_destinoID Int
+  quantidade    Decimal
+  descricao     String?
+  createdAt     DateTime              @default(now())
+  movimentacoes MovimentacaoEstoque[]
+}

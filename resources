@@ -1,0 +1,701 @@
+model User {
+  id         Int          @id @default(autoincrement())
+  nome       String
+  email      String       @unique
+  senha      String
+  telefone   String
+  cargoID    Int
+  cargo      Cargo        @relation(fields: [cargoID], references: [id])
+  pedidos    Pedido[]
+  permissoes Permissoes[] @relation("UserPermissions")
+}
+
+model Permissoes {
+  id        Int     @id @default(autoincrement())
+  nome      String  @unique
+  descricao String?
+  users     User[]  @relation("UserPermissions")
+}
+
+model Cargo {
+  id    Int    @id @default(autoincrement())
+  nome  String @unique
+  users User[]
+}
+
+enum TipoRegistro {
+  FISICA
+  JURIDICA
+}
+
+enum TipoPedido {
+  COMPRA
+  VENDA
+}
+
+enum TipoStatusPedido {
+  ABERTO
+  FECHADO
+  PAGO
+}
+
+enum TipoMovimentacao {
+  ENTRADA
+  SAIDA
+}
+
+enum FormaPagamento {
+  DINHEIRO
+  PIX
+  TRANSFERENCIA
+  ABATER
+}
+
+enum CategoriaMovimentacao {
+  PEDIDO
+  ABASTECIMENTO
+  RETIRADA
+  DESPESA
+}
+
+model Registro {
+  id              Int              @id @default(autoincrement())
+  nome_razao      String
+  apelido         String?
+  tipo            TipoRegistro
+  fisica          PessoaFisica?
+  juridica        PessoaJuridica?
+  tabelaID        Int
+  tabela          Tabela           @relation(fields: [tabelaID], references: [id])
+  dados_pagamento DadosPagamento?
+  pedidos         Pedido[]
+  email           String?
+  endereco        Endereco?
+  telefone        String?
+  criadoEm        DateTime         @default(now())
+  saldo           SaldoFinanceiro?
+}
+
+model PessoaFisica {
+  id         Int       @id
+  cpf        String    @unique
+  nascimento DateTime?
+  registro   Registro  @relation(fields: [id], references: [id])
+}
+
+model PessoaJuridica {
+  id       Int      @id
+  cnpj     String   @unique
+  ie       String?
+  fantasia String?
+  registro Registro @relation(fields: [id], references: [id])
+}
+
+model SaldoFinanceiro {
+  id       Int      @id @default(autoincrement())
+  regID    Int      @unique
+  registro Registro @relation(fields: [regID], references: [id])
+  saldo    Decimal
+}
+
+model Endereco {
+  id          Int      @id @default(autoincrement())
+  regID       Int      @unique
+  registro    Registro @relation(fields: [regID], references: [id])
+  estado      String?
+  cidade      String?
+  bairro      String?
+  logradouro  String?
+  numero      String?
+  complemento String?
+}
+
+model DadosPagamento {
+  id       Int      @id @default(autoincrement())
+  banco    String?
+  agencia  Int?
+  conta    Int?
+  chave    String?
+  cpf      String?
+  regID    Int      @unique
+  registro Registro @relation(fields: [regID], references: [id])
+}
+
+model Tabela {
+  id        Int              @id @default(autoincrement())
+  nome      String           @unique
+  materiais PrecoPorTabela[]
+  registros Registro[]
+  updatedAt DateTime         @default(now()) @updatedAt
+}
+
+model PrecoPorTabela {
+  id         Int      @id @default(autoincrement())
+  v_compra   Decimal
+  materialID Int
+  tabelaID   Int
+  editadoEm  DateTime @default(now()) @updatedAt
+  material   Material @relation(fields: [materialID], references: [id])
+  tabela     Tabela   @relation(fields: [tabelaID], references: [id])
+}
+
+model Material {
+  id            Int                   @id @default(autoincrement())
+  nome          String
+  catID         Int
+  v_venda       Decimal
+  estoque       Decimal
+  criado_em     DateTime              @default(now())
+  editado_em    DateTime              @default(now()) @updatedAt
+  categoria     CategoriaMaterial     @relation(fields: [catID], references: [id])
+  preco_tabela  PrecoPorTabela[]
+  items         ItemPedido[]
+  movimentacoes MovimentacaoEstoque[]
+}
+
+model CategoriaMaterial {
+  id        Int        @id @default(autoincrement())
+  name      String
+  materiais Material[]
+}
+
+model ItemPedido {
+  id         Int      @id @default(autoincrement())
+  pedidoID   Int
+  materialID Int
+  preco      Decimal
+  quantidade Decimal
+  tara       Decimal
+  impureza   Decimal
+  pedido     Pedido   @relation(fields: [pedidoID], references: [id])
+  material   Material @relation(fields: [materialID], references: [id])
+}
+
+model Pedido {
+  id          Int              @id @default(autoincrement())
+  regID       Int
+  tipo        TipoPedido
+  valor_total Decimal          @default(0)
+  status      TipoStatusPedido
+  userID      Int
+  criado_em   DateTime         @default(now())
+  registro    Registro         @relation(fields: [regID], references: [id])
+  user        User             @relation(fields: [userID], references: [id])
+  items       ItemPedido[]
+  pagamentos  Pagamento[]
+}
+
+model Pagamento {
+  id        Int                   @id @default(autoincrement())
+  pedidoID  Int
+  contaID   Int
+  valor     Decimal
+  forma     FormaPagamento
+  data      DateTime              @default(now())
+  categoria CategoriaMovimentacao
+  descricao String?
+  pedido    Pedido                @relation(fields: [pedidoID], references: [id])
+  conta     Conta                 @relation(fields: [contaID], references: [id])
+}
+
+model Conta {
+  id            Int                      @id @default(autoincrement())
+  nome          String
+  saldo         Decimal
+  pagamentos    Pagamento[]
+  movimentacoes MovimentacaoFinanceira[]
+}
+
+model MovimentacaoFinanceira {
+  id               Int                   @id @default(autoincrement())
+  contaID          Int
+  tipoMovimentacao TipoMovimentacao
+  valor            Decimal
+  descricao        String?
+  data             DateTime              @default(now())
+  categoria        CategoriaMovimentacao
+  origemId         Int?
+  conta            Conta                 @relation(fields: [contaID], references: [id])
+}
+
+enum TipoMovimentacaoEstoque {
+  VENDA
+  COMPRA
+  ENTRADA_MANUAL
+  SAIDA_MANUAL
+  ENTRADA_CONVERSAO
+  SAIDA_CONVERSAO
+}
+
+enum OrigemMovimentacaoEstoque {
+  PEDIDO
+  AJUSTE
+  CONVERSAO
+}
+
+model MovimentacaoEstoque {
+  id                 Int                       @id @default(autoincrement())
+  materialID         Int
+  tipo               TipoMovimentacaoEstoque
+  quantidade         Decimal
+  createdAt          DateTime                  @default(now())
+  origemID           Int?
+  origemTipo         OrigemMovimentacaoEstoque
+  material           Material                  @relation(fields: [materialID], references: [id])
+  conversaoEstoque   ConversaoEstoque?         @relation(fields: [conversaoEstoqueId], references: [id])
+  conversaoEstoqueId Int?
+}
+
+model ConversaoEstoque {
+  id            Int                   @id @default(autoincrement())
+  mat_origemID  Int
+  mat_destinoID Int
+  quantidade    Decimal
+  descricao     String?
+  createdAt     DateTime              @default(now())
+  movimentacoes MovimentacaoEstoque[]
+}
+
+
+
+// 🔐 AUTENTICAÇÃO
+POST -> /auth/signin
+---Headers:
+Authorization: Bearer <TOKEN> (não obrigatório para login)
+---Requisição:
+{
+  "email": "user@example.com",
+  "senha": "123456"
+}
+---Response:
+{
+  "id": 1,
+  "nome": "Usuário Teste",
+  "email": "user@example.com",
+  "telefone": "11999999999",
+  "cargoNome": "Administrador",
+  "token": "<JWT_TOKEN>"
+}
+
+MIDDLEWARE -> AuthMiddleware
+// Se Bearer Token for inválido ou usuário não existir:
+// Retorna 401 Unauthorized
+// Caso contrário: next() com req.user = { id, nome, email, telefone, cargoNome }
+
+POST -> /auth/validate
+---Headers:
+Authorization: Bearer <TOKEN>
+---Response:
+{
+  "user": {
+    "id": 1,
+    "nome": "Usuário Teste",
+    "email": "user@example.com",
+    "telefone": "11999999999",
+    "cargoNome": "Administrador"
+  }
+}
+
+
+// 👤 USUÁRIOS
+GET -> /users
+---Headers:
+Authorization: Bearer <TOKEN>
+---Response:
+{
+  "users": [
+    { "id": 1, "nome": "Luis", "email": "luis@email.com", "telefone": "123456789", "cargoNome": "Admin" }
+  ]
+}
+
+POST -> /users
+---Headers:
+Authorization: Bearer <TOKEN>
+---Requisição:
+{
+  "nome": "Luis",
+  "email": "luis@email.com",
+  "senha": "123456",
+  "telefone": "123456789",
+  "cargoId": 1
+}
+---Response:
+{ "id": 1 }
+
+PUT -> /users/:id
+---Headers:
+Authorization: Bearer <TOKEN>
+---Requisição:
+{
+  "nome": "Luis Atualizado",
+  "telefone": "1299999999"
+}
+---Response:
+{ "mensagem": "Usuário atualizado com sucesso" }
+
+DELETE -> /users/:id
+---Headers:
+Authorization: Bearer <TOKEN>
+---Response:
+{ "mensagem": "Usuário removido com sucesso" }
+
+
+// 🧾 REGISTROS
+POST -> /registros/fisica
+---Headers:
+Authorization: Bearer <TOKEN>
+---Requisição:
+{
+  "nome_razao": "João da Silva",
+  "email": "joao@email.com",
+  "telefone": "11999999999",
+  "cpf": "12345678900",
+  "nascimento": "1990-01-01",
+  
+}
+
+POST -> /registros/juridica
+---Headers:
+Authorization: Bearer <TOKEN>
+---Requisição:
+{
+  "nome_razao": "Empresa XYZ",
+  "email": "contato@empresa.com",
+  "telefone": "1122223333",
+  "cnpj": "12345678000190",
+  "fantasia": "Empresa X",
+  "tabelaId": 1
+}
+
+GET -> /registros
+---Headers:
+Authorization: Bearer <TOKEN>
+---Response:
+{
+  "registros": [
+    { "id": 1, "nome_razao": "João da Silva", "tipo": "FISICA" },
+    { "id": 2, "nome_razao": "Empresa XYZ", "tipo": "JURIDICA" }
+  ]
+}
+
+PUT -> /registros/:id
+---Headers:
+Authorization: Bearer <TOKEN>
+---Requisição:
+{
+  "email": "novo@email.com",
+  "telefone": "1188889999"
+}
+---Response:
+{ "mensagem": "Registro atualizado" }
+
+DELETE -> /registros/:id
+---Headers:
+Authorization: Bearer <TOKEN>
+---Response:
+{ "mensagem": "Registro removido" }
+
+
+// 🧾 PEDIDOS
+GET -> /pedidos
+---Headers:
+Authorization: Bearer <TOKEN>
+---Response:
+{
+  "pedidos": [
+    { "id": 10, "valor_total": 4500.00, "status": "ABERTO", "tipo": "VENDA", "cliente": "Recicladora X" }
+  ]
+}
+
+GET -> /pedidos/:id
+---Headers:
+Authorization: Bearer <TOKEN>
+---Response:
+{
+  "id": 10,
+  "registro": "João da Silva",
+  "itens": [
+    { "material": "Alumínio", "quantidade": 100, "preco": 45.5 }
+  ]
+}
+
+POST -> /pedidos
+---Headers:
+Authorization: Bearer <TOKEN>
+---Requisição:
+{
+  "registroId": 1,
+  "userId": 1,
+  "tipo": "VENDA",
+  "itens": [
+    { "materialId": 1, "quantidade": 100, "preco": 45.5, "tara": 0, "impureza": 0 }
+  ]
+}
+---Response:
+{ "id": 10 }
+
+PUT -> /pedidos/:id
+---Headers:
+Authorization: Bearer <TOKEN>
+---Requisição:
+{
+  "status": "PAGO"
+}
+---Response:
+{ "mensagem": "Pedido atualizado" }
+
+DELETE -> /pedidos/:id
+---Headers:
+Authorization: Bearer <TOKEN>
+---Response:
+{ "mensagem": "Pedido removido" }
+
+// MATERIAIS
+
+
+GET -> /materiais
+---Headers:
+Authorization: Bearer <TOKEN>
+--Response:
+{
+    materiais:[
+        {id,nome,cat_nome,estoque,v_venda}
+    ]
+}
+
+POST -> /materiais // ao criar material, criar o PrecoPorTabela na tabela padrao
+---Headers:
+Authorization: Bearer <TOKEN>
+--Requisiçao:
+{
+    "nome":"Material teste",
+    "catID":1,
+    "V_compra":1.00,
+    "v_venda:":1.30,
+
+}
+--Response:
+{
+    {id,nome,cat_nome,estoque,v_compra,v_venda}
+}
+PUT -> /materiais/:id
+---Headers:
+Authorization: Bearer <TOKEN>
+--Requisiçao:
+{
+    "catID":2
+    "nome":"Nome Atualizado",
+    "v_compra":2.00,
+    "v_venda":3.00,
+}
+--Response:
+{
+{id,nome,cat_nome,estoque,v_compra,v_venda}
+}
+
+// FUTURAMENTE CRIAR O DELETE MATERIAL AINDA NAO SEI COMO SERA LOGICO OU FISICO
+
+//CATEGORIAS
+
+GET -> /categorias
+---Headers:
+Authorization: Bearer <TOKEN>
+--Response:
+{
+    "categorias":[
+        {
+            id,nome
+        }
+    ]
+}
+POST -> /categorias
+---Headers:
+Authorization: Bearer <TOKEN>
+--Requisição:
+{
+    "nome":"Categoria 1",
+}
+--Response:
+{
+    id,nome
+}
+PUT -> /categorias/:id
+---Headers:
+Authorization: Bearer <TOKEN>
+--Requisição:
+{
+    "nome"
+}
+--Response:
+{
+    id,nome
+}
+DELETE -> /categorias/:id
+---Headers:
+Authorization: Bearer <TOKEN>
+--Response:
+{
+    id,nome
+}
+
+//TABELAS
+GET - > /TABELAS
+--Header
+--Response:
+{
+    "tabelas":[
+        {id,nome,updatedAt}
+    ]
+}
+
+POST -> /tabelas
+---Headers:
+Authorization: Bearer <TOKEN>
+--Requisiçao:
+{
+    "nome":"Tabela Exemplo",
+
+}
+--Response:{
+    "tabela":{
+        id,
+        nome,
+        updatedAt
+    }
+}
+GET -> /tabelas/:id
+---Headers:
+Authorization: Bearer <TOKEN>
+--Response:
+{
+    tabela:{
+        id,
+        nome,
+        updatedAt,
+        materiais[],
+    }
+}
+PUT -> /tabelas/:id
+---Headers:
+Authorization: Bearer <TOKEN>
+--Requisiçao:
+{
+    "tabela":{
+        "nome":"TABELA ATUALIZADA" //opicional
+    }
+    "materiais":[
+        {
+            "materialID":1,
+            "v_compra":12.45,
+        },
+        {
+            "materialID":3,
+            "v_compra":15.95,
+            
+        }
+    ]
+}
+
+DELETE - > /tabelas/:id
+---Headers:
+Authorization: Bearer <TOKEN>
+--Response:
+{
+    "tabela":{
+        id,
+        nome,
+        updatedAt
+    }
+}
+
+
+
+
+// 💰 PAGAMENTOS
+GET -> /pagamentos
+---Headers:
+Authorization: Bearer <TOKEN>
+---Response:
+{
+  "pagamentos": [
+    { "id": 1, "pedidoId": 10, "valor": 200.00, "forma": "PIX", "data": "2025-04-30" }
+  ]
+}
+
+GET -> /pedidos/:id/pagamentos
+---Headers:
+Authorization: Bearer <TOKEN>
+---Response:
+{
+  "pagamentos": [
+    { "id": 1, "valor": 200.00, "forma": "PIX", "data": "2025-04-30" }
+  ]
+}
+
+POST -> /pagamentos
+---Headers:
+Authorization: Bearer <TOKEN>
+---Requisição:
+{
+  "pedidoId": 10,
+  "contaId": 1,
+  "valor": 200.00,
+  "forma": "PIX",
+  "categoria": "PEDIDO",
+  "descricao": "Pagamento parcial"
+}
+---Response:
+{ "id": 1 }
+
+PUT -> /pagamentos/:id
+---Headers:
+Authorization: Bearer <TOKEN>
+---Requisição:
+{
+  "valor": 300.00
+}
+---Response:
+{ "mensagem": "Pagamento atualizado" }
+
+DELETE -> /pagamentos/:id
+---Headers:
+Authorization: Bearer <TOKEN>
+---Response:
+{ "mensagem": "Pagamento removido" }
+
+// LANCAMENTO AVULSO ESTOQUE
+
+// 🧮 RELATÓRIOS
+GET -> /relatorios/saldo
+---Headers:
+Authorization: Bearer <TOKEN>
+---Response:
+[
+  { "registroId": 1, "nome_razao": "João da Silva", "tipo": "FISICA", "saldo": 1050.75 }
+]
+
+GET -> /relatorios/vendas-mensais?mes=4&ano=2025
+---Headers:
+Authorization: Bearer <TOKEN>
+---Response:
+{
+  "mes": 4,
+  "ano": 2025,
+  "totalPedidos": 3,
+  "totalVendido": 9000.00,
+  "pedidos": [
+    { "id": 1, "cliente": "João", "valor_total": 3000.00, "data": "2025-04-01" }
+  ]
+}
+
+GET -> /relatorios/extrato-conta?contaId=1&inicio=2025-04-01&fim=2025-04-30
+---Headers:
+Authorization: Bearer <TOKEN>
+---Response:
+{
+  "conta": { "id": 1, "nome": "Caixa Físico" },
+  "movimentacoes": [
+    { "id": 1, "tipo": "ENTRADA", "valor": 200.00, "data": "2025-04-02", "descricao": "Venda de sucata" }
+  ],
+  "saldoFinal": 1400.00
+}
