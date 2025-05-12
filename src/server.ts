@@ -1,16 +1,14 @@
 import express, { Request, Response } from "express";
 import cors from "cors";
 import bodyParser, { urlencoded } from "body-parser";
+import { mainRoutes } from "./routes/main";
 
 const server = express();
 
 server.use(cors());
 server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({ extended: true }));
-
-server.get("/ping", (req: Request, res: Response) => {
-  res.json({ pong: true });
-});
+server.use("/api", mainRoutes);
 
 server.listen(3000, () => {
   console.log("EcoGestor API rodando...");
