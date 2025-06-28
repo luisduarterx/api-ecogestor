@@ -1,10 +1,8 @@
-import { Request, Response, Router } from "express";
+import { Router } from "express";
+import * as auth from "../controllers/auth";
 
 export const authRoutes = Router();
 
-// authRoutes.post("/auth/validate", async (req:Request,res:Response)=>{
+// authRoutes.post("/auth/validate", auth.VALIDATE);
 
-// })
-// authRoutes.post("/auth/signin", async (req:Request,res:Response)=>{
-
-// })
+authRoutes.post("/auth/signin", auth.SIGNIN);

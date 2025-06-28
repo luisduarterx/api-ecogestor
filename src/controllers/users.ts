@@ -1,52 +1,34 @@
-import { Prisma } from "@prisma/client";
+import { RequestHandler } from "express";
+import { z } from "zod";
+import { BadRequest, BaseError } from "../error";
+import * as DBUser from "../model/users";
 
-import { prisma } from "../libs/prisma";
-import { PrismaClientKnownRequestError } from "../generated/prisma/runtime/library";
+export const POST: RequestHandler = async (req, res) => {
+  const body = req.body;
 
-interface CreateUserArgs {
-  nome: string;
-  email: string;
-  senha: string;
-  telefone?: string;
-  cargo?: number;
-}
+  const userSchema = z.object({
+    nome: z.string(),
+    email: z.string().email(),
+    senha: z.string(),
+    cargo: z.number(),
+    telefone: z.string().optional(),
+  });
 
-export const createUser = async (data: CreateUserArgs) => {
   try {
-    const user = await prisma.user.create({
-      data: {
-        nome: data.nome,
-        email: data.email,
-        telefone: data.telefone || "",
-        cargoID: data.cargo || 1,
-        senha: data.senha,
-      },
-    });
+    const userData = userSchema.safeParse(req.body);
 
-    if (!user) {
-      throw new Error("Erro durante o processamento dos dados");
-    }
-    return user;
-  } catch (error) {
-    if (error instanceof PrismaClientKnownRequestError) {
-      if (error.code == "P2002") {
-        return {
-          nome: "ErroProcessamento",
-          mensagem: "Ja existe um usuário com esse ",
-          acao: "Escolha outro email ou contate um administrador",
-        };
-      }
-      if (error.code == "P2003") {
-        return {
-          nome: "ErroProcessamento",
-          mensagem: "Cargo inexistente ",
-          acao: "Escolha um cargo valido ou o cargo padrão",
-        };
-      }
-
-      return error;
+    if (!userData.success) {
+      throw new BadRequest();
     }
 
-    return error;
+    const user = await DBUser.createUser(userData.data);
+
+    res.status(201).json(user);
+  } catch (error: any) {
+    const status = error?.statusCode || 500;
+    res.status(status).json(error);
   }
 };
+export const GET = () => {};
+
+export const PUT = () => {};
