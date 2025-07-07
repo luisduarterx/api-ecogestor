@@ -29,6 +29,17 @@ export const POST: RequestHandler = async (req, res) => {
     res.status(status).json(error);
   }
 };
-export const GET = () => {};
+export const GET: RequestHandler = async (req, res) => {
+  try {
+    const users = await DBUser.getAllUsers();
+    if (!users) {
+      throw new Error("Não foi possivel buscar por usuarios");
+    }
+    res.json(users);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json(error);
+  }
+};
 
 export const PUT = () => {};

@@ -97,3 +97,22 @@ export const validateUser = async (data: UserDataAcess) => {
 
   return dataUser;
 };
+
+export const getAllUsers = () => {
+  try {
+    const users = prisma.user.findMany({
+      select: {
+        id: true,
+        nome: true,
+        email: true,
+        telefone: true,
+        cargoID: true,
+        permissoes: true,
+      },
+    });
+
+    return users;
+  } catch (error) {
+    return error;
+  }
+};
