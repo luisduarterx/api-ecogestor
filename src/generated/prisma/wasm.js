@@ -126,7 +126,8 @@ exports.Prisma.UserScalarFieldEnum = {
   email: 'email',
   senha: 'senha',
   telefone: 'telefone',
-  cargoID: 'cargoID'
+  cargoID: 'cargoID',
+  deletedAt: 'deletedAt'
 };
 
 exports.Prisma.PermissoesScalarFieldEnum = {

@@ -12,7 +12,16 @@ export class BaseError extends Error {
     this.statusCode = statusCode;
   }
 }
-
+export class InternalError extends BaseError {
+  constructor(mensagem = "Tivemos um problema em completar sua ação") {
+    super(
+      "Erro Interno",
+      mensagem,
+      "Tente novamento, case persistir, contate um administrador",
+      500
+    );
+  }
+}
 export class BadRequest extends BaseError {
   constructor(
     mensagem = "Não conseguimos validar os dados enviados, verifique os campos."

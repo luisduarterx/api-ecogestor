@@ -7,10 +7,6 @@ export const usersRoutes = Router();
 
 usersRoutes.get("/usuarios/", AuthMiddleware, user.GET);
 usersRoutes.post("/usuarios", AuthMiddleware, user.POST);
-// usersRoutes.put("/usuarios/:id", async (req:Request,res:Response)=>{
+usersRoutes.put("/usuarios/:userID", AuthMiddleware, user.PUT);
 
-// })
-
-// usersRoutes.delete("/usuarios/:id", async (req:Request,res:Response)=>{
-
-// })
+usersRoutes.delete("/usuarios/:userID", AuthMiddleware, user.DELETE);

@@ -1,20 +1,11 @@
 import { prisma } from "../libs/prisma";
-import { PrismaClientKnownRequestError } from "../generated/prisma/runtime/library";
-import { UserNotFound } from "../error";
+
+import { InternalError, UserNotFound } from "../error";
 import { encriptarSenha } from "../services/password";
 import bcrypt from "bcrypt";
-
-interface CreateUserArgs {
-  nome: string;
-  email: string;
-  senha: string;
-  telefone?: string;
-  cargo?: number;
-}
-interface UserDataAcess {
-  email: string;
-  senha: string;
-}
+import { error } from "console";
+import { Prisma } from "../generated/prisma";
+import { CreateUserArgs, UserDataAcess, UserDataEdit } from "../types/user";
 
 export const createUser = async (data: CreateUserArgs) => {
   try {
@@ -33,7 +24,7 @@ export const createUser = async (data: CreateUserArgs) => {
     }
     return user;
   } catch (error) {
-    if (error instanceof PrismaClientKnownRequestError) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
       if (error.code == "P2002") {
         return {
           nome: "ErroProcessamento",
@@ -75,7 +66,9 @@ export const findUserByEmail = async (email: string) => {
 };
 
 export const validateUser = async (data: UserDataAcess) => {
-  const user = await prisma.user.findUnique({ where: { email: data.email } });
+  const user = await prisma.user.findFirst({
+    where: { AND: { email: data.email, deletedAt: null } },
+  });
 
   if (!user) {
     throw new UserNotFound();
@@ -98,9 +91,13 @@ export const validateUser = async (data: UserDataAcess) => {
   return dataUser;
 };
 
-export const getAllUsers = () => {
+export const getAllUsers = async () => {
   try {
-    const users = prisma.user.findMany({
+    const users = await prisma.user.findMany({
+      where: {
+        deletedAt: null,
+      },
+
       select: {
         id: true,
         nome: true,
@@ -114,5 +111,76 @@ export const getAllUsers = () => {
     return users;
   } catch (error) {
     return error;
+  }
+};
+export const deleteUserByID = async (id: number) => {
+  try {
+    const user = prisma.user.update({
+      where: { id: id, deletedAt: null },
+      data: {
+        deletedAt: new Date(),
+      },
+    });
+
+    return user;
+  } catch (error) {
+    return error;
+  }
+};
+export const getUserByID = async (id: number) => {
+  try {
+    const user = await prisma.user.findFirst({
+      where: { AND: { id: id, deletedAt: null } },
+      select: {
+        id: true,
+        nome: true,
+        email: true,
+        telefone: true,
+        cargoID: true,
+      },
+    });
+
+    return user;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
+export const editUserData = async (data: UserDataEdit) => {
+  try {
+    const user = await prisma.user.update({
+      where: { id: data.id },
+      data: {
+        email: data.email,
+        cargoID: data.cargoID,
+        telefone: data.telefone,
+      },
+      select: {
+        id: true,
+        nome: true,
+        email: true,
+        telefone: true,
+        cargoID: true,
+      },
+    });
+
+    if (!user) {
+      return null;
+    }
+
+    return user;
+  } catch (error: any) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error.code === "P2003") {
+        throw new InternalError("Cargo inexistente. Escolha um cargo válido."); // futuramente alterar erro interno nao é o certo
+      }
+
+      if (error.code === "P2002") {
+        throw new InternalError("Email já cadastrado.");
+      }
+    }
+
+    console.error("Erro inesperado:", error);
+    throw new InternalError("Erro inesperado no servidor.");
   }
 };

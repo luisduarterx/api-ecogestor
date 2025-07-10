@@ -3235,6 +3235,7 @@ export namespace Prisma {
     senha: string | null
     telefone: string | null
     cargoID: number | null
+    deletedAt: Date | null
   }
 
   export type UserMaxAggregateOutputType = {
@@ -3244,6 +3245,7 @@ export namespace Prisma {
     senha: string | null
     telefone: string | null
     cargoID: number | null
+    deletedAt: Date | null
   }
 
   export type UserCountAggregateOutputType = {
@@ -3253,6 +3255,7 @@ export namespace Prisma {
     senha: number
     telefone: number
     cargoID: number
+    deletedAt: number
     _all: number
   }
 
@@ -3274,6 +3277,7 @@ export namespace Prisma {
     senha?: true
     telefone?: true
     cargoID?: true
+    deletedAt?: true
   }
 
   export type UserMaxAggregateInputType = {
@@ -3283,6 +3287,7 @@ export namespace Prisma {
     senha?: true
     telefone?: true
     cargoID?: true
+    deletedAt?: true
   }
 
   export type UserCountAggregateInputType = {
@@ -3292,6 +3297,7 @@ export namespace Prisma {
     senha?: true
     telefone?: true
     cargoID?: true
+    deletedAt?: true
     _all?: true
   }
 
@@ -3388,6 +3394,7 @@ export namespace Prisma {
     senha: string
     telefone: string
     cargoID: number
+    deletedAt: Date | null
     _count: UserCountAggregateOutputType | null
     _avg: UserAvgAggregateOutputType | null
     _sum: UserSumAggregateOutputType | null
@@ -3416,6 +3423,7 @@ export namespace Prisma {
     senha?: boolean
     telefone?: boolean
     cargoID?: boolean
+    deletedAt?: boolean
     pedidos?: boolean | User$pedidosArgs<ExtArgs>
     cargo?: boolean | CargoDefaultArgs<ExtArgs>
     permissoes?: boolean | User$permissoesArgs<ExtArgs>
@@ -3430,6 +3438,7 @@ export namespace Prisma {
     senha?: boolean
     telefone?: boolean
     cargoID?: boolean
+    deletedAt?: boolean
     cargo?: boolean | CargoDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -3440,6 +3449,7 @@ export namespace Prisma {
     senha?: boolean
     telefone?: boolean
     cargoID?: boolean
+    deletedAt?: boolean
     cargo?: boolean | CargoDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -3450,9 +3460,10 @@ export namespace Prisma {
     senha?: boolean
     telefone?: boolean
     cargoID?: boolean
+    deletedAt?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nome" | "email" | "senha" | "telefone" | "cargoID", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nome" | "email" | "senha" | "telefone" | "cargoID" | "deletedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     pedidos?: boolean | User$pedidosArgs<ExtArgs>
     cargo?: boolean | CargoDefaultArgs<ExtArgs>
@@ -3482,6 +3493,7 @@ export namespace Prisma {
       senha: string
       telefone: string
       cargoID: number
+      deletedAt: Date | null
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -3915,6 +3927,7 @@ export namespace Prisma {
     readonly senha: FieldRef<"User", 'String'>
     readonly telefone: FieldRef<"User", 'String'>
     readonly cargoID: FieldRef<"User", 'Int'>
+    readonly deletedAt: FieldRef<"User", 'DateTime'>
   }
     
 
@@ -27031,7 +27044,8 @@ export namespace Prisma {
     email: 'email',
     senha: 'senha',
     telefone: 'telefone',
-    cargoID: 'cargoID'
+    cargoID: 'cargoID',
+    deletedAt: 'deletedAt'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -27324,20 +27338,6 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'TipoRegistro'
-   */
-  export type EnumTipoRegistroFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TipoRegistro'>
-    
-
-
-  /**
-   * Reference to a field of type 'TipoRegistro[]'
-   */
-  export type ListEnumTipoRegistroFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TipoRegistro[]'>
-    
-
-
-  /**
    * Reference to a field of type 'DateTime'
    */
   export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
@@ -27348,6 +27348,20 @@ export namespace Prisma {
    * Reference to a field of type 'DateTime[]'
    */
   export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'TipoRegistro'
+   */
+  export type EnumTipoRegistroFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TipoRegistro'>
+    
+
+
+  /**
+   * Reference to a field of type 'TipoRegistro[]'
+   */
+  export type ListEnumTipoRegistroFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TipoRegistro[]'>
     
 
 
@@ -27511,6 +27525,7 @@ export namespace Prisma {
     senha?: StringFilter<"User"> | string
     telefone?: StringFilter<"User"> | string
     cargoID?: IntFilter<"User"> | number
+    deletedAt?: DateTimeNullableFilter<"User"> | Date | string | null
     pedidos?: PedidoListRelationFilter
     cargo?: XOR<CargoScalarRelationFilter, CargoWhereInput>
     permissoes?: PermissoesListRelationFilter
@@ -27524,6 +27539,7 @@ export namespace Prisma {
     senha?: SortOrder
     telefone?: SortOrder
     cargoID?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
     pedidos?: PedidoOrderByRelationAggregateInput
     cargo?: CargoOrderByWithRelationInput
     permissoes?: PermissoesOrderByRelationAggregateInput
@@ -27540,6 +27556,7 @@ export namespace Prisma {
     senha?: StringFilter<"User"> | string
     telefone?: StringFilter<"User"> | string
     cargoID?: IntFilter<"User"> | number
+    deletedAt?: DateTimeNullableFilter<"User"> | Date | string | null
     pedidos?: PedidoListRelationFilter
     cargo?: XOR<CargoScalarRelationFilter, CargoWhereInput>
     permissoes?: PermissoesListRelationFilter
@@ -27553,6 +27570,7 @@ export namespace Prisma {
     senha?: SortOrder
     telefone?: SortOrder
     cargoID?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
     _count?: UserCountOrderByAggregateInput
     _avg?: UserAvgOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
@@ -27570,6 +27588,7 @@ export namespace Prisma {
     senha?: StringWithAggregatesFilter<"User"> | string
     telefone?: StringWithAggregatesFilter<"User"> | string
     cargoID?: IntWithAggregatesFilter<"User"> | number
+    deletedAt?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   }
 
   export type PermissoesWhereInput = {
@@ -28816,6 +28835,7 @@ export namespace Prisma {
     email: string
     senha: string
     telefone: string
+    deletedAt?: Date | string | null
     pedidos?: PedidoCreateNestedManyWithoutUserInput
     cargo: CargoCreateNestedOneWithoutUsersInput
     permissoes?: PermissoesCreateNestedManyWithoutUsersInput
@@ -28829,6 +28849,7 @@ export namespace Prisma {
     senha: string
     telefone: string
     cargoID: number
+    deletedAt?: Date | string | null
     pedidos?: PedidoUncheckedCreateNestedManyWithoutUserInput
     permissoes?: PermissoesUncheckedCreateNestedManyWithoutUsersInput
     caixas?: LivroCaixaUncheckedCreateNestedManyWithoutUsuarioInput
@@ -28839,6 +28860,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     senha?: StringFieldUpdateOperationsInput | string
     telefone?: StringFieldUpdateOperationsInput | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pedidos?: PedidoUpdateManyWithoutUserNestedInput
     cargo?: CargoUpdateOneRequiredWithoutUsersNestedInput
     permissoes?: PermissoesUpdateManyWithoutUsersNestedInput
@@ -28852,6 +28874,7 @@ export namespace Prisma {
     senha?: StringFieldUpdateOperationsInput | string
     telefone?: StringFieldUpdateOperationsInput | string
     cargoID?: IntFieldUpdateOperationsInput | number
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pedidos?: PedidoUncheckedUpdateManyWithoutUserNestedInput
     permissoes?: PermissoesUncheckedUpdateManyWithoutUsersNestedInput
     caixas?: LivroCaixaUncheckedUpdateManyWithoutUsuarioNestedInput
@@ -28864,6 +28887,7 @@ export namespace Prisma {
     senha: string
     telefone: string
     cargoID: number
+    deletedAt?: Date | string | null
   }
 
   export type UserUpdateManyMutationInput = {
@@ -28871,6 +28895,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     senha?: StringFieldUpdateOperationsInput | string
     telefone?: StringFieldUpdateOperationsInput | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type UserUncheckedUpdateManyInput = {
@@ -28880,6 +28905,7 @@ export namespace Prisma {
     senha?: StringFieldUpdateOperationsInput | string
     telefone?: StringFieldUpdateOperationsInput | string
     cargoID?: IntFieldUpdateOperationsInput | number
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type PermissoesCreateInput = {
@@ -30094,6 +30120,17 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
+  export type DateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
   export type PedidoListRelationFilter = {
     every?: PedidoWhereInput
     some?: PedidoWhereInput
@@ -30117,6 +30154,11 @@ export namespace Prisma {
     none?: LivroCaixaWhereInput
   }
 
+  export type SortOrderInput = {
+    sort: SortOrder
+    nulls?: NullsOrder
+  }
+
   export type PedidoOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -30136,6 +30178,7 @@ export namespace Prisma {
     senha?: SortOrder
     telefone?: SortOrder
     cargoID?: SortOrder
+    deletedAt?: SortOrder
   }
 
   export type UserAvgOrderByAggregateInput = {
@@ -30150,6 +30193,7 @@ export namespace Prisma {
     senha?: SortOrder
     telefone?: SortOrder
     cargoID?: SortOrder
+    deletedAt?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
@@ -30159,6 +30203,7 @@ export namespace Prisma {
     senha?: SortOrder
     telefone?: SortOrder
     cargoID?: SortOrder
+    deletedAt?: SortOrder
   }
 
   export type UserSumOrderByAggregateInput = {
@@ -30200,6 +30245,20 @@ export namespace Prisma {
     _max?: NestedStringFilter<$PrismaModel>
   }
 
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
   export type StringNullableFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
@@ -30219,11 +30278,6 @@ export namespace Prisma {
     every?: UserWhereInput
     some?: UserWhereInput
     none?: UserWhereInput
-  }
-
-  export type SortOrderInput = {
-    sort: SortOrder
-    nulls?: NullsOrder
   }
 
   export type UserOrderByRelationAggregateInput = {
@@ -30412,17 +30466,6 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
-  export type DateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
   export type RegistroScalarRelationFilter = {
     is?: RegistroWhereInput
     isNot?: RegistroWhereInput
@@ -30452,20 +30495,6 @@ export namespace Prisma {
 
   export type PessoaFisicaSumOrderByAggregateInput = {
     id?: SortOrder
-  }
-
-  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type PessoaJuridicaCountOrderByAggregateInput = {
@@ -31485,6 +31514,10 @@ export namespace Prisma {
     set?: string
   }
 
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null
+  }
+
   export type PedidoUpdateManyWithoutUserNestedInput = {
     create?: XOR<PedidoCreateWithoutUserInput, PedidoUncheckedCreateWithoutUserInput> | PedidoCreateWithoutUserInput[] | PedidoUncheckedCreateWithoutUserInput[]
     connectOrCreate?: PedidoCreateOrConnectWithoutUserInput | PedidoCreateOrConnectWithoutUserInput[]
@@ -31895,10 +31928,6 @@ export namespace Prisma {
     create?: XOR<RegistroCreateWithoutFisicaInput, RegistroUncheckedCreateWithoutFisicaInput>
     connectOrCreate?: RegistroCreateOrConnectWithoutFisicaInput
     connect?: RegistroWhereUniqueInput
-  }
-
-  export type NullableDateTimeFieldUpdateOperationsInput = {
-    set?: Date | string | null
   }
 
   export type RegistroUpdateOneRequiredWithoutFisicaNestedInput = {
@@ -32698,6 +32727,17 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -32742,6 +32782,31 @@ export namespace Prisma {
     _max?: NestedStringFilter<$PrismaModel>
   }
 
+  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
+  export type NestedIntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
   export type NestedStringNullableFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
@@ -32771,17 +32836,6 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedStringNullableFilter<$PrismaModel>
     _max?: NestedStringNullableFilter<$PrismaModel>
-  }
-
-  export type NestedIntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
   export type NestedEnumTipoRegistroFilter<$PrismaModel = never> = {
@@ -32824,31 +32878,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
-  }
-
-  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
-  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type NestedDecimalFilter<$PrismaModel = never> = {
@@ -33282,6 +33311,7 @@ export namespace Prisma {
     email: string
     senha: string
     telefone: string
+    deletedAt?: Date | string | null
     pedidos?: PedidoCreateNestedManyWithoutUserInput
     cargo: CargoCreateNestedOneWithoutUsersInput
     caixas?: LivroCaixaCreateNestedManyWithoutUsuarioInput
@@ -33294,6 +33324,7 @@ export namespace Prisma {
     senha: string
     telefone: string
     cargoID: number
+    deletedAt?: Date | string | null
     pedidos?: PedidoUncheckedCreateNestedManyWithoutUserInput
     caixas?: LivroCaixaUncheckedCreateNestedManyWithoutUsuarioInput
   }
@@ -33329,6 +33360,7 @@ export namespace Prisma {
     senha?: StringFilter<"User"> | string
     telefone?: StringFilter<"User"> | string
     cargoID?: IntFilter<"User"> | number
+    deletedAt?: DateTimeNullableFilter<"User"> | Date | string | null
   }
 
   export type UserCreateWithoutCargoInput = {
@@ -33336,6 +33368,7 @@ export namespace Prisma {
     email: string
     senha: string
     telefone: string
+    deletedAt?: Date | string | null
     pedidos?: PedidoCreateNestedManyWithoutUserInput
     permissoes?: PermissoesCreateNestedManyWithoutUsersInput
     caixas?: LivroCaixaCreateNestedManyWithoutUsuarioInput
@@ -33347,6 +33380,7 @@ export namespace Prisma {
     email: string
     senha: string
     telefone: string
+    deletedAt?: Date | string | null
     pedidos?: PedidoUncheckedCreateNestedManyWithoutUserInput
     permissoes?: PermissoesUncheckedCreateNestedManyWithoutUsersInput
     caixas?: LivroCaixaUncheckedCreateNestedManyWithoutUsuarioInput
@@ -34774,6 +34808,7 @@ export namespace Prisma {
     email: string
     senha: string
     telefone: string
+    deletedAt?: Date | string | null
     cargo: CargoCreateNestedOneWithoutUsersInput
     permissoes?: PermissoesCreateNestedManyWithoutUsersInput
     caixas?: LivroCaixaCreateNestedManyWithoutUsuarioInput
@@ -34786,6 +34821,7 @@ export namespace Prisma {
     senha: string
     telefone: string
     cargoID: number
+    deletedAt?: Date | string | null
     permissoes?: PermissoesUncheckedCreateNestedManyWithoutUsersInput
     caixas?: LivroCaixaUncheckedCreateNestedManyWithoutUsuarioInput
   }
@@ -34896,6 +34932,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     senha?: StringFieldUpdateOperationsInput | string
     telefone?: StringFieldUpdateOperationsInput | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cargo?: CargoUpdateOneRequiredWithoutUsersNestedInput
     permissoes?: PermissoesUpdateManyWithoutUsersNestedInput
     caixas?: LivroCaixaUpdateManyWithoutUsuarioNestedInput
@@ -34908,6 +34945,7 @@ export namespace Prisma {
     senha?: StringFieldUpdateOperationsInput | string
     telefone?: StringFieldUpdateOperationsInput | string
     cargoID?: IntFieldUpdateOperationsInput | number
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     permissoes?: PermissoesUncheckedUpdateManyWithoutUsersNestedInput
     caixas?: LivroCaixaUncheckedUpdateManyWithoutUsuarioNestedInput
   }
@@ -35294,6 +35332,7 @@ export namespace Prisma {
     email: string
     senha: string
     telefone: string
+    deletedAt?: Date | string | null
     pedidos?: PedidoCreateNestedManyWithoutUserInput
     cargo: CargoCreateNestedOneWithoutUsersInput
     permissoes?: PermissoesCreateNestedManyWithoutUsersInput
@@ -35306,6 +35345,7 @@ export namespace Prisma {
     senha: string
     telefone: string
     cargoID: number
+    deletedAt?: Date | string | null
     pedidos?: PedidoUncheckedCreateNestedManyWithoutUserInput
     permissoes?: PermissoesUncheckedCreateNestedManyWithoutUsersInput
   }
@@ -35362,6 +35402,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     senha?: StringFieldUpdateOperationsInput | string
     telefone?: StringFieldUpdateOperationsInput | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pedidos?: PedidoUpdateManyWithoutUserNestedInput
     cargo?: CargoUpdateOneRequiredWithoutUsersNestedInput
     permissoes?: PermissoesUpdateManyWithoutUsersNestedInput
@@ -35374,6 +35415,7 @@ export namespace Prisma {
     senha?: StringFieldUpdateOperationsInput | string
     telefone?: StringFieldUpdateOperationsInput | string
     cargoID?: IntFieldUpdateOperationsInput | number
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pedidos?: PedidoUncheckedUpdateManyWithoutUserNestedInput
     permissoes?: PermissoesUncheckedUpdateManyWithoutUsersNestedInput
   }
@@ -35496,6 +35538,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     senha?: StringFieldUpdateOperationsInput | string
     telefone?: StringFieldUpdateOperationsInput | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pedidos?: PedidoUpdateManyWithoutUserNestedInput
     cargo?: CargoUpdateOneRequiredWithoutUsersNestedInput
     caixas?: LivroCaixaUpdateManyWithoutUsuarioNestedInput
@@ -35508,6 +35551,7 @@ export namespace Prisma {
     senha?: StringFieldUpdateOperationsInput | string
     telefone?: StringFieldUpdateOperationsInput | string
     cargoID?: IntFieldUpdateOperationsInput | number
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pedidos?: PedidoUncheckedUpdateManyWithoutUserNestedInput
     caixas?: LivroCaixaUncheckedUpdateManyWithoutUsuarioNestedInput
   }
@@ -35519,6 +35563,7 @@ export namespace Prisma {
     senha?: StringFieldUpdateOperationsInput | string
     telefone?: StringFieldUpdateOperationsInput | string
     cargoID?: IntFieldUpdateOperationsInput | number
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type UserCreateManyCargoInput = {
@@ -35527,6 +35572,7 @@ export namespace Prisma {
     email: string
     senha: string
     telefone: string
+    deletedAt?: Date | string | null
   }
 
   export type UserUpdateWithoutCargoInput = {
@@ -35534,6 +35580,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     senha?: StringFieldUpdateOperationsInput | string
     telefone?: StringFieldUpdateOperationsInput | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pedidos?: PedidoUpdateManyWithoutUserNestedInput
     permissoes?: PermissoesUpdateManyWithoutUsersNestedInput
     caixas?: LivroCaixaUpdateManyWithoutUsuarioNestedInput
@@ -35545,6 +35592,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     senha?: StringFieldUpdateOperationsInput | string
     telefone?: StringFieldUpdateOperationsInput | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pedidos?: PedidoUncheckedUpdateManyWithoutUserNestedInput
     permissoes?: PermissoesUncheckedUpdateManyWithoutUsersNestedInput
     caixas?: LivroCaixaUncheckedUpdateManyWithoutUsuarioNestedInput
@@ -35556,6 +35604,7 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     senha?: StringFieldUpdateOperationsInput | string
     telefone?: StringFieldUpdateOperationsInput | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type PedidoCreateManyRegistroInput = {

@@ -19,6 +19,7 @@ model User {
   cargo      Cargo        @relation(fields: [cargoID], references: [id])
   permissoes Permissoes[] @relation("UserPermissions")
   caixas     LivroCaixa[]
+  deletedAt  DateTime?
 }
 
 model Permissoes {
