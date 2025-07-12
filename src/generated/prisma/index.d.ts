@@ -2813,13 +2813,11 @@ export namespace Prisma {
 
   export type UserCountOutputType = {
     pedidos: number
-    permissoes: number
     caixas: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     pedidos?: boolean | UserCountOutputTypeCountPedidosArgs
-    permissoes?: boolean | UserCountOutputTypeCountPermissoesArgs
     caixas?: boolean | UserCountOutputTypeCountCaixasArgs
   }
 
@@ -2844,13 +2842,6 @@ export namespace Prisma {
   /**
    * UserCountOutputType without action
    */
-  export type UserCountOutputTypeCountPermissoesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: PermissoesWhereInput
-  }
-
-  /**
-   * UserCountOutputType without action
-   */
   export type UserCountOutputTypeCountCaixasArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: LivroCaixaWhereInput
   }
@@ -2861,11 +2852,11 @@ export namespace Prisma {
    */
 
   export type PermissoesCountOutputType = {
-    users: number
+    cargos: number
   }
 
   export type PermissoesCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    users?: boolean | PermissoesCountOutputTypeCountUsersArgs
+    cargos?: boolean | PermissoesCountOutputTypeCountCargosArgs
   }
 
   // Custom InputTypes
@@ -2882,8 +2873,8 @@ export namespace Prisma {
   /**
    * PermissoesCountOutputType without action
    */
-  export type PermissoesCountOutputTypeCountUsersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: UserWhereInput
+  export type PermissoesCountOutputTypeCountCargosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CargoWhereInput
   }
 
 
@@ -2892,10 +2883,12 @@ export namespace Prisma {
    */
 
   export type CargoCountOutputType = {
+    permissoes: number
     users: number
   }
 
   export type CargoCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    permissoes?: boolean | CargoCountOutputTypeCountPermissoesArgs
     users?: boolean | CargoCountOutputTypeCountUsersArgs
   }
 
@@ -2908,6 +2901,13 @@ export namespace Prisma {
      * Select specific fields to fetch from the CargoCountOutputType
      */
     select?: CargoCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * CargoCountOutputType without action
+   */
+  export type CargoCountOutputTypeCountPermissoesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PermissoesWhereInput
   }
 
   /**
@@ -3426,7 +3426,6 @@ export namespace Prisma {
     deletedAt?: boolean
     pedidos?: boolean | User$pedidosArgs<ExtArgs>
     cargo?: boolean | CargoDefaultArgs<ExtArgs>
-    permissoes?: boolean | User$permissoesArgs<ExtArgs>
     caixas?: boolean | User$caixasArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
@@ -3467,7 +3466,6 @@ export namespace Prisma {
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     pedidos?: boolean | User$pedidosArgs<ExtArgs>
     cargo?: boolean | CargoDefaultArgs<ExtArgs>
-    permissoes?: boolean | User$permissoesArgs<ExtArgs>
     caixas?: boolean | User$caixasArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -3483,7 +3481,6 @@ export namespace Prisma {
     objects: {
       pedidos: Prisma.$PedidoPayload<ExtArgs>[]
       cargo: Prisma.$CargoPayload<ExtArgs>
-      permissoes: Prisma.$PermissoesPayload<ExtArgs>[]
       caixas: Prisma.$LivroCaixaPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -3890,7 +3887,6 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     pedidos<T extends User$pedidosArgs<ExtArgs> = {}>(args?: Subset<T, User$pedidosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PedidoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     cargo<T extends CargoDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CargoDefaultArgs<ExtArgs>>): Prisma__CargoClient<$Result.GetResult<Prisma.$CargoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    permissoes<T extends User$permissoesArgs<ExtArgs> = {}>(args?: Subset<T, User$permissoesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PermissoesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     caixas<T extends User$caixasArgs<ExtArgs> = {}>(args?: Subset<T, User$caixasArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LivroCaixaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -4348,30 +4344,6 @@ export namespace Prisma {
   }
 
   /**
-   * User.permissoes
-   */
-  export type User$permissoesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Permissoes
-     */
-    select?: PermissoesSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Permissoes
-     */
-    omit?: PermissoesOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PermissoesInclude<ExtArgs> | null
-    where?: PermissoesWhereInput
-    orderBy?: PermissoesOrderByWithRelationInput | PermissoesOrderByWithRelationInput[]
-    cursor?: PermissoesWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: PermissoesScalarFieldEnum | PermissoesScalarFieldEnum[]
-  }
-
-  /**
    * User.caixas
    */
   export type User$caixasArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4596,7 +4568,7 @@ export namespace Prisma {
     id?: boolean
     nome?: boolean
     descricao?: boolean
-    users?: boolean | Permissoes$usersArgs<ExtArgs>
+    cargos?: boolean | Permissoes$cargosArgs<ExtArgs>
     _count?: boolean | PermissoesCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["permissoes"]>
 
@@ -4620,7 +4592,7 @@ export namespace Prisma {
 
   export type PermissoesOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nome" | "descricao", ExtArgs["result"]["permissoes"]>
   export type PermissoesInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    users?: boolean | Permissoes$usersArgs<ExtArgs>
+    cargos?: boolean | Permissoes$cargosArgs<ExtArgs>
     _count?: boolean | PermissoesCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type PermissoesIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -4629,7 +4601,7 @@ export namespace Prisma {
   export type $PermissoesPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Permissoes"
     objects: {
-      users: Prisma.$UserPayload<ExtArgs>[]
+      cargos: Prisma.$CargoPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -5029,7 +5001,7 @@ export namespace Prisma {
    */
   export interface Prisma__PermissoesClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    users<T extends Permissoes$usersArgs<ExtArgs> = {}>(args?: Subset<T, Permissoes$usersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    cargos<T extends Permissoes$cargosArgs<ExtArgs> = {}>(args?: Subset<T, Permissoes$cargosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CargoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5450,27 +5422,27 @@ export namespace Prisma {
   }
 
   /**
-   * Permissoes.users
+   * Permissoes.cargos
    */
-  export type Permissoes$usersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Permissoes$cargosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the User
+     * Select specific fields to fetch from the Cargo
      */
-    select?: UserSelect<ExtArgs> | null
+    select?: CargoSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the User
+     * Omit specific fields from the Cargo
      */
-    omit?: UserOmit<ExtArgs> | null
+    omit?: CargoOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: UserInclude<ExtArgs> | null
-    where?: UserWhereInput
-    orderBy?: UserOrderByWithRelationInput | UserOrderByWithRelationInput[]
-    cursor?: UserWhereUniqueInput
+    include?: CargoInclude<ExtArgs> | null
+    where?: CargoWhereInput
+    orderBy?: CargoOrderByWithRelationInput | CargoOrderByWithRelationInput[]
+    cursor?: CargoWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: UserScalarFieldEnum | UserScalarFieldEnum[]
+    distinct?: CargoScalarFieldEnum | CargoScalarFieldEnum[]
   }
 
   /**
@@ -5666,6 +5638,7 @@ export namespace Prisma {
   export type CargoSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     nome?: boolean
+    permissoes?: boolean | Cargo$permissoesArgs<ExtArgs>
     users?: boolean | Cargo$usersArgs<ExtArgs>
     _count?: boolean | CargoCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["cargo"]>
@@ -5687,6 +5660,7 @@ export namespace Prisma {
 
   export type CargoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nome", ExtArgs["result"]["cargo"]>
   export type CargoInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    permissoes?: boolean | Cargo$permissoesArgs<ExtArgs>
     users?: boolean | Cargo$usersArgs<ExtArgs>
     _count?: boolean | CargoCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -5696,6 +5670,7 @@ export namespace Prisma {
   export type $CargoPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Cargo"
     objects: {
+      permissoes: Prisma.$PermissoesPayload<ExtArgs>[]
       users: Prisma.$UserPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -6095,6 +6070,7 @@ export namespace Prisma {
    */
   export interface Prisma__CargoClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    permissoes<T extends Cargo$permissoesArgs<ExtArgs> = {}>(args?: Subset<T, Cargo$permissoesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PermissoesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     users<T extends Cargo$usersArgs<ExtArgs> = {}>(args?: Subset<T, Cargo$usersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -6512,6 +6488,30 @@ export namespace Prisma {
      * Limit how many Cargos to delete.
      */
     limit?: number
+  }
+
+  /**
+   * Cargo.permissoes
+   */
+  export type Cargo$permissoesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Permissoes
+     */
+    select?: PermissoesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Permissoes
+     */
+    omit?: PermissoesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PermissoesInclude<ExtArgs> | null
+    where?: PermissoesWhereInput
+    orderBy?: PermissoesOrderByWithRelationInput | PermissoesOrderByWithRelationInput[]
+    cursor?: PermissoesWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PermissoesScalarFieldEnum | PermissoesScalarFieldEnum[]
   }
 
   /**
@@ -27528,7 +27528,6 @@ export namespace Prisma {
     deletedAt?: DateTimeNullableFilter<"User"> | Date | string | null
     pedidos?: PedidoListRelationFilter
     cargo?: XOR<CargoScalarRelationFilter, CargoWhereInput>
-    permissoes?: PermissoesListRelationFilter
     caixas?: LivroCaixaListRelationFilter
   }
 
@@ -27542,7 +27541,6 @@ export namespace Prisma {
     deletedAt?: SortOrderInput | SortOrder
     pedidos?: PedidoOrderByRelationAggregateInput
     cargo?: CargoOrderByWithRelationInput
-    permissoes?: PermissoesOrderByRelationAggregateInput
     caixas?: LivroCaixaOrderByRelationAggregateInput
   }
 
@@ -27559,7 +27557,6 @@ export namespace Prisma {
     deletedAt?: DateTimeNullableFilter<"User"> | Date | string | null
     pedidos?: PedidoListRelationFilter
     cargo?: XOR<CargoScalarRelationFilter, CargoWhereInput>
-    permissoes?: PermissoesListRelationFilter
     caixas?: LivroCaixaListRelationFilter
   }, "id" | "email">
 
@@ -27598,14 +27595,14 @@ export namespace Prisma {
     id?: IntFilter<"Permissoes"> | number
     nome?: StringFilter<"Permissoes"> | string
     descricao?: StringNullableFilter<"Permissoes"> | string | null
-    users?: UserListRelationFilter
+    cargos?: CargoListRelationFilter
   }
 
   export type PermissoesOrderByWithRelationInput = {
     id?: SortOrder
     nome?: SortOrder
     descricao?: SortOrderInput | SortOrder
-    users?: UserOrderByRelationAggregateInput
+    cargos?: CargoOrderByRelationAggregateInput
   }
 
   export type PermissoesWhereUniqueInput = Prisma.AtLeast<{
@@ -27615,7 +27612,7 @@ export namespace Prisma {
     OR?: PermissoesWhereInput[]
     NOT?: PermissoesWhereInput | PermissoesWhereInput[]
     descricao?: StringNullableFilter<"Permissoes"> | string | null
-    users?: UserListRelationFilter
+    cargos?: CargoListRelationFilter
   }, "id" | "nome">
 
   export type PermissoesOrderByWithAggregationInput = {
@@ -27644,12 +27641,14 @@ export namespace Prisma {
     NOT?: CargoWhereInput | CargoWhereInput[]
     id?: IntFilter<"Cargo"> | number
     nome?: StringFilter<"Cargo"> | string
+    permissoes?: PermissoesListRelationFilter
     users?: UserListRelationFilter
   }
 
   export type CargoOrderByWithRelationInput = {
     id?: SortOrder
     nome?: SortOrder
+    permissoes?: PermissoesOrderByRelationAggregateInput
     users?: UserOrderByRelationAggregateInput
   }
 
@@ -27659,6 +27658,7 @@ export namespace Prisma {
     AND?: CargoWhereInput | CargoWhereInput[]
     OR?: CargoWhereInput[]
     NOT?: CargoWhereInput | CargoWhereInput[]
+    permissoes?: PermissoesListRelationFilter
     users?: UserListRelationFilter
   }, "id" | "nome">
 
@@ -28838,7 +28838,6 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     pedidos?: PedidoCreateNestedManyWithoutUserInput
     cargo: CargoCreateNestedOneWithoutUsersInput
-    permissoes?: PermissoesCreateNestedManyWithoutUsersInput
     caixas?: LivroCaixaCreateNestedManyWithoutUsuarioInput
   }
 
@@ -28851,7 +28850,6 @@ export namespace Prisma {
     cargoID: number
     deletedAt?: Date | string | null
     pedidos?: PedidoUncheckedCreateNestedManyWithoutUserInput
-    permissoes?: PermissoesUncheckedCreateNestedManyWithoutUsersInput
     caixas?: LivroCaixaUncheckedCreateNestedManyWithoutUsuarioInput
   }
 
@@ -28863,7 +28861,6 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pedidos?: PedidoUpdateManyWithoutUserNestedInput
     cargo?: CargoUpdateOneRequiredWithoutUsersNestedInput
-    permissoes?: PermissoesUpdateManyWithoutUsersNestedInput
     caixas?: LivroCaixaUpdateManyWithoutUsuarioNestedInput
   }
 
@@ -28876,7 +28873,6 @@ export namespace Prisma {
     cargoID?: IntFieldUpdateOperationsInput | number
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pedidos?: PedidoUncheckedUpdateManyWithoutUserNestedInput
-    permissoes?: PermissoesUncheckedUpdateManyWithoutUsersNestedInput
     caixas?: LivroCaixaUncheckedUpdateManyWithoutUsuarioNestedInput
   }
 
@@ -28911,27 +28907,27 @@ export namespace Prisma {
   export type PermissoesCreateInput = {
     nome: string
     descricao?: string | null
-    users?: UserCreateNestedManyWithoutPermissoesInput
+    cargos?: CargoCreateNestedManyWithoutPermissoesInput
   }
 
   export type PermissoesUncheckedCreateInput = {
     id?: number
     nome: string
     descricao?: string | null
-    users?: UserUncheckedCreateNestedManyWithoutPermissoesInput
+    cargos?: CargoUncheckedCreateNestedManyWithoutPermissoesInput
   }
 
   export type PermissoesUpdateInput = {
     nome?: StringFieldUpdateOperationsInput | string
     descricao?: NullableStringFieldUpdateOperationsInput | string | null
-    users?: UserUpdateManyWithoutPermissoesNestedInput
+    cargos?: CargoUpdateManyWithoutPermissoesNestedInput
   }
 
   export type PermissoesUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     nome?: StringFieldUpdateOperationsInput | string
     descricao?: NullableStringFieldUpdateOperationsInput | string | null
-    users?: UserUncheckedUpdateManyWithoutPermissoesNestedInput
+    cargos?: CargoUncheckedUpdateManyWithoutPermissoesNestedInput
   }
 
   export type PermissoesCreateManyInput = {
@@ -28953,23 +28949,27 @@ export namespace Prisma {
 
   export type CargoCreateInput = {
     nome: string
+    permissoes?: PermissoesCreateNestedManyWithoutCargosInput
     users?: UserCreateNestedManyWithoutCargoInput
   }
 
   export type CargoUncheckedCreateInput = {
     id?: number
     nome: string
+    permissoes?: PermissoesUncheckedCreateNestedManyWithoutCargosInput
     users?: UserUncheckedCreateNestedManyWithoutCargoInput
   }
 
   export type CargoUpdateInput = {
     nome?: StringFieldUpdateOperationsInput | string
+    permissoes?: PermissoesUpdateManyWithoutCargosNestedInput
     users?: UserUpdateManyWithoutCargoNestedInput
   }
 
   export type CargoUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     nome?: StringFieldUpdateOperationsInput | string
+    permissoes?: PermissoesUncheckedUpdateManyWithoutCargosNestedInput
     users?: UserUncheckedUpdateManyWithoutCargoNestedInput
   }
 
@@ -30142,12 +30142,6 @@ export namespace Prisma {
     isNot?: CargoWhereInput
   }
 
-  export type PermissoesListRelationFilter = {
-    every?: PermissoesWhereInput
-    some?: PermissoesWhereInput
-    none?: PermissoesWhereInput
-  }
-
   export type LivroCaixaListRelationFilter = {
     every?: LivroCaixaWhereInput
     some?: LivroCaixaWhereInput
@@ -30160,10 +30154,6 @@ export namespace Prisma {
   }
 
   export type PedidoOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type PermissoesOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -30274,13 +30264,13 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
-  export type UserListRelationFilter = {
-    every?: UserWhereInput
-    some?: UserWhereInput
-    none?: UserWhereInput
+  export type CargoListRelationFilter = {
+    every?: CargoWhereInput
+    some?: CargoWhereInput
+    none?: CargoWhereInput
   }
 
-  export type UserOrderByRelationAggregateInput = {
+  export type CargoOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -30326,6 +30316,26 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedStringNullableFilter<$PrismaModel>
     _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type PermissoesListRelationFilter = {
+    every?: PermissoesWhereInput
+    some?: PermissoesWhereInput
+    none?: PermissoesWhereInput
+  }
+
+  export type UserListRelationFilter = {
+    every?: UserWhereInput
+    some?: UserWhereInput
+    none?: UserWhereInput
+  }
+
+  export type PermissoesOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type UserOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type CargoCountOrderByAggregateInput = {
@@ -31477,12 +31487,6 @@ export namespace Prisma {
     connect?: CargoWhereUniqueInput
   }
 
-  export type PermissoesCreateNestedManyWithoutUsersInput = {
-    create?: XOR<PermissoesCreateWithoutUsersInput, PermissoesUncheckedCreateWithoutUsersInput> | PermissoesCreateWithoutUsersInput[] | PermissoesUncheckedCreateWithoutUsersInput[]
-    connectOrCreate?: PermissoesCreateOrConnectWithoutUsersInput | PermissoesCreateOrConnectWithoutUsersInput[]
-    connect?: PermissoesWhereUniqueInput | PermissoesWhereUniqueInput[]
-  }
-
   export type LivroCaixaCreateNestedManyWithoutUsuarioInput = {
     create?: XOR<LivroCaixaCreateWithoutUsuarioInput, LivroCaixaUncheckedCreateWithoutUsuarioInput> | LivroCaixaCreateWithoutUsuarioInput[] | LivroCaixaUncheckedCreateWithoutUsuarioInput[]
     connectOrCreate?: LivroCaixaCreateOrConnectWithoutUsuarioInput | LivroCaixaCreateOrConnectWithoutUsuarioInput[]
@@ -31495,12 +31499,6 @@ export namespace Prisma {
     connectOrCreate?: PedidoCreateOrConnectWithoutUserInput | PedidoCreateOrConnectWithoutUserInput[]
     createMany?: PedidoCreateManyUserInputEnvelope
     connect?: PedidoWhereUniqueInput | PedidoWhereUniqueInput[]
-  }
-
-  export type PermissoesUncheckedCreateNestedManyWithoutUsersInput = {
-    create?: XOR<PermissoesCreateWithoutUsersInput, PermissoesUncheckedCreateWithoutUsersInput> | PermissoesCreateWithoutUsersInput[] | PermissoesUncheckedCreateWithoutUsersInput[]
-    connectOrCreate?: PermissoesCreateOrConnectWithoutUsersInput | PermissoesCreateOrConnectWithoutUsersInput[]
-    connect?: PermissoesWhereUniqueInput | PermissoesWhereUniqueInput[]
   }
 
   export type LivroCaixaUncheckedCreateNestedManyWithoutUsuarioInput = {
@@ -31540,19 +31538,6 @@ export namespace Prisma {
     update?: XOR<XOR<CargoUpdateToOneWithWhereWithoutUsersInput, CargoUpdateWithoutUsersInput>, CargoUncheckedUpdateWithoutUsersInput>
   }
 
-  export type PermissoesUpdateManyWithoutUsersNestedInput = {
-    create?: XOR<PermissoesCreateWithoutUsersInput, PermissoesUncheckedCreateWithoutUsersInput> | PermissoesCreateWithoutUsersInput[] | PermissoesUncheckedCreateWithoutUsersInput[]
-    connectOrCreate?: PermissoesCreateOrConnectWithoutUsersInput | PermissoesCreateOrConnectWithoutUsersInput[]
-    upsert?: PermissoesUpsertWithWhereUniqueWithoutUsersInput | PermissoesUpsertWithWhereUniqueWithoutUsersInput[]
-    set?: PermissoesWhereUniqueInput | PermissoesWhereUniqueInput[]
-    disconnect?: PermissoesWhereUniqueInput | PermissoesWhereUniqueInput[]
-    delete?: PermissoesWhereUniqueInput | PermissoesWhereUniqueInput[]
-    connect?: PermissoesWhereUniqueInput | PermissoesWhereUniqueInput[]
-    update?: PermissoesUpdateWithWhereUniqueWithoutUsersInput | PermissoesUpdateWithWhereUniqueWithoutUsersInput[]
-    updateMany?: PermissoesUpdateManyWithWhereWithoutUsersInput | PermissoesUpdateManyWithWhereWithoutUsersInput[]
-    deleteMany?: PermissoesScalarWhereInput | PermissoesScalarWhereInput[]
-  }
-
   export type LivroCaixaUpdateManyWithoutUsuarioNestedInput = {
     create?: XOR<LivroCaixaCreateWithoutUsuarioInput, LivroCaixaUncheckedCreateWithoutUsuarioInput> | LivroCaixaCreateWithoutUsuarioInput[] | LivroCaixaUncheckedCreateWithoutUsuarioInput[]
     connectOrCreate?: LivroCaixaCreateOrConnectWithoutUsuarioInput | LivroCaixaCreateOrConnectWithoutUsuarioInput[]
@@ -31589,19 +31574,6 @@ export namespace Prisma {
     deleteMany?: PedidoScalarWhereInput | PedidoScalarWhereInput[]
   }
 
-  export type PermissoesUncheckedUpdateManyWithoutUsersNestedInput = {
-    create?: XOR<PermissoesCreateWithoutUsersInput, PermissoesUncheckedCreateWithoutUsersInput> | PermissoesCreateWithoutUsersInput[] | PermissoesUncheckedCreateWithoutUsersInput[]
-    connectOrCreate?: PermissoesCreateOrConnectWithoutUsersInput | PermissoesCreateOrConnectWithoutUsersInput[]
-    upsert?: PermissoesUpsertWithWhereUniqueWithoutUsersInput | PermissoesUpsertWithWhereUniqueWithoutUsersInput[]
-    set?: PermissoesWhereUniqueInput | PermissoesWhereUniqueInput[]
-    disconnect?: PermissoesWhereUniqueInput | PermissoesWhereUniqueInput[]
-    delete?: PermissoesWhereUniqueInput | PermissoesWhereUniqueInput[]
-    connect?: PermissoesWhereUniqueInput | PermissoesWhereUniqueInput[]
-    update?: PermissoesUpdateWithWhereUniqueWithoutUsersInput | PermissoesUpdateWithWhereUniqueWithoutUsersInput[]
-    updateMany?: PermissoesUpdateManyWithWhereWithoutUsersInput | PermissoesUpdateManyWithWhereWithoutUsersInput[]
-    deleteMany?: PermissoesScalarWhereInput | PermissoesScalarWhereInput[]
-  }
-
   export type LivroCaixaUncheckedUpdateManyWithoutUsuarioNestedInput = {
     create?: XOR<LivroCaixaCreateWithoutUsuarioInput, LivroCaixaUncheckedCreateWithoutUsuarioInput> | LivroCaixaCreateWithoutUsuarioInput[] | LivroCaixaUncheckedCreateWithoutUsuarioInput[]
     connectOrCreate?: LivroCaixaCreateOrConnectWithoutUsuarioInput | LivroCaixaCreateOrConnectWithoutUsuarioInput[]
@@ -31616,46 +31588,52 @@ export namespace Prisma {
     deleteMany?: LivroCaixaScalarWhereInput | LivroCaixaScalarWhereInput[]
   }
 
-  export type UserCreateNestedManyWithoutPermissoesInput = {
-    create?: XOR<UserCreateWithoutPermissoesInput, UserUncheckedCreateWithoutPermissoesInput> | UserCreateWithoutPermissoesInput[] | UserUncheckedCreateWithoutPermissoesInput[]
-    connectOrCreate?: UserCreateOrConnectWithoutPermissoesInput | UserCreateOrConnectWithoutPermissoesInput[]
-    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+  export type CargoCreateNestedManyWithoutPermissoesInput = {
+    create?: XOR<CargoCreateWithoutPermissoesInput, CargoUncheckedCreateWithoutPermissoesInput> | CargoCreateWithoutPermissoesInput[] | CargoUncheckedCreateWithoutPermissoesInput[]
+    connectOrCreate?: CargoCreateOrConnectWithoutPermissoesInput | CargoCreateOrConnectWithoutPermissoesInput[]
+    connect?: CargoWhereUniqueInput | CargoWhereUniqueInput[]
   }
 
-  export type UserUncheckedCreateNestedManyWithoutPermissoesInput = {
-    create?: XOR<UserCreateWithoutPermissoesInput, UserUncheckedCreateWithoutPermissoesInput> | UserCreateWithoutPermissoesInput[] | UserUncheckedCreateWithoutPermissoesInput[]
-    connectOrCreate?: UserCreateOrConnectWithoutPermissoesInput | UserCreateOrConnectWithoutPermissoesInput[]
-    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+  export type CargoUncheckedCreateNestedManyWithoutPermissoesInput = {
+    create?: XOR<CargoCreateWithoutPermissoesInput, CargoUncheckedCreateWithoutPermissoesInput> | CargoCreateWithoutPermissoesInput[] | CargoUncheckedCreateWithoutPermissoesInput[]
+    connectOrCreate?: CargoCreateOrConnectWithoutPermissoesInput | CargoCreateOrConnectWithoutPermissoesInput[]
+    connect?: CargoWhereUniqueInput | CargoWhereUniqueInput[]
   }
 
   export type NullableStringFieldUpdateOperationsInput = {
     set?: string | null
   }
 
-  export type UserUpdateManyWithoutPermissoesNestedInput = {
-    create?: XOR<UserCreateWithoutPermissoesInput, UserUncheckedCreateWithoutPermissoesInput> | UserCreateWithoutPermissoesInput[] | UserUncheckedCreateWithoutPermissoesInput[]
-    connectOrCreate?: UserCreateOrConnectWithoutPermissoesInput | UserCreateOrConnectWithoutPermissoesInput[]
-    upsert?: UserUpsertWithWhereUniqueWithoutPermissoesInput | UserUpsertWithWhereUniqueWithoutPermissoesInput[]
-    set?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    disconnect?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    delete?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    update?: UserUpdateWithWhereUniqueWithoutPermissoesInput | UserUpdateWithWhereUniqueWithoutPermissoesInput[]
-    updateMany?: UserUpdateManyWithWhereWithoutPermissoesInput | UserUpdateManyWithWhereWithoutPermissoesInput[]
-    deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
+  export type CargoUpdateManyWithoutPermissoesNestedInput = {
+    create?: XOR<CargoCreateWithoutPermissoesInput, CargoUncheckedCreateWithoutPermissoesInput> | CargoCreateWithoutPermissoesInput[] | CargoUncheckedCreateWithoutPermissoesInput[]
+    connectOrCreate?: CargoCreateOrConnectWithoutPermissoesInput | CargoCreateOrConnectWithoutPermissoesInput[]
+    upsert?: CargoUpsertWithWhereUniqueWithoutPermissoesInput | CargoUpsertWithWhereUniqueWithoutPermissoesInput[]
+    set?: CargoWhereUniqueInput | CargoWhereUniqueInput[]
+    disconnect?: CargoWhereUniqueInput | CargoWhereUniqueInput[]
+    delete?: CargoWhereUniqueInput | CargoWhereUniqueInput[]
+    connect?: CargoWhereUniqueInput | CargoWhereUniqueInput[]
+    update?: CargoUpdateWithWhereUniqueWithoutPermissoesInput | CargoUpdateWithWhereUniqueWithoutPermissoesInput[]
+    updateMany?: CargoUpdateManyWithWhereWithoutPermissoesInput | CargoUpdateManyWithWhereWithoutPermissoesInput[]
+    deleteMany?: CargoScalarWhereInput | CargoScalarWhereInput[]
   }
 
-  export type UserUncheckedUpdateManyWithoutPermissoesNestedInput = {
-    create?: XOR<UserCreateWithoutPermissoesInput, UserUncheckedCreateWithoutPermissoesInput> | UserCreateWithoutPermissoesInput[] | UserUncheckedCreateWithoutPermissoesInput[]
-    connectOrCreate?: UserCreateOrConnectWithoutPermissoesInput | UserCreateOrConnectWithoutPermissoesInput[]
-    upsert?: UserUpsertWithWhereUniqueWithoutPermissoesInput | UserUpsertWithWhereUniqueWithoutPermissoesInput[]
-    set?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    disconnect?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    delete?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    update?: UserUpdateWithWhereUniqueWithoutPermissoesInput | UserUpdateWithWhereUniqueWithoutPermissoesInput[]
-    updateMany?: UserUpdateManyWithWhereWithoutPermissoesInput | UserUpdateManyWithWhereWithoutPermissoesInput[]
-    deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
+  export type CargoUncheckedUpdateManyWithoutPermissoesNestedInput = {
+    create?: XOR<CargoCreateWithoutPermissoesInput, CargoUncheckedCreateWithoutPermissoesInput> | CargoCreateWithoutPermissoesInput[] | CargoUncheckedCreateWithoutPermissoesInput[]
+    connectOrCreate?: CargoCreateOrConnectWithoutPermissoesInput | CargoCreateOrConnectWithoutPermissoesInput[]
+    upsert?: CargoUpsertWithWhereUniqueWithoutPermissoesInput | CargoUpsertWithWhereUniqueWithoutPermissoesInput[]
+    set?: CargoWhereUniqueInput | CargoWhereUniqueInput[]
+    disconnect?: CargoWhereUniqueInput | CargoWhereUniqueInput[]
+    delete?: CargoWhereUniqueInput | CargoWhereUniqueInput[]
+    connect?: CargoWhereUniqueInput | CargoWhereUniqueInput[]
+    update?: CargoUpdateWithWhereUniqueWithoutPermissoesInput | CargoUpdateWithWhereUniqueWithoutPermissoesInput[]
+    updateMany?: CargoUpdateManyWithWhereWithoutPermissoesInput | CargoUpdateManyWithWhereWithoutPermissoesInput[]
+    deleteMany?: CargoScalarWhereInput | CargoScalarWhereInput[]
+  }
+
+  export type PermissoesCreateNestedManyWithoutCargosInput = {
+    create?: XOR<PermissoesCreateWithoutCargosInput, PermissoesUncheckedCreateWithoutCargosInput> | PermissoesCreateWithoutCargosInput[] | PermissoesUncheckedCreateWithoutCargosInput[]
+    connectOrCreate?: PermissoesCreateOrConnectWithoutCargosInput | PermissoesCreateOrConnectWithoutCargosInput[]
+    connect?: PermissoesWhereUniqueInput | PermissoesWhereUniqueInput[]
   }
 
   export type UserCreateNestedManyWithoutCargoInput = {
@@ -31665,11 +31643,30 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
   }
 
+  export type PermissoesUncheckedCreateNestedManyWithoutCargosInput = {
+    create?: XOR<PermissoesCreateWithoutCargosInput, PermissoesUncheckedCreateWithoutCargosInput> | PermissoesCreateWithoutCargosInput[] | PermissoesUncheckedCreateWithoutCargosInput[]
+    connectOrCreate?: PermissoesCreateOrConnectWithoutCargosInput | PermissoesCreateOrConnectWithoutCargosInput[]
+    connect?: PermissoesWhereUniqueInput | PermissoesWhereUniqueInput[]
+  }
+
   export type UserUncheckedCreateNestedManyWithoutCargoInput = {
     create?: XOR<UserCreateWithoutCargoInput, UserUncheckedCreateWithoutCargoInput> | UserCreateWithoutCargoInput[] | UserUncheckedCreateWithoutCargoInput[]
     connectOrCreate?: UserCreateOrConnectWithoutCargoInput | UserCreateOrConnectWithoutCargoInput[]
     createMany?: UserCreateManyCargoInputEnvelope
     connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+  }
+
+  export type PermissoesUpdateManyWithoutCargosNestedInput = {
+    create?: XOR<PermissoesCreateWithoutCargosInput, PermissoesUncheckedCreateWithoutCargosInput> | PermissoesCreateWithoutCargosInput[] | PermissoesUncheckedCreateWithoutCargosInput[]
+    connectOrCreate?: PermissoesCreateOrConnectWithoutCargosInput | PermissoesCreateOrConnectWithoutCargosInput[]
+    upsert?: PermissoesUpsertWithWhereUniqueWithoutCargosInput | PermissoesUpsertWithWhereUniqueWithoutCargosInput[]
+    set?: PermissoesWhereUniqueInput | PermissoesWhereUniqueInput[]
+    disconnect?: PermissoesWhereUniqueInput | PermissoesWhereUniqueInput[]
+    delete?: PermissoesWhereUniqueInput | PermissoesWhereUniqueInput[]
+    connect?: PermissoesWhereUniqueInput | PermissoesWhereUniqueInput[]
+    update?: PermissoesUpdateWithWhereUniqueWithoutCargosInput | PermissoesUpdateWithWhereUniqueWithoutCargosInput[]
+    updateMany?: PermissoesUpdateManyWithWhereWithoutCargosInput | PermissoesUpdateManyWithWhereWithoutCargosInput[]
+    deleteMany?: PermissoesScalarWhereInput | PermissoesScalarWhereInput[]
   }
 
   export type UserUpdateManyWithoutCargoNestedInput = {
@@ -31684,6 +31681,19 @@ export namespace Prisma {
     update?: UserUpdateWithWhereUniqueWithoutCargoInput | UserUpdateWithWhereUniqueWithoutCargoInput[]
     updateMany?: UserUpdateManyWithWhereWithoutCargoInput | UserUpdateManyWithWhereWithoutCargoInput[]
     deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
+  }
+
+  export type PermissoesUncheckedUpdateManyWithoutCargosNestedInput = {
+    create?: XOR<PermissoesCreateWithoutCargosInput, PermissoesUncheckedCreateWithoutCargosInput> | PermissoesCreateWithoutCargosInput[] | PermissoesUncheckedCreateWithoutCargosInput[]
+    connectOrCreate?: PermissoesCreateOrConnectWithoutCargosInput | PermissoesCreateOrConnectWithoutCargosInput[]
+    upsert?: PermissoesUpsertWithWhereUniqueWithoutCargosInput | PermissoesUpsertWithWhereUniqueWithoutCargosInput[]
+    set?: PermissoesWhereUniqueInput | PermissoesWhereUniqueInput[]
+    disconnect?: PermissoesWhereUniqueInput | PermissoesWhereUniqueInput[]
+    delete?: PermissoesWhereUniqueInput | PermissoesWhereUniqueInput[]
+    connect?: PermissoesWhereUniqueInput | PermissoesWhereUniqueInput[]
+    update?: PermissoesUpdateWithWhereUniqueWithoutCargosInput | PermissoesUpdateWithWhereUniqueWithoutCargosInput[]
+    updateMany?: PermissoesUpdateManyWithWhereWithoutCargosInput | PermissoesUpdateManyWithWhereWithoutCargosInput[]
+    deleteMany?: PermissoesScalarWhereInput | PermissoesScalarWhereInput[]
   }
 
   export type UserUncheckedUpdateManyWithoutCargoNestedInput = {
@@ -33145,32 +33155,18 @@ export namespace Prisma {
 
   export type CargoCreateWithoutUsersInput = {
     nome: string
+    permissoes?: PermissoesCreateNestedManyWithoutCargosInput
   }
 
   export type CargoUncheckedCreateWithoutUsersInput = {
     id?: number
     nome: string
+    permissoes?: PermissoesUncheckedCreateNestedManyWithoutCargosInput
   }
 
   export type CargoCreateOrConnectWithoutUsersInput = {
     where: CargoWhereUniqueInput
     create: XOR<CargoCreateWithoutUsersInput, CargoUncheckedCreateWithoutUsersInput>
-  }
-
-  export type PermissoesCreateWithoutUsersInput = {
-    nome: string
-    descricao?: string | null
-  }
-
-  export type PermissoesUncheckedCreateWithoutUsersInput = {
-    id?: number
-    nome: string
-    descricao?: string | null
-  }
-
-  export type PermissoesCreateOrConnectWithoutUsersInput = {
-    where: PermissoesWhereUniqueInput
-    create: XOR<PermissoesCreateWithoutUsersInput, PermissoesUncheckedCreateWithoutUsersInput>
   }
 
   export type LivroCaixaCreateWithoutUsuarioInput = {
@@ -33245,36 +33241,13 @@ export namespace Prisma {
 
   export type CargoUpdateWithoutUsersInput = {
     nome?: StringFieldUpdateOperationsInput | string
+    permissoes?: PermissoesUpdateManyWithoutCargosNestedInput
   }
 
   export type CargoUncheckedUpdateWithoutUsersInput = {
     id?: IntFieldUpdateOperationsInput | number
     nome?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type PermissoesUpsertWithWhereUniqueWithoutUsersInput = {
-    where: PermissoesWhereUniqueInput
-    update: XOR<PermissoesUpdateWithoutUsersInput, PermissoesUncheckedUpdateWithoutUsersInput>
-    create: XOR<PermissoesCreateWithoutUsersInput, PermissoesUncheckedCreateWithoutUsersInput>
-  }
-
-  export type PermissoesUpdateWithWhereUniqueWithoutUsersInput = {
-    where: PermissoesWhereUniqueInput
-    data: XOR<PermissoesUpdateWithoutUsersInput, PermissoesUncheckedUpdateWithoutUsersInput>
-  }
-
-  export type PermissoesUpdateManyWithWhereWithoutUsersInput = {
-    where: PermissoesScalarWhereInput
-    data: XOR<PermissoesUpdateManyMutationInput, PermissoesUncheckedUpdateManyWithoutUsersInput>
-  }
-
-  export type PermissoesScalarWhereInput = {
-    AND?: PermissoesScalarWhereInput | PermissoesScalarWhereInput[]
-    OR?: PermissoesScalarWhereInput[]
-    NOT?: PermissoesScalarWhereInput | PermissoesScalarWhereInput[]
-    id?: IntFilter<"Permissoes"> | number
-    nome?: StringFilter<"Permissoes"> | string
-    descricao?: StringNullableFilter<"Permissoes"> | string | null
+    permissoes?: PermissoesUncheckedUpdateManyWithoutCargosNestedInput
   }
 
   export type LivroCaixaUpsertWithWhereUniqueWithoutUsuarioInput = {
@@ -33306,61 +33279,60 @@ export namespace Prisma {
     usuarioID?: IntFilter<"LivroCaixa"> | number
   }
 
-  export type UserCreateWithoutPermissoesInput = {
+  export type CargoCreateWithoutPermissoesInput = {
     nome: string
-    email: string
-    senha: string
-    telefone: string
-    deletedAt?: Date | string | null
-    pedidos?: PedidoCreateNestedManyWithoutUserInput
-    cargo: CargoCreateNestedOneWithoutUsersInput
-    caixas?: LivroCaixaCreateNestedManyWithoutUsuarioInput
+    users?: UserCreateNestedManyWithoutCargoInput
   }
 
-  export type UserUncheckedCreateWithoutPermissoesInput = {
+  export type CargoUncheckedCreateWithoutPermissoesInput = {
     id?: number
     nome: string
-    email: string
-    senha: string
-    telefone: string
-    cargoID: number
-    deletedAt?: Date | string | null
-    pedidos?: PedidoUncheckedCreateNestedManyWithoutUserInput
-    caixas?: LivroCaixaUncheckedCreateNestedManyWithoutUsuarioInput
+    users?: UserUncheckedCreateNestedManyWithoutCargoInput
   }
 
-  export type UserCreateOrConnectWithoutPermissoesInput = {
-    where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutPermissoesInput, UserUncheckedCreateWithoutPermissoesInput>
+  export type CargoCreateOrConnectWithoutPermissoesInput = {
+    where: CargoWhereUniqueInput
+    create: XOR<CargoCreateWithoutPermissoesInput, CargoUncheckedCreateWithoutPermissoesInput>
   }
 
-  export type UserUpsertWithWhereUniqueWithoutPermissoesInput = {
-    where: UserWhereUniqueInput
-    update: XOR<UserUpdateWithoutPermissoesInput, UserUncheckedUpdateWithoutPermissoesInput>
-    create: XOR<UserCreateWithoutPermissoesInput, UserUncheckedCreateWithoutPermissoesInput>
+  export type CargoUpsertWithWhereUniqueWithoutPermissoesInput = {
+    where: CargoWhereUniqueInput
+    update: XOR<CargoUpdateWithoutPermissoesInput, CargoUncheckedUpdateWithoutPermissoesInput>
+    create: XOR<CargoCreateWithoutPermissoesInput, CargoUncheckedCreateWithoutPermissoesInput>
   }
 
-  export type UserUpdateWithWhereUniqueWithoutPermissoesInput = {
-    where: UserWhereUniqueInput
-    data: XOR<UserUpdateWithoutPermissoesInput, UserUncheckedUpdateWithoutPermissoesInput>
+  export type CargoUpdateWithWhereUniqueWithoutPermissoesInput = {
+    where: CargoWhereUniqueInput
+    data: XOR<CargoUpdateWithoutPermissoesInput, CargoUncheckedUpdateWithoutPermissoesInput>
   }
 
-  export type UserUpdateManyWithWhereWithoutPermissoesInput = {
-    where: UserScalarWhereInput
-    data: XOR<UserUpdateManyMutationInput, UserUncheckedUpdateManyWithoutPermissoesInput>
+  export type CargoUpdateManyWithWhereWithoutPermissoesInput = {
+    where: CargoScalarWhereInput
+    data: XOR<CargoUpdateManyMutationInput, CargoUncheckedUpdateManyWithoutPermissoesInput>
   }
 
-  export type UserScalarWhereInput = {
-    AND?: UserScalarWhereInput | UserScalarWhereInput[]
-    OR?: UserScalarWhereInput[]
-    NOT?: UserScalarWhereInput | UserScalarWhereInput[]
-    id?: IntFilter<"User"> | number
-    nome?: StringFilter<"User"> | string
-    email?: StringFilter<"User"> | string
-    senha?: StringFilter<"User"> | string
-    telefone?: StringFilter<"User"> | string
-    cargoID?: IntFilter<"User"> | number
-    deletedAt?: DateTimeNullableFilter<"User"> | Date | string | null
+  export type CargoScalarWhereInput = {
+    AND?: CargoScalarWhereInput | CargoScalarWhereInput[]
+    OR?: CargoScalarWhereInput[]
+    NOT?: CargoScalarWhereInput | CargoScalarWhereInput[]
+    id?: IntFilter<"Cargo"> | number
+    nome?: StringFilter<"Cargo"> | string
+  }
+
+  export type PermissoesCreateWithoutCargosInput = {
+    nome: string
+    descricao?: string | null
+  }
+
+  export type PermissoesUncheckedCreateWithoutCargosInput = {
+    id?: number
+    nome: string
+    descricao?: string | null
+  }
+
+  export type PermissoesCreateOrConnectWithoutCargosInput = {
+    where: PermissoesWhereUniqueInput
+    create: XOR<PermissoesCreateWithoutCargosInput, PermissoesUncheckedCreateWithoutCargosInput>
   }
 
   export type UserCreateWithoutCargoInput = {
@@ -33370,7 +33342,6 @@ export namespace Prisma {
     telefone: string
     deletedAt?: Date | string | null
     pedidos?: PedidoCreateNestedManyWithoutUserInput
-    permissoes?: PermissoesCreateNestedManyWithoutUsersInput
     caixas?: LivroCaixaCreateNestedManyWithoutUsuarioInput
   }
 
@@ -33382,7 +33353,6 @@ export namespace Prisma {
     telefone: string
     deletedAt?: Date | string | null
     pedidos?: PedidoUncheckedCreateNestedManyWithoutUserInput
-    permissoes?: PermissoesUncheckedCreateNestedManyWithoutUsersInput
     caixas?: LivroCaixaUncheckedCreateNestedManyWithoutUsuarioInput
   }
 
@@ -33394,6 +33364,31 @@ export namespace Prisma {
   export type UserCreateManyCargoInputEnvelope = {
     data: UserCreateManyCargoInput | UserCreateManyCargoInput[]
     skipDuplicates?: boolean
+  }
+
+  export type PermissoesUpsertWithWhereUniqueWithoutCargosInput = {
+    where: PermissoesWhereUniqueInput
+    update: XOR<PermissoesUpdateWithoutCargosInput, PermissoesUncheckedUpdateWithoutCargosInput>
+    create: XOR<PermissoesCreateWithoutCargosInput, PermissoesUncheckedCreateWithoutCargosInput>
+  }
+
+  export type PermissoesUpdateWithWhereUniqueWithoutCargosInput = {
+    where: PermissoesWhereUniqueInput
+    data: XOR<PermissoesUpdateWithoutCargosInput, PermissoesUncheckedUpdateWithoutCargosInput>
+  }
+
+  export type PermissoesUpdateManyWithWhereWithoutCargosInput = {
+    where: PermissoesScalarWhereInput
+    data: XOR<PermissoesUpdateManyMutationInput, PermissoesUncheckedUpdateManyWithoutCargosInput>
+  }
+
+  export type PermissoesScalarWhereInput = {
+    AND?: PermissoesScalarWhereInput | PermissoesScalarWhereInput[]
+    OR?: PermissoesScalarWhereInput[]
+    NOT?: PermissoesScalarWhereInput | PermissoesScalarWhereInput[]
+    id?: IntFilter<"Permissoes"> | number
+    nome?: StringFilter<"Permissoes"> | string
+    descricao?: StringNullableFilter<"Permissoes"> | string | null
   }
 
   export type UserUpsertWithWhereUniqueWithoutCargoInput = {
@@ -33410,6 +33405,19 @@ export namespace Prisma {
   export type UserUpdateManyWithWhereWithoutCargoInput = {
     where: UserScalarWhereInput
     data: XOR<UserUpdateManyMutationInput, UserUncheckedUpdateManyWithoutCargoInput>
+  }
+
+  export type UserScalarWhereInput = {
+    AND?: UserScalarWhereInput | UserScalarWhereInput[]
+    OR?: UserScalarWhereInput[]
+    NOT?: UserScalarWhereInput | UserScalarWhereInput[]
+    id?: IntFilter<"User"> | number
+    nome?: StringFilter<"User"> | string
+    email?: StringFilter<"User"> | string
+    senha?: StringFilter<"User"> | string
+    telefone?: StringFilter<"User"> | string
+    cargoID?: IntFilter<"User"> | number
+    deletedAt?: DateTimeNullableFilter<"User"> | Date | string | null
   }
 
   export type DadosPagamentoCreateWithoutRegistroInput = {
@@ -34810,7 +34818,6 @@ export namespace Prisma {
     telefone: string
     deletedAt?: Date | string | null
     cargo: CargoCreateNestedOneWithoutUsersInput
-    permissoes?: PermissoesCreateNestedManyWithoutUsersInput
     caixas?: LivroCaixaCreateNestedManyWithoutUsuarioInput
   }
 
@@ -34822,7 +34829,6 @@ export namespace Prisma {
     telefone: string
     cargoID: number
     deletedAt?: Date | string | null
-    permissoes?: PermissoesUncheckedCreateNestedManyWithoutUsersInput
     caixas?: LivroCaixaUncheckedCreateNestedManyWithoutUsuarioInput
   }
 
@@ -34934,7 +34940,6 @@ export namespace Prisma {
     telefone?: StringFieldUpdateOperationsInput | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cargo?: CargoUpdateOneRequiredWithoutUsersNestedInput
-    permissoes?: PermissoesUpdateManyWithoutUsersNestedInput
     caixas?: LivroCaixaUpdateManyWithoutUsuarioNestedInput
   }
 
@@ -34946,7 +34951,6 @@ export namespace Prisma {
     telefone?: StringFieldUpdateOperationsInput | string
     cargoID?: IntFieldUpdateOperationsInput | number
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    permissoes?: PermissoesUncheckedUpdateManyWithoutUsersNestedInput
     caixas?: LivroCaixaUncheckedUpdateManyWithoutUsuarioNestedInput
   }
 
@@ -35335,7 +35339,6 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     pedidos?: PedidoCreateNestedManyWithoutUserInput
     cargo: CargoCreateNestedOneWithoutUsersInput
-    permissoes?: PermissoesCreateNestedManyWithoutUsersInput
   }
 
   export type UserUncheckedCreateWithoutCaixasInput = {
@@ -35347,7 +35350,6 @@ export namespace Prisma {
     cargoID: number
     deletedAt?: Date | string | null
     pedidos?: PedidoUncheckedCreateNestedManyWithoutUserInput
-    permissoes?: PermissoesUncheckedCreateNestedManyWithoutUsersInput
   }
 
   export type UserCreateOrConnectWithoutCaixasInput = {
@@ -35405,7 +35407,6 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pedidos?: PedidoUpdateManyWithoutUserNestedInput
     cargo?: CargoUpdateOneRequiredWithoutUsersNestedInput
-    permissoes?: PermissoesUpdateManyWithoutUsersNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCaixasInput = {
@@ -35417,7 +35418,6 @@ export namespace Prisma {
     cargoID?: IntFieldUpdateOperationsInput | number
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pedidos?: PedidoUncheckedUpdateManyWithoutUserNestedInput
-    permissoes?: PermissoesUncheckedUpdateManyWithoutUsersNestedInput
   }
 
   export type MovimentacaoFinanceiraUpsertWithWhereUniqueWithoutCaixaInput = {
@@ -35488,23 +35488,6 @@ export namespace Prisma {
     atualizado?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type PermissoesUpdateWithoutUsersInput = {
-    nome?: StringFieldUpdateOperationsInput | string
-    descricao?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type PermissoesUncheckedUpdateWithoutUsersInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    nome?: StringFieldUpdateOperationsInput | string
-    descricao?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type PermissoesUncheckedUpdateManyWithoutUsersInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    nome?: StringFieldUpdateOperationsInput | string
-    descricao?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
   export type LivroCaixaUpdateWithoutUsuarioInput = {
     dataAbertura?: DateTimeFieldUpdateOperationsInput | Date | string
     dataFechamento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -35533,37 +35516,20 @@ export namespace Prisma {
     status?: EnumStatusCaixaFieldUpdateOperationsInput | $Enums.StatusCaixa
   }
 
-  export type UserUpdateWithoutPermissoesInput = {
+  export type CargoUpdateWithoutPermissoesInput = {
     nome?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    senha?: StringFieldUpdateOperationsInput | string
-    telefone?: StringFieldUpdateOperationsInput | string
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    pedidos?: PedidoUpdateManyWithoutUserNestedInput
-    cargo?: CargoUpdateOneRequiredWithoutUsersNestedInput
-    caixas?: LivroCaixaUpdateManyWithoutUsuarioNestedInput
+    users?: UserUpdateManyWithoutCargoNestedInput
   }
 
-  export type UserUncheckedUpdateWithoutPermissoesInput = {
+  export type CargoUncheckedUpdateWithoutPermissoesInput = {
     id?: IntFieldUpdateOperationsInput | number
     nome?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    senha?: StringFieldUpdateOperationsInput | string
-    telefone?: StringFieldUpdateOperationsInput | string
-    cargoID?: IntFieldUpdateOperationsInput | number
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    pedidos?: PedidoUncheckedUpdateManyWithoutUserNestedInput
-    caixas?: LivroCaixaUncheckedUpdateManyWithoutUsuarioNestedInput
+    users?: UserUncheckedUpdateManyWithoutCargoNestedInput
   }
 
-  export type UserUncheckedUpdateManyWithoutPermissoesInput = {
+  export type CargoUncheckedUpdateManyWithoutPermissoesInput = {
     id?: IntFieldUpdateOperationsInput | number
     nome?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    senha?: StringFieldUpdateOperationsInput | string
-    telefone?: StringFieldUpdateOperationsInput | string
-    cargoID?: IntFieldUpdateOperationsInput | number
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type UserCreateManyCargoInput = {
@@ -35575,6 +35541,23 @@ export namespace Prisma {
     deletedAt?: Date | string | null
   }
 
+  export type PermissoesUpdateWithoutCargosInput = {
+    nome?: StringFieldUpdateOperationsInput | string
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type PermissoesUncheckedUpdateWithoutCargosInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    nome?: StringFieldUpdateOperationsInput | string
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type PermissoesUncheckedUpdateManyWithoutCargosInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    nome?: StringFieldUpdateOperationsInput | string
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
   export type UserUpdateWithoutCargoInput = {
     nome?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -35582,7 +35565,6 @@ export namespace Prisma {
     telefone?: StringFieldUpdateOperationsInput | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pedidos?: PedidoUpdateManyWithoutUserNestedInput
-    permissoes?: PermissoesUpdateManyWithoutUsersNestedInput
     caixas?: LivroCaixaUpdateManyWithoutUsuarioNestedInput
   }
 
@@ -35594,7 +35576,6 @@ export namespace Prisma {
     telefone?: StringFieldUpdateOperationsInput | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pedidos?: PedidoUncheckedUpdateManyWithoutUserNestedInput
-    permissoes?: PermissoesUncheckedUpdateManyWithoutUsersNestedInput
     caixas?: LivroCaixaUncheckedUpdateManyWithoutUsuarioNestedInput
   }
 

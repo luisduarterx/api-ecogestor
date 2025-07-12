@@ -104,7 +104,6 @@ export const getAllUsers = async () => {
         email: true,
         telefone: true,
         cargoID: true,
-        permissoes: true,
       },
     });
 

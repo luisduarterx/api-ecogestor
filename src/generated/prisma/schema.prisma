@@ -9,30 +9,30 @@ datasource db {
 }
 
 model User {
-  id         Int          @id @default(autoincrement())
-  nome       String
-  email      String       @unique
-  senha      String
-  telefone   String
-  cargoID    Int
-  pedidos    Pedido[]
-  cargo      Cargo        @relation(fields: [cargoID], references: [id])
-  permissoes Permissoes[] @relation("UserPermissions")
-  caixas     LivroCaixa[]
-  deletedAt  DateTime?
+  id        Int          @id @default(autoincrement())
+  nome      String
+  email     String       @unique
+  senha     String
+  telefone  String
+  cargoID   Int
+  pedidos   Pedido[]
+  cargo     Cargo        @relation(fields: [cargoID], references: [id])
+  caixas    LivroCaixa[]
+  deletedAt DateTime?
 }
 
 model Permissoes {
   id        Int     @id @default(autoincrement())
   nome      String  @unique
   descricao String?
-  users     User[]  @relation("UserPermissions")
+  cargos    Cargo[] @relation("UserPermissions")
 }
 
 model Cargo {
-  id    Int    @id @default(autoincrement())
-  nome  String @unique
-  users User[]
+  id         Int          @id @default(autoincrement())
+  nome       String       @unique
+  permissoes Permissoes[] @relation("UserPermissions")
+  users      User[]
 }
 
 model Registro {

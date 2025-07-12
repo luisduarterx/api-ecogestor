@@ -34,6 +34,16 @@ export class BadRequest extends BaseError {
     );
   }
 }
+export class NotFound extends BaseError {
+  constructor(mensagem = "Não foi encontrado nenhum registro") {
+    super(
+      "Registro não encontrado",
+      mensagem,
+      "Verifique os dados e tente novamente",
+      404
+    );
+  }
+}
 
 export class UserNotFound extends BaseError {
   constructor(mensagem = "Não foi encontrado nenhum usuario.") {

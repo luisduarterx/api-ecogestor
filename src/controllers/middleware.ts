@@ -3,8 +3,9 @@ import { UnAuthorized } from "../error";
 import { verificarToken } from "../services/jwt";
 import { ReqUser, UserData } from "../types/user";
 import { ExtendedRequest } from "../types/extended-request";
+import { getUserByID } from "../model/users";
 
-export const AuthMiddleware = (
+export const AuthMiddleware = async (
   req: ExtendedRequest,
   res: Response,
   next: NextFunction
@@ -20,7 +21,11 @@ export const AuthMiddleware = (
     if (!user.id) {
       throw new UnAuthorized();
     }
+    const userExist = await getUserByID(user.id);
 
+    if (!userExist) {
+      throw new UnAuthorized();
+    }
     const RequestUser: ReqUser = {
       id: user.id,
       nome: user.nome,
