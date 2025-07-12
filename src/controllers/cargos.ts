@@ -2,7 +2,7 @@ import { Response } from "express";
 import { ExtendedRequest } from "../types/extended-request";
 import * as dbCargo from "../model/cargos";
 import { z } from "zod";
-import { BadRequest, InternalError } from "../error";
+import { BadRequest, InternalError, NotFound } from "../error";
 
 export const GET = async (req: ExtendedRequest, res: Response) => {
   try {
@@ -19,7 +19,7 @@ export const GET = async (req: ExtendedRequest, res: Response) => {
 export const GETUNIQUE = async (req: ExtendedRequest, res: Response) => {
   try {
     const roleID = parseInt(req.params.roleID);
-    console.log("ye");
+
     const idSchema = z.number().int().max(2147483646).positive();
     const id = idSchema.safeParse(roleID);
 
@@ -28,10 +28,12 @@ export const GETUNIQUE = async (req: ExtendedRequest, res: Response) => {
     }
 
     const cargo = await dbCargo.getRoleByID(id.data);
+    if (!cargo) {
+      throw new NotFound();
+    }
 
     res.status(200).json(cargo);
   } catch (error: any) {
-    console.log(error);
     const status = error?.statusCode || 500;
     res.status(status).json(error);
     return;

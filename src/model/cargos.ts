@@ -31,11 +31,7 @@ export const getRoleByID = async (id: number) => {
         permissoes: true,
       },
     });
-    console.log(role);
 
-    if (!role) {
-      throw new NotFound();
-    }
     return role;
   } catch (error) {
     return error;
