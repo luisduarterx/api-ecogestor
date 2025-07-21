@@ -5,6 +5,8 @@ import { mainRoutes } from "./routes/main";
 import { usersRoutes } from "./routes/users";
 import { authRoutes } from "./routes/auth";
 import { cargosRoutes } from "./routes/cargos";
+import { registRoutes } from "./routes/registros";
+import { categoriasRoutes } from "./routes/categorias";
 
 const server = express();
 
@@ -15,6 +17,8 @@ server.use("/v1", mainRoutes);
 server.use("/v1", usersRoutes);
 server.use("/v1", authRoutes);
 server.use("/v1", cargosRoutes);
+server.use("/v1", registRoutes);
+server.use("/v1", categoriasRoutes);
 
 server.listen(3000, () => {
   console.log("EcoGestor API rodando...");

@@ -149,20 +149,23 @@ exports.Prisma.RegistroScalarFieldEnum = {
   tabelaID: 'tabelaID',
   email: 'email',
   telefone: 'telefone',
-  criadoEm: 'criadoEm'
+  criadoEm: 'criadoEm',
+  deletedAt: 'deletedAt'
 };
 
 exports.Prisma.PessoaFisicaScalarFieldEnum = {
   id: 'id',
   cpf: 'cpf',
-  nascimento: 'nascimento'
+  nascimento: 'nascimento',
+  registroID: 'registroID'
 };
 
 exports.Prisma.PessoaJuridicaScalarFieldEnum = {
   id: 'id',
   cnpj: 'cnpj',
   ie: 'ie',
-  fantasia: 'fantasia'
+  fantasia: 'fantasia',
+  registroID: 'registroID'
 };
 
 exports.Prisma.SaldoFinanceiroScalarFieldEnum = {
@@ -174,6 +177,7 @@ exports.Prisma.SaldoFinanceiroScalarFieldEnum = {
 exports.Prisma.EnderecoScalarFieldEnum = {
   id: 'id',
   regID: 'regID',
+  cep: 'cep',
   estado: 'estado',
   cidade: 'cidade',
   bairro: 'bairro',

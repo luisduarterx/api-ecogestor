@@ -29,7 +29,7 @@ export class BadRequest extends BaseError {
     super(
       "Erro na Requisição",
       mensagem,
-      "Verifiqe os dados enviados e tente novamente.",
+      "Verifique os dados enviados e tente novamente.",
       400
     );
   }
@@ -61,6 +61,18 @@ export class UnAuthorized extends BaseError {
       "Acesso não Autorizado",
       mensagem,
       "Verifique suas permissões ou contate um administrador",
+      403
+    );
+  }
+}
+export class NotPossible extends BaseError {
+  constructor(
+    mensagem = "Por motivos desconhecidos não conseguimos realizar essa operação"
+  ) {
+    super(
+      "Não foi possivel realizar a operação",
+      mensagem,
+      "Verifique os dados enviados e tente novamente, caso persistir, contate um administrador.",
       403
     );
   }

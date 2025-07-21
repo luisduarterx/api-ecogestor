@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "DadosPagamento" ALTER COLUMN "agencia" SET DATA TYPE TEXT,
+ALTER COLUMN "conta" SET DATA TYPE TEXT;

@@ -51,21 +51,24 @@ model Registro {
   juridica        PessoaJuridica?
   tabela          Tabela           @relation(fields: [tabelaID], references: [id])
   saldo           SaldoFinanceiro?
+  deletedAt       DateTime?
 }
 
 model PessoaFisica {
-  id         Int       @id
+  id         Int       @id @default(autoincrement())
   cpf        String    @unique
   nascimento DateTime?
-  registro   Registro  @relation(fields: [id], references: [id])
+  registroID Int @unique
+  registro   Registro  @relation(fields: [registroID], references: [id])
 }
 
 model PessoaJuridica {
-  id       Int      @id
+  id       Int      @id @default(autoincrement())
   cnpj     String   @unique
   ie       String?
   fantasia String?
-  registro Registro @relation(fields: [id], references: [id])
+  registroID Int @unique
+  registro Registro @relation(fields: [registroID], references: [id])
 }
 
 model SaldoFinanceiro {
@@ -78,6 +81,7 @@ model SaldoFinanceiro {
 model Endereco {
   id          Int      @id @default(autoincrement())
   regID       Int      @unique
+  cep         String?
   estado      String?
   cidade      String?
   bairro      String?
@@ -90,8 +94,8 @@ model Endereco {
 model DadosPagamento {
   id       Int      @id @default(autoincrement())
   banco    String?
-  agencia  Int?
-  conta    Int?
+  agencia  String?
+  conta    String?
   chave    String?
   cpf      String?
   regID    Int      @unique
@@ -133,7 +137,7 @@ model Material {
 
 model CategoriaMaterial {
   id        Int        @id @default(autoincrement())
-  name      String
+  name      String     @unique
   materiais Material[]
 }
 

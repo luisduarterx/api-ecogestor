@@ -6588,6 +6588,7 @@ export namespace Prisma {
     email: string | null
     telefone: string | null
     criadoEm: Date | null
+    deletedAt: Date | null
   }
 
   export type RegistroMaxAggregateOutputType = {
@@ -6599,6 +6600,7 @@ export namespace Prisma {
     email: string | null
     telefone: string | null
     criadoEm: Date | null
+    deletedAt: Date | null
   }
 
   export type RegistroCountAggregateOutputType = {
@@ -6610,6 +6612,7 @@ export namespace Prisma {
     email: number
     telefone: number
     criadoEm: number
+    deletedAt: number
     _all: number
   }
 
@@ -6633,6 +6636,7 @@ export namespace Prisma {
     email?: true
     telefone?: true
     criadoEm?: true
+    deletedAt?: true
   }
 
   export type RegistroMaxAggregateInputType = {
@@ -6644,6 +6648,7 @@ export namespace Prisma {
     email?: true
     telefone?: true
     criadoEm?: true
+    deletedAt?: true
   }
 
   export type RegistroCountAggregateInputType = {
@@ -6655,6 +6660,7 @@ export namespace Prisma {
     email?: true
     telefone?: true
     criadoEm?: true
+    deletedAt?: true
     _all?: true
   }
 
@@ -6753,6 +6759,7 @@ export namespace Prisma {
     email: string | null
     telefone: string | null
     criadoEm: Date
+    deletedAt: Date | null
     _count: RegistroCountAggregateOutputType | null
     _avg: RegistroAvgAggregateOutputType | null
     _sum: RegistroSumAggregateOutputType | null
@@ -6783,6 +6790,7 @@ export namespace Prisma {
     email?: boolean
     telefone?: boolean
     criadoEm?: boolean
+    deletedAt?: boolean
     dados_pagamento?: boolean | Registro$dados_pagamentoArgs<ExtArgs>
     endereco?: boolean | Registro$enderecoArgs<ExtArgs>
     pedidos?: boolean | Registro$pedidosArgs<ExtArgs>
@@ -6802,6 +6810,7 @@ export namespace Prisma {
     email?: boolean
     telefone?: boolean
     criadoEm?: boolean
+    deletedAt?: boolean
     tabela?: boolean | TabelaDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["registro"]>
 
@@ -6814,6 +6823,7 @@ export namespace Prisma {
     email?: boolean
     telefone?: boolean
     criadoEm?: boolean
+    deletedAt?: boolean
     tabela?: boolean | TabelaDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["registro"]>
 
@@ -6826,9 +6836,10 @@ export namespace Prisma {
     email?: boolean
     telefone?: boolean
     criadoEm?: boolean
+    deletedAt?: boolean
   }
 
-  export type RegistroOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nome_razao" | "apelido" | "tipo" | "tabelaID" | "email" | "telefone" | "criadoEm", ExtArgs["result"]["registro"]>
+  export type RegistroOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nome_razao" | "apelido" | "tipo" | "tabelaID" | "email" | "telefone" | "criadoEm" | "deletedAt", ExtArgs["result"]["registro"]>
   export type RegistroInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     dados_pagamento?: boolean | Registro$dados_pagamentoArgs<ExtArgs>
     endereco?: boolean | Registro$enderecoArgs<ExtArgs>
@@ -6866,6 +6877,7 @@ export namespace Prisma {
       email: string | null
       telefone: string | null
       criadoEm: Date
+      deletedAt: Date | null
     }, ExtArgs["result"]["registro"]>
     composites: {}
   }
@@ -7304,6 +7316,7 @@ export namespace Prisma {
     readonly email: FieldRef<"Registro", 'String'>
     readonly telefone: FieldRef<"Registro", 'String'>
     readonly criadoEm: FieldRef<"Registro", 'DateTime'>
+    readonly deletedAt: FieldRef<"Registro", 'DateTime'>
   }
     
 
@@ -7851,56 +7864,66 @@ export namespace Prisma {
 
   export type PessoaFisicaAvgAggregateOutputType = {
     id: number | null
+    registroID: number | null
   }
 
   export type PessoaFisicaSumAggregateOutputType = {
     id: number | null
+    registroID: number | null
   }
 
   export type PessoaFisicaMinAggregateOutputType = {
     id: number | null
     cpf: string | null
     nascimento: Date | null
+    registroID: number | null
   }
 
   export type PessoaFisicaMaxAggregateOutputType = {
     id: number | null
     cpf: string | null
     nascimento: Date | null
+    registroID: number | null
   }
 
   export type PessoaFisicaCountAggregateOutputType = {
     id: number
     cpf: number
     nascimento: number
+    registroID: number
     _all: number
   }
 
 
   export type PessoaFisicaAvgAggregateInputType = {
     id?: true
+    registroID?: true
   }
 
   export type PessoaFisicaSumAggregateInputType = {
     id?: true
+    registroID?: true
   }
 
   export type PessoaFisicaMinAggregateInputType = {
     id?: true
     cpf?: true
     nascimento?: true
+    registroID?: true
   }
 
   export type PessoaFisicaMaxAggregateInputType = {
     id?: true
     cpf?: true
     nascimento?: true
+    registroID?: true
   }
 
   export type PessoaFisicaCountAggregateInputType = {
     id?: true
     cpf?: true
     nascimento?: true
+    registroID?: true
     _all?: true
   }
 
@@ -7994,6 +8017,7 @@ export namespace Prisma {
     id: number
     cpf: string
     nascimento: Date | null
+    registroID: number
     _count: PessoaFisicaCountAggregateOutputType | null
     _avg: PessoaFisicaAvgAggregateOutputType | null
     _sum: PessoaFisicaSumAggregateOutputType | null
@@ -8019,6 +8043,7 @@ export namespace Prisma {
     id?: boolean
     cpf?: boolean
     nascimento?: boolean
+    registroID?: boolean
     registro?: boolean | RegistroDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["pessoaFisica"]>
 
@@ -8026,6 +8051,7 @@ export namespace Prisma {
     id?: boolean
     cpf?: boolean
     nascimento?: boolean
+    registroID?: boolean
     registro?: boolean | RegistroDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["pessoaFisica"]>
 
@@ -8033,6 +8059,7 @@ export namespace Prisma {
     id?: boolean
     cpf?: boolean
     nascimento?: boolean
+    registroID?: boolean
     registro?: boolean | RegistroDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["pessoaFisica"]>
 
@@ -8040,9 +8067,10 @@ export namespace Prisma {
     id?: boolean
     cpf?: boolean
     nascimento?: boolean
+    registroID?: boolean
   }
 
-  export type PessoaFisicaOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "cpf" | "nascimento", ExtArgs["result"]["pessoaFisica"]>
+  export type PessoaFisicaOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "cpf" | "nascimento" | "registroID", ExtArgs["result"]["pessoaFisica"]>
   export type PessoaFisicaInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     registro?: boolean | RegistroDefaultArgs<ExtArgs>
   }
@@ -8062,6 +8090,7 @@ export namespace Prisma {
       id: number
       cpf: string
       nascimento: Date | null
+      registroID: number
     }, ExtArgs["result"]["pessoaFisica"]>
     composites: {}
   }
@@ -8489,6 +8518,7 @@ export namespace Prisma {
     readonly id: FieldRef<"PessoaFisica", 'Int'>
     readonly cpf: FieldRef<"PessoaFisica", 'String'>
     readonly nascimento: FieldRef<"PessoaFisica", 'DateTime'>
+    readonly registroID: FieldRef<"PessoaFisica", 'Int'>
   }
     
 
@@ -8917,10 +8947,12 @@ export namespace Prisma {
 
   export type PessoaJuridicaAvgAggregateOutputType = {
     id: number | null
+    registroID: number | null
   }
 
   export type PessoaJuridicaSumAggregateOutputType = {
     id: number | null
+    registroID: number | null
   }
 
   export type PessoaJuridicaMinAggregateOutputType = {
@@ -8928,6 +8960,7 @@ export namespace Prisma {
     cnpj: string | null
     ie: string | null
     fantasia: string | null
+    registroID: number | null
   }
 
   export type PessoaJuridicaMaxAggregateOutputType = {
@@ -8935,6 +8968,7 @@ export namespace Prisma {
     cnpj: string | null
     ie: string | null
     fantasia: string | null
+    registroID: number | null
   }
 
   export type PessoaJuridicaCountAggregateOutputType = {
@@ -8942,16 +8976,19 @@ export namespace Prisma {
     cnpj: number
     ie: number
     fantasia: number
+    registroID: number
     _all: number
   }
 
 
   export type PessoaJuridicaAvgAggregateInputType = {
     id?: true
+    registroID?: true
   }
 
   export type PessoaJuridicaSumAggregateInputType = {
     id?: true
+    registroID?: true
   }
 
   export type PessoaJuridicaMinAggregateInputType = {
@@ -8959,6 +8996,7 @@ export namespace Prisma {
     cnpj?: true
     ie?: true
     fantasia?: true
+    registroID?: true
   }
 
   export type PessoaJuridicaMaxAggregateInputType = {
@@ -8966,6 +9004,7 @@ export namespace Prisma {
     cnpj?: true
     ie?: true
     fantasia?: true
+    registroID?: true
   }
 
   export type PessoaJuridicaCountAggregateInputType = {
@@ -8973,6 +9012,7 @@ export namespace Prisma {
     cnpj?: true
     ie?: true
     fantasia?: true
+    registroID?: true
     _all?: true
   }
 
@@ -9067,6 +9107,7 @@ export namespace Prisma {
     cnpj: string
     ie: string | null
     fantasia: string | null
+    registroID: number
     _count: PessoaJuridicaCountAggregateOutputType | null
     _avg: PessoaJuridicaAvgAggregateOutputType | null
     _sum: PessoaJuridicaSumAggregateOutputType | null
@@ -9093,6 +9134,7 @@ export namespace Prisma {
     cnpj?: boolean
     ie?: boolean
     fantasia?: boolean
+    registroID?: boolean
     registro?: boolean | RegistroDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["pessoaJuridica"]>
 
@@ -9101,6 +9143,7 @@ export namespace Prisma {
     cnpj?: boolean
     ie?: boolean
     fantasia?: boolean
+    registroID?: boolean
     registro?: boolean | RegistroDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["pessoaJuridica"]>
 
@@ -9109,6 +9152,7 @@ export namespace Prisma {
     cnpj?: boolean
     ie?: boolean
     fantasia?: boolean
+    registroID?: boolean
     registro?: boolean | RegistroDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["pessoaJuridica"]>
 
@@ -9117,9 +9161,10 @@ export namespace Prisma {
     cnpj?: boolean
     ie?: boolean
     fantasia?: boolean
+    registroID?: boolean
   }
 
-  export type PessoaJuridicaOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "cnpj" | "ie" | "fantasia", ExtArgs["result"]["pessoaJuridica"]>
+  export type PessoaJuridicaOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "cnpj" | "ie" | "fantasia" | "registroID", ExtArgs["result"]["pessoaJuridica"]>
   export type PessoaJuridicaInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     registro?: boolean | RegistroDefaultArgs<ExtArgs>
   }
@@ -9140,6 +9185,7 @@ export namespace Prisma {
       cnpj: string
       ie: string | null
       fantasia: string | null
+      registroID: number
     }, ExtArgs["result"]["pessoaJuridica"]>
     composites: {}
   }
@@ -9568,6 +9614,7 @@ export namespace Prisma {
     readonly cnpj: FieldRef<"PessoaJuridica", 'String'>
     readonly ie: FieldRef<"PessoaJuridica", 'String'>
     readonly fantasia: FieldRef<"PessoaJuridica", 'String'>
+    readonly registroID: FieldRef<"PessoaJuridica", 'Int'>
   }
     
 
@@ -11081,6 +11128,7 @@ export namespace Prisma {
   export type EnderecoMinAggregateOutputType = {
     id: number | null
     regID: number | null
+    cep: string | null
     estado: string | null
     cidade: string | null
     bairro: string | null
@@ -11092,6 +11140,7 @@ export namespace Prisma {
   export type EnderecoMaxAggregateOutputType = {
     id: number | null
     regID: number | null
+    cep: string | null
     estado: string | null
     cidade: string | null
     bairro: string | null
@@ -11103,6 +11152,7 @@ export namespace Prisma {
   export type EnderecoCountAggregateOutputType = {
     id: number
     regID: number
+    cep: number
     estado: number
     cidade: number
     bairro: number
@@ -11126,6 +11176,7 @@ export namespace Prisma {
   export type EnderecoMinAggregateInputType = {
     id?: true
     regID?: true
+    cep?: true
     estado?: true
     cidade?: true
     bairro?: true
@@ -11137,6 +11188,7 @@ export namespace Prisma {
   export type EnderecoMaxAggregateInputType = {
     id?: true
     regID?: true
+    cep?: true
     estado?: true
     cidade?: true
     bairro?: true
@@ -11148,6 +11200,7 @@ export namespace Prisma {
   export type EnderecoCountAggregateInputType = {
     id?: true
     regID?: true
+    cep?: true
     estado?: true
     cidade?: true
     bairro?: true
@@ -11246,6 +11299,7 @@ export namespace Prisma {
   export type EnderecoGroupByOutputType = {
     id: number
     regID: number
+    cep: string | null
     estado: string | null
     cidade: string | null
     bairro: string | null
@@ -11276,6 +11330,7 @@ export namespace Prisma {
   export type EnderecoSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     regID?: boolean
+    cep?: boolean
     estado?: boolean
     cidade?: boolean
     bairro?: boolean
@@ -11288,6 +11343,7 @@ export namespace Prisma {
   export type EnderecoSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     regID?: boolean
+    cep?: boolean
     estado?: boolean
     cidade?: boolean
     bairro?: boolean
@@ -11300,6 +11356,7 @@ export namespace Prisma {
   export type EnderecoSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     regID?: boolean
+    cep?: boolean
     estado?: boolean
     cidade?: boolean
     bairro?: boolean
@@ -11312,6 +11369,7 @@ export namespace Prisma {
   export type EnderecoSelectScalar = {
     id?: boolean
     regID?: boolean
+    cep?: boolean
     estado?: boolean
     cidade?: boolean
     bairro?: boolean
@@ -11320,7 +11378,7 @@ export namespace Prisma {
     complemento?: boolean
   }
 
-  export type EnderecoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "regID" | "estado" | "cidade" | "bairro" | "logradouro" | "numero" | "complemento", ExtArgs["result"]["endereco"]>
+  export type EnderecoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "regID" | "cep" | "estado" | "cidade" | "bairro" | "logradouro" | "numero" | "complemento", ExtArgs["result"]["endereco"]>
   export type EnderecoInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     registro?: boolean | RegistroDefaultArgs<ExtArgs>
   }
@@ -11339,6 +11397,7 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: number
       regID: number
+      cep: string | null
       estado: string | null
       cidade: string | null
       bairro: string | null
@@ -11771,6 +11830,7 @@ export namespace Prisma {
   interface EnderecoFieldRefs {
     readonly id: FieldRef<"Endereco", 'Int'>
     readonly regID: FieldRef<"Endereco", 'Int'>
+    readonly cep: FieldRef<"Endereco", 'String'>
     readonly estado: FieldRef<"Endereco", 'String'>
     readonly cidade: FieldRef<"Endereco", 'String'>
     readonly bairro: FieldRef<"Endereco", 'String'>
@@ -12205,23 +12265,19 @@ export namespace Prisma {
 
   export type DadosPagamentoAvgAggregateOutputType = {
     id: number | null
-    agencia: number | null
-    conta: number | null
     regID: number | null
   }
 
   export type DadosPagamentoSumAggregateOutputType = {
     id: number | null
-    agencia: number | null
-    conta: number | null
     regID: number | null
   }
 
   export type DadosPagamentoMinAggregateOutputType = {
     id: number | null
     banco: string | null
-    agencia: number | null
-    conta: number | null
+    agencia: string | null
+    conta: string | null
     chave: string | null
     cpf: string | null
     regID: number | null
@@ -12230,8 +12286,8 @@ export namespace Prisma {
   export type DadosPagamentoMaxAggregateOutputType = {
     id: number | null
     banco: string | null
-    agencia: number | null
-    conta: number | null
+    agencia: string | null
+    conta: string | null
     chave: string | null
     cpf: string | null
     regID: number | null
@@ -12251,15 +12307,11 @@ export namespace Prisma {
 
   export type DadosPagamentoAvgAggregateInputType = {
     id?: true
-    agencia?: true
-    conta?: true
     regID?: true
   }
 
   export type DadosPagamentoSumAggregateInputType = {
     id?: true
-    agencia?: true
-    conta?: true
     regID?: true
   }
 
@@ -12383,8 +12435,8 @@ export namespace Prisma {
   export type DadosPagamentoGroupByOutputType = {
     id: number
     banco: string | null
-    agencia: number | null
-    conta: number | null
+    agencia: string | null
+    conta: string | null
     chave: string | null
     cpf: string | null
     regID: number
@@ -12471,8 +12523,8 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: number
       banco: string | null
-      agencia: number | null
-      conta: number | null
+      agencia: string | null
+      conta: string | null
       chave: string | null
       cpf: string | null
       regID: number
@@ -12902,8 +12954,8 @@ export namespace Prisma {
   interface DadosPagamentoFieldRefs {
     readonly id: FieldRef<"DadosPagamento", 'Int'>
     readonly banco: FieldRef<"DadosPagamento", 'String'>
-    readonly agencia: FieldRef<"DadosPagamento", 'Int'>
-    readonly conta: FieldRef<"DadosPagamento", 'Int'>
+    readonly agencia: FieldRef<"DadosPagamento", 'String'>
+    readonly conta: FieldRef<"DadosPagamento", 'String'>
     readonly chave: FieldRef<"DadosPagamento", 'String'>
     readonly cpf: FieldRef<"DadosPagamento", 'String'>
     readonly regID: FieldRef<"DadosPagamento", 'Int'>
@@ -27076,7 +27128,8 @@ export namespace Prisma {
     tabelaID: 'tabelaID',
     email: 'email',
     telefone: 'telefone',
-    criadoEm: 'criadoEm'
+    criadoEm: 'criadoEm',
+    deletedAt: 'deletedAt'
   };
 
   export type RegistroScalarFieldEnum = (typeof RegistroScalarFieldEnum)[keyof typeof RegistroScalarFieldEnum]
@@ -27085,7 +27138,8 @@ export namespace Prisma {
   export const PessoaFisicaScalarFieldEnum: {
     id: 'id',
     cpf: 'cpf',
-    nascimento: 'nascimento'
+    nascimento: 'nascimento',
+    registroID: 'registroID'
   };
 
   export type PessoaFisicaScalarFieldEnum = (typeof PessoaFisicaScalarFieldEnum)[keyof typeof PessoaFisicaScalarFieldEnum]
@@ -27095,7 +27149,8 @@ export namespace Prisma {
     id: 'id',
     cnpj: 'cnpj',
     ie: 'ie',
-    fantasia: 'fantasia'
+    fantasia: 'fantasia',
+    registroID: 'registroID'
   };
 
   export type PessoaJuridicaScalarFieldEnum = (typeof PessoaJuridicaScalarFieldEnum)[keyof typeof PessoaJuridicaScalarFieldEnum]
@@ -27113,6 +27168,7 @@ export namespace Prisma {
   export const EnderecoScalarFieldEnum: {
     id: 'id',
     regID: 'regID',
+    cep: 'cep',
     estado: 'estado',
     cidade: 'cidade',
     bairro: 'bairro',
@@ -27692,6 +27748,7 @@ export namespace Prisma {
     email?: StringNullableFilter<"Registro"> | string | null
     telefone?: StringNullableFilter<"Registro"> | string | null
     criadoEm?: DateTimeFilter<"Registro"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"Registro"> | Date | string | null
     dados_pagamento?: XOR<DadosPagamentoNullableScalarRelationFilter, DadosPagamentoWhereInput> | null
     endereco?: XOR<EnderecoNullableScalarRelationFilter, EnderecoWhereInput> | null
     pedidos?: PedidoListRelationFilter
@@ -27710,6 +27767,7 @@ export namespace Prisma {
     email?: SortOrderInput | SortOrder
     telefone?: SortOrderInput | SortOrder
     criadoEm?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
     dados_pagamento?: DadosPagamentoOrderByWithRelationInput
     endereco?: EnderecoOrderByWithRelationInput
     pedidos?: PedidoOrderByRelationAggregateInput
@@ -27731,6 +27789,7 @@ export namespace Prisma {
     email?: StringNullableFilter<"Registro"> | string | null
     telefone?: StringNullableFilter<"Registro"> | string | null
     criadoEm?: DateTimeFilter<"Registro"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"Registro"> | Date | string | null
     dados_pagamento?: XOR<DadosPagamentoNullableScalarRelationFilter, DadosPagamentoWhereInput> | null
     endereco?: XOR<EnderecoNullableScalarRelationFilter, EnderecoWhereInput> | null
     pedidos?: PedidoListRelationFilter
@@ -27749,6 +27808,7 @@ export namespace Prisma {
     email?: SortOrderInput | SortOrder
     telefone?: SortOrderInput | SortOrder
     criadoEm?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
     _count?: RegistroCountOrderByAggregateInput
     _avg?: RegistroAvgOrderByAggregateInput
     _max?: RegistroMaxOrderByAggregateInput
@@ -27768,6 +27828,7 @@ export namespace Prisma {
     email?: StringNullableWithAggregatesFilter<"Registro"> | string | null
     telefone?: StringNullableWithAggregatesFilter<"Registro"> | string | null
     criadoEm?: DateTimeWithAggregatesFilter<"Registro"> | Date | string
+    deletedAt?: DateTimeNullableWithAggregatesFilter<"Registro"> | Date | string | null
   }
 
   export type PessoaFisicaWhereInput = {
@@ -27777,6 +27838,7 @@ export namespace Prisma {
     id?: IntFilter<"PessoaFisica"> | number
     cpf?: StringFilter<"PessoaFisica"> | string
     nascimento?: DateTimeNullableFilter<"PessoaFisica"> | Date | string | null
+    registroID?: IntFilter<"PessoaFisica"> | number
     registro?: XOR<RegistroScalarRelationFilter, RegistroWhereInput>
   }
 
@@ -27784,23 +27846,26 @@ export namespace Prisma {
     id?: SortOrder
     cpf?: SortOrder
     nascimento?: SortOrderInput | SortOrder
+    registroID?: SortOrder
     registro?: RegistroOrderByWithRelationInput
   }
 
   export type PessoaFisicaWhereUniqueInput = Prisma.AtLeast<{
     id?: number
     cpf?: string
+    registroID?: number
     AND?: PessoaFisicaWhereInput | PessoaFisicaWhereInput[]
     OR?: PessoaFisicaWhereInput[]
     NOT?: PessoaFisicaWhereInput | PessoaFisicaWhereInput[]
     nascimento?: DateTimeNullableFilter<"PessoaFisica"> | Date | string | null
     registro?: XOR<RegistroScalarRelationFilter, RegistroWhereInput>
-  }, "id" | "cpf">
+  }, "id" | "cpf" | "registroID">
 
   export type PessoaFisicaOrderByWithAggregationInput = {
     id?: SortOrder
     cpf?: SortOrder
     nascimento?: SortOrderInput | SortOrder
+    registroID?: SortOrder
     _count?: PessoaFisicaCountOrderByAggregateInput
     _avg?: PessoaFisicaAvgOrderByAggregateInput
     _max?: PessoaFisicaMaxOrderByAggregateInput
@@ -27815,6 +27880,7 @@ export namespace Prisma {
     id?: IntWithAggregatesFilter<"PessoaFisica"> | number
     cpf?: StringWithAggregatesFilter<"PessoaFisica"> | string
     nascimento?: DateTimeNullableWithAggregatesFilter<"PessoaFisica"> | Date | string | null
+    registroID?: IntWithAggregatesFilter<"PessoaFisica"> | number
   }
 
   export type PessoaJuridicaWhereInput = {
@@ -27825,6 +27891,7 @@ export namespace Prisma {
     cnpj?: StringFilter<"PessoaJuridica"> | string
     ie?: StringNullableFilter<"PessoaJuridica"> | string | null
     fantasia?: StringNullableFilter<"PessoaJuridica"> | string | null
+    registroID?: IntFilter<"PessoaJuridica"> | number
     registro?: XOR<RegistroScalarRelationFilter, RegistroWhereInput>
   }
 
@@ -27833,25 +27900,28 @@ export namespace Prisma {
     cnpj?: SortOrder
     ie?: SortOrderInput | SortOrder
     fantasia?: SortOrderInput | SortOrder
+    registroID?: SortOrder
     registro?: RegistroOrderByWithRelationInput
   }
 
   export type PessoaJuridicaWhereUniqueInput = Prisma.AtLeast<{
     id?: number
     cnpj?: string
+    registroID?: number
     AND?: PessoaJuridicaWhereInput | PessoaJuridicaWhereInput[]
     OR?: PessoaJuridicaWhereInput[]
     NOT?: PessoaJuridicaWhereInput | PessoaJuridicaWhereInput[]
     ie?: StringNullableFilter<"PessoaJuridica"> | string | null
     fantasia?: StringNullableFilter<"PessoaJuridica"> | string | null
     registro?: XOR<RegistroScalarRelationFilter, RegistroWhereInput>
-  }, "id" | "cnpj">
+  }, "id" | "cnpj" | "registroID">
 
   export type PessoaJuridicaOrderByWithAggregationInput = {
     id?: SortOrder
     cnpj?: SortOrder
     ie?: SortOrderInput | SortOrder
     fantasia?: SortOrderInput | SortOrder
+    registroID?: SortOrder
     _count?: PessoaJuridicaCountOrderByAggregateInput
     _avg?: PessoaJuridicaAvgOrderByAggregateInput
     _max?: PessoaJuridicaMaxOrderByAggregateInput
@@ -27867,6 +27937,7 @@ export namespace Prisma {
     cnpj?: StringWithAggregatesFilter<"PessoaJuridica"> | string
     ie?: StringNullableWithAggregatesFilter<"PessoaJuridica"> | string | null
     fantasia?: StringNullableWithAggregatesFilter<"PessoaJuridica"> | string | null
+    registroID?: IntWithAggregatesFilter<"PessoaJuridica"> | number
   }
 
   export type SaldoFinanceiroWhereInput = {
@@ -27922,6 +27993,7 @@ export namespace Prisma {
     NOT?: EnderecoWhereInput | EnderecoWhereInput[]
     id?: IntFilter<"Endereco"> | number
     regID?: IntFilter<"Endereco"> | number
+    cep?: StringNullableFilter<"Endereco"> | string | null
     estado?: StringNullableFilter<"Endereco"> | string | null
     cidade?: StringNullableFilter<"Endereco"> | string | null
     bairro?: StringNullableFilter<"Endereco"> | string | null
@@ -27934,6 +28006,7 @@ export namespace Prisma {
   export type EnderecoOrderByWithRelationInput = {
     id?: SortOrder
     regID?: SortOrder
+    cep?: SortOrderInput | SortOrder
     estado?: SortOrderInput | SortOrder
     cidade?: SortOrderInput | SortOrder
     bairro?: SortOrderInput | SortOrder
@@ -27949,6 +28022,7 @@ export namespace Prisma {
     AND?: EnderecoWhereInput | EnderecoWhereInput[]
     OR?: EnderecoWhereInput[]
     NOT?: EnderecoWhereInput | EnderecoWhereInput[]
+    cep?: StringNullableFilter<"Endereco"> | string | null
     estado?: StringNullableFilter<"Endereco"> | string | null
     cidade?: StringNullableFilter<"Endereco"> | string | null
     bairro?: StringNullableFilter<"Endereco"> | string | null
@@ -27961,6 +28035,7 @@ export namespace Prisma {
   export type EnderecoOrderByWithAggregationInput = {
     id?: SortOrder
     regID?: SortOrder
+    cep?: SortOrderInput | SortOrder
     estado?: SortOrderInput | SortOrder
     cidade?: SortOrderInput | SortOrder
     bairro?: SortOrderInput | SortOrder
@@ -27980,6 +28055,7 @@ export namespace Prisma {
     NOT?: EnderecoScalarWhereWithAggregatesInput | EnderecoScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"Endereco"> | number
     regID?: IntWithAggregatesFilter<"Endereco"> | number
+    cep?: StringNullableWithAggregatesFilter<"Endereco"> | string | null
     estado?: StringNullableWithAggregatesFilter<"Endereco"> | string | null
     cidade?: StringNullableWithAggregatesFilter<"Endereco"> | string | null
     bairro?: StringNullableWithAggregatesFilter<"Endereco"> | string | null
@@ -27994,8 +28070,8 @@ export namespace Prisma {
     NOT?: DadosPagamentoWhereInput | DadosPagamentoWhereInput[]
     id?: IntFilter<"DadosPagamento"> | number
     banco?: StringNullableFilter<"DadosPagamento"> | string | null
-    agencia?: IntNullableFilter<"DadosPagamento"> | number | null
-    conta?: IntNullableFilter<"DadosPagamento"> | number | null
+    agencia?: StringNullableFilter<"DadosPagamento"> | string | null
+    conta?: StringNullableFilter<"DadosPagamento"> | string | null
     chave?: StringNullableFilter<"DadosPagamento"> | string | null
     cpf?: StringNullableFilter<"DadosPagamento"> | string | null
     regID?: IntFilter<"DadosPagamento"> | number
@@ -28020,8 +28096,8 @@ export namespace Prisma {
     OR?: DadosPagamentoWhereInput[]
     NOT?: DadosPagamentoWhereInput | DadosPagamentoWhereInput[]
     banco?: StringNullableFilter<"DadosPagamento"> | string | null
-    agencia?: IntNullableFilter<"DadosPagamento"> | number | null
-    conta?: IntNullableFilter<"DadosPagamento"> | number | null
+    agencia?: StringNullableFilter<"DadosPagamento"> | string | null
+    conta?: StringNullableFilter<"DadosPagamento"> | string | null
     chave?: StringNullableFilter<"DadosPagamento"> | string | null
     cpf?: StringNullableFilter<"DadosPagamento"> | string | null
     registro?: XOR<RegistroScalarRelationFilter, RegistroWhereInput>
@@ -28048,8 +28124,8 @@ export namespace Prisma {
     NOT?: DadosPagamentoScalarWhereWithAggregatesInput | DadosPagamentoScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"DadosPagamento"> | number
     banco?: StringNullableWithAggregatesFilter<"DadosPagamento"> | string | null
-    agencia?: IntNullableWithAggregatesFilter<"DadosPagamento"> | number | null
-    conta?: IntNullableWithAggregatesFilter<"DadosPagamento"> | number | null
+    agencia?: StringNullableWithAggregatesFilter<"DadosPagamento"> | string | null
+    conta?: StringNullableWithAggregatesFilter<"DadosPagamento"> | string | null
     chave?: StringNullableWithAggregatesFilter<"DadosPagamento"> | string | null
     cpf?: StringNullableWithAggregatesFilter<"DadosPagamento"> | string | null
     regID?: IntWithAggregatesFilter<"DadosPagamento"> | number
@@ -28263,12 +28339,12 @@ export namespace Prisma {
 
   export type CategoriaMaterialWhereUniqueInput = Prisma.AtLeast<{
     id?: number
+    name?: string
     AND?: CategoriaMaterialWhereInput | CategoriaMaterialWhereInput[]
     OR?: CategoriaMaterialWhereInput[]
     NOT?: CategoriaMaterialWhereInput | CategoriaMaterialWhereInput[]
-    name?: StringFilter<"CategoriaMaterial"> | string
     materiais?: MaterialListRelationFilter
-  }, "id">
+  }, "id" | "name">
 
   export type CategoriaMaterialOrderByWithAggregationInput = {
     id?: SortOrder
@@ -28994,6 +29070,7 @@ export namespace Prisma {
     email?: string | null
     telefone?: string | null
     criadoEm?: Date | string
+    deletedAt?: Date | string | null
     dados_pagamento?: DadosPagamentoCreateNestedOneWithoutRegistroInput
     endereco?: EnderecoCreateNestedOneWithoutRegistroInput
     pedidos?: PedidoCreateNestedManyWithoutRegistroInput
@@ -29012,6 +29089,7 @@ export namespace Prisma {
     email?: string | null
     telefone?: string | null
     criadoEm?: Date | string
+    deletedAt?: Date | string | null
     dados_pagamento?: DadosPagamentoUncheckedCreateNestedOneWithoutRegistroInput
     endereco?: EnderecoUncheckedCreateNestedOneWithoutRegistroInput
     pedidos?: PedidoUncheckedCreateNestedManyWithoutRegistroInput
@@ -29027,6 +29105,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     telefone?: NullableStringFieldUpdateOperationsInput | string | null
     criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dados_pagamento?: DadosPagamentoUpdateOneWithoutRegistroNestedInput
     endereco?: EnderecoUpdateOneWithoutRegistroNestedInput
     pedidos?: PedidoUpdateManyWithoutRegistroNestedInput
@@ -29045,6 +29124,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     telefone?: NullableStringFieldUpdateOperationsInput | string | null
     criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dados_pagamento?: DadosPagamentoUncheckedUpdateOneWithoutRegistroNestedInput
     endereco?: EnderecoUncheckedUpdateOneWithoutRegistroNestedInput
     pedidos?: PedidoUncheckedUpdateManyWithoutRegistroNestedInput
@@ -29062,6 +29142,7 @@ export namespace Prisma {
     email?: string | null
     telefone?: string | null
     criadoEm?: Date | string
+    deletedAt?: Date | string | null
   }
 
   export type RegistroUpdateManyMutationInput = {
@@ -29071,6 +29152,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     telefone?: NullableStringFieldUpdateOperationsInput | string | null
     criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type RegistroUncheckedUpdateManyInput = {
@@ -29082,6 +29164,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     telefone?: NullableStringFieldUpdateOperationsInput | string | null
     criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type PessoaFisicaCreateInput = {
@@ -29091,9 +29174,10 @@ export namespace Prisma {
   }
 
   export type PessoaFisicaUncheckedCreateInput = {
-    id: number
+    id?: number
     cpf: string
     nascimento?: Date | string | null
+    registroID: number
   }
 
   export type PessoaFisicaUpdateInput = {
@@ -29106,12 +29190,14 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     cpf?: StringFieldUpdateOperationsInput | string
     nascimento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registroID?: IntFieldUpdateOperationsInput | number
   }
 
   export type PessoaFisicaCreateManyInput = {
-    id: number
+    id?: number
     cpf: string
     nascimento?: Date | string | null
+    registroID: number
   }
 
   export type PessoaFisicaUpdateManyMutationInput = {
@@ -29123,6 +29209,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     cpf?: StringFieldUpdateOperationsInput | string
     nascimento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registroID?: IntFieldUpdateOperationsInput | number
   }
 
   export type PessoaJuridicaCreateInput = {
@@ -29133,10 +29220,11 @@ export namespace Prisma {
   }
 
   export type PessoaJuridicaUncheckedCreateInput = {
-    id: number
+    id?: number
     cnpj: string
     ie?: string | null
     fantasia?: string | null
+    registroID: number
   }
 
   export type PessoaJuridicaUpdateInput = {
@@ -29151,13 +29239,15 @@ export namespace Prisma {
     cnpj?: StringFieldUpdateOperationsInput | string
     ie?: NullableStringFieldUpdateOperationsInput | string | null
     fantasia?: NullableStringFieldUpdateOperationsInput | string | null
+    registroID?: IntFieldUpdateOperationsInput | number
   }
 
   export type PessoaJuridicaCreateManyInput = {
-    id: number
+    id?: number
     cnpj: string
     ie?: string | null
     fantasia?: string | null
+    registroID: number
   }
 
   export type PessoaJuridicaUpdateManyMutationInput = {
@@ -29171,6 +29261,7 @@ export namespace Prisma {
     cnpj?: StringFieldUpdateOperationsInput | string
     ie?: NullableStringFieldUpdateOperationsInput | string | null
     fantasia?: NullableStringFieldUpdateOperationsInput | string | null
+    registroID?: IntFieldUpdateOperationsInput | number
   }
 
   export type SaldoFinanceiroCreateInput = {
@@ -29212,6 +29303,7 @@ export namespace Prisma {
   }
 
   export type EnderecoCreateInput = {
+    cep?: string | null
     estado?: string | null
     cidade?: string | null
     bairro?: string | null
@@ -29224,6 +29316,7 @@ export namespace Prisma {
   export type EnderecoUncheckedCreateInput = {
     id?: number
     regID: number
+    cep?: string | null
     estado?: string | null
     cidade?: string | null
     bairro?: string | null
@@ -29233,6 +29326,7 @@ export namespace Prisma {
   }
 
   export type EnderecoUpdateInput = {
+    cep?: NullableStringFieldUpdateOperationsInput | string | null
     estado?: NullableStringFieldUpdateOperationsInput | string | null
     cidade?: NullableStringFieldUpdateOperationsInput | string | null
     bairro?: NullableStringFieldUpdateOperationsInput | string | null
@@ -29245,6 +29339,7 @@ export namespace Prisma {
   export type EnderecoUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     regID?: IntFieldUpdateOperationsInput | number
+    cep?: NullableStringFieldUpdateOperationsInput | string | null
     estado?: NullableStringFieldUpdateOperationsInput | string | null
     cidade?: NullableStringFieldUpdateOperationsInput | string | null
     bairro?: NullableStringFieldUpdateOperationsInput | string | null
@@ -29256,6 +29351,7 @@ export namespace Prisma {
   export type EnderecoCreateManyInput = {
     id?: number
     regID: number
+    cep?: string | null
     estado?: string | null
     cidade?: string | null
     bairro?: string | null
@@ -29265,6 +29361,7 @@ export namespace Prisma {
   }
 
   export type EnderecoUpdateManyMutationInput = {
+    cep?: NullableStringFieldUpdateOperationsInput | string | null
     estado?: NullableStringFieldUpdateOperationsInput | string | null
     cidade?: NullableStringFieldUpdateOperationsInput | string | null
     bairro?: NullableStringFieldUpdateOperationsInput | string | null
@@ -29276,6 +29373,7 @@ export namespace Prisma {
   export type EnderecoUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     regID?: IntFieldUpdateOperationsInput | number
+    cep?: NullableStringFieldUpdateOperationsInput | string | null
     estado?: NullableStringFieldUpdateOperationsInput | string | null
     cidade?: NullableStringFieldUpdateOperationsInput | string | null
     bairro?: NullableStringFieldUpdateOperationsInput | string | null
@@ -29286,8 +29384,8 @@ export namespace Prisma {
 
   export type DadosPagamentoCreateInput = {
     banco?: string | null
-    agencia?: number | null
-    conta?: number | null
+    agencia?: string | null
+    conta?: string | null
     chave?: string | null
     cpf?: string | null
     registro: RegistroCreateNestedOneWithoutDados_pagamentoInput
@@ -29296,8 +29394,8 @@ export namespace Prisma {
   export type DadosPagamentoUncheckedCreateInput = {
     id?: number
     banco?: string | null
-    agencia?: number | null
-    conta?: number | null
+    agencia?: string | null
+    conta?: string | null
     chave?: string | null
     cpf?: string | null
     regID: number
@@ -29305,8 +29403,8 @@ export namespace Prisma {
 
   export type DadosPagamentoUpdateInput = {
     banco?: NullableStringFieldUpdateOperationsInput | string | null
-    agencia?: NullableIntFieldUpdateOperationsInput | number | null
-    conta?: NullableIntFieldUpdateOperationsInput | number | null
+    agencia?: NullableStringFieldUpdateOperationsInput | string | null
+    conta?: NullableStringFieldUpdateOperationsInput | string | null
     chave?: NullableStringFieldUpdateOperationsInput | string | null
     cpf?: NullableStringFieldUpdateOperationsInput | string | null
     registro?: RegistroUpdateOneRequiredWithoutDados_pagamentoNestedInput
@@ -29315,8 +29413,8 @@ export namespace Prisma {
   export type DadosPagamentoUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     banco?: NullableStringFieldUpdateOperationsInput | string | null
-    agencia?: NullableIntFieldUpdateOperationsInput | number | null
-    conta?: NullableIntFieldUpdateOperationsInput | number | null
+    agencia?: NullableStringFieldUpdateOperationsInput | string | null
+    conta?: NullableStringFieldUpdateOperationsInput | string | null
     chave?: NullableStringFieldUpdateOperationsInput | string | null
     cpf?: NullableStringFieldUpdateOperationsInput | string | null
     regID?: IntFieldUpdateOperationsInput | number
@@ -29325,8 +29423,8 @@ export namespace Prisma {
   export type DadosPagamentoCreateManyInput = {
     id?: number
     banco?: string | null
-    agencia?: number | null
-    conta?: number | null
+    agencia?: string | null
+    conta?: string | null
     chave?: string | null
     cpf?: string | null
     regID: number
@@ -29334,8 +29432,8 @@ export namespace Prisma {
 
   export type DadosPagamentoUpdateManyMutationInput = {
     banco?: NullableStringFieldUpdateOperationsInput | string | null
-    agencia?: NullableIntFieldUpdateOperationsInput | number | null
-    conta?: NullableIntFieldUpdateOperationsInput | number | null
+    agencia?: NullableStringFieldUpdateOperationsInput | string | null
+    conta?: NullableStringFieldUpdateOperationsInput | string | null
     chave?: NullableStringFieldUpdateOperationsInput | string | null
     cpf?: NullableStringFieldUpdateOperationsInput | string | null
   }
@@ -29343,8 +29441,8 @@ export namespace Prisma {
   export type DadosPagamentoUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     banco?: NullableStringFieldUpdateOperationsInput | string | null
-    agencia?: NullableIntFieldUpdateOperationsInput | number | null
-    conta?: NullableIntFieldUpdateOperationsInput | number | null
+    agencia?: NullableStringFieldUpdateOperationsInput | string | null
+    conta?: NullableStringFieldUpdateOperationsInput | string | null
     chave?: NullableStringFieldUpdateOperationsInput | string | null
     cpf?: NullableStringFieldUpdateOperationsInput | string | null
     regID?: IntFieldUpdateOperationsInput | number
@@ -30418,6 +30516,7 @@ export namespace Prisma {
     email?: SortOrder
     telefone?: SortOrder
     criadoEm?: SortOrder
+    deletedAt?: SortOrder
   }
 
   export type RegistroAvgOrderByAggregateInput = {
@@ -30434,6 +30533,7 @@ export namespace Prisma {
     email?: SortOrder
     telefone?: SortOrder
     criadoEm?: SortOrder
+    deletedAt?: SortOrder
   }
 
   export type RegistroMinOrderByAggregateInput = {
@@ -30445,6 +30545,7 @@ export namespace Prisma {
     email?: SortOrder
     telefone?: SortOrder
     criadoEm?: SortOrder
+    deletedAt?: SortOrder
   }
 
   export type RegistroSumOrderByAggregateInput = {
@@ -30485,26 +30586,31 @@ export namespace Prisma {
     id?: SortOrder
     cpf?: SortOrder
     nascimento?: SortOrder
+    registroID?: SortOrder
   }
 
   export type PessoaFisicaAvgOrderByAggregateInput = {
     id?: SortOrder
+    registroID?: SortOrder
   }
 
   export type PessoaFisicaMaxOrderByAggregateInput = {
     id?: SortOrder
     cpf?: SortOrder
     nascimento?: SortOrder
+    registroID?: SortOrder
   }
 
   export type PessoaFisicaMinOrderByAggregateInput = {
     id?: SortOrder
     cpf?: SortOrder
     nascimento?: SortOrder
+    registroID?: SortOrder
   }
 
   export type PessoaFisicaSumOrderByAggregateInput = {
     id?: SortOrder
+    registroID?: SortOrder
   }
 
   export type PessoaJuridicaCountOrderByAggregateInput = {
@@ -30512,10 +30618,12 @@ export namespace Prisma {
     cnpj?: SortOrder
     ie?: SortOrder
     fantasia?: SortOrder
+    registroID?: SortOrder
   }
 
   export type PessoaJuridicaAvgOrderByAggregateInput = {
     id?: SortOrder
+    registroID?: SortOrder
   }
 
   export type PessoaJuridicaMaxOrderByAggregateInput = {
@@ -30523,6 +30631,7 @@ export namespace Prisma {
     cnpj?: SortOrder
     ie?: SortOrder
     fantasia?: SortOrder
+    registroID?: SortOrder
   }
 
   export type PessoaJuridicaMinOrderByAggregateInput = {
@@ -30530,10 +30639,12 @@ export namespace Prisma {
     cnpj?: SortOrder
     ie?: SortOrder
     fantasia?: SortOrder
+    registroID?: SortOrder
   }
 
   export type PessoaJuridicaSumOrderByAggregateInput = {
     id?: SortOrder
+    registroID?: SortOrder
   }
 
   export type DecimalFilter<$PrismaModel = never> = {
@@ -30596,6 +30707,7 @@ export namespace Prisma {
   export type EnderecoCountOrderByAggregateInput = {
     id?: SortOrder
     regID?: SortOrder
+    cep?: SortOrder
     estado?: SortOrder
     cidade?: SortOrder
     bairro?: SortOrder
@@ -30612,6 +30724,7 @@ export namespace Prisma {
   export type EnderecoMaxOrderByAggregateInput = {
     id?: SortOrder
     regID?: SortOrder
+    cep?: SortOrder
     estado?: SortOrder
     cidade?: SortOrder
     bairro?: SortOrder
@@ -30623,6 +30736,7 @@ export namespace Prisma {
   export type EnderecoMinOrderByAggregateInput = {
     id?: SortOrder
     regID?: SortOrder
+    cep?: SortOrder
     estado?: SortOrder
     cidade?: SortOrder
     bairro?: SortOrder
@@ -30634,17 +30748,6 @@ export namespace Prisma {
   export type EnderecoSumOrderByAggregateInput = {
     id?: SortOrder
     regID?: SortOrder
-  }
-
-  export type IntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
   export type DadosPagamentoCountOrderByAggregateInput = {
@@ -30659,8 +30762,6 @@ export namespace Prisma {
 
   export type DadosPagamentoAvgOrderByAggregateInput = {
     id?: SortOrder
-    agencia?: SortOrder
-    conta?: SortOrder
     regID?: SortOrder
   }
 
@@ -30686,25 +30787,7 @@ export namespace Prisma {
 
   export type DadosPagamentoSumOrderByAggregateInput = {
     id?: SortOrder
-    agencia?: SortOrder
-    conta?: SortOrder
     regID?: SortOrder
-  }
-
-  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type PrecoPorTabelaListRelationFilter = {
@@ -30969,6 +31052,17 @@ export namespace Prisma {
     impureza?: SortOrder
   }
 
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
   export type EnumTipoPedidoFilter<$PrismaModel = never> = {
     equals?: $Enums.TipoPedido | EnumTipoPedidoFieldRefInput<$PrismaModel>
     in?: $Enums.TipoPedido[] | ListEnumTipoPedidoFieldRefInput<$PrismaModel>
@@ -31048,6 +31142,22 @@ export namespace Prisma {
     regID?: SortOrder
     valor_total?: SortOrder
     userID?: SortOrder
+  }
+
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type EnumTipoPedidoWithAggregatesFilter<$PrismaModel = never> = {
@@ -32004,14 +32114,6 @@ export namespace Prisma {
     connect?: RegistroWhereUniqueInput
   }
 
-  export type NullableIntFieldUpdateOperationsInput = {
-    set?: number | null
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
-  }
-
   export type RegistroUpdateOneRequiredWithoutDados_pagamentoNestedInput = {
     create?: XOR<RegistroCreateWithoutDados_pagamentoInput, RegistroUncheckedCreateWithoutDados_pagamentoInput>
     connectOrCreate?: RegistroCreateOrConnectWithoutDados_pagamentoInput
@@ -32438,6 +32540,14 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutPedidosInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutPedidosInput, UserUpdateWithoutPedidosInput>, UserUncheckedUpdateWithoutPedidosInput>
+  }
+
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
   }
 
   export type ItemPedidoUncheckedUpdateManyWithoutPedidoNestedInput = {
@@ -32917,33 +33027,6 @@ export namespace Prisma {
     _max?: NestedDecimalFilter<$PrismaModel>
   }
 
-  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
-  }
-
-  export type NestedFloatNullableFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
-  }
-
   export type NestedBoolFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolFilter<$PrismaModel> | boolean
@@ -32969,6 +33052,33 @@ export namespace Prisma {
     in?: $Enums.TipoStatusPedido[] | ListEnumTipoStatusPedidoFieldRefInput<$PrismaModel>
     notIn?: $Enums.TipoStatusPedido[] | ListEnumTipoStatusPedidoFieldRefInput<$PrismaModel>
     not?: NestedEnumTipoStatusPedidoFilter<$PrismaModel> | $Enums.TipoStatusPedido
+  }
+
+  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
   export type NestedEnumTipoPedidoWithAggregatesFilter<$PrismaModel = never> = {
@@ -33422,8 +33532,8 @@ export namespace Prisma {
 
   export type DadosPagamentoCreateWithoutRegistroInput = {
     banco?: string | null
-    agencia?: number | null
-    conta?: number | null
+    agencia?: string | null
+    conta?: string | null
     chave?: string | null
     cpf?: string | null
   }
@@ -33431,8 +33541,8 @@ export namespace Prisma {
   export type DadosPagamentoUncheckedCreateWithoutRegistroInput = {
     id?: number
     banco?: string | null
-    agencia?: number | null
-    conta?: number | null
+    agencia?: string | null
+    conta?: string | null
     chave?: string | null
     cpf?: string | null
   }
@@ -33443,6 +33553,7 @@ export namespace Prisma {
   }
 
   export type EnderecoCreateWithoutRegistroInput = {
+    cep?: string | null
     estado?: string | null
     cidade?: string | null
     bairro?: string | null
@@ -33453,6 +33564,7 @@ export namespace Prisma {
 
   export type EnderecoUncheckedCreateWithoutRegistroInput = {
     id?: number
+    cep?: string | null
     estado?: string | null
     cidade?: string | null
     bairro?: string | null
@@ -33505,6 +33617,7 @@ export namespace Prisma {
   }
 
   export type PessoaFisicaUncheckedCreateWithoutRegistroInput = {
+    id?: number
     cpf: string
     nascimento?: Date | string | null
   }
@@ -33521,6 +33634,7 @@ export namespace Prisma {
   }
 
   export type PessoaJuridicaUncheckedCreateWithoutRegistroInput = {
+    id?: number
     cnpj: string
     ie?: string | null
     fantasia?: string | null
@@ -33576,8 +33690,8 @@ export namespace Prisma {
 
   export type DadosPagamentoUpdateWithoutRegistroInput = {
     banco?: NullableStringFieldUpdateOperationsInput | string | null
-    agencia?: NullableIntFieldUpdateOperationsInput | number | null
-    conta?: NullableIntFieldUpdateOperationsInput | number | null
+    agencia?: NullableStringFieldUpdateOperationsInput | string | null
+    conta?: NullableStringFieldUpdateOperationsInput | string | null
     chave?: NullableStringFieldUpdateOperationsInput | string | null
     cpf?: NullableStringFieldUpdateOperationsInput | string | null
   }
@@ -33585,8 +33699,8 @@ export namespace Prisma {
   export type DadosPagamentoUncheckedUpdateWithoutRegistroInput = {
     id?: IntFieldUpdateOperationsInput | number
     banco?: NullableStringFieldUpdateOperationsInput | string | null
-    agencia?: NullableIntFieldUpdateOperationsInput | number | null
-    conta?: NullableIntFieldUpdateOperationsInput | number | null
+    agencia?: NullableStringFieldUpdateOperationsInput | string | null
+    conta?: NullableStringFieldUpdateOperationsInput | string | null
     chave?: NullableStringFieldUpdateOperationsInput | string | null
     cpf?: NullableStringFieldUpdateOperationsInput | string | null
   }
@@ -33603,6 +33717,7 @@ export namespace Prisma {
   }
 
   export type EnderecoUpdateWithoutRegistroInput = {
+    cep?: NullableStringFieldUpdateOperationsInput | string | null
     estado?: NullableStringFieldUpdateOperationsInput | string | null
     cidade?: NullableStringFieldUpdateOperationsInput | string | null
     bairro?: NullableStringFieldUpdateOperationsInput | string | null
@@ -33613,6 +33728,7 @@ export namespace Prisma {
 
   export type EnderecoUncheckedUpdateWithoutRegistroInput = {
     id?: IntFieldUpdateOperationsInput | number
+    cep?: NullableStringFieldUpdateOperationsInput | string | null
     estado?: NullableStringFieldUpdateOperationsInput | string | null
     cidade?: NullableStringFieldUpdateOperationsInput | string | null
     bairro?: NullableStringFieldUpdateOperationsInput | string | null
@@ -33654,6 +33770,7 @@ export namespace Prisma {
   }
 
   export type PessoaFisicaUncheckedUpdateWithoutRegistroInput = {
+    id?: IntFieldUpdateOperationsInput | number
     cpf?: StringFieldUpdateOperationsInput | string
     nascimento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -33676,6 +33793,7 @@ export namespace Prisma {
   }
 
   export type PessoaJuridicaUncheckedUpdateWithoutRegistroInput = {
+    id?: IntFieldUpdateOperationsInput | number
     cnpj?: StringFieldUpdateOperationsInput | string
     ie?: NullableStringFieldUpdateOperationsInput | string | null
     fantasia?: NullableStringFieldUpdateOperationsInput | string | null
@@ -33732,6 +33850,7 @@ export namespace Prisma {
     email?: string | null
     telefone?: string | null
     criadoEm?: Date | string
+    deletedAt?: Date | string | null
     dados_pagamento?: DadosPagamentoCreateNestedOneWithoutRegistroInput
     endereco?: EnderecoCreateNestedOneWithoutRegistroInput
     pedidos?: PedidoCreateNestedManyWithoutRegistroInput
@@ -33749,6 +33868,7 @@ export namespace Prisma {
     email?: string | null
     telefone?: string | null
     criadoEm?: Date | string
+    deletedAt?: Date | string | null
     dados_pagamento?: DadosPagamentoUncheckedCreateNestedOneWithoutRegistroInput
     endereco?: EnderecoUncheckedCreateNestedOneWithoutRegistroInput
     pedidos?: PedidoUncheckedCreateNestedManyWithoutRegistroInput
@@ -33779,6 +33899,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     telefone?: NullableStringFieldUpdateOperationsInput | string | null
     criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dados_pagamento?: DadosPagamentoUpdateOneWithoutRegistroNestedInput
     endereco?: EnderecoUpdateOneWithoutRegistroNestedInput
     pedidos?: PedidoUpdateManyWithoutRegistroNestedInput
@@ -33796,6 +33917,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     telefone?: NullableStringFieldUpdateOperationsInput | string | null
     criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dados_pagamento?: DadosPagamentoUncheckedUpdateOneWithoutRegistroNestedInput
     endereco?: EnderecoUncheckedUpdateOneWithoutRegistroNestedInput
     pedidos?: PedidoUncheckedUpdateManyWithoutRegistroNestedInput
@@ -33810,6 +33932,7 @@ export namespace Prisma {
     email?: string | null
     telefone?: string | null
     criadoEm?: Date | string
+    deletedAt?: Date | string | null
     dados_pagamento?: DadosPagamentoCreateNestedOneWithoutRegistroInput
     endereco?: EnderecoCreateNestedOneWithoutRegistroInput
     pedidos?: PedidoCreateNestedManyWithoutRegistroInput
@@ -33827,6 +33950,7 @@ export namespace Prisma {
     email?: string | null
     telefone?: string | null
     criadoEm?: Date | string
+    deletedAt?: Date | string | null
     dados_pagamento?: DadosPagamentoUncheckedCreateNestedOneWithoutRegistroInput
     endereco?: EnderecoUncheckedCreateNestedOneWithoutRegistroInput
     pedidos?: PedidoUncheckedCreateNestedManyWithoutRegistroInput
@@ -33857,6 +33981,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     telefone?: NullableStringFieldUpdateOperationsInput | string | null
     criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dados_pagamento?: DadosPagamentoUpdateOneWithoutRegistroNestedInput
     endereco?: EnderecoUpdateOneWithoutRegistroNestedInput
     pedidos?: PedidoUpdateManyWithoutRegistroNestedInput
@@ -33874,6 +33999,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     telefone?: NullableStringFieldUpdateOperationsInput | string | null
     criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dados_pagamento?: DadosPagamentoUncheckedUpdateOneWithoutRegistroNestedInput
     endereco?: EnderecoUncheckedUpdateOneWithoutRegistroNestedInput
     pedidos?: PedidoUncheckedUpdateManyWithoutRegistroNestedInput
@@ -33888,6 +34014,7 @@ export namespace Prisma {
     email?: string | null
     telefone?: string | null
     criadoEm?: Date | string
+    deletedAt?: Date | string | null
     dados_pagamento?: DadosPagamentoCreateNestedOneWithoutRegistroInput
     endereco?: EnderecoCreateNestedOneWithoutRegistroInput
     pedidos?: PedidoCreateNestedManyWithoutRegistroInput
@@ -33905,6 +34032,7 @@ export namespace Prisma {
     email?: string | null
     telefone?: string | null
     criadoEm?: Date | string
+    deletedAt?: Date | string | null
     dados_pagamento?: DadosPagamentoUncheckedCreateNestedOneWithoutRegistroInput
     endereco?: EnderecoUncheckedCreateNestedOneWithoutRegistroInput
     pedidos?: PedidoUncheckedCreateNestedManyWithoutRegistroInput
@@ -33935,6 +34063,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     telefone?: NullableStringFieldUpdateOperationsInput | string | null
     criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dados_pagamento?: DadosPagamentoUpdateOneWithoutRegistroNestedInput
     endereco?: EnderecoUpdateOneWithoutRegistroNestedInput
     pedidos?: PedidoUpdateManyWithoutRegistroNestedInput
@@ -33952,6 +34081,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     telefone?: NullableStringFieldUpdateOperationsInput | string | null
     criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dados_pagamento?: DadosPagamentoUncheckedUpdateOneWithoutRegistroNestedInput
     endereco?: EnderecoUncheckedUpdateOneWithoutRegistroNestedInput
     pedidos?: PedidoUncheckedUpdateManyWithoutRegistroNestedInput
@@ -33966,6 +34096,7 @@ export namespace Prisma {
     email?: string | null
     telefone?: string | null
     criadoEm?: Date | string
+    deletedAt?: Date | string | null
     dados_pagamento?: DadosPagamentoCreateNestedOneWithoutRegistroInput
     pedidos?: PedidoCreateNestedManyWithoutRegistroInput
     fisica?: PessoaFisicaCreateNestedOneWithoutRegistroInput
@@ -33983,6 +34114,7 @@ export namespace Prisma {
     email?: string | null
     telefone?: string | null
     criadoEm?: Date | string
+    deletedAt?: Date | string | null
     dados_pagamento?: DadosPagamentoUncheckedCreateNestedOneWithoutRegistroInput
     pedidos?: PedidoUncheckedCreateNestedManyWithoutRegistroInput
     fisica?: PessoaFisicaUncheckedCreateNestedOneWithoutRegistroInput
@@ -34013,6 +34145,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     telefone?: NullableStringFieldUpdateOperationsInput | string | null
     criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dados_pagamento?: DadosPagamentoUpdateOneWithoutRegistroNestedInput
     pedidos?: PedidoUpdateManyWithoutRegistroNestedInput
     fisica?: PessoaFisicaUpdateOneWithoutRegistroNestedInput
@@ -34030,6 +34163,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     telefone?: NullableStringFieldUpdateOperationsInput | string | null
     criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dados_pagamento?: DadosPagamentoUncheckedUpdateOneWithoutRegistroNestedInput
     pedidos?: PedidoUncheckedUpdateManyWithoutRegistroNestedInput
     fisica?: PessoaFisicaUncheckedUpdateOneWithoutRegistroNestedInput
@@ -34044,6 +34178,7 @@ export namespace Prisma {
     email?: string | null
     telefone?: string | null
     criadoEm?: Date | string
+    deletedAt?: Date | string | null
     endereco?: EnderecoCreateNestedOneWithoutRegistroInput
     pedidos?: PedidoCreateNestedManyWithoutRegistroInput
     fisica?: PessoaFisicaCreateNestedOneWithoutRegistroInput
@@ -34061,6 +34196,7 @@ export namespace Prisma {
     email?: string | null
     telefone?: string | null
     criadoEm?: Date | string
+    deletedAt?: Date | string | null
     endereco?: EnderecoUncheckedCreateNestedOneWithoutRegistroInput
     pedidos?: PedidoUncheckedCreateNestedManyWithoutRegistroInput
     fisica?: PessoaFisicaUncheckedCreateNestedOneWithoutRegistroInput
@@ -34091,6 +34227,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     telefone?: NullableStringFieldUpdateOperationsInput | string | null
     criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endereco?: EnderecoUpdateOneWithoutRegistroNestedInput
     pedidos?: PedidoUpdateManyWithoutRegistroNestedInput
     fisica?: PessoaFisicaUpdateOneWithoutRegistroNestedInput
@@ -34108,6 +34245,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     telefone?: NullableStringFieldUpdateOperationsInput | string | null
     criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endereco?: EnderecoUncheckedUpdateOneWithoutRegistroNestedInput
     pedidos?: PedidoUncheckedUpdateManyWithoutRegistroNestedInput
     fisica?: PessoaFisicaUncheckedUpdateOneWithoutRegistroNestedInput
@@ -34145,6 +34283,7 @@ export namespace Prisma {
     email?: string | null
     telefone?: string | null
     criadoEm?: Date | string
+    deletedAt?: Date | string | null
     dados_pagamento?: DadosPagamentoCreateNestedOneWithoutRegistroInput
     endereco?: EnderecoCreateNestedOneWithoutRegistroInput
     pedidos?: PedidoCreateNestedManyWithoutRegistroInput
@@ -34161,6 +34300,7 @@ export namespace Prisma {
     email?: string | null
     telefone?: string | null
     criadoEm?: Date | string
+    deletedAt?: Date | string | null
     dados_pagamento?: DadosPagamentoUncheckedCreateNestedOneWithoutRegistroInput
     endereco?: EnderecoUncheckedCreateNestedOneWithoutRegistroInput
     pedidos?: PedidoUncheckedCreateNestedManyWithoutRegistroInput
@@ -34234,6 +34374,7 @@ export namespace Prisma {
     email?: StringNullableFilter<"Registro"> | string | null
     telefone?: StringNullableFilter<"Registro"> | string | null
     criadoEm?: DateTimeFilter<"Registro"> | Date | string
+    deletedAt?: DateTimeNullableFilter<"Registro"> | Date | string | null
   }
 
   export type MaterialCreateWithoutPreco_tabelaInput = {
@@ -34782,6 +34923,7 @@ export namespace Prisma {
     email?: string | null
     telefone?: string | null
     criadoEm?: Date | string
+    deletedAt?: Date | string | null
     dados_pagamento?: DadosPagamentoCreateNestedOneWithoutRegistroInput
     endereco?: EnderecoCreateNestedOneWithoutRegistroInput
     fisica?: PessoaFisicaCreateNestedOneWithoutRegistroInput
@@ -34799,6 +34941,7 @@ export namespace Prisma {
     email?: string | null
     telefone?: string | null
     criadoEm?: Date | string
+    deletedAt?: Date | string | null
     dados_pagamento?: DadosPagamentoUncheckedCreateNestedOneWithoutRegistroInput
     endereco?: EnderecoUncheckedCreateNestedOneWithoutRegistroInput
     fisica?: PessoaFisicaUncheckedCreateNestedOneWithoutRegistroInput
@@ -34898,6 +35041,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     telefone?: NullableStringFieldUpdateOperationsInput | string | null
     criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dados_pagamento?: DadosPagamentoUpdateOneWithoutRegistroNestedInput
     endereco?: EnderecoUpdateOneWithoutRegistroNestedInput
     fisica?: PessoaFisicaUpdateOneWithoutRegistroNestedInput
@@ -34915,6 +35059,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     telefone?: NullableStringFieldUpdateOperationsInput | string | null
     criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dados_pagamento?: DadosPagamentoUncheckedUpdateOneWithoutRegistroNestedInput
     endereco?: EnderecoUncheckedUpdateOneWithoutRegistroNestedInput
     fisica?: PessoaFisicaUncheckedUpdateOneWithoutRegistroNestedInput
@@ -35646,6 +35791,7 @@ export namespace Prisma {
     email?: string | null
     telefone?: string | null
     criadoEm?: Date | string
+    deletedAt?: Date | string | null
   }
 
   export type PrecoPorTabelaUpdateWithoutTabelaInput = {
@@ -35675,6 +35821,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     telefone?: NullableStringFieldUpdateOperationsInput | string | null
     criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dados_pagamento?: DadosPagamentoUpdateOneWithoutRegistroNestedInput
     endereco?: EnderecoUpdateOneWithoutRegistroNestedInput
     pedidos?: PedidoUpdateManyWithoutRegistroNestedInput
@@ -35691,6 +35838,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     telefone?: NullableStringFieldUpdateOperationsInput | string | null
     criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dados_pagamento?: DadosPagamentoUncheckedUpdateOneWithoutRegistroNestedInput
     endereco?: EnderecoUncheckedUpdateOneWithoutRegistroNestedInput
     pedidos?: PedidoUncheckedUpdateManyWithoutRegistroNestedInput
@@ -35707,6 +35855,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     telefone?: NullableStringFieldUpdateOperationsInput | string | null
     criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type ItemPedidoCreateManyMaterialInput = {

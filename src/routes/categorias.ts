@@ -1,22 +1,21 @@
-import { Request, Response, Router } from "express";
+import { Router } from "express";
+import { AuthMiddleware } from "../controllers/middleware";
+import * as categorias from "../controllers/categorias";
 
 export const categoriasRoutes = Router();
 
-// //Lida com as categorias
-// categoriasRoutes.get("/categorias", async (req: Request, res: Response) => {});
-// categoriasRoutes.get(
-//   "/categorias/:id",
-//   async (req: Request, res: Response) => {}
-// );
+//Lida com as categorias
+categoriasRoutes.get("/categorias", AuthMiddleware, categorias.GETS);
+categoriasRoutes.get(
+  "/categorias/:catID",
+  AuthMiddleware,
+  categorias.GET_UNIQUE
+);
 
-// categoriasRoutes.post("/categorias", async (req: Request, res: Response) => {});
+categoriasRoutes.post("/categorias", AuthMiddleware, categorias.POST);
 
-// categoriasRoutes.put(
-//   "/categorias/:id",
-//   async (req: Request, res: Response) => {}
-// );
-
-// categoriasRoutes.delete(
-//   "/categorias/:id",
-//   async (req: Request, res: Response) => {}
-// );
+categoriasRoutes.delete(
+  "/categorias/:catID",
+  AuthMiddleware,
+  categorias.DELETE
+);
