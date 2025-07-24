@@ -1,7 +1,7 @@
 import { Response } from "express";
 import { ExtendedRequest } from "../types/extended-request";
 import { z } from "zod";
-import { BadRequest } from "../error";
+import { BadRequest, NotFound } from "../error";
 import {
   createCategory,
   deleteCategory,
@@ -74,6 +74,10 @@ export const GET_UNIQUE = async (req: ExtendedRequest, res: Response) => {
     }
 
     const categoria = await findUniqueCategory(id.data);
+
+    if (!categoria) {
+      throw new NotFound();
+    }
 
     res.status(200).json(categoria);
   } catch (error: any) {
