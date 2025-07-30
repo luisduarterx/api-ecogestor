@@ -38,7 +38,7 @@ export const createCategory = async ({ id, nome }: UpsertTypeCategory) => {
       }
     }
     console.log(error);
-    return error;
+    throw error;
   }
 };
 export const deleteCategory = async (id: number) => {
@@ -59,9 +59,9 @@ export const deleteCategory = async (id: number) => {
           "Não é possivel excluir uma categoria qual tenha materiais listados."
         );
       }
-      return error;
+      throw error;
     }
-    return error;
+    throw error;
   }
 };
 export const findAllCategories = async () => {
@@ -71,7 +71,7 @@ export const findAllCategories = async () => {
     return categorias;
   } catch (error) {
     console.log(error);
-    return error;
+    throw error;
   }
 };
 export const findUniqueCategory = async (id: number) => {
@@ -84,6 +84,6 @@ export const findUniqueCategory = async (id: number) => {
     return categoria;
   } catch (error) {
     console.log(error);
-    return error;
+    throw error;
   }
 };

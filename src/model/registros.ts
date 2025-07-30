@@ -55,7 +55,7 @@ export const createNewF = (p: PessoaFisica) => {
           if (error.code === "P2002") {
             return new BadRequest("Já existe um usuário com o CPF informado");
           }
-          return error;
+          throw error;
         }
       }
     });
@@ -66,7 +66,7 @@ export const createNewF = (p: PessoaFisica) => {
     //criar endereco
   } catch (error) {
     console.log("deu erro");
-    return error;
+    throw error;
   }
 };
 export const createNewJ = (p: PessoaJuridica) => {
@@ -123,7 +123,7 @@ export const createNewJ = (p: PessoaJuridica) => {
           if (error.code === "P2002") {
             return new BadRequest("Já existe um usuário com o CNPJ informado");
           }
-          return error;
+          throw error;
         }
       }
     });
@@ -134,7 +134,7 @@ export const createNewJ = (p: PessoaJuridica) => {
     //criar endereco
   } catch (error) {
     console.log("deu erro");
-    return error;
+    throw error;
   }
 };
 export const deleteRegister = async (id: number) => {
@@ -159,7 +159,7 @@ export const deleteRegister = async (id: number) => {
       }
     }
     console.log(error);
-    return error;
+    throw error;
   }
 };
 
@@ -193,7 +193,7 @@ export const findRegister = async (params: string) => {
     return registros;
   } catch (error) {
     console.log(error);
-    return error;
+    throw error;
   }
 };
 
@@ -282,7 +282,7 @@ export const updateRegister = async (id: number, data: Pessoa) => {
 
     return result;
   } catch (error) {
-    return error;
+    throw error;
   }
 };
 export const findAllRegisters = async (page: number, take: number) => {
@@ -297,6 +297,6 @@ export const findAllRegisters = async (page: number, take: number) => {
     return registros;
   } catch (error) {
     console.log(error);
-    return error;
+    throw error;
   }
 };

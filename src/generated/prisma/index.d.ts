@@ -89,20 +89,25 @@ export type ItemPedido = $Result.DefaultSelection<Prisma.$ItemPedidoPayload>
  */
 export type Pedido = $Result.DefaultSelection<Prisma.$PedidoPayload>
 /**
- * Model Pagamento
+ * Model ContaFinanceira
  * 
  */
-export type Pagamento = $Result.DefaultSelection<Prisma.$PagamentoPayload>
+export type ContaFinanceira = $Result.DefaultSelection<Prisma.$ContaFinanceiraPayload>
 /**
- * Model Conta
+ * Model Banco
  * 
  */
-export type Conta = $Result.DefaultSelection<Prisma.$ContaPayload>
+export type Banco = $Result.DefaultSelection<Prisma.$BancoPayload>
 /**
  * Model MovimentacaoFinanceira
  * 
  */
 export type MovimentacaoFinanceira = $Result.DefaultSelection<Prisma.$MovimentacaoFinanceiraPayload>
+/**
+ * Model CategoriaCaixa
+ * 
+ */
+export type CategoriaCaixa = $Result.DefaultSelection<Prisma.$CategoriaCaixaPayload>
 /**
  * Model MovimentacaoEstoque
  * 
@@ -118,12 +123,25 @@ export type ConversaoEstoque = $Result.DefaultSelection<Prisma.$ConversaoEstoque
  * 
  */
 export type LivroCaixa = $Result.DefaultSelection<Prisma.$LivroCaixaPayload>
+/**
+ * Model Fechamento
+ * 
+ */
+export type Fechamento = $Result.DefaultSelection<Prisma.$FechamentoPayload>
 
 /**
  * Enums
  */
 export namespace $Enums {
-  export const StatusCaixa: {
+  export const TipoConta: {
+  PAGAR: 'PAGAR',
+  RECEBER: 'RECEBER'
+};
+
+export type TipoConta = (typeof TipoConta)[keyof typeof TipoConta]
+
+
+export const StatusCaixa: {
   ABERTO: 'ABERTO',
   FECHADO: 'FECHADO'
 };
@@ -158,7 +176,8 @@ export type TipoStatusPedido = (typeof TipoStatusPedido)[keyof typeof TipoStatus
 
 export const TipoMovimentacao: {
   ENTRADA: 'ENTRADA',
-  SAIDA: 'SAIDA'
+  SAIDA: 'SAIDA',
+  ESTORNO: 'ESTORNO'
 };
 
 export type TipoMovimentacao = (typeof TipoMovimentacao)[keyof typeof TipoMovimentacao]
@@ -172,16 +191,6 @@ export const FormaPagamento: {
 };
 
 export type FormaPagamento = (typeof FormaPagamento)[keyof typeof FormaPagamento]
-
-
-export const TipoOrigem: {
-  PEDIDO: 'PEDIDO',
-  ABASTECIMENTO: 'ABASTECIMENTO',
-  RETIRADA: 'RETIRADA',
-  DESPESA: 'DESPESA'
-};
-
-export type TipoOrigem = (typeof TipoOrigem)[keyof typeof TipoOrigem]
 
 
 export const TipoMovimentacaoEstoque: {
@@ -206,6 +215,10 @@ export type OrigemMovimentacaoEstoque = (typeof OrigemMovimentacaoEstoque)[keyof
 
 }
 
+export type TipoConta = $Enums.TipoConta
+
+export const TipoConta: typeof $Enums.TipoConta
+
 export type StatusCaixa = $Enums.StatusCaixa
 
 export const StatusCaixa: typeof $Enums.StatusCaixa
@@ -229,10 +242,6 @@ export const TipoMovimentacao: typeof $Enums.TipoMovimentacao
 export type FormaPagamento = $Enums.FormaPagamento
 
 export const FormaPagamento: typeof $Enums.FormaPagamento
-
-export type TipoOrigem = $Enums.TipoOrigem
-
-export const TipoOrigem: typeof $Enums.TipoOrigem
 
 export type TipoMovimentacaoEstoque = $Enums.TipoMovimentacaoEstoque
 
@@ -518,24 +527,24 @@ export class PrismaClient<
   get pedido(): Prisma.PedidoDelegate<ExtArgs, ClientOptions>;
 
   /**
-   * `prisma.pagamento`: Exposes CRUD operations for the **Pagamento** model.
+   * `prisma.contaFinanceira`: Exposes CRUD operations for the **ContaFinanceira** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more Pagamentos
-    * const pagamentos = await prisma.pagamento.findMany()
+    * // Fetch zero or more ContaFinanceiras
+    * const contaFinanceiras = await prisma.contaFinanceira.findMany()
     * ```
     */
-  get pagamento(): Prisma.PagamentoDelegate<ExtArgs, ClientOptions>;
+  get contaFinanceira(): Prisma.ContaFinanceiraDelegate<ExtArgs, ClientOptions>;
 
   /**
-   * `prisma.conta`: Exposes CRUD operations for the **Conta** model.
+   * `prisma.banco`: Exposes CRUD operations for the **Banco** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more Contas
-    * const contas = await prisma.conta.findMany()
+    * // Fetch zero or more Bancos
+    * const bancos = await prisma.banco.findMany()
     * ```
     */
-  get conta(): Prisma.ContaDelegate<ExtArgs, ClientOptions>;
+  get banco(): Prisma.BancoDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.movimentacaoFinanceira`: Exposes CRUD operations for the **MovimentacaoFinanceira** model.
@@ -546,6 +555,16 @@ export class PrismaClient<
     * ```
     */
   get movimentacaoFinanceira(): Prisma.MovimentacaoFinanceiraDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.categoriaCaixa`: Exposes CRUD operations for the **CategoriaCaixa** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CategoriaCaixas
+    * const categoriaCaixas = await prisma.categoriaCaixa.findMany()
+    * ```
+    */
+  get categoriaCaixa(): Prisma.CategoriaCaixaDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.movimentacaoEstoque`: Exposes CRUD operations for the **MovimentacaoEstoque** model.
@@ -576,6 +595,16 @@ export class PrismaClient<
     * ```
     */
   get livroCaixa(): Prisma.LivroCaixaDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.fechamento`: Exposes CRUD operations for the **Fechamento** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Fechamentos
+    * const fechamentos = await prisma.fechamento.findMany()
+    * ```
+    */
+  get fechamento(): Prisma.FechamentoDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1031,12 +1060,14 @@ export namespace Prisma {
     CategoriaMaterial: 'CategoriaMaterial',
     ItemPedido: 'ItemPedido',
     Pedido: 'Pedido',
-    Pagamento: 'Pagamento',
-    Conta: 'Conta',
+    ContaFinanceira: 'ContaFinanceira',
+    Banco: 'Banco',
     MovimentacaoFinanceira: 'MovimentacaoFinanceira',
+    CategoriaCaixa: 'CategoriaCaixa',
     MovimentacaoEstoque: 'MovimentacaoEstoque',
     ConversaoEstoque: 'ConversaoEstoque',
-    LivroCaixa: 'LivroCaixa'
+    LivroCaixa: 'LivroCaixa',
+    Fechamento: 'Fechamento'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1055,7 +1086,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "permissoes" | "cargo" | "registro" | "pessoaFisica" | "pessoaJuridica" | "saldoFinanceiro" | "endereco" | "dadosPagamento" | "tabela" | "precoPorTabela" | "material" | "categoriaMaterial" | "itemPedido" | "pedido" | "pagamento" | "conta" | "movimentacaoFinanceira" | "movimentacaoEstoque" | "conversaoEstoque" | "livroCaixa"
+      modelProps: "user" | "permissoes" | "cargo" | "registro" | "pessoaFisica" | "pessoaJuridica" | "saldoFinanceiro" | "endereco" | "dadosPagamento" | "tabela" | "precoPorTabela" | "material" | "categoriaMaterial" | "itemPedido" | "pedido" | "contaFinanceira" | "banco" | "movimentacaoFinanceira" | "categoriaCaixa" | "movimentacaoEstoque" | "conversaoEstoque" | "livroCaixa" | "fechamento"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2169,151 +2200,151 @@ export namespace Prisma {
           }
         }
       }
-      Pagamento: {
-        payload: Prisma.$PagamentoPayload<ExtArgs>
-        fields: Prisma.PagamentoFieldRefs
+      ContaFinanceira: {
+        payload: Prisma.$ContaFinanceiraPayload<ExtArgs>
+        fields: Prisma.ContaFinanceiraFieldRefs
         operations: {
           findUnique: {
-            args: Prisma.PagamentoFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PagamentoPayload> | null
+            args: Prisma.ContaFinanceiraFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContaFinanceiraPayload> | null
           }
           findUniqueOrThrow: {
-            args: Prisma.PagamentoFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PagamentoPayload>
+            args: Prisma.ContaFinanceiraFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContaFinanceiraPayload>
           }
           findFirst: {
-            args: Prisma.PagamentoFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PagamentoPayload> | null
+            args: Prisma.ContaFinanceiraFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContaFinanceiraPayload> | null
           }
           findFirstOrThrow: {
-            args: Prisma.PagamentoFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PagamentoPayload>
+            args: Prisma.ContaFinanceiraFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContaFinanceiraPayload>
           }
           findMany: {
-            args: Prisma.PagamentoFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PagamentoPayload>[]
+            args: Prisma.ContaFinanceiraFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContaFinanceiraPayload>[]
           }
           create: {
-            args: Prisma.PagamentoCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PagamentoPayload>
+            args: Prisma.ContaFinanceiraCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContaFinanceiraPayload>
           }
           createMany: {
-            args: Prisma.PagamentoCreateManyArgs<ExtArgs>
+            args: Prisma.ContaFinanceiraCreateManyArgs<ExtArgs>
             result: BatchPayload
           }
           createManyAndReturn: {
-            args: Prisma.PagamentoCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PagamentoPayload>[]
+            args: Prisma.ContaFinanceiraCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContaFinanceiraPayload>[]
           }
           delete: {
-            args: Prisma.PagamentoDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PagamentoPayload>
+            args: Prisma.ContaFinanceiraDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContaFinanceiraPayload>
           }
           update: {
-            args: Prisma.PagamentoUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PagamentoPayload>
+            args: Prisma.ContaFinanceiraUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContaFinanceiraPayload>
           }
           deleteMany: {
-            args: Prisma.PagamentoDeleteManyArgs<ExtArgs>
+            args: Prisma.ContaFinanceiraDeleteManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateMany: {
-            args: Prisma.PagamentoUpdateManyArgs<ExtArgs>
+            args: Prisma.ContaFinanceiraUpdateManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateManyAndReturn: {
-            args: Prisma.PagamentoUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PagamentoPayload>[]
+            args: Prisma.ContaFinanceiraUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContaFinanceiraPayload>[]
           }
           upsert: {
-            args: Prisma.PagamentoUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PagamentoPayload>
+            args: Prisma.ContaFinanceiraUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ContaFinanceiraPayload>
           }
           aggregate: {
-            args: Prisma.PagamentoAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregatePagamento>
+            args: Prisma.ContaFinanceiraAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateContaFinanceira>
           }
           groupBy: {
-            args: Prisma.PagamentoGroupByArgs<ExtArgs>
-            result: $Utils.Optional<PagamentoGroupByOutputType>[]
+            args: Prisma.ContaFinanceiraGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ContaFinanceiraGroupByOutputType>[]
           }
           count: {
-            args: Prisma.PagamentoCountArgs<ExtArgs>
-            result: $Utils.Optional<PagamentoCountAggregateOutputType> | number
+            args: Prisma.ContaFinanceiraCountArgs<ExtArgs>
+            result: $Utils.Optional<ContaFinanceiraCountAggregateOutputType> | number
           }
         }
       }
-      Conta: {
-        payload: Prisma.$ContaPayload<ExtArgs>
-        fields: Prisma.ContaFieldRefs
+      Banco: {
+        payload: Prisma.$BancoPayload<ExtArgs>
+        fields: Prisma.BancoFieldRefs
         operations: {
           findUnique: {
-            args: Prisma.ContaFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ContaPayload> | null
+            args: Prisma.BancoFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BancoPayload> | null
           }
           findUniqueOrThrow: {
-            args: Prisma.ContaFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ContaPayload>
+            args: Prisma.BancoFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BancoPayload>
           }
           findFirst: {
-            args: Prisma.ContaFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ContaPayload> | null
+            args: Prisma.BancoFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BancoPayload> | null
           }
           findFirstOrThrow: {
-            args: Prisma.ContaFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ContaPayload>
+            args: Prisma.BancoFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BancoPayload>
           }
           findMany: {
-            args: Prisma.ContaFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ContaPayload>[]
+            args: Prisma.BancoFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BancoPayload>[]
           }
           create: {
-            args: Prisma.ContaCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ContaPayload>
+            args: Prisma.BancoCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BancoPayload>
           }
           createMany: {
-            args: Prisma.ContaCreateManyArgs<ExtArgs>
+            args: Prisma.BancoCreateManyArgs<ExtArgs>
             result: BatchPayload
           }
           createManyAndReturn: {
-            args: Prisma.ContaCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ContaPayload>[]
+            args: Prisma.BancoCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BancoPayload>[]
           }
           delete: {
-            args: Prisma.ContaDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ContaPayload>
+            args: Prisma.BancoDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BancoPayload>
           }
           update: {
-            args: Prisma.ContaUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ContaPayload>
+            args: Prisma.BancoUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BancoPayload>
           }
           deleteMany: {
-            args: Prisma.ContaDeleteManyArgs<ExtArgs>
+            args: Prisma.BancoDeleteManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateMany: {
-            args: Prisma.ContaUpdateManyArgs<ExtArgs>
+            args: Prisma.BancoUpdateManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateManyAndReturn: {
-            args: Prisma.ContaUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ContaPayload>[]
+            args: Prisma.BancoUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BancoPayload>[]
           }
           upsert: {
-            args: Prisma.ContaUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ContaPayload>
+            args: Prisma.BancoUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BancoPayload>
           }
           aggregate: {
-            args: Prisma.ContaAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateConta>
+            args: Prisma.BancoAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateBanco>
           }
           groupBy: {
-            args: Prisma.ContaGroupByArgs<ExtArgs>
-            result: $Utils.Optional<ContaGroupByOutputType>[]
+            args: Prisma.BancoGroupByArgs<ExtArgs>
+            result: $Utils.Optional<BancoGroupByOutputType>[]
           }
           count: {
-            args: Prisma.ContaCountArgs<ExtArgs>
-            result: $Utils.Optional<ContaCountAggregateOutputType> | number
+            args: Prisma.BancoCountArgs<ExtArgs>
+            result: $Utils.Optional<BancoCountAggregateOutputType> | number
           }
         }
       }
@@ -2388,6 +2419,80 @@ export namespace Prisma {
           count: {
             args: Prisma.MovimentacaoFinanceiraCountArgs<ExtArgs>
             result: $Utils.Optional<MovimentacaoFinanceiraCountAggregateOutputType> | number
+          }
+        }
+      }
+      CategoriaCaixa: {
+        payload: Prisma.$CategoriaCaixaPayload<ExtArgs>
+        fields: Prisma.CategoriaCaixaFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CategoriaCaixaFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CategoriaCaixaPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CategoriaCaixaFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CategoriaCaixaPayload>
+          }
+          findFirst: {
+            args: Prisma.CategoriaCaixaFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CategoriaCaixaPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CategoriaCaixaFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CategoriaCaixaPayload>
+          }
+          findMany: {
+            args: Prisma.CategoriaCaixaFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CategoriaCaixaPayload>[]
+          }
+          create: {
+            args: Prisma.CategoriaCaixaCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CategoriaCaixaPayload>
+          }
+          createMany: {
+            args: Prisma.CategoriaCaixaCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CategoriaCaixaCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CategoriaCaixaPayload>[]
+          }
+          delete: {
+            args: Prisma.CategoriaCaixaDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CategoriaCaixaPayload>
+          }
+          update: {
+            args: Prisma.CategoriaCaixaUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CategoriaCaixaPayload>
+          }
+          deleteMany: {
+            args: Prisma.CategoriaCaixaDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CategoriaCaixaUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.CategoriaCaixaUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CategoriaCaixaPayload>[]
+          }
+          upsert: {
+            args: Prisma.CategoriaCaixaUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CategoriaCaixaPayload>
+          }
+          aggregate: {
+            args: Prisma.CategoriaCaixaAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCategoriaCaixa>
+          }
+          groupBy: {
+            args: Prisma.CategoriaCaixaGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CategoriaCaixaGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CategoriaCaixaCountArgs<ExtArgs>
+            result: $Utils.Optional<CategoriaCaixaCountAggregateOutputType> | number
           }
         }
       }
@@ -2613,6 +2718,80 @@ export namespace Prisma {
           }
         }
       }
+      Fechamento: {
+        payload: Prisma.$FechamentoPayload<ExtArgs>
+        fields: Prisma.FechamentoFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.FechamentoFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FechamentoPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.FechamentoFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FechamentoPayload>
+          }
+          findFirst: {
+            args: Prisma.FechamentoFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FechamentoPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.FechamentoFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FechamentoPayload>
+          }
+          findMany: {
+            args: Prisma.FechamentoFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FechamentoPayload>[]
+          }
+          create: {
+            args: Prisma.FechamentoCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FechamentoPayload>
+          }
+          createMany: {
+            args: Prisma.FechamentoCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.FechamentoCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FechamentoPayload>[]
+          }
+          delete: {
+            args: Prisma.FechamentoDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FechamentoPayload>
+          }
+          update: {
+            args: Prisma.FechamentoUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FechamentoPayload>
+          }
+          deleteMany: {
+            args: Prisma.FechamentoDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.FechamentoUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.FechamentoUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FechamentoPayload>[]
+          }
+          upsert: {
+            args: Prisma.FechamentoUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FechamentoPayload>
+          }
+          aggregate: {
+            args: Prisma.FechamentoAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateFechamento>
+          }
+          groupBy: {
+            args: Prisma.FechamentoGroupByArgs<ExtArgs>
+            result: $Utils.Optional<FechamentoGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.FechamentoCountArgs<ExtArgs>
+            result: $Utils.Optional<FechamentoCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -2712,12 +2891,14 @@ export namespace Prisma {
     categoriaMaterial?: CategoriaMaterialOmit
     itemPedido?: ItemPedidoOmit
     pedido?: PedidoOmit
-    pagamento?: PagamentoOmit
-    conta?: ContaOmit
+    contaFinanceira?: ContaFinanceiraOmit
+    banco?: BancoOmit
     movimentacaoFinanceira?: MovimentacaoFinanceiraOmit
+    categoriaCaixa?: CategoriaCaixaOmit
     movimentacaoEstoque?: MovimentacaoEstoqueOmit
     conversaoEstoque?: ConversaoEstoqueOmit
     livroCaixa?: LivroCaixaOmit
+    fechamento?: FechamentoOmit
   }
 
   /* Types for Logging */
@@ -2813,12 +2994,14 @@ export namespace Prisma {
 
   export type UserCountOutputType = {
     pedidos: number
-    caixas: number
+    caixasAbertos: number
+    fechamentos: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     pedidos?: boolean | UserCountOutputTypeCountPedidosArgs
-    caixas?: boolean | UserCountOutputTypeCountCaixasArgs
+    caixasAbertos?: boolean | UserCountOutputTypeCountCaixasAbertosArgs
+    fechamentos?: boolean | UserCountOutputTypeCountFechamentosArgs
   }
 
   // Custom InputTypes
@@ -2842,8 +3025,15 @@ export namespace Prisma {
   /**
    * UserCountOutputType without action
    */
-  export type UserCountOutputTypeCountCaixasArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserCountOutputTypeCountCaixasAbertosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: LivroCaixaWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountFechamentosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FechamentoWhereInput
   }
 
 
@@ -2924,10 +3114,12 @@ export namespace Prisma {
 
   export type RegistroCountOutputType = {
     pedidos: number
+    contas: number
   }
 
   export type RegistroCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     pedidos?: boolean | RegistroCountOutputTypeCountPedidosArgs
+    contas?: boolean | RegistroCountOutputTypeCountContasArgs
   }
 
   // Custom InputTypes
@@ -2946,6 +3138,13 @@ export namespace Prisma {
    */
   export type RegistroCountOutputTypeCountPedidosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: PedidoWhereInput
+  }
+
+  /**
+   * RegistroCountOutputType without action
+   */
+  export type RegistroCountOutputTypeCountContasArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ContaFinanceiraWhereInput
   }
 
 
@@ -3105,37 +3304,68 @@ export namespace Prisma {
    * PedidoCountOutputType without action
    */
   export type PedidoCountOutputTypeCountPagamentosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: PagamentoWhereInput
+    where?: ContaFinanceiraWhereInput
   }
 
 
   /**
-   * Count Type ContaCountOutputType
+   * Count Type BancoCountOutputType
    */
 
-  export type ContaCountOutputType = {
+  export type BancoCountOutputType = {
     movimentacoes: number
   }
 
-  export type ContaCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    movimentacoes?: boolean | ContaCountOutputTypeCountMovimentacoesArgs
+  export type BancoCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    movimentacoes?: boolean | BancoCountOutputTypeCountMovimentacoesArgs
   }
 
   // Custom InputTypes
   /**
-   * ContaCountOutputType without action
+   * BancoCountOutputType without action
    */
-  export type ContaCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type BancoCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ContaCountOutputType
+     * Select specific fields to fetch from the BancoCountOutputType
      */
-    select?: ContaCountOutputTypeSelect<ExtArgs> | null
+    select?: BancoCountOutputTypeSelect<ExtArgs> | null
   }
 
   /**
-   * ContaCountOutputType without action
+   * BancoCountOutputType without action
    */
-  export type ContaCountOutputTypeCountMovimentacoesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type BancoCountOutputTypeCountMovimentacoesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MovimentacaoFinanceiraWhereInput
+  }
+
+
+  /**
+   * Count Type CategoriaCaixaCountOutputType
+   */
+
+  export type CategoriaCaixaCountOutputType = {
+    movimentacoes: number
+  }
+
+  export type CategoriaCaixaCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    movimentacoes?: boolean | CategoriaCaixaCountOutputTypeCountMovimentacoesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * CategoriaCaixaCountOutputType without action
+   */
+  export type CategoriaCaixaCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CategoriaCaixaCountOutputType
+     */
+    select?: CategoriaCaixaCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * CategoriaCaixaCountOutputType without action
+   */
+  export type CategoriaCaixaCountOutputTypeCountMovimentacoesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: MovimentacaoFinanceiraWhereInput
   }
 
@@ -3426,7 +3656,8 @@ export namespace Prisma {
     deletedAt?: boolean
     pedidos?: boolean | User$pedidosArgs<ExtArgs>
     cargo?: boolean | CargoDefaultArgs<ExtArgs>
-    caixas?: boolean | User$caixasArgs<ExtArgs>
+    caixasAbertos?: boolean | User$caixasAbertosArgs<ExtArgs>
+    fechamentos?: boolean | User$fechamentosArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -3466,7 +3697,8 @@ export namespace Prisma {
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     pedidos?: boolean | User$pedidosArgs<ExtArgs>
     cargo?: boolean | CargoDefaultArgs<ExtArgs>
-    caixas?: boolean | User$caixasArgs<ExtArgs>
+    caixasAbertos?: boolean | User$caixasAbertosArgs<ExtArgs>
+    fechamentos?: boolean | User$fechamentosArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3481,7 +3713,8 @@ export namespace Prisma {
     objects: {
       pedidos: Prisma.$PedidoPayload<ExtArgs>[]
       cargo: Prisma.$CargoPayload<ExtArgs>
-      caixas: Prisma.$LivroCaixaPayload<ExtArgs>[]
+      caixasAbertos: Prisma.$LivroCaixaPayload<ExtArgs>[]
+      fechamentos: Prisma.$FechamentoPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -3887,7 +4120,8 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     pedidos<T extends User$pedidosArgs<ExtArgs> = {}>(args?: Subset<T, User$pedidosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PedidoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     cargo<T extends CargoDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CargoDefaultArgs<ExtArgs>>): Prisma__CargoClient<$Result.GetResult<Prisma.$CargoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    caixas<T extends User$caixasArgs<ExtArgs> = {}>(args?: Subset<T, User$caixasArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LivroCaixaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    caixasAbertos<T extends User$caixasAbertosArgs<ExtArgs> = {}>(args?: Subset<T, User$caixasAbertosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LivroCaixaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    fechamentos<T extends User$fechamentosArgs<ExtArgs> = {}>(args?: Subset<T, User$fechamentosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FechamentoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4344,9 +4578,9 @@ export namespace Prisma {
   }
 
   /**
-   * User.caixas
+   * User.caixasAbertos
    */
-  export type User$caixasArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type User$caixasAbertosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the LivroCaixa
      */
@@ -4365,6 +4599,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: LivroCaixaScalarFieldEnum | LivroCaixaScalarFieldEnum[]
+  }
+
+  /**
+   * User.fechamentos
+   */
+  export type User$fechamentosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Fechamento
+     */
+    select?: FechamentoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Fechamento
+     */
+    omit?: FechamentoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FechamentoInclude<ExtArgs> | null
+    where?: FechamentoWhereInput
+    orderBy?: FechamentoOrderByWithRelationInput | FechamentoOrderByWithRelationInput[]
+    cursor?: FechamentoWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FechamentoScalarFieldEnum | FechamentoScalarFieldEnum[]
   }
 
   /**
@@ -6798,6 +7056,7 @@ export namespace Prisma {
     juridica?: boolean | Registro$juridicaArgs<ExtArgs>
     tabela?: boolean | TabelaDefaultArgs<ExtArgs>
     saldo?: boolean | Registro$saldoArgs<ExtArgs>
+    contas?: boolean | Registro$contasArgs<ExtArgs>
     _count?: boolean | RegistroCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["registro"]>
 
@@ -6848,6 +7107,7 @@ export namespace Prisma {
     juridica?: boolean | Registro$juridicaArgs<ExtArgs>
     tabela?: boolean | TabelaDefaultArgs<ExtArgs>
     saldo?: boolean | Registro$saldoArgs<ExtArgs>
+    contas?: boolean | Registro$contasArgs<ExtArgs>
     _count?: boolean | RegistroCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type RegistroIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6867,6 +7127,7 @@ export namespace Prisma {
       juridica: Prisma.$PessoaJuridicaPayload<ExtArgs> | null
       tabela: Prisma.$TabelaPayload<ExtArgs>
       saldo: Prisma.$SaldoFinanceiroPayload<ExtArgs> | null
+      contas: Prisma.$ContaFinanceiraPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -7279,6 +7540,7 @@ export namespace Prisma {
     juridica<T extends Registro$juridicaArgs<ExtArgs> = {}>(args?: Subset<T, Registro$juridicaArgs<ExtArgs>>): Prisma__PessoaJuridicaClient<$Result.GetResult<Prisma.$PessoaJuridicaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     tabela<T extends TabelaDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TabelaDefaultArgs<ExtArgs>>): Prisma__TabelaClient<$Result.GetResult<Prisma.$TabelaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     saldo<T extends Registro$saldoArgs<ExtArgs> = {}>(args?: Subset<T, Registro$saldoArgs<ExtArgs>>): Prisma__SaldoFinanceiroClient<$Result.GetResult<Prisma.$SaldoFinanceiroPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    contas<T extends Registro$contasArgs<ExtArgs> = {}>(args?: Subset<T, Registro$contasArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContaFinanceiraPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7829,6 +8091,30 @@ export namespace Prisma {
      */
     include?: SaldoFinanceiroInclude<ExtArgs> | null
     where?: SaldoFinanceiroWhereInput
+  }
+
+  /**
+   * Registro.contas
+   */
+  export type Registro$contasArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContaFinanceira
+     */
+    select?: ContaFinanceiraSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContaFinanceira
+     */
+    omit?: ContaFinanceiraOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContaFinanceiraInclude<ExtArgs> | null
+    where?: ContaFinanceiraWhereInput
+    orderBy?: ContaFinanceiraOrderByWithRelationInput | ContaFinanceiraOrderByWithRelationInput[]
+    cursor?: ContaFinanceiraWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ContaFinanceiraScalarFieldEnum | ContaFinanceiraScalarFieldEnum[]
   }
 
   /**
@@ -19334,7 +19620,7 @@ export namespace Prisma {
     name: "Pedido"
     objects: {
       items: Prisma.$ItemPedidoPayload<ExtArgs>[]
-      pagamentos: Prisma.$PagamentoPayload<ExtArgs>[]
+      pagamentos: Prisma.$ContaFinanceiraPayload<ExtArgs>[]
       registro: Prisma.$RegistroPayload<ExtArgs> | null
       user: Prisma.$UserPayload<ExtArgs>
     }
@@ -19742,7 +20028,7 @@ export namespace Prisma {
   export interface Prisma__PedidoClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     items<T extends Pedido$itemsArgs<ExtArgs> = {}>(args?: Subset<T, Pedido$itemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ItemPedidoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    pagamentos<T extends Pedido$pagamentosArgs<ExtArgs> = {}>(args?: Subset<T, Pedido$pagamentosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PagamentoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    pagamentos<T extends Pedido$pagamentosArgs<ExtArgs> = {}>(args?: Subset<T, Pedido$pagamentosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContaFinanceiraPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     registro<T extends Pedido$registroArgs<ExtArgs> = {}>(args?: Subset<T, Pedido$registroArgs<ExtArgs>>): Prisma__RegistroClient<$Result.GetResult<Prisma.$RegistroPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
@@ -20206,23 +20492,23 @@ export namespace Prisma {
    */
   export type Pedido$pagamentosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Pagamento
+     * Select specific fields to fetch from the ContaFinanceira
      */
-    select?: PagamentoSelect<ExtArgs> | null
+    select?: ContaFinanceiraSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Pagamento
+     * Omit specific fields from the ContaFinanceira
      */
-    omit?: PagamentoOmit<ExtArgs> | null
+    omit?: ContaFinanceiraOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: PagamentoInclude<ExtArgs> | null
-    where?: PagamentoWhereInput
-    orderBy?: PagamentoOrderByWithRelationInput | PagamentoOrderByWithRelationInput[]
-    cursor?: PagamentoWhereUniqueInput
+    include?: ContaFinanceiraInclude<ExtArgs> | null
+    where?: ContaFinanceiraWhereInput
+    orderBy?: ContaFinanceiraOrderByWithRelationInput | ContaFinanceiraOrderByWithRelationInput[]
+    cursor?: ContaFinanceiraWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: PagamentoScalarFieldEnum | PagamentoScalarFieldEnum[]
+    distinct?: ContaFinanceiraScalarFieldEnum | ContaFinanceiraScalarFieldEnum[]
   }
 
   /**
@@ -20264,392 +20550,478 @@ export namespace Prisma {
 
 
   /**
-   * Model Pagamento
+   * Model ContaFinanceira
    */
 
-  export type AggregatePagamento = {
-    _count: PagamentoCountAggregateOutputType | null
-    _avg: PagamentoAvgAggregateOutputType | null
-    _sum: PagamentoSumAggregateOutputType | null
-    _min: PagamentoMinAggregateOutputType | null
-    _max: PagamentoMaxAggregateOutputType | null
+  export type AggregateContaFinanceira = {
+    _count: ContaFinanceiraCountAggregateOutputType | null
+    _avg: ContaFinanceiraAvgAggregateOutputType | null
+    _sum: ContaFinanceiraSumAggregateOutputType | null
+    _min: ContaFinanceiraMinAggregateOutputType | null
+    _max: ContaFinanceiraMaxAggregateOutputType | null
   }
 
-  export type PagamentoAvgAggregateOutputType = {
+  export type ContaFinanceiraAvgAggregateOutputType = {
     id: number | null
     pedidoID: number | null
+    registroID: number | null
     valor: Decimal | null
   }
 
-  export type PagamentoSumAggregateOutputType = {
+  export type ContaFinanceiraSumAggregateOutputType = {
     id: number | null
     pedidoID: number | null
+    registroID: number | null
     valor: Decimal | null
   }
 
-  export type PagamentoMinAggregateOutputType = {
+  export type ContaFinanceiraMinAggregateOutputType = {
     id: number | null
+    tipo: $Enums.TipoConta | null
     pedidoID: number | null
+    registroID: number | null
+    descricao: string | null
     valor: Decimal | null
+    data_documento: Date | null
+    data_vencimento: Date | null
+    data_pagamento: Date | null
     forma: $Enums.FormaPagamento | null
     data: Date | null
   }
 
-  export type PagamentoMaxAggregateOutputType = {
+  export type ContaFinanceiraMaxAggregateOutputType = {
     id: number | null
+    tipo: $Enums.TipoConta | null
     pedidoID: number | null
+    registroID: number | null
+    descricao: string | null
     valor: Decimal | null
+    data_documento: Date | null
+    data_vencimento: Date | null
+    data_pagamento: Date | null
     forma: $Enums.FormaPagamento | null
     data: Date | null
   }
 
-  export type PagamentoCountAggregateOutputType = {
+  export type ContaFinanceiraCountAggregateOutputType = {
     id: number
+    tipo: number
     pedidoID: number
+    registroID: number
+    descricao: number
     valor: number
+    data_documento: number
+    data_vencimento: number
+    data_pagamento: number
     forma: number
     data: number
     _all: number
   }
 
 
-  export type PagamentoAvgAggregateInputType = {
+  export type ContaFinanceiraAvgAggregateInputType = {
     id?: true
     pedidoID?: true
+    registroID?: true
     valor?: true
   }
 
-  export type PagamentoSumAggregateInputType = {
+  export type ContaFinanceiraSumAggregateInputType = {
     id?: true
     pedidoID?: true
+    registroID?: true
     valor?: true
   }
 
-  export type PagamentoMinAggregateInputType = {
+  export type ContaFinanceiraMinAggregateInputType = {
     id?: true
+    tipo?: true
     pedidoID?: true
+    registroID?: true
+    descricao?: true
     valor?: true
+    data_documento?: true
+    data_vencimento?: true
+    data_pagamento?: true
     forma?: true
     data?: true
   }
 
-  export type PagamentoMaxAggregateInputType = {
+  export type ContaFinanceiraMaxAggregateInputType = {
     id?: true
+    tipo?: true
     pedidoID?: true
+    registroID?: true
+    descricao?: true
     valor?: true
+    data_documento?: true
+    data_vencimento?: true
+    data_pagamento?: true
     forma?: true
     data?: true
   }
 
-  export type PagamentoCountAggregateInputType = {
+  export type ContaFinanceiraCountAggregateInputType = {
     id?: true
+    tipo?: true
     pedidoID?: true
+    registroID?: true
+    descricao?: true
     valor?: true
+    data_documento?: true
+    data_vencimento?: true
+    data_pagamento?: true
     forma?: true
     data?: true
     _all?: true
   }
 
-  export type PagamentoAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ContaFinanceiraAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which Pagamento to aggregate.
+     * Filter which ContaFinanceira to aggregate.
      */
-    where?: PagamentoWhereInput
+    where?: ContaFinanceiraWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Pagamentos to fetch.
+     * Determine the order of ContaFinanceiras to fetch.
      */
-    orderBy?: PagamentoOrderByWithRelationInput | PagamentoOrderByWithRelationInput[]
+    orderBy?: ContaFinanceiraOrderByWithRelationInput | ContaFinanceiraOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
      * Sets the start position
      */
-    cursor?: PagamentoWhereUniqueInput
+    cursor?: ContaFinanceiraWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Pagamentos from the position of the cursor.
+     * Take `±n` ContaFinanceiras from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Pagamentos.
+     * Skip the first `n` ContaFinanceiras.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Count returned Pagamentos
+     * Count returned ContaFinanceiras
     **/
-    _count?: true | PagamentoCountAggregateInputType
+    _count?: true | ContaFinanceiraCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to average
     **/
-    _avg?: PagamentoAvgAggregateInputType
+    _avg?: ContaFinanceiraAvgAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to sum
     **/
-    _sum?: PagamentoSumAggregateInputType
+    _sum?: ContaFinanceiraSumAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the minimum value
     **/
-    _min?: PagamentoMinAggregateInputType
+    _min?: ContaFinanceiraMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the maximum value
     **/
-    _max?: PagamentoMaxAggregateInputType
+    _max?: ContaFinanceiraMaxAggregateInputType
   }
 
-  export type GetPagamentoAggregateType<T extends PagamentoAggregateArgs> = {
-        [P in keyof T & keyof AggregatePagamento]: P extends '_count' | 'count'
+  export type GetContaFinanceiraAggregateType<T extends ContaFinanceiraAggregateArgs> = {
+        [P in keyof T & keyof AggregateContaFinanceira]: P extends '_count' | 'count'
       ? T[P] extends true
         ? number
-        : GetScalarType<T[P], AggregatePagamento[P]>
-      : GetScalarType<T[P], AggregatePagamento[P]>
+        : GetScalarType<T[P], AggregateContaFinanceira[P]>
+      : GetScalarType<T[P], AggregateContaFinanceira[P]>
   }
 
 
 
 
-  export type PagamentoGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: PagamentoWhereInput
-    orderBy?: PagamentoOrderByWithAggregationInput | PagamentoOrderByWithAggregationInput[]
-    by: PagamentoScalarFieldEnum[] | PagamentoScalarFieldEnum
-    having?: PagamentoScalarWhereWithAggregatesInput
+  export type ContaFinanceiraGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ContaFinanceiraWhereInput
+    orderBy?: ContaFinanceiraOrderByWithAggregationInput | ContaFinanceiraOrderByWithAggregationInput[]
+    by: ContaFinanceiraScalarFieldEnum[] | ContaFinanceiraScalarFieldEnum
+    having?: ContaFinanceiraScalarWhereWithAggregatesInput
     take?: number
     skip?: number
-    _count?: PagamentoCountAggregateInputType | true
-    _avg?: PagamentoAvgAggregateInputType
-    _sum?: PagamentoSumAggregateInputType
-    _min?: PagamentoMinAggregateInputType
-    _max?: PagamentoMaxAggregateInputType
+    _count?: ContaFinanceiraCountAggregateInputType | true
+    _avg?: ContaFinanceiraAvgAggregateInputType
+    _sum?: ContaFinanceiraSumAggregateInputType
+    _min?: ContaFinanceiraMinAggregateInputType
+    _max?: ContaFinanceiraMaxAggregateInputType
   }
 
-  export type PagamentoGroupByOutputType = {
+  export type ContaFinanceiraGroupByOutputType = {
     id: number
-    pedidoID: number
+    tipo: $Enums.TipoConta
+    pedidoID: number | null
+    registroID: number | null
+    descricao: string | null
     valor: Decimal
+    data_documento: Date
+    data_vencimento: Date | null
+    data_pagamento: Date | null
     forma: $Enums.FormaPagamento
     data: Date
-    _count: PagamentoCountAggregateOutputType | null
-    _avg: PagamentoAvgAggregateOutputType | null
-    _sum: PagamentoSumAggregateOutputType | null
-    _min: PagamentoMinAggregateOutputType | null
-    _max: PagamentoMaxAggregateOutputType | null
+    _count: ContaFinanceiraCountAggregateOutputType | null
+    _avg: ContaFinanceiraAvgAggregateOutputType | null
+    _sum: ContaFinanceiraSumAggregateOutputType | null
+    _min: ContaFinanceiraMinAggregateOutputType | null
+    _max: ContaFinanceiraMaxAggregateOutputType | null
   }
 
-  type GetPagamentoGroupByPayload<T extends PagamentoGroupByArgs> = Prisma.PrismaPromise<
+  type GetContaFinanceiraGroupByPayload<T extends ContaFinanceiraGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickEnumerable<PagamentoGroupByOutputType, T['by']> &
+      PickEnumerable<ContaFinanceiraGroupByOutputType, T['by']> &
         {
-          [P in ((keyof T) & (keyof PagamentoGroupByOutputType))]: P extends '_count'
+          [P in ((keyof T) & (keyof ContaFinanceiraGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
               ? number
-              : GetScalarType<T[P], PagamentoGroupByOutputType[P]>
-            : GetScalarType<T[P], PagamentoGroupByOutputType[P]>
+              : GetScalarType<T[P], ContaFinanceiraGroupByOutputType[P]>
+            : GetScalarType<T[P], ContaFinanceiraGroupByOutputType[P]>
         }
       >
     >
 
 
-  export type PagamentoSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type ContaFinanceiraSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    tipo?: boolean
     pedidoID?: boolean
+    registroID?: boolean
+    descricao?: boolean
     valor?: boolean
+    data_documento?: boolean
+    data_vencimento?: boolean
+    data_pagamento?: boolean
     forma?: boolean
     data?: boolean
-    pedido?: boolean | PedidoDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["pagamento"]>
+    pedido?: boolean | ContaFinanceira$pedidoArgs<ExtArgs>
+    registro?: boolean | ContaFinanceira$registroArgs<ExtArgs>
+    movimentacao?: boolean | ContaFinanceira$movimentacaoArgs<ExtArgs>
+  }, ExtArgs["result"]["contaFinanceira"]>
 
-  export type PagamentoSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type ContaFinanceiraSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    tipo?: boolean
     pedidoID?: boolean
+    registroID?: boolean
+    descricao?: boolean
     valor?: boolean
+    data_documento?: boolean
+    data_vencimento?: boolean
+    data_pagamento?: boolean
     forma?: boolean
     data?: boolean
-    pedido?: boolean | PedidoDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["pagamento"]>
+    pedido?: boolean | ContaFinanceira$pedidoArgs<ExtArgs>
+    registro?: boolean | ContaFinanceira$registroArgs<ExtArgs>
+  }, ExtArgs["result"]["contaFinanceira"]>
 
-  export type PagamentoSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type ContaFinanceiraSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    tipo?: boolean
     pedidoID?: boolean
+    registroID?: boolean
+    descricao?: boolean
     valor?: boolean
+    data_documento?: boolean
+    data_vencimento?: boolean
+    data_pagamento?: boolean
     forma?: boolean
     data?: boolean
-    pedido?: boolean | PedidoDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["pagamento"]>
+    pedido?: boolean | ContaFinanceira$pedidoArgs<ExtArgs>
+    registro?: boolean | ContaFinanceira$registroArgs<ExtArgs>
+  }, ExtArgs["result"]["contaFinanceira"]>
 
-  export type PagamentoSelectScalar = {
+  export type ContaFinanceiraSelectScalar = {
     id?: boolean
+    tipo?: boolean
     pedidoID?: boolean
+    registroID?: boolean
+    descricao?: boolean
     valor?: boolean
+    data_documento?: boolean
+    data_vencimento?: boolean
+    data_pagamento?: boolean
     forma?: boolean
     data?: boolean
   }
 
-  export type PagamentoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "pedidoID" | "valor" | "forma" | "data", ExtArgs["result"]["pagamento"]>
-  export type PagamentoInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    pedido?: boolean | PedidoDefaultArgs<ExtArgs>
+  export type ContaFinanceiraOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tipo" | "pedidoID" | "registroID" | "descricao" | "valor" | "data_documento" | "data_vencimento" | "data_pagamento" | "forma" | "data", ExtArgs["result"]["contaFinanceira"]>
+  export type ContaFinanceiraInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    pedido?: boolean | ContaFinanceira$pedidoArgs<ExtArgs>
+    registro?: boolean | ContaFinanceira$registroArgs<ExtArgs>
+    movimentacao?: boolean | ContaFinanceira$movimentacaoArgs<ExtArgs>
   }
-  export type PagamentoIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    pedido?: boolean | PedidoDefaultArgs<ExtArgs>
+  export type ContaFinanceiraIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    pedido?: boolean | ContaFinanceira$pedidoArgs<ExtArgs>
+    registro?: boolean | ContaFinanceira$registroArgs<ExtArgs>
   }
-  export type PagamentoIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    pedido?: boolean | PedidoDefaultArgs<ExtArgs>
+  export type ContaFinanceiraIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    pedido?: boolean | ContaFinanceira$pedidoArgs<ExtArgs>
+    registro?: boolean | ContaFinanceira$registroArgs<ExtArgs>
   }
 
-  export type $PagamentoPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "Pagamento"
+  export type $ContaFinanceiraPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ContaFinanceira"
     objects: {
-      pedido: Prisma.$PedidoPayload<ExtArgs>
+      pedido: Prisma.$PedidoPayload<ExtArgs> | null
+      registro: Prisma.$RegistroPayload<ExtArgs> | null
+      movimentacao: Prisma.$MovimentacaoFinanceiraPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
-      pedidoID: number
+      tipo: $Enums.TipoConta
+      pedidoID: number | null
+      registroID: number | null
+      descricao: string | null
       valor: Prisma.Decimal
+      data_documento: Date
+      data_vencimento: Date | null
+      data_pagamento: Date | null
       forma: $Enums.FormaPagamento
       data: Date
-    }, ExtArgs["result"]["pagamento"]>
+    }, ExtArgs["result"]["contaFinanceira"]>
     composites: {}
   }
 
-  type PagamentoGetPayload<S extends boolean | null | undefined | PagamentoDefaultArgs> = $Result.GetResult<Prisma.$PagamentoPayload, S>
+  type ContaFinanceiraGetPayload<S extends boolean | null | undefined | ContaFinanceiraDefaultArgs> = $Result.GetResult<Prisma.$ContaFinanceiraPayload, S>
 
-  type PagamentoCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<PagamentoFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: PagamentoCountAggregateInputType | true
+  type ContaFinanceiraCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ContaFinanceiraFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ContaFinanceiraCountAggregateInputType | true
     }
 
-  export interface PagamentoDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Pagamento'], meta: { name: 'Pagamento' } }
+  export interface ContaFinanceiraDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ContaFinanceira'], meta: { name: 'ContaFinanceira' } }
     /**
-     * Find zero or one Pagamento that matches the filter.
-     * @param {PagamentoFindUniqueArgs} args - Arguments to find a Pagamento
+     * Find zero or one ContaFinanceira that matches the filter.
+     * @param {ContaFinanceiraFindUniqueArgs} args - Arguments to find a ContaFinanceira
      * @example
-     * // Get one Pagamento
-     * const pagamento = await prisma.pagamento.findUnique({
+     * // Get one ContaFinanceira
+     * const contaFinanceira = await prisma.contaFinanceira.findUnique({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUnique<T extends PagamentoFindUniqueArgs>(args: SelectSubset<T, PagamentoFindUniqueArgs<ExtArgs>>): Prisma__PagamentoClient<$Result.GetResult<Prisma.$PagamentoPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findUnique<T extends ContaFinanceiraFindUniqueArgs>(args: SelectSubset<T, ContaFinanceiraFindUniqueArgs<ExtArgs>>): Prisma__ContaFinanceiraClient<$Result.GetResult<Prisma.$ContaFinanceiraPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find one Pagamento that matches the filter or throw an error with `error.code='P2025'`
+     * Find one ContaFinanceira that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
-     * @param {PagamentoFindUniqueOrThrowArgs} args - Arguments to find a Pagamento
+     * @param {ContaFinanceiraFindUniqueOrThrowArgs} args - Arguments to find a ContaFinanceira
      * @example
-     * // Get one Pagamento
-     * const pagamento = await prisma.pagamento.findUniqueOrThrow({
+     * // Get one ContaFinanceira
+     * const contaFinanceira = await prisma.contaFinanceira.findUniqueOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUniqueOrThrow<T extends PagamentoFindUniqueOrThrowArgs>(args: SelectSubset<T, PagamentoFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PagamentoClient<$Result.GetResult<Prisma.$PagamentoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findUniqueOrThrow<T extends ContaFinanceiraFindUniqueOrThrowArgs>(args: SelectSubset<T, ContaFinanceiraFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ContaFinanceiraClient<$Result.GetResult<Prisma.$ContaFinanceiraPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first Pagamento that matches the filter.
+     * Find the first ContaFinanceira that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {PagamentoFindFirstArgs} args - Arguments to find a Pagamento
+     * @param {ContaFinanceiraFindFirstArgs} args - Arguments to find a ContaFinanceira
      * @example
-     * // Get one Pagamento
-     * const pagamento = await prisma.pagamento.findFirst({
+     * // Get one ContaFinanceira
+     * const contaFinanceira = await prisma.contaFinanceira.findFirst({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirst<T extends PagamentoFindFirstArgs>(args?: SelectSubset<T, PagamentoFindFirstArgs<ExtArgs>>): Prisma__PagamentoClient<$Result.GetResult<Prisma.$PagamentoPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findFirst<T extends ContaFinanceiraFindFirstArgs>(args?: SelectSubset<T, ContaFinanceiraFindFirstArgs<ExtArgs>>): Prisma__ContaFinanceiraClient<$Result.GetResult<Prisma.$ContaFinanceiraPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first Pagamento that matches the filter or
+     * Find the first ContaFinanceira that matches the filter or
      * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {PagamentoFindFirstOrThrowArgs} args - Arguments to find a Pagamento
+     * @param {ContaFinanceiraFindFirstOrThrowArgs} args - Arguments to find a ContaFinanceira
      * @example
-     * // Get one Pagamento
-     * const pagamento = await prisma.pagamento.findFirstOrThrow({
+     * // Get one ContaFinanceira
+     * const contaFinanceira = await prisma.contaFinanceira.findFirstOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirstOrThrow<T extends PagamentoFindFirstOrThrowArgs>(args?: SelectSubset<T, PagamentoFindFirstOrThrowArgs<ExtArgs>>): Prisma__PagamentoClient<$Result.GetResult<Prisma.$PagamentoPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findFirstOrThrow<T extends ContaFinanceiraFindFirstOrThrowArgs>(args?: SelectSubset<T, ContaFinanceiraFindFirstOrThrowArgs<ExtArgs>>): Prisma__ContaFinanceiraClient<$Result.GetResult<Prisma.$ContaFinanceiraPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find zero or more Pagamentos that matches the filter.
+     * Find zero or more ContaFinanceiras that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {PagamentoFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @param {ContaFinanceiraFindManyArgs} args - Arguments to filter and select certain fields only.
      * @example
-     * // Get all Pagamentos
-     * const pagamentos = await prisma.pagamento.findMany()
+     * // Get all ContaFinanceiras
+     * const contaFinanceiras = await prisma.contaFinanceira.findMany()
      * 
-     * // Get first 10 Pagamentos
-     * const pagamentos = await prisma.pagamento.findMany({ take: 10 })
+     * // Get first 10 ContaFinanceiras
+     * const contaFinanceiras = await prisma.contaFinanceira.findMany({ take: 10 })
      * 
      * // Only select the `id`
-     * const pagamentoWithIdOnly = await prisma.pagamento.findMany({ select: { id: true } })
+     * const contaFinanceiraWithIdOnly = await prisma.contaFinanceira.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends PagamentoFindManyArgs>(args?: SelectSubset<T, PagamentoFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PagamentoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+    findMany<T extends ContaFinanceiraFindManyArgs>(args?: SelectSubset<T, ContaFinanceiraFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContaFinanceiraPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
-     * Create a Pagamento.
-     * @param {PagamentoCreateArgs} args - Arguments to create a Pagamento.
+     * Create a ContaFinanceira.
+     * @param {ContaFinanceiraCreateArgs} args - Arguments to create a ContaFinanceira.
      * @example
-     * // Create one Pagamento
-     * const Pagamento = await prisma.pagamento.create({
+     * // Create one ContaFinanceira
+     * const ContaFinanceira = await prisma.contaFinanceira.create({
      *   data: {
-     *     // ... data to create a Pagamento
+     *     // ... data to create a ContaFinanceira
      *   }
      * })
      * 
      */
-    create<T extends PagamentoCreateArgs>(args: SelectSubset<T, PagamentoCreateArgs<ExtArgs>>): Prisma__PagamentoClient<$Result.GetResult<Prisma.$PagamentoPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    create<T extends ContaFinanceiraCreateArgs>(args: SelectSubset<T, ContaFinanceiraCreateArgs<ExtArgs>>): Prisma__ContaFinanceiraClient<$Result.GetResult<Prisma.$ContaFinanceiraPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Create many Pagamentos.
-     * @param {PagamentoCreateManyArgs} args - Arguments to create many Pagamentos.
+     * Create many ContaFinanceiras.
+     * @param {ContaFinanceiraCreateManyArgs} args - Arguments to create many ContaFinanceiras.
      * @example
-     * // Create many Pagamentos
-     * const pagamento = await prisma.pagamento.createMany({
+     * // Create many ContaFinanceiras
+     * const contaFinanceira = await prisma.contaFinanceira.createMany({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      *     
      */
-    createMany<T extends PagamentoCreateManyArgs>(args?: SelectSubset<T, PagamentoCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    createMany<T extends ContaFinanceiraCreateManyArgs>(args?: SelectSubset<T, ContaFinanceiraCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Create many Pagamentos and returns the data saved in the database.
-     * @param {PagamentoCreateManyAndReturnArgs} args - Arguments to create many Pagamentos.
+     * Create many ContaFinanceiras and returns the data saved in the database.
+     * @param {ContaFinanceiraCreateManyAndReturnArgs} args - Arguments to create many ContaFinanceiras.
      * @example
-     * // Create many Pagamentos
-     * const pagamento = await prisma.pagamento.createManyAndReturn({
+     * // Create many ContaFinanceiras
+     * const contaFinanceira = await prisma.contaFinanceira.createManyAndReturn({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      * 
-     * // Create many Pagamentos and only return the `id`
-     * const pagamentoWithIdOnly = await prisma.pagamento.createManyAndReturn({
+     * // Create many ContaFinanceiras and only return the `id`
+     * const contaFinanceiraWithIdOnly = await prisma.contaFinanceira.createManyAndReturn({
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -20659,28 +21031,28 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends PagamentoCreateManyAndReturnArgs>(args?: SelectSubset<T, PagamentoCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PagamentoPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+    createManyAndReturn<T extends ContaFinanceiraCreateManyAndReturnArgs>(args?: SelectSubset<T, ContaFinanceiraCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContaFinanceiraPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Delete a Pagamento.
-     * @param {PagamentoDeleteArgs} args - Arguments to delete one Pagamento.
+     * Delete a ContaFinanceira.
+     * @param {ContaFinanceiraDeleteArgs} args - Arguments to delete one ContaFinanceira.
      * @example
-     * // Delete one Pagamento
-     * const Pagamento = await prisma.pagamento.delete({
+     * // Delete one ContaFinanceira
+     * const ContaFinanceira = await prisma.contaFinanceira.delete({
      *   where: {
-     *     // ... filter to delete one Pagamento
+     *     // ... filter to delete one ContaFinanceira
      *   }
      * })
      * 
      */
-    delete<T extends PagamentoDeleteArgs>(args: SelectSubset<T, PagamentoDeleteArgs<ExtArgs>>): Prisma__PagamentoClient<$Result.GetResult<Prisma.$PagamentoPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    delete<T extends ContaFinanceiraDeleteArgs>(args: SelectSubset<T, ContaFinanceiraDeleteArgs<ExtArgs>>): Prisma__ContaFinanceiraClient<$Result.GetResult<Prisma.$ContaFinanceiraPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Update one Pagamento.
-     * @param {PagamentoUpdateArgs} args - Arguments to update one Pagamento.
+     * Update one ContaFinanceira.
+     * @param {ContaFinanceiraUpdateArgs} args - Arguments to update one ContaFinanceira.
      * @example
-     * // Update one Pagamento
-     * const pagamento = await prisma.pagamento.update({
+     * // Update one ContaFinanceira
+     * const contaFinanceira = await prisma.contaFinanceira.update({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -20690,30 +21062,30 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends PagamentoUpdateArgs>(args: SelectSubset<T, PagamentoUpdateArgs<ExtArgs>>): Prisma__PagamentoClient<$Result.GetResult<Prisma.$PagamentoPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    update<T extends ContaFinanceiraUpdateArgs>(args: SelectSubset<T, ContaFinanceiraUpdateArgs<ExtArgs>>): Prisma__ContaFinanceiraClient<$Result.GetResult<Prisma.$ContaFinanceiraPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Delete zero or more Pagamentos.
-     * @param {PagamentoDeleteManyArgs} args - Arguments to filter Pagamentos to delete.
+     * Delete zero or more ContaFinanceiras.
+     * @param {ContaFinanceiraDeleteManyArgs} args - Arguments to filter ContaFinanceiras to delete.
      * @example
-     * // Delete a few Pagamentos
-     * const { count } = await prisma.pagamento.deleteMany({
+     * // Delete a few ContaFinanceiras
+     * const { count } = await prisma.contaFinanceira.deleteMany({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      * 
      */
-    deleteMany<T extends PagamentoDeleteManyArgs>(args?: SelectSubset<T, PagamentoDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    deleteMany<T extends ContaFinanceiraDeleteManyArgs>(args?: SelectSubset<T, ContaFinanceiraDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more Pagamentos.
+     * Update zero or more ContaFinanceiras.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {PagamentoUpdateManyArgs} args - Arguments to update one or more rows.
+     * @param {ContaFinanceiraUpdateManyArgs} args - Arguments to update one or more rows.
      * @example
-     * // Update many Pagamentos
-     * const pagamento = await prisma.pagamento.updateMany({
+     * // Update many ContaFinanceiras
+     * const contaFinanceira = await prisma.contaFinanceira.updateMany({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -20723,14 +21095,14 @@ export namespace Prisma {
      * })
      * 
      */
-    updateMany<T extends PagamentoUpdateManyArgs>(args: SelectSubset<T, PagamentoUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    updateMany<T extends ContaFinanceiraUpdateManyArgs>(args: SelectSubset<T, ContaFinanceiraUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more Pagamentos and returns the data updated in the database.
-     * @param {PagamentoUpdateManyAndReturnArgs} args - Arguments to update many Pagamentos.
+     * Update zero or more ContaFinanceiras and returns the data updated in the database.
+     * @param {ContaFinanceiraUpdateManyAndReturnArgs} args - Arguments to update many ContaFinanceiras.
      * @example
-     * // Update many Pagamentos
-     * const pagamento = await prisma.pagamento.updateManyAndReturn({
+     * // Update many ContaFinanceiras
+     * const contaFinanceira = await prisma.contaFinanceira.updateManyAndReturn({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -20739,8 +21111,8 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Update zero or more Pagamentos and only return the `id`
-     * const pagamentoWithIdOnly = await prisma.pagamento.updateManyAndReturn({
+     * // Update zero or more ContaFinanceiras and only return the `id`
+     * const contaFinanceiraWithIdOnly = await prisma.contaFinanceira.updateManyAndReturn({
      *   select: { id: true },
      *   where: {
      *     // ... provide filter here
@@ -20753,56 +21125,56 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    updateManyAndReturn<T extends PagamentoUpdateManyAndReturnArgs>(args: SelectSubset<T, PagamentoUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PagamentoPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+    updateManyAndReturn<T extends ContaFinanceiraUpdateManyAndReturnArgs>(args: SelectSubset<T, ContaFinanceiraUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContaFinanceiraPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Create or update one Pagamento.
-     * @param {PagamentoUpsertArgs} args - Arguments to update or create a Pagamento.
+     * Create or update one ContaFinanceira.
+     * @param {ContaFinanceiraUpsertArgs} args - Arguments to update or create a ContaFinanceira.
      * @example
-     * // Update or create a Pagamento
-     * const pagamento = await prisma.pagamento.upsert({
+     * // Update or create a ContaFinanceira
+     * const contaFinanceira = await prisma.contaFinanceira.upsert({
      *   create: {
-     *     // ... data to create a Pagamento
+     *     // ... data to create a ContaFinanceira
      *   },
      *   update: {
      *     // ... in case it already exists, update
      *   },
      *   where: {
-     *     // ... the filter for the Pagamento we want to update
+     *     // ... the filter for the ContaFinanceira we want to update
      *   }
      * })
      */
-    upsert<T extends PagamentoUpsertArgs>(args: SelectSubset<T, PagamentoUpsertArgs<ExtArgs>>): Prisma__PagamentoClient<$Result.GetResult<Prisma.$PagamentoPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    upsert<T extends ContaFinanceiraUpsertArgs>(args: SelectSubset<T, ContaFinanceiraUpsertArgs<ExtArgs>>): Prisma__ContaFinanceiraClient<$Result.GetResult<Prisma.$ContaFinanceiraPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
-     * Count the number of Pagamentos.
+     * Count the number of ContaFinanceiras.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {PagamentoCountArgs} args - Arguments to filter Pagamentos to count.
+     * @param {ContaFinanceiraCountArgs} args - Arguments to filter ContaFinanceiras to count.
      * @example
-     * // Count the number of Pagamentos
-     * const count = await prisma.pagamento.count({
+     * // Count the number of ContaFinanceiras
+     * const count = await prisma.contaFinanceira.count({
      *   where: {
-     *     // ... the filter for the Pagamentos we want to count
+     *     // ... the filter for the ContaFinanceiras we want to count
      *   }
      * })
     **/
-    count<T extends PagamentoCountArgs>(
-      args?: Subset<T, PagamentoCountArgs>,
+    count<T extends ContaFinanceiraCountArgs>(
+      args?: Subset<T, ContaFinanceiraCountArgs>,
     ): Prisma.PrismaPromise<
       T extends $Utils.Record<'select', any>
         ? T['select'] extends true
           ? number
-          : GetScalarType<T['select'], PagamentoCountAggregateOutputType>
+          : GetScalarType<T['select'], ContaFinanceiraCountAggregateOutputType>
         : number
     >
 
     /**
-     * Allows you to perform aggregations operations on a Pagamento.
+     * Allows you to perform aggregations operations on a ContaFinanceira.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {PagamentoAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @param {ContaFinanceiraAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
      * @example
      * // Ordered by age ascending
      * // Where email contains prisma.io
@@ -20822,13 +21194,13 @@ export namespace Prisma {
      *   take: 10,
      * })
     **/
-    aggregate<T extends PagamentoAggregateArgs>(args: Subset<T, PagamentoAggregateArgs>): Prisma.PrismaPromise<GetPagamentoAggregateType<T>>
+    aggregate<T extends ContaFinanceiraAggregateArgs>(args: Subset<T, ContaFinanceiraAggregateArgs>): Prisma.PrismaPromise<GetContaFinanceiraAggregateType<T>>
 
     /**
-     * Group by Pagamento.
+     * Group by ContaFinanceira.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {PagamentoGroupByArgs} args - Group by arguments.
+     * @param {ContaFinanceiraGroupByArgs} args - Group by arguments.
      * @example
      * // Group by city, order by createdAt, get count
      * const result = await prisma.user.groupBy({
@@ -20843,14 +21215,14 @@ export namespace Prisma {
      * 
     **/
     groupBy<
-      T extends PagamentoGroupByArgs,
+      T extends ContaFinanceiraGroupByArgs,
       HasSelectOrTake extends Or<
         Extends<'skip', Keys<T>>,
         Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: PagamentoGroupByArgs['orderBy'] }
-        : { orderBy?: PagamentoGroupByArgs['orderBy'] },
+        ? { orderBy: ContaFinanceiraGroupByArgs['orderBy'] }
+        : { orderBy?: ContaFinanceiraGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
       ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
@@ -20899,22 +21271,24 @@ export namespace Prisma {
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
-    >(args: SubsetIntersection<T, PagamentoGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPagamentoGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+    >(args: SubsetIntersection<T, ContaFinanceiraGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetContaFinanceiraGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
   /**
-   * Fields of the Pagamento model
+   * Fields of the ContaFinanceira model
    */
-  readonly fields: PagamentoFieldRefs;
+  readonly fields: ContaFinanceiraFieldRefs;
   }
 
   /**
-   * The delegate class that acts as a "Promise-like" for Pagamento.
+   * The delegate class that acts as a "Promise-like" for ContaFinanceira.
    * Why is this prefixed with `Prisma__`?
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__PagamentoClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__ContaFinanceiraClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    pedido<T extends PedidoDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PedidoDefaultArgs<ExtArgs>>): Prisma__PedidoClient<$Result.GetResult<Prisma.$PedidoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    pedido<T extends ContaFinanceira$pedidoArgs<ExtArgs> = {}>(args?: Subset<T, ContaFinanceira$pedidoArgs<ExtArgs>>): Prisma__PedidoClient<$Result.GetResult<Prisma.$PedidoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    registro<T extends ContaFinanceira$registroArgs<ExtArgs> = {}>(args?: Subset<T, ContaFinanceira$registroArgs<ExtArgs>>): Prisma__RegistroClient<$Result.GetResult<Prisma.$RegistroPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    movimentacao<T extends ContaFinanceira$movimentacaoArgs<ExtArgs> = {}>(args?: Subset<T, ContaFinanceira$movimentacaoArgs<ExtArgs>>): Prisma__MovimentacaoFinanceiraClient<$Result.GetResult<Prisma.$MovimentacaoFinanceiraPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -20941,463 +21315,526 @@ export namespace Prisma {
 
 
   /**
-   * Fields of the Pagamento model
+   * Fields of the ContaFinanceira model
    */
-  interface PagamentoFieldRefs {
-    readonly id: FieldRef<"Pagamento", 'Int'>
-    readonly pedidoID: FieldRef<"Pagamento", 'Int'>
-    readonly valor: FieldRef<"Pagamento", 'Decimal'>
-    readonly forma: FieldRef<"Pagamento", 'FormaPagamento'>
-    readonly data: FieldRef<"Pagamento", 'DateTime'>
+  interface ContaFinanceiraFieldRefs {
+    readonly id: FieldRef<"ContaFinanceira", 'Int'>
+    readonly tipo: FieldRef<"ContaFinanceira", 'TipoConta'>
+    readonly pedidoID: FieldRef<"ContaFinanceira", 'Int'>
+    readonly registroID: FieldRef<"ContaFinanceira", 'Int'>
+    readonly descricao: FieldRef<"ContaFinanceira", 'String'>
+    readonly valor: FieldRef<"ContaFinanceira", 'Decimal'>
+    readonly data_documento: FieldRef<"ContaFinanceira", 'DateTime'>
+    readonly data_vencimento: FieldRef<"ContaFinanceira", 'DateTime'>
+    readonly data_pagamento: FieldRef<"ContaFinanceira", 'DateTime'>
+    readonly forma: FieldRef<"ContaFinanceira", 'FormaPagamento'>
+    readonly data: FieldRef<"ContaFinanceira", 'DateTime'>
   }
     
 
   // Custom InputTypes
   /**
-   * Pagamento findUnique
+   * ContaFinanceira findUnique
    */
-  export type PagamentoFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ContaFinanceiraFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Pagamento
+     * Select specific fields to fetch from the ContaFinanceira
      */
-    select?: PagamentoSelect<ExtArgs> | null
+    select?: ContaFinanceiraSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Pagamento
+     * Omit specific fields from the ContaFinanceira
      */
-    omit?: PagamentoOmit<ExtArgs> | null
+    omit?: ContaFinanceiraOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: PagamentoInclude<ExtArgs> | null
+    include?: ContaFinanceiraInclude<ExtArgs> | null
     /**
-     * Filter, which Pagamento to fetch.
+     * Filter, which ContaFinanceira to fetch.
      */
-    where: PagamentoWhereUniqueInput
+    where: ContaFinanceiraWhereUniqueInput
   }
 
   /**
-   * Pagamento findUniqueOrThrow
+   * ContaFinanceira findUniqueOrThrow
    */
-  export type PagamentoFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ContaFinanceiraFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Pagamento
+     * Select specific fields to fetch from the ContaFinanceira
      */
-    select?: PagamentoSelect<ExtArgs> | null
+    select?: ContaFinanceiraSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Pagamento
+     * Omit specific fields from the ContaFinanceira
      */
-    omit?: PagamentoOmit<ExtArgs> | null
+    omit?: ContaFinanceiraOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: PagamentoInclude<ExtArgs> | null
+    include?: ContaFinanceiraInclude<ExtArgs> | null
     /**
-     * Filter, which Pagamento to fetch.
+     * Filter, which ContaFinanceira to fetch.
      */
-    where: PagamentoWhereUniqueInput
+    where: ContaFinanceiraWhereUniqueInput
   }
 
   /**
-   * Pagamento findFirst
+   * ContaFinanceira findFirst
    */
-  export type PagamentoFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ContaFinanceiraFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Pagamento
+     * Select specific fields to fetch from the ContaFinanceira
      */
-    select?: PagamentoSelect<ExtArgs> | null
+    select?: ContaFinanceiraSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Pagamento
+     * Omit specific fields from the ContaFinanceira
      */
-    omit?: PagamentoOmit<ExtArgs> | null
+    omit?: ContaFinanceiraOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: PagamentoInclude<ExtArgs> | null
+    include?: ContaFinanceiraInclude<ExtArgs> | null
     /**
-     * Filter, which Pagamento to fetch.
+     * Filter, which ContaFinanceira to fetch.
      */
-    where?: PagamentoWhereInput
+    where?: ContaFinanceiraWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Pagamentos to fetch.
+     * Determine the order of ContaFinanceiras to fetch.
      */
-    orderBy?: PagamentoOrderByWithRelationInput | PagamentoOrderByWithRelationInput[]
+    orderBy?: ContaFinanceiraOrderByWithRelationInput | ContaFinanceiraOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for Pagamentos.
+     * Sets the position for searching for ContaFinanceiras.
      */
-    cursor?: PagamentoWhereUniqueInput
+    cursor?: ContaFinanceiraWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Pagamentos from the position of the cursor.
+     * Take `±n` ContaFinanceiras from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Pagamentos.
+     * Skip the first `n` ContaFinanceiras.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of Pagamentos.
+     * Filter by unique combinations of ContaFinanceiras.
      */
-    distinct?: PagamentoScalarFieldEnum | PagamentoScalarFieldEnum[]
+    distinct?: ContaFinanceiraScalarFieldEnum | ContaFinanceiraScalarFieldEnum[]
   }
 
   /**
-   * Pagamento findFirstOrThrow
+   * ContaFinanceira findFirstOrThrow
    */
-  export type PagamentoFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ContaFinanceiraFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Pagamento
+     * Select specific fields to fetch from the ContaFinanceira
      */
-    select?: PagamentoSelect<ExtArgs> | null
+    select?: ContaFinanceiraSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Pagamento
+     * Omit specific fields from the ContaFinanceira
      */
-    omit?: PagamentoOmit<ExtArgs> | null
+    omit?: ContaFinanceiraOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: PagamentoInclude<ExtArgs> | null
+    include?: ContaFinanceiraInclude<ExtArgs> | null
     /**
-     * Filter, which Pagamento to fetch.
+     * Filter, which ContaFinanceira to fetch.
      */
-    where?: PagamentoWhereInput
+    where?: ContaFinanceiraWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Pagamentos to fetch.
+     * Determine the order of ContaFinanceiras to fetch.
      */
-    orderBy?: PagamentoOrderByWithRelationInput | PagamentoOrderByWithRelationInput[]
+    orderBy?: ContaFinanceiraOrderByWithRelationInput | ContaFinanceiraOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for Pagamentos.
+     * Sets the position for searching for ContaFinanceiras.
      */
-    cursor?: PagamentoWhereUniqueInput
+    cursor?: ContaFinanceiraWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Pagamentos from the position of the cursor.
+     * Take `±n` ContaFinanceiras from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Pagamentos.
+     * Skip the first `n` ContaFinanceiras.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of Pagamentos.
+     * Filter by unique combinations of ContaFinanceiras.
      */
-    distinct?: PagamentoScalarFieldEnum | PagamentoScalarFieldEnum[]
+    distinct?: ContaFinanceiraScalarFieldEnum | ContaFinanceiraScalarFieldEnum[]
   }
 
   /**
-   * Pagamento findMany
+   * ContaFinanceira findMany
    */
-  export type PagamentoFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ContaFinanceiraFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Pagamento
+     * Select specific fields to fetch from the ContaFinanceira
      */
-    select?: PagamentoSelect<ExtArgs> | null
+    select?: ContaFinanceiraSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Pagamento
+     * Omit specific fields from the ContaFinanceira
      */
-    omit?: PagamentoOmit<ExtArgs> | null
+    omit?: ContaFinanceiraOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: PagamentoInclude<ExtArgs> | null
+    include?: ContaFinanceiraInclude<ExtArgs> | null
     /**
-     * Filter, which Pagamentos to fetch.
+     * Filter, which ContaFinanceiras to fetch.
      */
-    where?: PagamentoWhereInput
+    where?: ContaFinanceiraWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Pagamentos to fetch.
+     * Determine the order of ContaFinanceiras to fetch.
      */
-    orderBy?: PagamentoOrderByWithRelationInput | PagamentoOrderByWithRelationInput[]
+    orderBy?: ContaFinanceiraOrderByWithRelationInput | ContaFinanceiraOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for listing Pagamentos.
+     * Sets the position for listing ContaFinanceiras.
      */
-    cursor?: PagamentoWhereUniqueInput
+    cursor?: ContaFinanceiraWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Pagamentos from the position of the cursor.
+     * Take `±n` ContaFinanceiras from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Pagamentos.
+     * Skip the first `n` ContaFinanceiras.
      */
     skip?: number
-    distinct?: PagamentoScalarFieldEnum | PagamentoScalarFieldEnum[]
+    distinct?: ContaFinanceiraScalarFieldEnum | ContaFinanceiraScalarFieldEnum[]
   }
 
   /**
-   * Pagamento create
+   * ContaFinanceira create
    */
-  export type PagamentoCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ContaFinanceiraCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Pagamento
+     * Select specific fields to fetch from the ContaFinanceira
      */
-    select?: PagamentoSelect<ExtArgs> | null
+    select?: ContaFinanceiraSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Pagamento
+     * Omit specific fields from the ContaFinanceira
      */
-    omit?: PagamentoOmit<ExtArgs> | null
+    omit?: ContaFinanceiraOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: PagamentoInclude<ExtArgs> | null
+    include?: ContaFinanceiraInclude<ExtArgs> | null
     /**
-     * The data needed to create a Pagamento.
+     * The data needed to create a ContaFinanceira.
      */
-    data: XOR<PagamentoCreateInput, PagamentoUncheckedCreateInput>
+    data: XOR<ContaFinanceiraCreateInput, ContaFinanceiraUncheckedCreateInput>
   }
 
   /**
-   * Pagamento createMany
+   * ContaFinanceira createMany
    */
-  export type PagamentoCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ContaFinanceiraCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to create many Pagamentos.
+     * The data used to create many ContaFinanceiras.
      */
-    data: PagamentoCreateManyInput | PagamentoCreateManyInput[]
+    data: ContaFinanceiraCreateManyInput | ContaFinanceiraCreateManyInput[]
     skipDuplicates?: boolean
   }
 
   /**
-   * Pagamento createManyAndReturn
+   * ContaFinanceira createManyAndReturn
    */
-  export type PagamentoCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ContaFinanceiraCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Pagamento
+     * Select specific fields to fetch from the ContaFinanceira
      */
-    select?: PagamentoSelectCreateManyAndReturn<ExtArgs> | null
+    select?: ContaFinanceiraSelectCreateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the Pagamento
+     * Omit specific fields from the ContaFinanceira
      */
-    omit?: PagamentoOmit<ExtArgs> | null
+    omit?: ContaFinanceiraOmit<ExtArgs> | null
     /**
-     * The data used to create many Pagamentos.
+     * The data used to create many ContaFinanceiras.
      */
-    data: PagamentoCreateManyInput | PagamentoCreateManyInput[]
+    data: ContaFinanceiraCreateManyInput | ContaFinanceiraCreateManyInput[]
     skipDuplicates?: boolean
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: PagamentoIncludeCreateManyAndReturn<ExtArgs> | null
+    include?: ContaFinanceiraIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
-   * Pagamento update
+   * ContaFinanceira update
    */
-  export type PagamentoUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ContaFinanceiraUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Pagamento
+     * Select specific fields to fetch from the ContaFinanceira
      */
-    select?: PagamentoSelect<ExtArgs> | null
+    select?: ContaFinanceiraSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Pagamento
+     * Omit specific fields from the ContaFinanceira
      */
-    omit?: PagamentoOmit<ExtArgs> | null
+    omit?: ContaFinanceiraOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: PagamentoInclude<ExtArgs> | null
+    include?: ContaFinanceiraInclude<ExtArgs> | null
     /**
-     * The data needed to update a Pagamento.
+     * The data needed to update a ContaFinanceira.
      */
-    data: XOR<PagamentoUpdateInput, PagamentoUncheckedUpdateInput>
+    data: XOR<ContaFinanceiraUpdateInput, ContaFinanceiraUncheckedUpdateInput>
     /**
-     * Choose, which Pagamento to update.
+     * Choose, which ContaFinanceira to update.
      */
-    where: PagamentoWhereUniqueInput
+    where: ContaFinanceiraWhereUniqueInput
   }
 
   /**
-   * Pagamento updateMany
+   * ContaFinanceira updateMany
    */
-  export type PagamentoUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ContaFinanceiraUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to update Pagamentos.
+     * The data used to update ContaFinanceiras.
      */
-    data: XOR<PagamentoUpdateManyMutationInput, PagamentoUncheckedUpdateManyInput>
+    data: XOR<ContaFinanceiraUpdateManyMutationInput, ContaFinanceiraUncheckedUpdateManyInput>
     /**
-     * Filter which Pagamentos to update
+     * Filter which ContaFinanceiras to update
      */
-    where?: PagamentoWhereInput
+    where?: ContaFinanceiraWhereInput
     /**
-     * Limit how many Pagamentos to update.
+     * Limit how many ContaFinanceiras to update.
      */
     limit?: number
   }
 
   /**
-   * Pagamento updateManyAndReturn
+   * ContaFinanceira updateManyAndReturn
    */
-  export type PagamentoUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ContaFinanceiraUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Pagamento
+     * Select specific fields to fetch from the ContaFinanceira
      */
-    select?: PagamentoSelectUpdateManyAndReturn<ExtArgs> | null
+    select?: ContaFinanceiraSelectUpdateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the Pagamento
+     * Omit specific fields from the ContaFinanceira
      */
-    omit?: PagamentoOmit<ExtArgs> | null
+    omit?: ContaFinanceiraOmit<ExtArgs> | null
     /**
-     * The data used to update Pagamentos.
+     * The data used to update ContaFinanceiras.
      */
-    data: XOR<PagamentoUpdateManyMutationInput, PagamentoUncheckedUpdateManyInput>
+    data: XOR<ContaFinanceiraUpdateManyMutationInput, ContaFinanceiraUncheckedUpdateManyInput>
     /**
-     * Filter which Pagamentos to update
+     * Filter which ContaFinanceiras to update
      */
-    where?: PagamentoWhereInput
+    where?: ContaFinanceiraWhereInput
     /**
-     * Limit how many Pagamentos to update.
+     * Limit how many ContaFinanceiras to update.
      */
     limit?: number
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: PagamentoIncludeUpdateManyAndReturn<ExtArgs> | null
+    include?: ContaFinanceiraIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
-   * Pagamento upsert
+   * ContaFinanceira upsert
    */
-  export type PagamentoUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ContaFinanceiraUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Pagamento
+     * Select specific fields to fetch from the ContaFinanceira
      */
-    select?: PagamentoSelect<ExtArgs> | null
+    select?: ContaFinanceiraSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Pagamento
+     * Omit specific fields from the ContaFinanceira
      */
-    omit?: PagamentoOmit<ExtArgs> | null
+    omit?: ContaFinanceiraOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: PagamentoInclude<ExtArgs> | null
+    include?: ContaFinanceiraInclude<ExtArgs> | null
     /**
-     * The filter to search for the Pagamento to update in case it exists.
+     * The filter to search for the ContaFinanceira to update in case it exists.
      */
-    where: PagamentoWhereUniqueInput
+    where: ContaFinanceiraWhereUniqueInput
     /**
-     * In case the Pagamento found by the `where` argument doesn't exist, create a new Pagamento with this data.
+     * In case the ContaFinanceira found by the `where` argument doesn't exist, create a new ContaFinanceira with this data.
      */
-    create: XOR<PagamentoCreateInput, PagamentoUncheckedCreateInput>
+    create: XOR<ContaFinanceiraCreateInput, ContaFinanceiraUncheckedCreateInput>
     /**
-     * In case the Pagamento was found with the provided `where` argument, update it with this data.
+     * In case the ContaFinanceira was found with the provided `where` argument, update it with this data.
      */
-    update: XOR<PagamentoUpdateInput, PagamentoUncheckedUpdateInput>
+    update: XOR<ContaFinanceiraUpdateInput, ContaFinanceiraUncheckedUpdateInput>
   }
 
   /**
-   * Pagamento delete
+   * ContaFinanceira delete
    */
-  export type PagamentoDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ContaFinanceiraDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Pagamento
+     * Select specific fields to fetch from the ContaFinanceira
      */
-    select?: PagamentoSelect<ExtArgs> | null
+    select?: ContaFinanceiraSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Pagamento
+     * Omit specific fields from the ContaFinanceira
      */
-    omit?: PagamentoOmit<ExtArgs> | null
+    omit?: ContaFinanceiraOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: PagamentoInclude<ExtArgs> | null
+    include?: ContaFinanceiraInclude<ExtArgs> | null
     /**
-     * Filter which Pagamento to delete.
+     * Filter which ContaFinanceira to delete.
      */
-    where: PagamentoWhereUniqueInput
+    where: ContaFinanceiraWhereUniqueInput
   }
 
   /**
-   * Pagamento deleteMany
+   * ContaFinanceira deleteMany
    */
-  export type PagamentoDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ContaFinanceiraDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which Pagamentos to delete
+     * Filter which ContaFinanceiras to delete
      */
-    where?: PagamentoWhereInput
+    where?: ContaFinanceiraWhereInput
     /**
-     * Limit how many Pagamentos to delete.
+     * Limit how many ContaFinanceiras to delete.
      */
     limit?: number
   }
 
   /**
-   * Pagamento without action
+   * ContaFinanceira.pedido
    */
-  export type PagamentoDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ContaFinanceira$pedidoArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Pagamento
+     * Select specific fields to fetch from the Pedido
      */
-    select?: PagamentoSelect<ExtArgs> | null
+    select?: PedidoSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Pagamento
+     * Omit specific fields from the Pedido
      */
-    omit?: PagamentoOmit<ExtArgs> | null
+    omit?: PedidoOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: PagamentoInclude<ExtArgs> | null
+    include?: PedidoInclude<ExtArgs> | null
+    where?: PedidoWhereInput
+  }
+
+  /**
+   * ContaFinanceira.registro
+   */
+  export type ContaFinanceira$registroArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Registro
+     */
+    select?: RegistroSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Registro
+     */
+    omit?: RegistroOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RegistroInclude<ExtArgs> | null
+    where?: RegistroWhereInput
+  }
+
+  /**
+   * ContaFinanceira.movimentacao
+   */
+  export type ContaFinanceira$movimentacaoArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MovimentacaoFinanceira
+     */
+    select?: MovimentacaoFinanceiraSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MovimentacaoFinanceira
+     */
+    omit?: MovimentacaoFinanceiraOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MovimentacaoFinanceiraInclude<ExtArgs> | null
+    where?: MovimentacaoFinanceiraWhereInput
+  }
+
+  /**
+   * ContaFinanceira without action
+   */
+  export type ContaFinanceiraDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContaFinanceira
+     */
+    select?: ContaFinanceiraSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContaFinanceira
+     */
+    omit?: ContaFinanceiraOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContaFinanceiraInclude<ExtArgs> | null
   }
 
 
   /**
-   * Model Conta
+   * Model Banco
    */
 
-  export type AggregateConta = {
-    _count: ContaCountAggregateOutputType | null
-    _avg: ContaAvgAggregateOutputType | null
-    _sum: ContaSumAggregateOutputType | null
-    _min: ContaMinAggregateOutputType | null
-    _max: ContaMaxAggregateOutputType | null
+  export type AggregateBanco = {
+    _count: BancoCountAggregateOutputType | null
+    _avg: BancoAvgAggregateOutputType | null
+    _sum: BancoSumAggregateOutputType | null
+    _min: BancoMinAggregateOutputType | null
+    _max: BancoMaxAggregateOutputType | null
   }
 
-  export type ContaAvgAggregateOutputType = {
+  export type BancoAvgAggregateOutputType = {
     id: number | null
     saldo: Decimal | null
   }
 
-  export type ContaSumAggregateOutputType = {
+  export type BancoSumAggregateOutputType = {
     id: number | null
     saldo: Decimal | null
   }
 
-  export type ContaMinAggregateOutputType = {
+  export type BancoMinAggregateOutputType = {
     id: number | null
     nome: string | null
     saldo: Decimal | null
   }
 
-  export type ContaMaxAggregateOutputType = {
+  export type BancoMaxAggregateOutputType = {
     id: number | null
     nome: string | null
     saldo: Decimal | null
   }
 
-  export type ContaCountAggregateOutputType = {
+  export type BancoCountAggregateOutputType = {
     id: number
     nome: number
     saldo: number
@@ -21405,182 +21842,182 @@ export namespace Prisma {
   }
 
 
-  export type ContaAvgAggregateInputType = {
+  export type BancoAvgAggregateInputType = {
     id?: true
     saldo?: true
   }
 
-  export type ContaSumAggregateInputType = {
+  export type BancoSumAggregateInputType = {
     id?: true
     saldo?: true
   }
 
-  export type ContaMinAggregateInputType = {
-    id?: true
-    nome?: true
-    saldo?: true
-  }
-
-  export type ContaMaxAggregateInputType = {
+  export type BancoMinAggregateInputType = {
     id?: true
     nome?: true
     saldo?: true
   }
 
-  export type ContaCountAggregateInputType = {
+  export type BancoMaxAggregateInputType = {
+    id?: true
+    nome?: true
+    saldo?: true
+  }
+
+  export type BancoCountAggregateInputType = {
     id?: true
     nome?: true
     saldo?: true
     _all?: true
   }
 
-  export type ContaAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type BancoAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which Conta to aggregate.
+     * Filter which Banco to aggregate.
      */
-    where?: ContaWhereInput
+    where?: BancoWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Contas to fetch.
+     * Determine the order of Bancos to fetch.
      */
-    orderBy?: ContaOrderByWithRelationInput | ContaOrderByWithRelationInput[]
+    orderBy?: BancoOrderByWithRelationInput | BancoOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
      * Sets the start position
      */
-    cursor?: ContaWhereUniqueInput
+    cursor?: BancoWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Contas from the position of the cursor.
+     * Take `±n` Bancos from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Contas.
+     * Skip the first `n` Bancos.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Count returned Contas
+     * Count returned Bancos
     **/
-    _count?: true | ContaCountAggregateInputType
+    _count?: true | BancoCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to average
     **/
-    _avg?: ContaAvgAggregateInputType
+    _avg?: BancoAvgAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to sum
     **/
-    _sum?: ContaSumAggregateInputType
+    _sum?: BancoSumAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the minimum value
     **/
-    _min?: ContaMinAggregateInputType
+    _min?: BancoMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the maximum value
     **/
-    _max?: ContaMaxAggregateInputType
+    _max?: BancoMaxAggregateInputType
   }
 
-  export type GetContaAggregateType<T extends ContaAggregateArgs> = {
-        [P in keyof T & keyof AggregateConta]: P extends '_count' | 'count'
+  export type GetBancoAggregateType<T extends BancoAggregateArgs> = {
+        [P in keyof T & keyof AggregateBanco]: P extends '_count' | 'count'
       ? T[P] extends true
         ? number
-        : GetScalarType<T[P], AggregateConta[P]>
-      : GetScalarType<T[P], AggregateConta[P]>
+        : GetScalarType<T[P], AggregateBanco[P]>
+      : GetScalarType<T[P], AggregateBanco[P]>
   }
 
 
 
 
-  export type ContaGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ContaWhereInput
-    orderBy?: ContaOrderByWithAggregationInput | ContaOrderByWithAggregationInput[]
-    by: ContaScalarFieldEnum[] | ContaScalarFieldEnum
-    having?: ContaScalarWhereWithAggregatesInput
+  export type BancoGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BancoWhereInput
+    orderBy?: BancoOrderByWithAggregationInput | BancoOrderByWithAggregationInput[]
+    by: BancoScalarFieldEnum[] | BancoScalarFieldEnum
+    having?: BancoScalarWhereWithAggregatesInput
     take?: number
     skip?: number
-    _count?: ContaCountAggregateInputType | true
-    _avg?: ContaAvgAggregateInputType
-    _sum?: ContaSumAggregateInputType
-    _min?: ContaMinAggregateInputType
-    _max?: ContaMaxAggregateInputType
+    _count?: BancoCountAggregateInputType | true
+    _avg?: BancoAvgAggregateInputType
+    _sum?: BancoSumAggregateInputType
+    _min?: BancoMinAggregateInputType
+    _max?: BancoMaxAggregateInputType
   }
 
-  export type ContaGroupByOutputType = {
+  export type BancoGroupByOutputType = {
     id: number
     nome: string
     saldo: Decimal
-    _count: ContaCountAggregateOutputType | null
-    _avg: ContaAvgAggregateOutputType | null
-    _sum: ContaSumAggregateOutputType | null
-    _min: ContaMinAggregateOutputType | null
-    _max: ContaMaxAggregateOutputType | null
+    _count: BancoCountAggregateOutputType | null
+    _avg: BancoAvgAggregateOutputType | null
+    _sum: BancoSumAggregateOutputType | null
+    _min: BancoMinAggregateOutputType | null
+    _max: BancoMaxAggregateOutputType | null
   }
 
-  type GetContaGroupByPayload<T extends ContaGroupByArgs> = Prisma.PrismaPromise<
+  type GetBancoGroupByPayload<T extends BancoGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickEnumerable<ContaGroupByOutputType, T['by']> &
+      PickEnumerable<BancoGroupByOutputType, T['by']> &
         {
-          [P in ((keyof T) & (keyof ContaGroupByOutputType))]: P extends '_count'
+          [P in ((keyof T) & (keyof BancoGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
               ? number
-              : GetScalarType<T[P], ContaGroupByOutputType[P]>
-            : GetScalarType<T[P], ContaGroupByOutputType[P]>
+              : GetScalarType<T[P], BancoGroupByOutputType[P]>
+            : GetScalarType<T[P], BancoGroupByOutputType[P]>
         }
       >
     >
 
 
-  export type ContaSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type BancoSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     nome?: boolean
     saldo?: boolean
-    movimentacoes?: boolean | Conta$movimentacoesArgs<ExtArgs>
-    _count?: boolean | ContaCountOutputTypeDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["conta"]>
+    movimentacoes?: boolean | Banco$movimentacoesArgs<ExtArgs>
+    _count?: boolean | BancoCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["banco"]>
 
-  export type ContaSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type BancoSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     nome?: boolean
     saldo?: boolean
-  }, ExtArgs["result"]["conta"]>
+  }, ExtArgs["result"]["banco"]>
 
-  export type ContaSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type BancoSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     nome?: boolean
     saldo?: boolean
-  }, ExtArgs["result"]["conta"]>
+  }, ExtArgs["result"]["banco"]>
 
-  export type ContaSelectScalar = {
+  export type BancoSelectScalar = {
     id?: boolean
     nome?: boolean
     saldo?: boolean
   }
 
-  export type ContaOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nome" | "saldo", ExtArgs["result"]["conta"]>
-  export type ContaInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    movimentacoes?: boolean | Conta$movimentacoesArgs<ExtArgs>
-    _count?: boolean | ContaCountOutputTypeDefaultArgs<ExtArgs>
+  export type BancoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nome" | "saldo", ExtArgs["result"]["banco"]>
+  export type BancoInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    movimentacoes?: boolean | Banco$movimentacoesArgs<ExtArgs>
+    _count?: boolean | BancoCountOutputTypeDefaultArgs<ExtArgs>
   }
-  export type ContaIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
-  export type ContaIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type BancoIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type BancoIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
 
-  export type $ContaPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "Conta"
+  export type $BancoPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Banco"
     objects: {
       movimentacoes: Prisma.$MovimentacaoFinanceiraPayload<ExtArgs>[]
     }
@@ -21588,136 +22025,136 @@ export namespace Prisma {
       id: number
       nome: string
       saldo: Prisma.Decimal
-    }, ExtArgs["result"]["conta"]>
+    }, ExtArgs["result"]["banco"]>
     composites: {}
   }
 
-  type ContaGetPayload<S extends boolean | null | undefined | ContaDefaultArgs> = $Result.GetResult<Prisma.$ContaPayload, S>
+  type BancoGetPayload<S extends boolean | null | undefined | BancoDefaultArgs> = $Result.GetResult<Prisma.$BancoPayload, S>
 
-  type ContaCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<ContaFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: ContaCountAggregateInputType | true
+  type BancoCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<BancoFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: BancoCountAggregateInputType | true
     }
 
-  export interface ContaDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Conta'], meta: { name: 'Conta' } }
+  export interface BancoDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Banco'], meta: { name: 'Banco' } }
     /**
-     * Find zero or one Conta that matches the filter.
-     * @param {ContaFindUniqueArgs} args - Arguments to find a Conta
+     * Find zero or one Banco that matches the filter.
+     * @param {BancoFindUniqueArgs} args - Arguments to find a Banco
      * @example
-     * // Get one Conta
-     * const conta = await prisma.conta.findUnique({
+     * // Get one Banco
+     * const banco = await prisma.banco.findUnique({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUnique<T extends ContaFindUniqueArgs>(args: SelectSubset<T, ContaFindUniqueArgs<ExtArgs>>): Prisma__ContaClient<$Result.GetResult<Prisma.$ContaPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findUnique<T extends BancoFindUniqueArgs>(args: SelectSubset<T, BancoFindUniqueArgs<ExtArgs>>): Prisma__BancoClient<$Result.GetResult<Prisma.$BancoPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find one Conta that matches the filter or throw an error with `error.code='P2025'`
+     * Find one Banco that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
-     * @param {ContaFindUniqueOrThrowArgs} args - Arguments to find a Conta
+     * @param {BancoFindUniqueOrThrowArgs} args - Arguments to find a Banco
      * @example
-     * // Get one Conta
-     * const conta = await prisma.conta.findUniqueOrThrow({
+     * // Get one Banco
+     * const banco = await prisma.banco.findUniqueOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUniqueOrThrow<T extends ContaFindUniqueOrThrowArgs>(args: SelectSubset<T, ContaFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ContaClient<$Result.GetResult<Prisma.$ContaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findUniqueOrThrow<T extends BancoFindUniqueOrThrowArgs>(args: SelectSubset<T, BancoFindUniqueOrThrowArgs<ExtArgs>>): Prisma__BancoClient<$Result.GetResult<Prisma.$BancoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first Conta that matches the filter.
+     * Find the first Banco that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ContaFindFirstArgs} args - Arguments to find a Conta
+     * @param {BancoFindFirstArgs} args - Arguments to find a Banco
      * @example
-     * // Get one Conta
-     * const conta = await prisma.conta.findFirst({
+     * // Get one Banco
+     * const banco = await prisma.banco.findFirst({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirst<T extends ContaFindFirstArgs>(args?: SelectSubset<T, ContaFindFirstArgs<ExtArgs>>): Prisma__ContaClient<$Result.GetResult<Prisma.$ContaPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findFirst<T extends BancoFindFirstArgs>(args?: SelectSubset<T, BancoFindFirstArgs<ExtArgs>>): Prisma__BancoClient<$Result.GetResult<Prisma.$BancoPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first Conta that matches the filter or
+     * Find the first Banco that matches the filter or
      * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ContaFindFirstOrThrowArgs} args - Arguments to find a Conta
+     * @param {BancoFindFirstOrThrowArgs} args - Arguments to find a Banco
      * @example
-     * // Get one Conta
-     * const conta = await prisma.conta.findFirstOrThrow({
+     * // Get one Banco
+     * const banco = await prisma.banco.findFirstOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirstOrThrow<T extends ContaFindFirstOrThrowArgs>(args?: SelectSubset<T, ContaFindFirstOrThrowArgs<ExtArgs>>): Prisma__ContaClient<$Result.GetResult<Prisma.$ContaPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findFirstOrThrow<T extends BancoFindFirstOrThrowArgs>(args?: SelectSubset<T, BancoFindFirstOrThrowArgs<ExtArgs>>): Prisma__BancoClient<$Result.GetResult<Prisma.$BancoPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find zero or more Contas that matches the filter.
+     * Find zero or more Bancos that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ContaFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @param {BancoFindManyArgs} args - Arguments to filter and select certain fields only.
      * @example
-     * // Get all Contas
-     * const contas = await prisma.conta.findMany()
+     * // Get all Bancos
+     * const bancos = await prisma.banco.findMany()
      * 
-     * // Get first 10 Contas
-     * const contas = await prisma.conta.findMany({ take: 10 })
+     * // Get first 10 Bancos
+     * const bancos = await prisma.banco.findMany({ take: 10 })
      * 
      * // Only select the `id`
-     * const contaWithIdOnly = await prisma.conta.findMany({ select: { id: true } })
+     * const bancoWithIdOnly = await prisma.banco.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends ContaFindManyArgs>(args?: SelectSubset<T, ContaFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+    findMany<T extends BancoFindManyArgs>(args?: SelectSubset<T, BancoFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BancoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
-     * Create a Conta.
-     * @param {ContaCreateArgs} args - Arguments to create a Conta.
+     * Create a Banco.
+     * @param {BancoCreateArgs} args - Arguments to create a Banco.
      * @example
-     * // Create one Conta
-     * const Conta = await prisma.conta.create({
+     * // Create one Banco
+     * const Banco = await prisma.banco.create({
      *   data: {
-     *     // ... data to create a Conta
+     *     // ... data to create a Banco
      *   }
      * })
      * 
      */
-    create<T extends ContaCreateArgs>(args: SelectSubset<T, ContaCreateArgs<ExtArgs>>): Prisma__ContaClient<$Result.GetResult<Prisma.$ContaPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    create<T extends BancoCreateArgs>(args: SelectSubset<T, BancoCreateArgs<ExtArgs>>): Prisma__BancoClient<$Result.GetResult<Prisma.$BancoPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Create many Contas.
-     * @param {ContaCreateManyArgs} args - Arguments to create many Contas.
+     * Create many Bancos.
+     * @param {BancoCreateManyArgs} args - Arguments to create many Bancos.
      * @example
-     * // Create many Contas
-     * const conta = await prisma.conta.createMany({
+     * // Create many Bancos
+     * const banco = await prisma.banco.createMany({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      *     
      */
-    createMany<T extends ContaCreateManyArgs>(args?: SelectSubset<T, ContaCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    createMany<T extends BancoCreateManyArgs>(args?: SelectSubset<T, BancoCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Create many Contas and returns the data saved in the database.
-     * @param {ContaCreateManyAndReturnArgs} args - Arguments to create many Contas.
+     * Create many Bancos and returns the data saved in the database.
+     * @param {BancoCreateManyAndReturnArgs} args - Arguments to create many Bancos.
      * @example
-     * // Create many Contas
-     * const conta = await prisma.conta.createManyAndReturn({
+     * // Create many Bancos
+     * const banco = await prisma.banco.createManyAndReturn({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      * 
-     * // Create many Contas and only return the `id`
-     * const contaWithIdOnly = await prisma.conta.createManyAndReturn({
+     * // Create many Bancos and only return the `id`
+     * const bancoWithIdOnly = await prisma.banco.createManyAndReturn({
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -21727,28 +22164,28 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends ContaCreateManyAndReturnArgs>(args?: SelectSubset<T, ContaCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContaPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+    createManyAndReturn<T extends BancoCreateManyAndReturnArgs>(args?: SelectSubset<T, BancoCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BancoPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Delete a Conta.
-     * @param {ContaDeleteArgs} args - Arguments to delete one Conta.
+     * Delete a Banco.
+     * @param {BancoDeleteArgs} args - Arguments to delete one Banco.
      * @example
-     * // Delete one Conta
-     * const Conta = await prisma.conta.delete({
+     * // Delete one Banco
+     * const Banco = await prisma.banco.delete({
      *   where: {
-     *     // ... filter to delete one Conta
+     *     // ... filter to delete one Banco
      *   }
      * })
      * 
      */
-    delete<T extends ContaDeleteArgs>(args: SelectSubset<T, ContaDeleteArgs<ExtArgs>>): Prisma__ContaClient<$Result.GetResult<Prisma.$ContaPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    delete<T extends BancoDeleteArgs>(args: SelectSubset<T, BancoDeleteArgs<ExtArgs>>): Prisma__BancoClient<$Result.GetResult<Prisma.$BancoPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Update one Conta.
-     * @param {ContaUpdateArgs} args - Arguments to update one Conta.
+     * Update one Banco.
+     * @param {BancoUpdateArgs} args - Arguments to update one Banco.
      * @example
-     * // Update one Conta
-     * const conta = await prisma.conta.update({
+     * // Update one Banco
+     * const banco = await prisma.banco.update({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -21758,30 +22195,30 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends ContaUpdateArgs>(args: SelectSubset<T, ContaUpdateArgs<ExtArgs>>): Prisma__ContaClient<$Result.GetResult<Prisma.$ContaPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    update<T extends BancoUpdateArgs>(args: SelectSubset<T, BancoUpdateArgs<ExtArgs>>): Prisma__BancoClient<$Result.GetResult<Prisma.$BancoPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Delete zero or more Contas.
-     * @param {ContaDeleteManyArgs} args - Arguments to filter Contas to delete.
+     * Delete zero or more Bancos.
+     * @param {BancoDeleteManyArgs} args - Arguments to filter Bancos to delete.
      * @example
-     * // Delete a few Contas
-     * const { count } = await prisma.conta.deleteMany({
+     * // Delete a few Bancos
+     * const { count } = await prisma.banco.deleteMany({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      * 
      */
-    deleteMany<T extends ContaDeleteManyArgs>(args?: SelectSubset<T, ContaDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    deleteMany<T extends BancoDeleteManyArgs>(args?: SelectSubset<T, BancoDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more Contas.
+     * Update zero or more Bancos.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ContaUpdateManyArgs} args - Arguments to update one or more rows.
+     * @param {BancoUpdateManyArgs} args - Arguments to update one or more rows.
      * @example
-     * // Update many Contas
-     * const conta = await prisma.conta.updateMany({
+     * // Update many Bancos
+     * const banco = await prisma.banco.updateMany({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -21791,14 +22228,14 @@ export namespace Prisma {
      * })
      * 
      */
-    updateMany<T extends ContaUpdateManyArgs>(args: SelectSubset<T, ContaUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    updateMany<T extends BancoUpdateManyArgs>(args: SelectSubset<T, BancoUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more Contas and returns the data updated in the database.
-     * @param {ContaUpdateManyAndReturnArgs} args - Arguments to update many Contas.
+     * Update zero or more Bancos and returns the data updated in the database.
+     * @param {BancoUpdateManyAndReturnArgs} args - Arguments to update many Bancos.
      * @example
-     * // Update many Contas
-     * const conta = await prisma.conta.updateManyAndReturn({
+     * // Update many Bancos
+     * const banco = await prisma.banco.updateManyAndReturn({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -21807,8 +22244,8 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Update zero or more Contas and only return the `id`
-     * const contaWithIdOnly = await prisma.conta.updateManyAndReturn({
+     * // Update zero or more Bancos and only return the `id`
+     * const bancoWithIdOnly = await prisma.banco.updateManyAndReturn({
      *   select: { id: true },
      *   where: {
      *     // ... provide filter here
@@ -21821,56 +22258,56 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    updateManyAndReturn<T extends ContaUpdateManyAndReturnArgs>(args: SelectSubset<T, ContaUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContaPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+    updateManyAndReturn<T extends BancoUpdateManyAndReturnArgs>(args: SelectSubset<T, BancoUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BancoPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Create or update one Conta.
-     * @param {ContaUpsertArgs} args - Arguments to update or create a Conta.
+     * Create or update one Banco.
+     * @param {BancoUpsertArgs} args - Arguments to update or create a Banco.
      * @example
-     * // Update or create a Conta
-     * const conta = await prisma.conta.upsert({
+     * // Update or create a Banco
+     * const banco = await prisma.banco.upsert({
      *   create: {
-     *     // ... data to create a Conta
+     *     // ... data to create a Banco
      *   },
      *   update: {
      *     // ... in case it already exists, update
      *   },
      *   where: {
-     *     // ... the filter for the Conta we want to update
+     *     // ... the filter for the Banco we want to update
      *   }
      * })
      */
-    upsert<T extends ContaUpsertArgs>(args: SelectSubset<T, ContaUpsertArgs<ExtArgs>>): Prisma__ContaClient<$Result.GetResult<Prisma.$ContaPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    upsert<T extends BancoUpsertArgs>(args: SelectSubset<T, BancoUpsertArgs<ExtArgs>>): Prisma__BancoClient<$Result.GetResult<Prisma.$BancoPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
-     * Count the number of Contas.
+     * Count the number of Bancos.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ContaCountArgs} args - Arguments to filter Contas to count.
+     * @param {BancoCountArgs} args - Arguments to filter Bancos to count.
      * @example
-     * // Count the number of Contas
-     * const count = await prisma.conta.count({
+     * // Count the number of Bancos
+     * const count = await prisma.banco.count({
      *   where: {
-     *     // ... the filter for the Contas we want to count
+     *     // ... the filter for the Bancos we want to count
      *   }
      * })
     **/
-    count<T extends ContaCountArgs>(
-      args?: Subset<T, ContaCountArgs>,
+    count<T extends BancoCountArgs>(
+      args?: Subset<T, BancoCountArgs>,
     ): Prisma.PrismaPromise<
       T extends $Utils.Record<'select', any>
         ? T['select'] extends true
           ? number
-          : GetScalarType<T['select'], ContaCountAggregateOutputType>
+          : GetScalarType<T['select'], BancoCountAggregateOutputType>
         : number
     >
 
     /**
-     * Allows you to perform aggregations operations on a Conta.
+     * Allows you to perform aggregations operations on a Banco.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ContaAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @param {BancoAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
      * @example
      * // Ordered by age ascending
      * // Where email contains prisma.io
@@ -21890,13 +22327,13 @@ export namespace Prisma {
      *   take: 10,
      * })
     **/
-    aggregate<T extends ContaAggregateArgs>(args: Subset<T, ContaAggregateArgs>): Prisma.PrismaPromise<GetContaAggregateType<T>>
+    aggregate<T extends BancoAggregateArgs>(args: Subset<T, BancoAggregateArgs>): Prisma.PrismaPromise<GetBancoAggregateType<T>>
 
     /**
-     * Group by Conta.
+     * Group by Banco.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ContaGroupByArgs} args - Group by arguments.
+     * @param {BancoGroupByArgs} args - Group by arguments.
      * @example
      * // Group by city, order by createdAt, get count
      * const result = await prisma.user.groupBy({
@@ -21911,14 +22348,14 @@ export namespace Prisma {
      * 
     **/
     groupBy<
-      T extends ContaGroupByArgs,
+      T extends BancoGroupByArgs,
       HasSelectOrTake extends Or<
         Extends<'skip', Keys<T>>,
         Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: ContaGroupByArgs['orderBy'] }
-        : { orderBy?: ContaGroupByArgs['orderBy'] },
+        ? { orderBy: BancoGroupByArgs['orderBy'] }
+        : { orderBy?: BancoGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
       ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
@@ -21967,22 +22404,22 @@ export namespace Prisma {
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
-    >(args: SubsetIntersection<T, ContaGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetContaGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+    >(args: SubsetIntersection<T, BancoGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetBancoGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
   /**
-   * Fields of the Conta model
+   * Fields of the Banco model
    */
-  readonly fields: ContaFieldRefs;
+  readonly fields: BancoFieldRefs;
   }
 
   /**
-   * The delegate class that acts as a "Promise-like" for Conta.
+   * The delegate class that acts as a "Promise-like" for Banco.
    * Why is this prefixed with `Prisma__`?
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__ContaClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__BancoClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    movimentacoes<T extends Conta$movimentacoesArgs<ExtArgs> = {}>(args?: Subset<T, Conta$movimentacoesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MovimentacaoFinanceiraPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    movimentacoes<T extends Banco$movimentacoesArgs<ExtArgs> = {}>(args?: Subset<T, Banco$movimentacoesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MovimentacaoFinanceiraPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -22009,403 +22446,403 @@ export namespace Prisma {
 
 
   /**
-   * Fields of the Conta model
+   * Fields of the Banco model
    */
-  interface ContaFieldRefs {
-    readonly id: FieldRef<"Conta", 'Int'>
-    readonly nome: FieldRef<"Conta", 'String'>
-    readonly saldo: FieldRef<"Conta", 'Decimal'>
+  interface BancoFieldRefs {
+    readonly id: FieldRef<"Banco", 'Int'>
+    readonly nome: FieldRef<"Banco", 'String'>
+    readonly saldo: FieldRef<"Banco", 'Decimal'>
   }
     
 
   // Custom InputTypes
   /**
-   * Conta findUnique
+   * Banco findUnique
    */
-  export type ContaFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type BancoFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Conta
+     * Select specific fields to fetch from the Banco
      */
-    select?: ContaSelect<ExtArgs> | null
+    select?: BancoSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Conta
+     * Omit specific fields from the Banco
      */
-    omit?: ContaOmit<ExtArgs> | null
+    omit?: BancoOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ContaInclude<ExtArgs> | null
+    include?: BancoInclude<ExtArgs> | null
     /**
-     * Filter, which Conta to fetch.
+     * Filter, which Banco to fetch.
      */
-    where: ContaWhereUniqueInput
+    where: BancoWhereUniqueInput
   }
 
   /**
-   * Conta findUniqueOrThrow
+   * Banco findUniqueOrThrow
    */
-  export type ContaFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type BancoFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Conta
+     * Select specific fields to fetch from the Banco
      */
-    select?: ContaSelect<ExtArgs> | null
+    select?: BancoSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Conta
+     * Omit specific fields from the Banco
      */
-    omit?: ContaOmit<ExtArgs> | null
+    omit?: BancoOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ContaInclude<ExtArgs> | null
+    include?: BancoInclude<ExtArgs> | null
     /**
-     * Filter, which Conta to fetch.
+     * Filter, which Banco to fetch.
      */
-    where: ContaWhereUniqueInput
+    where: BancoWhereUniqueInput
   }
 
   /**
-   * Conta findFirst
+   * Banco findFirst
    */
-  export type ContaFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type BancoFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Conta
+     * Select specific fields to fetch from the Banco
      */
-    select?: ContaSelect<ExtArgs> | null
+    select?: BancoSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Conta
+     * Omit specific fields from the Banco
      */
-    omit?: ContaOmit<ExtArgs> | null
+    omit?: BancoOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ContaInclude<ExtArgs> | null
+    include?: BancoInclude<ExtArgs> | null
     /**
-     * Filter, which Conta to fetch.
+     * Filter, which Banco to fetch.
      */
-    where?: ContaWhereInput
+    where?: BancoWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Contas to fetch.
+     * Determine the order of Bancos to fetch.
      */
-    orderBy?: ContaOrderByWithRelationInput | ContaOrderByWithRelationInput[]
+    orderBy?: BancoOrderByWithRelationInput | BancoOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for Contas.
+     * Sets the position for searching for Bancos.
      */
-    cursor?: ContaWhereUniqueInput
+    cursor?: BancoWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Contas from the position of the cursor.
+     * Take `±n` Bancos from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Contas.
+     * Skip the first `n` Bancos.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of Contas.
+     * Filter by unique combinations of Bancos.
      */
-    distinct?: ContaScalarFieldEnum | ContaScalarFieldEnum[]
+    distinct?: BancoScalarFieldEnum | BancoScalarFieldEnum[]
   }
 
   /**
-   * Conta findFirstOrThrow
+   * Banco findFirstOrThrow
    */
-  export type ContaFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type BancoFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Conta
+     * Select specific fields to fetch from the Banco
      */
-    select?: ContaSelect<ExtArgs> | null
+    select?: BancoSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Conta
+     * Omit specific fields from the Banco
      */
-    omit?: ContaOmit<ExtArgs> | null
+    omit?: BancoOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ContaInclude<ExtArgs> | null
+    include?: BancoInclude<ExtArgs> | null
     /**
-     * Filter, which Conta to fetch.
+     * Filter, which Banco to fetch.
      */
-    where?: ContaWhereInput
+    where?: BancoWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Contas to fetch.
+     * Determine the order of Bancos to fetch.
      */
-    orderBy?: ContaOrderByWithRelationInput | ContaOrderByWithRelationInput[]
+    orderBy?: BancoOrderByWithRelationInput | BancoOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for Contas.
+     * Sets the position for searching for Bancos.
      */
-    cursor?: ContaWhereUniqueInput
+    cursor?: BancoWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Contas from the position of the cursor.
+     * Take `±n` Bancos from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Contas.
+     * Skip the first `n` Bancos.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of Contas.
+     * Filter by unique combinations of Bancos.
      */
-    distinct?: ContaScalarFieldEnum | ContaScalarFieldEnum[]
+    distinct?: BancoScalarFieldEnum | BancoScalarFieldEnum[]
   }
 
   /**
-   * Conta findMany
+   * Banco findMany
    */
-  export type ContaFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type BancoFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Conta
+     * Select specific fields to fetch from the Banco
      */
-    select?: ContaSelect<ExtArgs> | null
+    select?: BancoSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Conta
+     * Omit specific fields from the Banco
      */
-    omit?: ContaOmit<ExtArgs> | null
+    omit?: BancoOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ContaInclude<ExtArgs> | null
+    include?: BancoInclude<ExtArgs> | null
     /**
-     * Filter, which Contas to fetch.
+     * Filter, which Bancos to fetch.
      */
-    where?: ContaWhereInput
+    where?: BancoWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Contas to fetch.
+     * Determine the order of Bancos to fetch.
      */
-    orderBy?: ContaOrderByWithRelationInput | ContaOrderByWithRelationInput[]
+    orderBy?: BancoOrderByWithRelationInput | BancoOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for listing Contas.
+     * Sets the position for listing Bancos.
      */
-    cursor?: ContaWhereUniqueInput
+    cursor?: BancoWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Contas from the position of the cursor.
+     * Take `±n` Bancos from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Contas.
+     * Skip the first `n` Bancos.
      */
     skip?: number
-    distinct?: ContaScalarFieldEnum | ContaScalarFieldEnum[]
+    distinct?: BancoScalarFieldEnum | BancoScalarFieldEnum[]
   }
 
   /**
-   * Conta create
+   * Banco create
    */
-  export type ContaCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type BancoCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Conta
+     * Select specific fields to fetch from the Banco
      */
-    select?: ContaSelect<ExtArgs> | null
+    select?: BancoSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Conta
+     * Omit specific fields from the Banco
      */
-    omit?: ContaOmit<ExtArgs> | null
+    omit?: BancoOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ContaInclude<ExtArgs> | null
+    include?: BancoInclude<ExtArgs> | null
     /**
-     * The data needed to create a Conta.
+     * The data needed to create a Banco.
      */
-    data: XOR<ContaCreateInput, ContaUncheckedCreateInput>
+    data: XOR<BancoCreateInput, BancoUncheckedCreateInput>
   }
 
   /**
-   * Conta createMany
+   * Banco createMany
    */
-  export type ContaCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type BancoCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to create many Contas.
+     * The data used to create many Bancos.
      */
-    data: ContaCreateManyInput | ContaCreateManyInput[]
+    data: BancoCreateManyInput | BancoCreateManyInput[]
     skipDuplicates?: boolean
   }
 
   /**
-   * Conta createManyAndReturn
+   * Banco createManyAndReturn
    */
-  export type ContaCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type BancoCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Conta
+     * Select specific fields to fetch from the Banco
      */
-    select?: ContaSelectCreateManyAndReturn<ExtArgs> | null
+    select?: BancoSelectCreateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the Conta
+     * Omit specific fields from the Banco
      */
-    omit?: ContaOmit<ExtArgs> | null
+    omit?: BancoOmit<ExtArgs> | null
     /**
-     * The data used to create many Contas.
+     * The data used to create many Bancos.
      */
-    data: ContaCreateManyInput | ContaCreateManyInput[]
+    data: BancoCreateManyInput | BancoCreateManyInput[]
     skipDuplicates?: boolean
   }
 
   /**
-   * Conta update
+   * Banco update
    */
-  export type ContaUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type BancoUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Conta
+     * Select specific fields to fetch from the Banco
      */
-    select?: ContaSelect<ExtArgs> | null
+    select?: BancoSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Conta
+     * Omit specific fields from the Banco
      */
-    omit?: ContaOmit<ExtArgs> | null
+    omit?: BancoOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ContaInclude<ExtArgs> | null
+    include?: BancoInclude<ExtArgs> | null
     /**
-     * The data needed to update a Conta.
+     * The data needed to update a Banco.
      */
-    data: XOR<ContaUpdateInput, ContaUncheckedUpdateInput>
+    data: XOR<BancoUpdateInput, BancoUncheckedUpdateInput>
     /**
-     * Choose, which Conta to update.
+     * Choose, which Banco to update.
      */
-    where: ContaWhereUniqueInput
+    where: BancoWhereUniqueInput
   }
 
   /**
-   * Conta updateMany
+   * Banco updateMany
    */
-  export type ContaUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type BancoUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to update Contas.
+     * The data used to update Bancos.
      */
-    data: XOR<ContaUpdateManyMutationInput, ContaUncheckedUpdateManyInput>
+    data: XOR<BancoUpdateManyMutationInput, BancoUncheckedUpdateManyInput>
     /**
-     * Filter which Contas to update
+     * Filter which Bancos to update
      */
-    where?: ContaWhereInput
+    where?: BancoWhereInput
     /**
-     * Limit how many Contas to update.
+     * Limit how many Bancos to update.
      */
     limit?: number
   }
 
   /**
-   * Conta updateManyAndReturn
+   * Banco updateManyAndReturn
    */
-  export type ContaUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type BancoUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Conta
+     * Select specific fields to fetch from the Banco
      */
-    select?: ContaSelectUpdateManyAndReturn<ExtArgs> | null
+    select?: BancoSelectUpdateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the Conta
+     * Omit specific fields from the Banco
      */
-    omit?: ContaOmit<ExtArgs> | null
+    omit?: BancoOmit<ExtArgs> | null
     /**
-     * The data used to update Contas.
+     * The data used to update Bancos.
      */
-    data: XOR<ContaUpdateManyMutationInput, ContaUncheckedUpdateManyInput>
+    data: XOR<BancoUpdateManyMutationInput, BancoUncheckedUpdateManyInput>
     /**
-     * Filter which Contas to update
+     * Filter which Bancos to update
      */
-    where?: ContaWhereInput
+    where?: BancoWhereInput
     /**
-     * Limit how many Contas to update.
+     * Limit how many Bancos to update.
      */
     limit?: number
   }
 
   /**
-   * Conta upsert
+   * Banco upsert
    */
-  export type ContaUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type BancoUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Conta
+     * Select specific fields to fetch from the Banco
      */
-    select?: ContaSelect<ExtArgs> | null
+    select?: BancoSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Conta
+     * Omit specific fields from the Banco
      */
-    omit?: ContaOmit<ExtArgs> | null
+    omit?: BancoOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ContaInclude<ExtArgs> | null
+    include?: BancoInclude<ExtArgs> | null
     /**
-     * The filter to search for the Conta to update in case it exists.
+     * The filter to search for the Banco to update in case it exists.
      */
-    where: ContaWhereUniqueInput
+    where: BancoWhereUniqueInput
     /**
-     * In case the Conta found by the `where` argument doesn't exist, create a new Conta with this data.
+     * In case the Banco found by the `where` argument doesn't exist, create a new Banco with this data.
      */
-    create: XOR<ContaCreateInput, ContaUncheckedCreateInput>
+    create: XOR<BancoCreateInput, BancoUncheckedCreateInput>
     /**
-     * In case the Conta was found with the provided `where` argument, update it with this data.
+     * In case the Banco was found with the provided `where` argument, update it with this data.
      */
-    update: XOR<ContaUpdateInput, ContaUncheckedUpdateInput>
+    update: XOR<BancoUpdateInput, BancoUncheckedUpdateInput>
   }
 
   /**
-   * Conta delete
+   * Banco delete
    */
-  export type ContaDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type BancoDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Conta
+     * Select specific fields to fetch from the Banco
      */
-    select?: ContaSelect<ExtArgs> | null
+    select?: BancoSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Conta
+     * Omit specific fields from the Banco
      */
-    omit?: ContaOmit<ExtArgs> | null
+    omit?: BancoOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ContaInclude<ExtArgs> | null
+    include?: BancoInclude<ExtArgs> | null
     /**
-     * Filter which Conta to delete.
+     * Filter which Banco to delete.
      */
-    where: ContaWhereUniqueInput
+    where: BancoWhereUniqueInput
   }
 
   /**
-   * Conta deleteMany
+   * Banco deleteMany
    */
-  export type ContaDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type BancoDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which Contas to delete
+     * Filter which Bancos to delete
      */
-    where?: ContaWhereInput
+    where?: BancoWhereInput
     /**
-     * Limit how many Contas to delete.
+     * Limit how many Bancos to delete.
      */
     limit?: number
   }
 
   /**
-   * Conta.movimentacoes
+   * Banco.movimentacoes
    */
-  export type Conta$movimentacoesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Banco$movimentacoesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the MovimentacaoFinanceira
      */
@@ -22427,21 +22864,21 @@ export namespace Prisma {
   }
 
   /**
-   * Conta without action
+   * Banco without action
    */
-  export type ContaDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type BancoDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Conta
+     * Select specific fields to fetch from the Banco
      */
-    select?: ContaSelect<ExtArgs> | null
+    select?: BancoSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Conta
+     * Omit specific fields from the Banco
      */
-    omit?: ContaOmit<ExtArgs> | null
+    omit?: BancoOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ContaInclude<ExtArgs> | null
+    include?: BancoInclude<ExtArgs> | null
   }
 
 
@@ -22459,108 +22896,138 @@ export namespace Prisma {
 
   export type MovimentacaoFinanceiraAvgAggregateOutputType = {
     id: number | null
-    contaID: number | null
-    valor: Decimal | null
-    origemID: number | null
+    bancoID: number | null
     caixaID: number | null
+    contaID: number | null
+    categoriaID: number | null
+    saldoAtual: Decimal | null
+    valor: Decimal | null
+    saldoFinal: Decimal | null
   }
 
   export type MovimentacaoFinanceiraSumAggregateOutputType = {
     id: number | null
-    contaID: number | null
-    valor: Decimal | null
-    origemID: number | null
+    bancoID: number | null
     caixaID: number | null
+    contaID: number | null
+    categoriaID: number | null
+    saldoAtual: Decimal | null
+    valor: Decimal | null
+    saldoFinal: Decimal | null
   }
 
   export type MovimentacaoFinanceiraMinAggregateOutputType = {
     id: number | null
-    contaID: number | null
-    tipoMovimentacao: $Enums.TipoMovimentacao | null
-    valor: Decimal | null
-    descricao: string | null
-    data: Date | null
-    origem: $Enums.TipoOrigem | null
-    origemID: number | null
+    bancoID: number | null
     caixaID: number | null
+    contaID: number | null
+    categoriaID: number | null
+    tipoMovimentacao: $Enums.TipoMovimentacao | null
+    data: Date | null
+    saldoAtual: Decimal | null
+    valor: Decimal | null
+    saldoFinal: Decimal | null
+    descricao: string | null
+    estornadoEm: Date | null
   }
 
   export type MovimentacaoFinanceiraMaxAggregateOutputType = {
     id: number | null
-    contaID: number | null
-    tipoMovimentacao: $Enums.TipoMovimentacao | null
-    valor: Decimal | null
-    descricao: string | null
-    data: Date | null
-    origem: $Enums.TipoOrigem | null
-    origemID: number | null
+    bancoID: number | null
     caixaID: number | null
+    contaID: number | null
+    categoriaID: number | null
+    tipoMovimentacao: $Enums.TipoMovimentacao | null
+    data: Date | null
+    saldoAtual: Decimal | null
+    valor: Decimal | null
+    saldoFinal: Decimal | null
+    descricao: string | null
+    estornadoEm: Date | null
   }
 
   export type MovimentacaoFinanceiraCountAggregateOutputType = {
     id: number
-    contaID: number
-    tipoMovimentacao: number
-    valor: number
-    descricao: number
-    data: number
-    origem: number
-    origemID: number
+    bancoID: number
     caixaID: number
+    contaID: number
+    categoriaID: number
+    tipoMovimentacao: number
+    data: number
+    saldoAtual: number
+    valor: number
+    saldoFinal: number
+    descricao: number
+    estornadoEm: number
     _all: number
   }
 
 
   export type MovimentacaoFinanceiraAvgAggregateInputType = {
     id?: true
-    contaID?: true
-    valor?: true
-    origemID?: true
+    bancoID?: true
     caixaID?: true
+    contaID?: true
+    categoriaID?: true
+    saldoAtual?: true
+    valor?: true
+    saldoFinal?: true
   }
 
   export type MovimentacaoFinanceiraSumAggregateInputType = {
     id?: true
-    contaID?: true
-    valor?: true
-    origemID?: true
+    bancoID?: true
     caixaID?: true
+    contaID?: true
+    categoriaID?: true
+    saldoAtual?: true
+    valor?: true
+    saldoFinal?: true
   }
 
   export type MovimentacaoFinanceiraMinAggregateInputType = {
     id?: true
-    contaID?: true
-    tipoMovimentacao?: true
-    valor?: true
-    descricao?: true
-    data?: true
-    origem?: true
-    origemID?: true
+    bancoID?: true
     caixaID?: true
+    contaID?: true
+    categoriaID?: true
+    tipoMovimentacao?: true
+    data?: true
+    saldoAtual?: true
+    valor?: true
+    saldoFinal?: true
+    descricao?: true
+    estornadoEm?: true
   }
 
   export type MovimentacaoFinanceiraMaxAggregateInputType = {
     id?: true
-    contaID?: true
-    tipoMovimentacao?: true
-    valor?: true
-    descricao?: true
-    data?: true
-    origem?: true
-    origemID?: true
+    bancoID?: true
     caixaID?: true
+    contaID?: true
+    categoriaID?: true
+    tipoMovimentacao?: true
+    data?: true
+    saldoAtual?: true
+    valor?: true
+    saldoFinal?: true
+    descricao?: true
+    estornadoEm?: true
   }
 
   export type MovimentacaoFinanceiraCountAggregateInputType = {
     id?: true
-    contaID?: true
-    tipoMovimentacao?: true
-    valor?: true
-    descricao?: true
-    data?: true
-    origem?: true
-    origemID?: true
+    bancoID?: true
     caixaID?: true
+    contaID?: true
+    categoriaID?: true
+    tipoMovimentacao?: true
+    data?: true
+    saldoAtual?: true
+    valor?: true
+    saldoFinal?: true
+    descricao?: true
+    estornadoEm?: true
     _all?: true
   }
 
@@ -22652,14 +23119,17 @@ export namespace Prisma {
 
   export type MovimentacaoFinanceiraGroupByOutputType = {
     id: number
-    contaID: number
-    tipoMovimentacao: $Enums.TipoMovimentacao
-    valor: Decimal
-    descricao: string | null
-    data: Date
-    origem: $Enums.TipoOrigem
-    origemID: number | null
+    bancoID: number | null
     caixaID: number
+    contaID: number | null
+    categoriaID: number
+    tipoMovimentacao: $Enums.TipoMovimentacao
+    data: Date
+    saldoAtual: Decimal
+    valor: Decimal
+    saldoFinal: Decimal
+    descricao: string | null
+    estornadoEm: Date | null
     _count: MovimentacaoFinanceiraCountAggregateOutputType | null
     _avg: MovimentacaoFinanceiraAvgAggregateOutputType | null
     _sum: MovimentacaoFinanceiraSumAggregateOutputType | null
@@ -22683,88 +23153,117 @@ export namespace Prisma {
 
   export type MovimentacaoFinanceiraSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    contaID?: boolean
-    tipoMovimentacao?: boolean
-    valor?: boolean
-    descricao?: boolean
-    data?: boolean
-    origem?: boolean
-    origemID?: boolean
+    bancoID?: boolean
     caixaID?: boolean
-    conta?: boolean | ContaDefaultArgs<ExtArgs>
+    contaID?: boolean
+    categoriaID?: boolean
+    tipoMovimentacao?: boolean
+    data?: boolean
+    saldoAtual?: boolean
+    valor?: boolean
+    saldoFinal?: boolean
+    descricao?: boolean
+    estornadoEm?: boolean
+    banco?: boolean | MovimentacaoFinanceira$bancoArgs<ExtArgs>
     caixa?: boolean | LivroCaixaDefaultArgs<ExtArgs>
+    conta?: boolean | MovimentacaoFinanceira$contaArgs<ExtArgs>
+    categoria?: boolean | CategoriaCaixaDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["movimentacaoFinanceira"]>
 
   export type MovimentacaoFinanceiraSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    contaID?: boolean
-    tipoMovimentacao?: boolean
-    valor?: boolean
-    descricao?: boolean
-    data?: boolean
-    origem?: boolean
-    origemID?: boolean
+    bancoID?: boolean
     caixaID?: boolean
-    conta?: boolean | ContaDefaultArgs<ExtArgs>
+    contaID?: boolean
+    categoriaID?: boolean
+    tipoMovimentacao?: boolean
+    data?: boolean
+    saldoAtual?: boolean
+    valor?: boolean
+    saldoFinal?: boolean
+    descricao?: boolean
+    estornadoEm?: boolean
+    banco?: boolean | MovimentacaoFinanceira$bancoArgs<ExtArgs>
     caixa?: boolean | LivroCaixaDefaultArgs<ExtArgs>
+    conta?: boolean | MovimentacaoFinanceira$contaArgs<ExtArgs>
+    categoria?: boolean | CategoriaCaixaDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["movimentacaoFinanceira"]>
 
   export type MovimentacaoFinanceiraSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    contaID?: boolean
-    tipoMovimentacao?: boolean
-    valor?: boolean
-    descricao?: boolean
-    data?: boolean
-    origem?: boolean
-    origemID?: boolean
+    bancoID?: boolean
     caixaID?: boolean
-    conta?: boolean | ContaDefaultArgs<ExtArgs>
+    contaID?: boolean
+    categoriaID?: boolean
+    tipoMovimentacao?: boolean
+    data?: boolean
+    saldoAtual?: boolean
+    valor?: boolean
+    saldoFinal?: boolean
+    descricao?: boolean
+    estornadoEm?: boolean
+    banco?: boolean | MovimentacaoFinanceira$bancoArgs<ExtArgs>
     caixa?: boolean | LivroCaixaDefaultArgs<ExtArgs>
+    conta?: boolean | MovimentacaoFinanceira$contaArgs<ExtArgs>
+    categoria?: boolean | CategoriaCaixaDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["movimentacaoFinanceira"]>
 
   export type MovimentacaoFinanceiraSelectScalar = {
     id?: boolean
-    contaID?: boolean
-    tipoMovimentacao?: boolean
-    valor?: boolean
-    descricao?: boolean
-    data?: boolean
-    origem?: boolean
-    origemID?: boolean
+    bancoID?: boolean
     caixaID?: boolean
+    contaID?: boolean
+    categoriaID?: boolean
+    tipoMovimentacao?: boolean
+    data?: boolean
+    saldoAtual?: boolean
+    valor?: boolean
+    saldoFinal?: boolean
+    descricao?: boolean
+    estornadoEm?: boolean
   }
 
-  export type MovimentacaoFinanceiraOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "contaID" | "tipoMovimentacao" | "valor" | "descricao" | "data" | "origem" | "origemID" | "caixaID", ExtArgs["result"]["movimentacaoFinanceira"]>
+  export type MovimentacaoFinanceiraOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "bancoID" | "caixaID" | "contaID" | "categoriaID" | "tipoMovimentacao" | "data" | "saldoAtual" | "valor" | "saldoFinal" | "descricao" | "estornadoEm", ExtArgs["result"]["movimentacaoFinanceira"]>
   export type MovimentacaoFinanceiraInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    conta?: boolean | ContaDefaultArgs<ExtArgs>
+    banco?: boolean | MovimentacaoFinanceira$bancoArgs<ExtArgs>
     caixa?: boolean | LivroCaixaDefaultArgs<ExtArgs>
+    conta?: boolean | MovimentacaoFinanceira$contaArgs<ExtArgs>
+    categoria?: boolean | CategoriaCaixaDefaultArgs<ExtArgs>
   }
   export type MovimentacaoFinanceiraIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    conta?: boolean | ContaDefaultArgs<ExtArgs>
+    banco?: boolean | MovimentacaoFinanceira$bancoArgs<ExtArgs>
     caixa?: boolean | LivroCaixaDefaultArgs<ExtArgs>
+    conta?: boolean | MovimentacaoFinanceira$contaArgs<ExtArgs>
+    categoria?: boolean | CategoriaCaixaDefaultArgs<ExtArgs>
   }
   export type MovimentacaoFinanceiraIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    conta?: boolean | ContaDefaultArgs<ExtArgs>
+    banco?: boolean | MovimentacaoFinanceira$bancoArgs<ExtArgs>
     caixa?: boolean | LivroCaixaDefaultArgs<ExtArgs>
+    conta?: boolean | MovimentacaoFinanceira$contaArgs<ExtArgs>
+    categoria?: boolean | CategoriaCaixaDefaultArgs<ExtArgs>
   }
 
   export type $MovimentacaoFinanceiraPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "MovimentacaoFinanceira"
     objects: {
-      conta: Prisma.$ContaPayload<ExtArgs>
+      banco: Prisma.$BancoPayload<ExtArgs> | null
       caixa: Prisma.$LivroCaixaPayload<ExtArgs>
+      conta: Prisma.$ContaFinanceiraPayload<ExtArgs> | null
+      categoria: Prisma.$CategoriaCaixaPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
-      contaID: number
-      tipoMovimentacao: $Enums.TipoMovimentacao
-      valor: Prisma.Decimal
-      descricao: string | null
-      data: Date
-      origem: $Enums.TipoOrigem
-      origemID: number | null
+      bancoID: number | null
       caixaID: number
+      contaID: number | null
+      categoriaID: number
+      tipoMovimentacao: $Enums.TipoMovimentacao
+      data: Date
+      saldoAtual: Prisma.Decimal
+      valor: Prisma.Decimal
+      saldoFinal: Prisma.Decimal
+      descricao: string | null
+      estornadoEm: Date | null
     }, ExtArgs["result"]["movimentacaoFinanceira"]>
     composites: {}
   }
@@ -23159,8 +23658,10 @@ export namespace Prisma {
    */
   export interface Prisma__MovimentacaoFinanceiraClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    conta<T extends ContaDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ContaDefaultArgs<ExtArgs>>): Prisma__ContaClient<$Result.GetResult<Prisma.$ContaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    banco<T extends MovimentacaoFinanceira$bancoArgs<ExtArgs> = {}>(args?: Subset<T, MovimentacaoFinanceira$bancoArgs<ExtArgs>>): Prisma__BancoClient<$Result.GetResult<Prisma.$BancoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     caixa<T extends LivroCaixaDefaultArgs<ExtArgs> = {}>(args?: Subset<T, LivroCaixaDefaultArgs<ExtArgs>>): Prisma__LivroCaixaClient<$Result.GetResult<Prisma.$LivroCaixaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    conta<T extends MovimentacaoFinanceira$contaArgs<ExtArgs> = {}>(args?: Subset<T, MovimentacaoFinanceira$contaArgs<ExtArgs>>): Prisma__ContaFinanceiraClient<$Result.GetResult<Prisma.$ContaFinanceiraPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    categoria<T extends CategoriaCaixaDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CategoriaCaixaDefaultArgs<ExtArgs>>): Prisma__CategoriaCaixaClient<$Result.GetResult<Prisma.$CategoriaCaixaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -23191,14 +23692,17 @@ export namespace Prisma {
    */
   interface MovimentacaoFinanceiraFieldRefs {
     readonly id: FieldRef<"MovimentacaoFinanceira", 'Int'>
-    readonly contaID: FieldRef<"MovimentacaoFinanceira", 'Int'>
-    readonly tipoMovimentacao: FieldRef<"MovimentacaoFinanceira", 'TipoMovimentacao'>
-    readonly valor: FieldRef<"MovimentacaoFinanceira", 'Decimal'>
-    readonly descricao: FieldRef<"MovimentacaoFinanceira", 'String'>
-    readonly data: FieldRef<"MovimentacaoFinanceira", 'DateTime'>
-    readonly origem: FieldRef<"MovimentacaoFinanceira", 'TipoOrigem'>
-    readonly origemID: FieldRef<"MovimentacaoFinanceira", 'Int'>
+    readonly bancoID: FieldRef<"MovimentacaoFinanceira", 'Int'>
     readonly caixaID: FieldRef<"MovimentacaoFinanceira", 'Int'>
+    readonly contaID: FieldRef<"MovimentacaoFinanceira", 'Int'>
+    readonly categoriaID: FieldRef<"MovimentacaoFinanceira", 'Int'>
+    readonly tipoMovimentacao: FieldRef<"MovimentacaoFinanceira", 'TipoMovimentacao'>
+    readonly data: FieldRef<"MovimentacaoFinanceira", 'DateTime'>
+    readonly saldoAtual: FieldRef<"MovimentacaoFinanceira", 'Decimal'>
+    readonly valor: FieldRef<"MovimentacaoFinanceira", 'Decimal'>
+    readonly saldoFinal: FieldRef<"MovimentacaoFinanceira", 'Decimal'>
+    readonly descricao: FieldRef<"MovimentacaoFinanceira", 'String'>
+    readonly estornadoEm: FieldRef<"MovimentacaoFinanceira", 'DateTime'>
   }
     
 
@@ -23595,6 +24099,44 @@ export namespace Prisma {
   }
 
   /**
+   * MovimentacaoFinanceira.banco
+   */
+  export type MovimentacaoFinanceira$bancoArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Banco
+     */
+    select?: BancoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Banco
+     */
+    omit?: BancoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BancoInclude<ExtArgs> | null
+    where?: BancoWhereInput
+  }
+
+  /**
+   * MovimentacaoFinanceira.conta
+   */
+  export type MovimentacaoFinanceira$contaArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ContaFinanceira
+     */
+    select?: ContaFinanceiraSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ContaFinanceira
+     */
+    omit?: ContaFinanceiraOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContaFinanceiraInclude<ExtArgs> | null
+    where?: ContaFinanceiraWhereInput
+  }
+
+  /**
    * MovimentacaoFinanceira without action
    */
   export type MovimentacaoFinanceiraDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -23610,6 +24152,1084 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: MovimentacaoFinanceiraInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model CategoriaCaixa
+   */
+
+  export type AggregateCategoriaCaixa = {
+    _count: CategoriaCaixaCountAggregateOutputType | null
+    _avg: CategoriaCaixaAvgAggregateOutputType | null
+    _sum: CategoriaCaixaSumAggregateOutputType | null
+    _min: CategoriaCaixaMinAggregateOutputType | null
+    _max: CategoriaCaixaMaxAggregateOutputType | null
+  }
+
+  export type CategoriaCaixaAvgAggregateOutputType = {
+    id: number | null
+  }
+
+  export type CategoriaCaixaSumAggregateOutputType = {
+    id: number | null
+  }
+
+  export type CategoriaCaixaMinAggregateOutputType = {
+    id: number | null
+    nome: string | null
+    deletedAt: Date | null
+  }
+
+  export type CategoriaCaixaMaxAggregateOutputType = {
+    id: number | null
+    nome: string | null
+    deletedAt: Date | null
+  }
+
+  export type CategoriaCaixaCountAggregateOutputType = {
+    id: number
+    nome: number
+    deletedAt: number
+    _all: number
+  }
+
+
+  export type CategoriaCaixaAvgAggregateInputType = {
+    id?: true
+  }
+
+  export type CategoriaCaixaSumAggregateInputType = {
+    id?: true
+  }
+
+  export type CategoriaCaixaMinAggregateInputType = {
+    id?: true
+    nome?: true
+    deletedAt?: true
+  }
+
+  export type CategoriaCaixaMaxAggregateInputType = {
+    id?: true
+    nome?: true
+    deletedAt?: true
+  }
+
+  export type CategoriaCaixaCountAggregateInputType = {
+    id?: true
+    nome?: true
+    deletedAt?: true
+    _all?: true
+  }
+
+  export type CategoriaCaixaAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CategoriaCaixa to aggregate.
+     */
+    where?: CategoriaCaixaWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CategoriaCaixas to fetch.
+     */
+    orderBy?: CategoriaCaixaOrderByWithRelationInput | CategoriaCaixaOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CategoriaCaixaWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CategoriaCaixas from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CategoriaCaixas.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned CategoriaCaixas
+    **/
+    _count?: true | CategoriaCaixaCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: CategoriaCaixaAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: CategoriaCaixaSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CategoriaCaixaMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CategoriaCaixaMaxAggregateInputType
+  }
+
+  export type GetCategoriaCaixaAggregateType<T extends CategoriaCaixaAggregateArgs> = {
+        [P in keyof T & keyof AggregateCategoriaCaixa]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCategoriaCaixa[P]>
+      : GetScalarType<T[P], AggregateCategoriaCaixa[P]>
+  }
+
+
+
+
+  export type CategoriaCaixaGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CategoriaCaixaWhereInput
+    orderBy?: CategoriaCaixaOrderByWithAggregationInput | CategoriaCaixaOrderByWithAggregationInput[]
+    by: CategoriaCaixaScalarFieldEnum[] | CategoriaCaixaScalarFieldEnum
+    having?: CategoriaCaixaScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CategoriaCaixaCountAggregateInputType | true
+    _avg?: CategoriaCaixaAvgAggregateInputType
+    _sum?: CategoriaCaixaSumAggregateInputType
+    _min?: CategoriaCaixaMinAggregateInputType
+    _max?: CategoriaCaixaMaxAggregateInputType
+  }
+
+  export type CategoriaCaixaGroupByOutputType = {
+    id: number
+    nome: string
+    deletedAt: Date | null
+    _count: CategoriaCaixaCountAggregateOutputType | null
+    _avg: CategoriaCaixaAvgAggregateOutputType | null
+    _sum: CategoriaCaixaSumAggregateOutputType | null
+    _min: CategoriaCaixaMinAggregateOutputType | null
+    _max: CategoriaCaixaMaxAggregateOutputType | null
+  }
+
+  type GetCategoriaCaixaGroupByPayload<T extends CategoriaCaixaGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CategoriaCaixaGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CategoriaCaixaGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CategoriaCaixaGroupByOutputType[P]>
+            : GetScalarType<T[P], CategoriaCaixaGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CategoriaCaixaSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    nome?: boolean
+    deletedAt?: boolean
+    movimentacoes?: boolean | CategoriaCaixa$movimentacoesArgs<ExtArgs>
+    _count?: boolean | CategoriaCaixaCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["categoriaCaixa"]>
+
+  export type CategoriaCaixaSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    nome?: boolean
+    deletedAt?: boolean
+  }, ExtArgs["result"]["categoriaCaixa"]>
+
+  export type CategoriaCaixaSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    nome?: boolean
+    deletedAt?: boolean
+  }, ExtArgs["result"]["categoriaCaixa"]>
+
+  export type CategoriaCaixaSelectScalar = {
+    id?: boolean
+    nome?: boolean
+    deletedAt?: boolean
+  }
+
+  export type CategoriaCaixaOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nome" | "deletedAt", ExtArgs["result"]["categoriaCaixa"]>
+  export type CategoriaCaixaInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    movimentacoes?: boolean | CategoriaCaixa$movimentacoesArgs<ExtArgs>
+    _count?: boolean | CategoriaCaixaCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type CategoriaCaixaIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type CategoriaCaixaIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $CategoriaCaixaPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "CategoriaCaixa"
+    objects: {
+      movimentacoes: Prisma.$MovimentacaoFinanceiraPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      nome: string
+      deletedAt: Date | null
+    }, ExtArgs["result"]["categoriaCaixa"]>
+    composites: {}
+  }
+
+  type CategoriaCaixaGetPayload<S extends boolean | null | undefined | CategoriaCaixaDefaultArgs> = $Result.GetResult<Prisma.$CategoriaCaixaPayload, S>
+
+  type CategoriaCaixaCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<CategoriaCaixaFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: CategoriaCaixaCountAggregateInputType | true
+    }
+
+  export interface CategoriaCaixaDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CategoriaCaixa'], meta: { name: 'CategoriaCaixa' } }
+    /**
+     * Find zero or one CategoriaCaixa that matches the filter.
+     * @param {CategoriaCaixaFindUniqueArgs} args - Arguments to find a CategoriaCaixa
+     * @example
+     * // Get one CategoriaCaixa
+     * const categoriaCaixa = await prisma.categoriaCaixa.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CategoriaCaixaFindUniqueArgs>(args: SelectSubset<T, CategoriaCaixaFindUniqueArgs<ExtArgs>>): Prisma__CategoriaCaixaClient<$Result.GetResult<Prisma.$CategoriaCaixaPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one CategoriaCaixa that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {CategoriaCaixaFindUniqueOrThrowArgs} args - Arguments to find a CategoriaCaixa
+     * @example
+     * // Get one CategoriaCaixa
+     * const categoriaCaixa = await prisma.categoriaCaixa.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CategoriaCaixaFindUniqueOrThrowArgs>(args: SelectSubset<T, CategoriaCaixaFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CategoriaCaixaClient<$Result.GetResult<Prisma.$CategoriaCaixaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CategoriaCaixa that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CategoriaCaixaFindFirstArgs} args - Arguments to find a CategoriaCaixa
+     * @example
+     * // Get one CategoriaCaixa
+     * const categoriaCaixa = await prisma.categoriaCaixa.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CategoriaCaixaFindFirstArgs>(args?: SelectSubset<T, CategoriaCaixaFindFirstArgs<ExtArgs>>): Prisma__CategoriaCaixaClient<$Result.GetResult<Prisma.$CategoriaCaixaPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CategoriaCaixa that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CategoriaCaixaFindFirstOrThrowArgs} args - Arguments to find a CategoriaCaixa
+     * @example
+     * // Get one CategoriaCaixa
+     * const categoriaCaixa = await prisma.categoriaCaixa.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CategoriaCaixaFindFirstOrThrowArgs>(args?: SelectSubset<T, CategoriaCaixaFindFirstOrThrowArgs<ExtArgs>>): Prisma__CategoriaCaixaClient<$Result.GetResult<Prisma.$CategoriaCaixaPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more CategoriaCaixas that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CategoriaCaixaFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all CategoriaCaixas
+     * const categoriaCaixas = await prisma.categoriaCaixa.findMany()
+     * 
+     * // Get first 10 CategoriaCaixas
+     * const categoriaCaixas = await prisma.categoriaCaixa.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const categoriaCaixaWithIdOnly = await prisma.categoriaCaixa.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CategoriaCaixaFindManyArgs>(args?: SelectSubset<T, CategoriaCaixaFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CategoriaCaixaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a CategoriaCaixa.
+     * @param {CategoriaCaixaCreateArgs} args - Arguments to create a CategoriaCaixa.
+     * @example
+     * // Create one CategoriaCaixa
+     * const CategoriaCaixa = await prisma.categoriaCaixa.create({
+     *   data: {
+     *     // ... data to create a CategoriaCaixa
+     *   }
+     * })
+     * 
+     */
+    create<T extends CategoriaCaixaCreateArgs>(args: SelectSubset<T, CategoriaCaixaCreateArgs<ExtArgs>>): Prisma__CategoriaCaixaClient<$Result.GetResult<Prisma.$CategoriaCaixaPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many CategoriaCaixas.
+     * @param {CategoriaCaixaCreateManyArgs} args - Arguments to create many CategoriaCaixas.
+     * @example
+     * // Create many CategoriaCaixas
+     * const categoriaCaixa = await prisma.categoriaCaixa.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CategoriaCaixaCreateManyArgs>(args?: SelectSubset<T, CategoriaCaixaCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many CategoriaCaixas and returns the data saved in the database.
+     * @param {CategoriaCaixaCreateManyAndReturnArgs} args - Arguments to create many CategoriaCaixas.
+     * @example
+     * // Create many CategoriaCaixas
+     * const categoriaCaixa = await prisma.categoriaCaixa.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many CategoriaCaixas and only return the `id`
+     * const categoriaCaixaWithIdOnly = await prisma.categoriaCaixa.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CategoriaCaixaCreateManyAndReturnArgs>(args?: SelectSubset<T, CategoriaCaixaCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CategoriaCaixaPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a CategoriaCaixa.
+     * @param {CategoriaCaixaDeleteArgs} args - Arguments to delete one CategoriaCaixa.
+     * @example
+     * // Delete one CategoriaCaixa
+     * const CategoriaCaixa = await prisma.categoriaCaixa.delete({
+     *   where: {
+     *     // ... filter to delete one CategoriaCaixa
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CategoriaCaixaDeleteArgs>(args: SelectSubset<T, CategoriaCaixaDeleteArgs<ExtArgs>>): Prisma__CategoriaCaixaClient<$Result.GetResult<Prisma.$CategoriaCaixaPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one CategoriaCaixa.
+     * @param {CategoriaCaixaUpdateArgs} args - Arguments to update one CategoriaCaixa.
+     * @example
+     * // Update one CategoriaCaixa
+     * const categoriaCaixa = await prisma.categoriaCaixa.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CategoriaCaixaUpdateArgs>(args: SelectSubset<T, CategoriaCaixaUpdateArgs<ExtArgs>>): Prisma__CategoriaCaixaClient<$Result.GetResult<Prisma.$CategoriaCaixaPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more CategoriaCaixas.
+     * @param {CategoriaCaixaDeleteManyArgs} args - Arguments to filter CategoriaCaixas to delete.
+     * @example
+     * // Delete a few CategoriaCaixas
+     * const { count } = await prisma.categoriaCaixa.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CategoriaCaixaDeleteManyArgs>(args?: SelectSubset<T, CategoriaCaixaDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CategoriaCaixas.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CategoriaCaixaUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many CategoriaCaixas
+     * const categoriaCaixa = await prisma.categoriaCaixa.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CategoriaCaixaUpdateManyArgs>(args: SelectSubset<T, CategoriaCaixaUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CategoriaCaixas and returns the data updated in the database.
+     * @param {CategoriaCaixaUpdateManyAndReturnArgs} args - Arguments to update many CategoriaCaixas.
+     * @example
+     * // Update many CategoriaCaixas
+     * const categoriaCaixa = await prisma.categoriaCaixa.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more CategoriaCaixas and only return the `id`
+     * const categoriaCaixaWithIdOnly = await prisma.categoriaCaixa.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends CategoriaCaixaUpdateManyAndReturnArgs>(args: SelectSubset<T, CategoriaCaixaUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CategoriaCaixaPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one CategoriaCaixa.
+     * @param {CategoriaCaixaUpsertArgs} args - Arguments to update or create a CategoriaCaixa.
+     * @example
+     * // Update or create a CategoriaCaixa
+     * const categoriaCaixa = await prisma.categoriaCaixa.upsert({
+     *   create: {
+     *     // ... data to create a CategoriaCaixa
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the CategoriaCaixa we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CategoriaCaixaUpsertArgs>(args: SelectSubset<T, CategoriaCaixaUpsertArgs<ExtArgs>>): Prisma__CategoriaCaixaClient<$Result.GetResult<Prisma.$CategoriaCaixaPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of CategoriaCaixas.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CategoriaCaixaCountArgs} args - Arguments to filter CategoriaCaixas to count.
+     * @example
+     * // Count the number of CategoriaCaixas
+     * const count = await prisma.categoriaCaixa.count({
+     *   where: {
+     *     // ... the filter for the CategoriaCaixas we want to count
+     *   }
+     * })
+    **/
+    count<T extends CategoriaCaixaCountArgs>(
+      args?: Subset<T, CategoriaCaixaCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CategoriaCaixaCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a CategoriaCaixa.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CategoriaCaixaAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CategoriaCaixaAggregateArgs>(args: Subset<T, CategoriaCaixaAggregateArgs>): Prisma.PrismaPromise<GetCategoriaCaixaAggregateType<T>>
+
+    /**
+     * Group by CategoriaCaixa.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CategoriaCaixaGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CategoriaCaixaGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CategoriaCaixaGroupByArgs['orderBy'] }
+        : { orderBy?: CategoriaCaixaGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CategoriaCaixaGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCategoriaCaixaGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the CategoriaCaixa model
+   */
+  readonly fields: CategoriaCaixaFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for CategoriaCaixa.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CategoriaCaixaClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    movimentacoes<T extends CategoriaCaixa$movimentacoesArgs<ExtArgs> = {}>(args?: Subset<T, CategoriaCaixa$movimentacoesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MovimentacaoFinanceiraPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the CategoriaCaixa model
+   */
+  interface CategoriaCaixaFieldRefs {
+    readonly id: FieldRef<"CategoriaCaixa", 'Int'>
+    readonly nome: FieldRef<"CategoriaCaixa", 'String'>
+    readonly deletedAt: FieldRef<"CategoriaCaixa", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * CategoriaCaixa findUnique
+   */
+  export type CategoriaCaixaFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CategoriaCaixa
+     */
+    select?: CategoriaCaixaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CategoriaCaixa
+     */
+    omit?: CategoriaCaixaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CategoriaCaixaInclude<ExtArgs> | null
+    /**
+     * Filter, which CategoriaCaixa to fetch.
+     */
+    where: CategoriaCaixaWhereUniqueInput
+  }
+
+  /**
+   * CategoriaCaixa findUniqueOrThrow
+   */
+  export type CategoriaCaixaFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CategoriaCaixa
+     */
+    select?: CategoriaCaixaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CategoriaCaixa
+     */
+    omit?: CategoriaCaixaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CategoriaCaixaInclude<ExtArgs> | null
+    /**
+     * Filter, which CategoriaCaixa to fetch.
+     */
+    where: CategoriaCaixaWhereUniqueInput
+  }
+
+  /**
+   * CategoriaCaixa findFirst
+   */
+  export type CategoriaCaixaFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CategoriaCaixa
+     */
+    select?: CategoriaCaixaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CategoriaCaixa
+     */
+    omit?: CategoriaCaixaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CategoriaCaixaInclude<ExtArgs> | null
+    /**
+     * Filter, which CategoriaCaixa to fetch.
+     */
+    where?: CategoriaCaixaWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CategoriaCaixas to fetch.
+     */
+    orderBy?: CategoriaCaixaOrderByWithRelationInput | CategoriaCaixaOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CategoriaCaixas.
+     */
+    cursor?: CategoriaCaixaWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CategoriaCaixas from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CategoriaCaixas.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CategoriaCaixas.
+     */
+    distinct?: CategoriaCaixaScalarFieldEnum | CategoriaCaixaScalarFieldEnum[]
+  }
+
+  /**
+   * CategoriaCaixa findFirstOrThrow
+   */
+  export type CategoriaCaixaFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CategoriaCaixa
+     */
+    select?: CategoriaCaixaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CategoriaCaixa
+     */
+    omit?: CategoriaCaixaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CategoriaCaixaInclude<ExtArgs> | null
+    /**
+     * Filter, which CategoriaCaixa to fetch.
+     */
+    where?: CategoriaCaixaWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CategoriaCaixas to fetch.
+     */
+    orderBy?: CategoriaCaixaOrderByWithRelationInput | CategoriaCaixaOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CategoriaCaixas.
+     */
+    cursor?: CategoriaCaixaWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CategoriaCaixas from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CategoriaCaixas.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CategoriaCaixas.
+     */
+    distinct?: CategoriaCaixaScalarFieldEnum | CategoriaCaixaScalarFieldEnum[]
+  }
+
+  /**
+   * CategoriaCaixa findMany
+   */
+  export type CategoriaCaixaFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CategoriaCaixa
+     */
+    select?: CategoriaCaixaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CategoriaCaixa
+     */
+    omit?: CategoriaCaixaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CategoriaCaixaInclude<ExtArgs> | null
+    /**
+     * Filter, which CategoriaCaixas to fetch.
+     */
+    where?: CategoriaCaixaWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CategoriaCaixas to fetch.
+     */
+    orderBy?: CategoriaCaixaOrderByWithRelationInput | CategoriaCaixaOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing CategoriaCaixas.
+     */
+    cursor?: CategoriaCaixaWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CategoriaCaixas from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CategoriaCaixas.
+     */
+    skip?: number
+    distinct?: CategoriaCaixaScalarFieldEnum | CategoriaCaixaScalarFieldEnum[]
+  }
+
+  /**
+   * CategoriaCaixa create
+   */
+  export type CategoriaCaixaCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CategoriaCaixa
+     */
+    select?: CategoriaCaixaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CategoriaCaixa
+     */
+    omit?: CategoriaCaixaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CategoriaCaixaInclude<ExtArgs> | null
+    /**
+     * The data needed to create a CategoriaCaixa.
+     */
+    data: XOR<CategoriaCaixaCreateInput, CategoriaCaixaUncheckedCreateInput>
+  }
+
+  /**
+   * CategoriaCaixa createMany
+   */
+  export type CategoriaCaixaCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many CategoriaCaixas.
+     */
+    data: CategoriaCaixaCreateManyInput | CategoriaCaixaCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CategoriaCaixa createManyAndReturn
+   */
+  export type CategoriaCaixaCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CategoriaCaixa
+     */
+    select?: CategoriaCaixaSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CategoriaCaixa
+     */
+    omit?: CategoriaCaixaOmit<ExtArgs> | null
+    /**
+     * The data used to create many CategoriaCaixas.
+     */
+    data: CategoriaCaixaCreateManyInput | CategoriaCaixaCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CategoriaCaixa update
+   */
+  export type CategoriaCaixaUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CategoriaCaixa
+     */
+    select?: CategoriaCaixaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CategoriaCaixa
+     */
+    omit?: CategoriaCaixaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CategoriaCaixaInclude<ExtArgs> | null
+    /**
+     * The data needed to update a CategoriaCaixa.
+     */
+    data: XOR<CategoriaCaixaUpdateInput, CategoriaCaixaUncheckedUpdateInput>
+    /**
+     * Choose, which CategoriaCaixa to update.
+     */
+    where: CategoriaCaixaWhereUniqueInput
+  }
+
+  /**
+   * CategoriaCaixa updateMany
+   */
+  export type CategoriaCaixaUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update CategoriaCaixas.
+     */
+    data: XOR<CategoriaCaixaUpdateManyMutationInput, CategoriaCaixaUncheckedUpdateManyInput>
+    /**
+     * Filter which CategoriaCaixas to update
+     */
+    where?: CategoriaCaixaWhereInput
+    /**
+     * Limit how many CategoriaCaixas to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * CategoriaCaixa updateManyAndReturn
+   */
+  export type CategoriaCaixaUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CategoriaCaixa
+     */
+    select?: CategoriaCaixaSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CategoriaCaixa
+     */
+    omit?: CategoriaCaixaOmit<ExtArgs> | null
+    /**
+     * The data used to update CategoriaCaixas.
+     */
+    data: XOR<CategoriaCaixaUpdateManyMutationInput, CategoriaCaixaUncheckedUpdateManyInput>
+    /**
+     * Filter which CategoriaCaixas to update
+     */
+    where?: CategoriaCaixaWhereInput
+    /**
+     * Limit how many CategoriaCaixas to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * CategoriaCaixa upsert
+   */
+  export type CategoriaCaixaUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CategoriaCaixa
+     */
+    select?: CategoriaCaixaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CategoriaCaixa
+     */
+    omit?: CategoriaCaixaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CategoriaCaixaInclude<ExtArgs> | null
+    /**
+     * The filter to search for the CategoriaCaixa to update in case it exists.
+     */
+    where: CategoriaCaixaWhereUniqueInput
+    /**
+     * In case the CategoriaCaixa found by the `where` argument doesn't exist, create a new CategoriaCaixa with this data.
+     */
+    create: XOR<CategoriaCaixaCreateInput, CategoriaCaixaUncheckedCreateInput>
+    /**
+     * In case the CategoriaCaixa was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CategoriaCaixaUpdateInput, CategoriaCaixaUncheckedUpdateInput>
+  }
+
+  /**
+   * CategoriaCaixa delete
+   */
+  export type CategoriaCaixaDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CategoriaCaixa
+     */
+    select?: CategoriaCaixaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CategoriaCaixa
+     */
+    omit?: CategoriaCaixaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CategoriaCaixaInclude<ExtArgs> | null
+    /**
+     * Filter which CategoriaCaixa to delete.
+     */
+    where: CategoriaCaixaWhereUniqueInput
+  }
+
+  /**
+   * CategoriaCaixa deleteMany
+   */
+  export type CategoriaCaixaDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CategoriaCaixas to delete
+     */
+    where?: CategoriaCaixaWhereInput
+    /**
+     * Limit how many CategoriaCaixas to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * CategoriaCaixa.movimentacoes
+   */
+  export type CategoriaCaixa$movimentacoesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MovimentacaoFinanceira
+     */
+    select?: MovimentacaoFinanceiraSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MovimentacaoFinanceira
+     */
+    omit?: MovimentacaoFinanceiraOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MovimentacaoFinanceiraInclude<ExtArgs> | null
+    where?: MovimentacaoFinanceiraWhereInput
+    orderBy?: MovimentacaoFinanceiraOrderByWithRelationInput | MovimentacaoFinanceiraOrderByWithRelationInput[]
+    cursor?: MovimentacaoFinanceiraWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: MovimentacaoFinanceiraScalarFieldEnum | MovimentacaoFinanceiraScalarFieldEnum[]
+  }
+
+  /**
+   * CategoriaCaixa without action
+   */
+  export type CategoriaCaixaDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CategoriaCaixa
+     */
+    select?: CategoriaCaixaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CategoriaCaixa
+     */
+    omit?: CategoriaCaixaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CategoriaCaixaInclude<ExtArgs> | null
   }
 
 
@@ -25930,92 +27550,92 @@ export namespace Prisma {
 
   export type LivroCaixaAvgAggregateOutputType = {
     id: number | null
+    abertoPorID: number | null
     saldoInicial: Decimal | null
     saldoFinal: Decimal | null
-    usuarioID: number | null
   }
 
   export type LivroCaixaSumAggregateOutputType = {
     id: number | null
+    abertoPorID: number | null
     saldoInicial: Decimal | null
     saldoFinal: Decimal | null
-    usuarioID: number | null
   }
 
   export type LivroCaixaMinAggregateOutputType = {
     id: number | null
     dataAbertura: Date | null
     dataFechamento: Date | null
+    abertoPorID: number | null
     saldoInicial: Decimal | null
     saldoFinal: Decimal | null
     status: $Enums.StatusCaixa | null
-    usuarioID: number | null
   }
 
   export type LivroCaixaMaxAggregateOutputType = {
     id: number | null
     dataAbertura: Date | null
     dataFechamento: Date | null
+    abertoPorID: number | null
     saldoInicial: Decimal | null
     saldoFinal: Decimal | null
     status: $Enums.StatusCaixa | null
-    usuarioID: number | null
   }
 
   export type LivroCaixaCountAggregateOutputType = {
     id: number
     dataAbertura: number
     dataFechamento: number
+    abertoPorID: number
     saldoInicial: number
     saldoFinal: number
     status: number
-    usuarioID: number
     _all: number
   }
 
 
   export type LivroCaixaAvgAggregateInputType = {
     id?: true
+    abertoPorID?: true
     saldoInicial?: true
     saldoFinal?: true
-    usuarioID?: true
   }
 
   export type LivroCaixaSumAggregateInputType = {
     id?: true
+    abertoPorID?: true
     saldoInicial?: true
     saldoFinal?: true
-    usuarioID?: true
   }
 
   export type LivroCaixaMinAggregateInputType = {
     id?: true
     dataAbertura?: true
     dataFechamento?: true
+    abertoPorID?: true
     saldoInicial?: true
     saldoFinal?: true
     status?: true
-    usuarioID?: true
   }
 
   export type LivroCaixaMaxAggregateInputType = {
     id?: true
     dataAbertura?: true
     dataFechamento?: true
+    abertoPorID?: true
     saldoInicial?: true
     saldoFinal?: true
     status?: true
-    usuarioID?: true
   }
 
   export type LivroCaixaCountAggregateInputType = {
     id?: true
     dataAbertura?: true
     dataFechamento?: true
+    abertoPorID?: true
     saldoInicial?: true
     saldoFinal?: true
     status?: true
-    usuarioID?: true
     _all?: true
   }
 
@@ -26109,10 +27729,10 @@ export namespace Prisma {
     id: number
     dataAbertura: Date
     dataFechamento: Date | null
+    abertoPorID: number
     saldoInicial: Decimal
-    saldoFinal: Decimal | null
+    saldoFinal: Decimal
     status: $Enums.StatusCaixa
-    usuarioID: number
     _count: LivroCaixaCountAggregateOutputType | null
     _avg: LivroCaixaAvgAggregateOutputType | null
     _sum: LivroCaixaSumAggregateOutputType | null
@@ -26138,12 +27758,13 @@ export namespace Prisma {
     id?: boolean
     dataAbertura?: boolean
     dataFechamento?: boolean
+    abertoPorID?: boolean
     saldoInicial?: boolean
     saldoFinal?: boolean
     status?: boolean
-    usuarioID?: boolean
-    usuario?: boolean | UserDefaultArgs<ExtArgs>
+    abertoPor?: boolean | UserDefaultArgs<ExtArgs>
     movimentacoes?: boolean | LivroCaixa$movimentacoesArgs<ExtArgs>
+    fechamento?: boolean | LivroCaixa$fechamentoArgs<ExtArgs>
     _count?: boolean | LivroCaixaCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["livroCaixa"]>
 
@@ -26151,61 +27772,63 @@ export namespace Prisma {
     id?: boolean
     dataAbertura?: boolean
     dataFechamento?: boolean
+    abertoPorID?: boolean
     saldoInicial?: boolean
     saldoFinal?: boolean
     status?: boolean
-    usuarioID?: boolean
-    usuario?: boolean | UserDefaultArgs<ExtArgs>
+    abertoPor?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["livroCaixa"]>
 
   export type LivroCaixaSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     dataAbertura?: boolean
     dataFechamento?: boolean
+    abertoPorID?: boolean
     saldoInicial?: boolean
     saldoFinal?: boolean
     status?: boolean
-    usuarioID?: boolean
-    usuario?: boolean | UserDefaultArgs<ExtArgs>
+    abertoPor?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["livroCaixa"]>
 
   export type LivroCaixaSelectScalar = {
     id?: boolean
     dataAbertura?: boolean
     dataFechamento?: boolean
+    abertoPorID?: boolean
     saldoInicial?: boolean
     saldoFinal?: boolean
     status?: boolean
-    usuarioID?: boolean
   }
 
-  export type LivroCaixaOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "dataAbertura" | "dataFechamento" | "saldoInicial" | "saldoFinal" | "status" | "usuarioID", ExtArgs["result"]["livroCaixa"]>
+  export type LivroCaixaOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "dataAbertura" | "dataFechamento" | "abertoPorID" | "saldoInicial" | "saldoFinal" | "status", ExtArgs["result"]["livroCaixa"]>
   export type LivroCaixaInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    usuario?: boolean | UserDefaultArgs<ExtArgs>
+    abertoPor?: boolean | UserDefaultArgs<ExtArgs>
     movimentacoes?: boolean | LivroCaixa$movimentacoesArgs<ExtArgs>
+    fechamento?: boolean | LivroCaixa$fechamentoArgs<ExtArgs>
     _count?: boolean | LivroCaixaCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type LivroCaixaIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    usuario?: boolean | UserDefaultArgs<ExtArgs>
+    abertoPor?: boolean | UserDefaultArgs<ExtArgs>
   }
   export type LivroCaixaIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    usuario?: boolean | UserDefaultArgs<ExtArgs>
+    abertoPor?: boolean | UserDefaultArgs<ExtArgs>
   }
 
   export type $LivroCaixaPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "LivroCaixa"
     objects: {
-      usuario: Prisma.$UserPayload<ExtArgs>
+      abertoPor: Prisma.$UserPayload<ExtArgs>
       movimentacoes: Prisma.$MovimentacaoFinanceiraPayload<ExtArgs>[]
+      fechamento: Prisma.$FechamentoPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
       dataAbertura: Date
       dataFechamento: Date | null
+      abertoPorID: number
       saldoInicial: Prisma.Decimal
-      saldoFinal: Prisma.Decimal | null
+      saldoFinal: Prisma.Decimal
       status: $Enums.StatusCaixa
-      usuarioID: number
     }, ExtArgs["result"]["livroCaixa"]>
     composites: {}
   }
@@ -26600,8 +28223,9 @@ export namespace Prisma {
    */
   export interface Prisma__LivroCaixaClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    usuario<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    abertoPor<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     movimentacoes<T extends LivroCaixa$movimentacoesArgs<ExtArgs> = {}>(args?: Subset<T, LivroCaixa$movimentacoesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MovimentacaoFinanceiraPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    fechamento<T extends LivroCaixa$fechamentoArgs<ExtArgs> = {}>(args?: Subset<T, LivroCaixa$fechamentoArgs<ExtArgs>>): Prisma__FechamentoClient<$Result.GetResult<Prisma.$FechamentoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -26634,10 +28258,10 @@ export namespace Prisma {
     readonly id: FieldRef<"LivroCaixa", 'Int'>
     readonly dataAbertura: FieldRef<"LivroCaixa", 'DateTime'>
     readonly dataFechamento: FieldRef<"LivroCaixa", 'DateTime'>
+    readonly abertoPorID: FieldRef<"LivroCaixa", 'Int'>
     readonly saldoInicial: FieldRef<"LivroCaixa", 'Decimal'>
     readonly saldoFinal: FieldRef<"LivroCaixa", 'Decimal'>
     readonly status: FieldRef<"LivroCaixa", 'StatusCaixa'>
-    readonly usuarioID: FieldRef<"LivroCaixa", 'Int'>
   }
     
 
@@ -27058,6 +28682,25 @@ export namespace Prisma {
   }
 
   /**
+   * LivroCaixa.fechamento
+   */
+  export type LivroCaixa$fechamentoArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Fechamento
+     */
+    select?: FechamentoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Fechamento
+     */
+    omit?: FechamentoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FechamentoInclude<ExtArgs> | null
+    where?: FechamentoWhereInput
+  }
+
+  /**
    * LivroCaixa without action
    */
   export type LivroCaixaDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -27073,6 +28716,1403 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: LivroCaixaInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Fechamento
+   */
+
+  export type AggregateFechamento = {
+    _count: FechamentoCountAggregateOutputType | null
+    _avg: FechamentoAvgAggregateOutputType | null
+    _sum: FechamentoSumAggregateOutputType | null
+    _min: FechamentoMinAggregateOutputType | null
+    _max: FechamentoMaxAggregateOutputType | null
+  }
+
+  export type FechamentoAvgAggregateOutputType = {
+    id: number | null
+    caixaID: number | null
+    valor_abertura: Decimal | null
+    valor_abastecimentos: Decimal | null
+    valor_despesas: Decimal | null
+    userID_fechamento: number | null
+    valor_esperado: Decimal | null
+    valor_conferido: Decimal | null
+    valor_diferenca: Decimal | null
+    valor_pago: Decimal | null
+    valor_recebido: Decimal | null
+    valor_total_compras: Decimal | null
+    valor_total_vendas: Decimal | null
+    peso_total_compras: Decimal | null
+    peso_total_vendas: Decimal | null
+    lucro_total: Decimal | null
+    proj_lucro: Decimal | null
+    proj_venda: Decimal | null
+    qnt_compras: Decimal | null
+    qnt_vendas: Decimal | null
+  }
+
+  export type FechamentoSumAggregateOutputType = {
+    id: number | null
+    caixaID: number | null
+    valor_abertura: Decimal | null
+    valor_abastecimentos: Decimal | null
+    valor_despesas: Decimal | null
+    userID_fechamento: number | null
+    valor_esperado: Decimal | null
+    valor_conferido: Decimal | null
+    valor_diferenca: Decimal | null
+    valor_pago: Decimal | null
+    valor_recebido: Decimal | null
+    valor_total_compras: Decimal | null
+    valor_total_vendas: Decimal | null
+    peso_total_compras: Decimal | null
+    peso_total_vendas: Decimal | null
+    lucro_total: Decimal | null
+    proj_lucro: Decimal | null
+    proj_venda: Decimal | null
+    qnt_compras: Decimal | null
+    qnt_vendas: Decimal | null
+  }
+
+  export type FechamentoMinAggregateOutputType = {
+    id: number | null
+    caixaID: number | null
+    valor_abertura: Decimal | null
+    valor_abastecimentos: Decimal | null
+    valor_despesas: Decimal | null
+    data_abertura: Date | null
+    data_fechamento: Date | null
+    userID_fechamento: number | null
+    valor_esperado: Decimal | null
+    valor_conferido: Decimal | null
+    valor_diferenca: Decimal | null
+    valor_pago: Decimal | null
+    valor_recebido: Decimal | null
+    valor_total_compras: Decimal | null
+    valor_total_vendas: Decimal | null
+    peso_total_compras: Decimal | null
+    peso_total_vendas: Decimal | null
+    lucro_total: Decimal | null
+    proj_lucro: Decimal | null
+    proj_venda: Decimal | null
+    qnt_compras: Decimal | null
+    qnt_vendas: Decimal | null
+  }
+
+  export type FechamentoMaxAggregateOutputType = {
+    id: number | null
+    caixaID: number | null
+    valor_abertura: Decimal | null
+    valor_abastecimentos: Decimal | null
+    valor_despesas: Decimal | null
+    data_abertura: Date | null
+    data_fechamento: Date | null
+    userID_fechamento: number | null
+    valor_esperado: Decimal | null
+    valor_conferido: Decimal | null
+    valor_diferenca: Decimal | null
+    valor_pago: Decimal | null
+    valor_recebido: Decimal | null
+    valor_total_compras: Decimal | null
+    valor_total_vendas: Decimal | null
+    peso_total_compras: Decimal | null
+    peso_total_vendas: Decimal | null
+    lucro_total: Decimal | null
+    proj_lucro: Decimal | null
+    proj_venda: Decimal | null
+    qnt_compras: Decimal | null
+    qnt_vendas: Decimal | null
+  }
+
+  export type FechamentoCountAggregateOutputType = {
+    id: number
+    caixaID: number
+    valor_abertura: number
+    valor_abastecimentos: number
+    valor_despesas: number
+    data_abertura: number
+    data_fechamento: number
+    userID_fechamento: number
+    valor_esperado: number
+    valor_conferido: number
+    valor_diferenca: number
+    valor_pago: number
+    valor_recebido: number
+    valor_total_compras: number
+    valor_total_vendas: number
+    peso_total_compras: number
+    peso_total_vendas: number
+    lucro_total: number
+    proj_lucro: number
+    proj_venda: number
+    qnt_compras: number
+    qnt_vendas: number
+    _all: number
+  }
+
+
+  export type FechamentoAvgAggregateInputType = {
+    id?: true
+    caixaID?: true
+    valor_abertura?: true
+    valor_abastecimentos?: true
+    valor_despesas?: true
+    userID_fechamento?: true
+    valor_esperado?: true
+    valor_conferido?: true
+    valor_diferenca?: true
+    valor_pago?: true
+    valor_recebido?: true
+    valor_total_compras?: true
+    valor_total_vendas?: true
+    peso_total_compras?: true
+    peso_total_vendas?: true
+    lucro_total?: true
+    proj_lucro?: true
+    proj_venda?: true
+    qnt_compras?: true
+    qnt_vendas?: true
+  }
+
+  export type FechamentoSumAggregateInputType = {
+    id?: true
+    caixaID?: true
+    valor_abertura?: true
+    valor_abastecimentos?: true
+    valor_despesas?: true
+    userID_fechamento?: true
+    valor_esperado?: true
+    valor_conferido?: true
+    valor_diferenca?: true
+    valor_pago?: true
+    valor_recebido?: true
+    valor_total_compras?: true
+    valor_total_vendas?: true
+    peso_total_compras?: true
+    peso_total_vendas?: true
+    lucro_total?: true
+    proj_lucro?: true
+    proj_venda?: true
+    qnt_compras?: true
+    qnt_vendas?: true
+  }
+
+  export type FechamentoMinAggregateInputType = {
+    id?: true
+    caixaID?: true
+    valor_abertura?: true
+    valor_abastecimentos?: true
+    valor_despesas?: true
+    data_abertura?: true
+    data_fechamento?: true
+    userID_fechamento?: true
+    valor_esperado?: true
+    valor_conferido?: true
+    valor_diferenca?: true
+    valor_pago?: true
+    valor_recebido?: true
+    valor_total_compras?: true
+    valor_total_vendas?: true
+    peso_total_compras?: true
+    peso_total_vendas?: true
+    lucro_total?: true
+    proj_lucro?: true
+    proj_venda?: true
+    qnt_compras?: true
+    qnt_vendas?: true
+  }
+
+  export type FechamentoMaxAggregateInputType = {
+    id?: true
+    caixaID?: true
+    valor_abertura?: true
+    valor_abastecimentos?: true
+    valor_despesas?: true
+    data_abertura?: true
+    data_fechamento?: true
+    userID_fechamento?: true
+    valor_esperado?: true
+    valor_conferido?: true
+    valor_diferenca?: true
+    valor_pago?: true
+    valor_recebido?: true
+    valor_total_compras?: true
+    valor_total_vendas?: true
+    peso_total_compras?: true
+    peso_total_vendas?: true
+    lucro_total?: true
+    proj_lucro?: true
+    proj_venda?: true
+    qnt_compras?: true
+    qnt_vendas?: true
+  }
+
+  export type FechamentoCountAggregateInputType = {
+    id?: true
+    caixaID?: true
+    valor_abertura?: true
+    valor_abastecimentos?: true
+    valor_despesas?: true
+    data_abertura?: true
+    data_fechamento?: true
+    userID_fechamento?: true
+    valor_esperado?: true
+    valor_conferido?: true
+    valor_diferenca?: true
+    valor_pago?: true
+    valor_recebido?: true
+    valor_total_compras?: true
+    valor_total_vendas?: true
+    peso_total_compras?: true
+    peso_total_vendas?: true
+    lucro_total?: true
+    proj_lucro?: true
+    proj_venda?: true
+    qnt_compras?: true
+    qnt_vendas?: true
+    _all?: true
+  }
+
+  export type FechamentoAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Fechamento to aggregate.
+     */
+    where?: FechamentoWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Fechamentos to fetch.
+     */
+    orderBy?: FechamentoOrderByWithRelationInput | FechamentoOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: FechamentoWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Fechamentos from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Fechamentos.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Fechamentos
+    **/
+    _count?: true | FechamentoCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: FechamentoAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: FechamentoSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: FechamentoMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: FechamentoMaxAggregateInputType
+  }
+
+  export type GetFechamentoAggregateType<T extends FechamentoAggregateArgs> = {
+        [P in keyof T & keyof AggregateFechamento]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateFechamento[P]>
+      : GetScalarType<T[P], AggregateFechamento[P]>
+  }
+
+
+
+
+  export type FechamentoGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FechamentoWhereInput
+    orderBy?: FechamentoOrderByWithAggregationInput | FechamentoOrderByWithAggregationInput[]
+    by: FechamentoScalarFieldEnum[] | FechamentoScalarFieldEnum
+    having?: FechamentoScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: FechamentoCountAggregateInputType | true
+    _avg?: FechamentoAvgAggregateInputType
+    _sum?: FechamentoSumAggregateInputType
+    _min?: FechamentoMinAggregateInputType
+    _max?: FechamentoMaxAggregateInputType
+  }
+
+  export type FechamentoGroupByOutputType = {
+    id: number
+    caixaID: number
+    valor_abertura: Decimal
+    valor_abastecimentos: Decimal
+    valor_despesas: Decimal
+    data_abertura: Date
+    data_fechamento: Date
+    userID_fechamento: number
+    valor_esperado: Decimal
+    valor_conferido: Decimal
+    valor_diferenca: Decimal | null
+    valor_pago: Decimal
+    valor_recebido: Decimal
+    valor_total_compras: Decimal
+    valor_total_vendas: Decimal
+    peso_total_compras: Decimal
+    peso_total_vendas: Decimal
+    lucro_total: Decimal
+    proj_lucro: Decimal
+    proj_venda: Decimal
+    qnt_compras: Decimal
+    qnt_vendas: Decimal
+    _count: FechamentoCountAggregateOutputType | null
+    _avg: FechamentoAvgAggregateOutputType | null
+    _sum: FechamentoSumAggregateOutputType | null
+    _min: FechamentoMinAggregateOutputType | null
+    _max: FechamentoMaxAggregateOutputType | null
+  }
+
+  type GetFechamentoGroupByPayload<T extends FechamentoGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<FechamentoGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof FechamentoGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], FechamentoGroupByOutputType[P]>
+            : GetScalarType<T[P], FechamentoGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type FechamentoSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    caixaID?: boolean
+    valor_abertura?: boolean
+    valor_abastecimentos?: boolean
+    valor_despesas?: boolean
+    data_abertura?: boolean
+    data_fechamento?: boolean
+    userID_fechamento?: boolean
+    valor_esperado?: boolean
+    valor_conferido?: boolean
+    valor_diferenca?: boolean
+    valor_pago?: boolean
+    valor_recebido?: boolean
+    valor_total_compras?: boolean
+    valor_total_vendas?: boolean
+    peso_total_compras?: boolean
+    peso_total_vendas?: boolean
+    lucro_total?: boolean
+    proj_lucro?: boolean
+    proj_venda?: boolean
+    qnt_compras?: boolean
+    qnt_vendas?: boolean
+    caixa?: boolean | LivroCaixaDefaultArgs<ExtArgs>
+    user_fechamento?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["fechamento"]>
+
+  export type FechamentoSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    caixaID?: boolean
+    valor_abertura?: boolean
+    valor_abastecimentos?: boolean
+    valor_despesas?: boolean
+    data_abertura?: boolean
+    data_fechamento?: boolean
+    userID_fechamento?: boolean
+    valor_esperado?: boolean
+    valor_conferido?: boolean
+    valor_diferenca?: boolean
+    valor_pago?: boolean
+    valor_recebido?: boolean
+    valor_total_compras?: boolean
+    valor_total_vendas?: boolean
+    peso_total_compras?: boolean
+    peso_total_vendas?: boolean
+    lucro_total?: boolean
+    proj_lucro?: boolean
+    proj_venda?: boolean
+    qnt_compras?: boolean
+    qnt_vendas?: boolean
+    caixa?: boolean | LivroCaixaDefaultArgs<ExtArgs>
+    user_fechamento?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["fechamento"]>
+
+  export type FechamentoSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    caixaID?: boolean
+    valor_abertura?: boolean
+    valor_abastecimentos?: boolean
+    valor_despesas?: boolean
+    data_abertura?: boolean
+    data_fechamento?: boolean
+    userID_fechamento?: boolean
+    valor_esperado?: boolean
+    valor_conferido?: boolean
+    valor_diferenca?: boolean
+    valor_pago?: boolean
+    valor_recebido?: boolean
+    valor_total_compras?: boolean
+    valor_total_vendas?: boolean
+    peso_total_compras?: boolean
+    peso_total_vendas?: boolean
+    lucro_total?: boolean
+    proj_lucro?: boolean
+    proj_venda?: boolean
+    qnt_compras?: boolean
+    qnt_vendas?: boolean
+    caixa?: boolean | LivroCaixaDefaultArgs<ExtArgs>
+    user_fechamento?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["fechamento"]>
+
+  export type FechamentoSelectScalar = {
+    id?: boolean
+    caixaID?: boolean
+    valor_abertura?: boolean
+    valor_abastecimentos?: boolean
+    valor_despesas?: boolean
+    data_abertura?: boolean
+    data_fechamento?: boolean
+    userID_fechamento?: boolean
+    valor_esperado?: boolean
+    valor_conferido?: boolean
+    valor_diferenca?: boolean
+    valor_pago?: boolean
+    valor_recebido?: boolean
+    valor_total_compras?: boolean
+    valor_total_vendas?: boolean
+    peso_total_compras?: boolean
+    peso_total_vendas?: boolean
+    lucro_total?: boolean
+    proj_lucro?: boolean
+    proj_venda?: boolean
+    qnt_compras?: boolean
+    qnt_vendas?: boolean
+  }
+
+  export type FechamentoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "caixaID" | "valor_abertura" | "valor_abastecimentos" | "valor_despesas" | "data_abertura" | "data_fechamento" | "userID_fechamento" | "valor_esperado" | "valor_conferido" | "valor_diferenca" | "valor_pago" | "valor_recebido" | "valor_total_compras" | "valor_total_vendas" | "peso_total_compras" | "peso_total_vendas" | "lucro_total" | "proj_lucro" | "proj_venda" | "qnt_compras" | "qnt_vendas", ExtArgs["result"]["fechamento"]>
+  export type FechamentoInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    caixa?: boolean | LivroCaixaDefaultArgs<ExtArgs>
+    user_fechamento?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type FechamentoIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    caixa?: boolean | LivroCaixaDefaultArgs<ExtArgs>
+    user_fechamento?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type FechamentoIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    caixa?: boolean | LivroCaixaDefaultArgs<ExtArgs>
+    user_fechamento?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $FechamentoPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Fechamento"
+    objects: {
+      caixa: Prisma.$LivroCaixaPayload<ExtArgs>
+      user_fechamento: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      caixaID: number
+      valor_abertura: Prisma.Decimal
+      valor_abastecimentos: Prisma.Decimal
+      valor_despesas: Prisma.Decimal
+      data_abertura: Date
+      data_fechamento: Date
+      userID_fechamento: number
+      valor_esperado: Prisma.Decimal
+      valor_conferido: Prisma.Decimal
+      valor_diferenca: Prisma.Decimal | null
+      valor_pago: Prisma.Decimal
+      valor_recebido: Prisma.Decimal
+      valor_total_compras: Prisma.Decimal
+      valor_total_vendas: Prisma.Decimal
+      peso_total_compras: Prisma.Decimal
+      peso_total_vendas: Prisma.Decimal
+      lucro_total: Prisma.Decimal
+      proj_lucro: Prisma.Decimal
+      proj_venda: Prisma.Decimal
+      qnt_compras: Prisma.Decimal
+      qnt_vendas: Prisma.Decimal
+    }, ExtArgs["result"]["fechamento"]>
+    composites: {}
+  }
+
+  type FechamentoGetPayload<S extends boolean | null | undefined | FechamentoDefaultArgs> = $Result.GetResult<Prisma.$FechamentoPayload, S>
+
+  type FechamentoCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<FechamentoFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: FechamentoCountAggregateInputType | true
+    }
+
+  export interface FechamentoDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Fechamento'], meta: { name: 'Fechamento' } }
+    /**
+     * Find zero or one Fechamento that matches the filter.
+     * @param {FechamentoFindUniqueArgs} args - Arguments to find a Fechamento
+     * @example
+     * // Get one Fechamento
+     * const fechamento = await prisma.fechamento.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends FechamentoFindUniqueArgs>(args: SelectSubset<T, FechamentoFindUniqueArgs<ExtArgs>>): Prisma__FechamentoClient<$Result.GetResult<Prisma.$FechamentoPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Fechamento that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {FechamentoFindUniqueOrThrowArgs} args - Arguments to find a Fechamento
+     * @example
+     * // Get one Fechamento
+     * const fechamento = await prisma.fechamento.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends FechamentoFindUniqueOrThrowArgs>(args: SelectSubset<T, FechamentoFindUniqueOrThrowArgs<ExtArgs>>): Prisma__FechamentoClient<$Result.GetResult<Prisma.$FechamentoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Fechamento that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FechamentoFindFirstArgs} args - Arguments to find a Fechamento
+     * @example
+     * // Get one Fechamento
+     * const fechamento = await prisma.fechamento.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends FechamentoFindFirstArgs>(args?: SelectSubset<T, FechamentoFindFirstArgs<ExtArgs>>): Prisma__FechamentoClient<$Result.GetResult<Prisma.$FechamentoPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Fechamento that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FechamentoFindFirstOrThrowArgs} args - Arguments to find a Fechamento
+     * @example
+     * // Get one Fechamento
+     * const fechamento = await prisma.fechamento.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends FechamentoFindFirstOrThrowArgs>(args?: SelectSubset<T, FechamentoFindFirstOrThrowArgs<ExtArgs>>): Prisma__FechamentoClient<$Result.GetResult<Prisma.$FechamentoPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Fechamentos that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FechamentoFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Fechamentos
+     * const fechamentos = await prisma.fechamento.findMany()
+     * 
+     * // Get first 10 Fechamentos
+     * const fechamentos = await prisma.fechamento.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const fechamentoWithIdOnly = await prisma.fechamento.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends FechamentoFindManyArgs>(args?: SelectSubset<T, FechamentoFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FechamentoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Fechamento.
+     * @param {FechamentoCreateArgs} args - Arguments to create a Fechamento.
+     * @example
+     * // Create one Fechamento
+     * const Fechamento = await prisma.fechamento.create({
+     *   data: {
+     *     // ... data to create a Fechamento
+     *   }
+     * })
+     * 
+     */
+    create<T extends FechamentoCreateArgs>(args: SelectSubset<T, FechamentoCreateArgs<ExtArgs>>): Prisma__FechamentoClient<$Result.GetResult<Prisma.$FechamentoPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Fechamentos.
+     * @param {FechamentoCreateManyArgs} args - Arguments to create many Fechamentos.
+     * @example
+     * // Create many Fechamentos
+     * const fechamento = await prisma.fechamento.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends FechamentoCreateManyArgs>(args?: SelectSubset<T, FechamentoCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Fechamentos and returns the data saved in the database.
+     * @param {FechamentoCreateManyAndReturnArgs} args - Arguments to create many Fechamentos.
+     * @example
+     * // Create many Fechamentos
+     * const fechamento = await prisma.fechamento.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Fechamentos and only return the `id`
+     * const fechamentoWithIdOnly = await prisma.fechamento.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends FechamentoCreateManyAndReturnArgs>(args?: SelectSubset<T, FechamentoCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FechamentoPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Fechamento.
+     * @param {FechamentoDeleteArgs} args - Arguments to delete one Fechamento.
+     * @example
+     * // Delete one Fechamento
+     * const Fechamento = await prisma.fechamento.delete({
+     *   where: {
+     *     // ... filter to delete one Fechamento
+     *   }
+     * })
+     * 
+     */
+    delete<T extends FechamentoDeleteArgs>(args: SelectSubset<T, FechamentoDeleteArgs<ExtArgs>>): Prisma__FechamentoClient<$Result.GetResult<Prisma.$FechamentoPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Fechamento.
+     * @param {FechamentoUpdateArgs} args - Arguments to update one Fechamento.
+     * @example
+     * // Update one Fechamento
+     * const fechamento = await prisma.fechamento.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends FechamentoUpdateArgs>(args: SelectSubset<T, FechamentoUpdateArgs<ExtArgs>>): Prisma__FechamentoClient<$Result.GetResult<Prisma.$FechamentoPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Fechamentos.
+     * @param {FechamentoDeleteManyArgs} args - Arguments to filter Fechamentos to delete.
+     * @example
+     * // Delete a few Fechamentos
+     * const { count } = await prisma.fechamento.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends FechamentoDeleteManyArgs>(args?: SelectSubset<T, FechamentoDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Fechamentos.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FechamentoUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Fechamentos
+     * const fechamento = await prisma.fechamento.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends FechamentoUpdateManyArgs>(args: SelectSubset<T, FechamentoUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Fechamentos and returns the data updated in the database.
+     * @param {FechamentoUpdateManyAndReturnArgs} args - Arguments to update many Fechamentos.
+     * @example
+     * // Update many Fechamentos
+     * const fechamento = await prisma.fechamento.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Fechamentos and only return the `id`
+     * const fechamentoWithIdOnly = await prisma.fechamento.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends FechamentoUpdateManyAndReturnArgs>(args: SelectSubset<T, FechamentoUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FechamentoPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Fechamento.
+     * @param {FechamentoUpsertArgs} args - Arguments to update or create a Fechamento.
+     * @example
+     * // Update or create a Fechamento
+     * const fechamento = await prisma.fechamento.upsert({
+     *   create: {
+     *     // ... data to create a Fechamento
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Fechamento we want to update
+     *   }
+     * })
+     */
+    upsert<T extends FechamentoUpsertArgs>(args: SelectSubset<T, FechamentoUpsertArgs<ExtArgs>>): Prisma__FechamentoClient<$Result.GetResult<Prisma.$FechamentoPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Fechamentos.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FechamentoCountArgs} args - Arguments to filter Fechamentos to count.
+     * @example
+     * // Count the number of Fechamentos
+     * const count = await prisma.fechamento.count({
+     *   where: {
+     *     // ... the filter for the Fechamentos we want to count
+     *   }
+     * })
+    **/
+    count<T extends FechamentoCountArgs>(
+      args?: Subset<T, FechamentoCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], FechamentoCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Fechamento.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FechamentoAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends FechamentoAggregateArgs>(args: Subset<T, FechamentoAggregateArgs>): Prisma.PrismaPromise<GetFechamentoAggregateType<T>>
+
+    /**
+     * Group by Fechamento.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FechamentoGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends FechamentoGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: FechamentoGroupByArgs['orderBy'] }
+        : { orderBy?: FechamentoGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, FechamentoGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetFechamentoGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Fechamento model
+   */
+  readonly fields: FechamentoFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Fechamento.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__FechamentoClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    caixa<T extends LivroCaixaDefaultArgs<ExtArgs> = {}>(args?: Subset<T, LivroCaixaDefaultArgs<ExtArgs>>): Prisma__LivroCaixaClient<$Result.GetResult<Prisma.$LivroCaixaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    user_fechamento<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Fechamento model
+   */
+  interface FechamentoFieldRefs {
+    readonly id: FieldRef<"Fechamento", 'Int'>
+    readonly caixaID: FieldRef<"Fechamento", 'Int'>
+    readonly valor_abertura: FieldRef<"Fechamento", 'Decimal'>
+    readonly valor_abastecimentos: FieldRef<"Fechamento", 'Decimal'>
+    readonly valor_despesas: FieldRef<"Fechamento", 'Decimal'>
+    readonly data_abertura: FieldRef<"Fechamento", 'DateTime'>
+    readonly data_fechamento: FieldRef<"Fechamento", 'DateTime'>
+    readonly userID_fechamento: FieldRef<"Fechamento", 'Int'>
+    readonly valor_esperado: FieldRef<"Fechamento", 'Decimal'>
+    readonly valor_conferido: FieldRef<"Fechamento", 'Decimal'>
+    readonly valor_diferenca: FieldRef<"Fechamento", 'Decimal'>
+    readonly valor_pago: FieldRef<"Fechamento", 'Decimal'>
+    readonly valor_recebido: FieldRef<"Fechamento", 'Decimal'>
+    readonly valor_total_compras: FieldRef<"Fechamento", 'Decimal'>
+    readonly valor_total_vendas: FieldRef<"Fechamento", 'Decimal'>
+    readonly peso_total_compras: FieldRef<"Fechamento", 'Decimal'>
+    readonly peso_total_vendas: FieldRef<"Fechamento", 'Decimal'>
+    readonly lucro_total: FieldRef<"Fechamento", 'Decimal'>
+    readonly proj_lucro: FieldRef<"Fechamento", 'Decimal'>
+    readonly proj_venda: FieldRef<"Fechamento", 'Decimal'>
+    readonly qnt_compras: FieldRef<"Fechamento", 'Decimal'>
+    readonly qnt_vendas: FieldRef<"Fechamento", 'Decimal'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Fechamento findUnique
+   */
+  export type FechamentoFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Fechamento
+     */
+    select?: FechamentoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Fechamento
+     */
+    omit?: FechamentoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FechamentoInclude<ExtArgs> | null
+    /**
+     * Filter, which Fechamento to fetch.
+     */
+    where: FechamentoWhereUniqueInput
+  }
+
+  /**
+   * Fechamento findUniqueOrThrow
+   */
+  export type FechamentoFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Fechamento
+     */
+    select?: FechamentoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Fechamento
+     */
+    omit?: FechamentoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FechamentoInclude<ExtArgs> | null
+    /**
+     * Filter, which Fechamento to fetch.
+     */
+    where: FechamentoWhereUniqueInput
+  }
+
+  /**
+   * Fechamento findFirst
+   */
+  export type FechamentoFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Fechamento
+     */
+    select?: FechamentoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Fechamento
+     */
+    omit?: FechamentoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FechamentoInclude<ExtArgs> | null
+    /**
+     * Filter, which Fechamento to fetch.
+     */
+    where?: FechamentoWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Fechamentos to fetch.
+     */
+    orderBy?: FechamentoOrderByWithRelationInput | FechamentoOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Fechamentos.
+     */
+    cursor?: FechamentoWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Fechamentos from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Fechamentos.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Fechamentos.
+     */
+    distinct?: FechamentoScalarFieldEnum | FechamentoScalarFieldEnum[]
+  }
+
+  /**
+   * Fechamento findFirstOrThrow
+   */
+  export type FechamentoFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Fechamento
+     */
+    select?: FechamentoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Fechamento
+     */
+    omit?: FechamentoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FechamentoInclude<ExtArgs> | null
+    /**
+     * Filter, which Fechamento to fetch.
+     */
+    where?: FechamentoWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Fechamentos to fetch.
+     */
+    orderBy?: FechamentoOrderByWithRelationInput | FechamentoOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Fechamentos.
+     */
+    cursor?: FechamentoWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Fechamentos from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Fechamentos.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Fechamentos.
+     */
+    distinct?: FechamentoScalarFieldEnum | FechamentoScalarFieldEnum[]
+  }
+
+  /**
+   * Fechamento findMany
+   */
+  export type FechamentoFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Fechamento
+     */
+    select?: FechamentoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Fechamento
+     */
+    omit?: FechamentoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FechamentoInclude<ExtArgs> | null
+    /**
+     * Filter, which Fechamentos to fetch.
+     */
+    where?: FechamentoWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Fechamentos to fetch.
+     */
+    orderBy?: FechamentoOrderByWithRelationInput | FechamentoOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Fechamentos.
+     */
+    cursor?: FechamentoWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Fechamentos from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Fechamentos.
+     */
+    skip?: number
+    distinct?: FechamentoScalarFieldEnum | FechamentoScalarFieldEnum[]
+  }
+
+  /**
+   * Fechamento create
+   */
+  export type FechamentoCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Fechamento
+     */
+    select?: FechamentoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Fechamento
+     */
+    omit?: FechamentoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FechamentoInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Fechamento.
+     */
+    data: XOR<FechamentoCreateInput, FechamentoUncheckedCreateInput>
+  }
+
+  /**
+   * Fechamento createMany
+   */
+  export type FechamentoCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Fechamentos.
+     */
+    data: FechamentoCreateManyInput | FechamentoCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Fechamento createManyAndReturn
+   */
+  export type FechamentoCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Fechamento
+     */
+    select?: FechamentoSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Fechamento
+     */
+    omit?: FechamentoOmit<ExtArgs> | null
+    /**
+     * The data used to create many Fechamentos.
+     */
+    data: FechamentoCreateManyInput | FechamentoCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FechamentoIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Fechamento update
+   */
+  export type FechamentoUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Fechamento
+     */
+    select?: FechamentoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Fechamento
+     */
+    omit?: FechamentoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FechamentoInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Fechamento.
+     */
+    data: XOR<FechamentoUpdateInput, FechamentoUncheckedUpdateInput>
+    /**
+     * Choose, which Fechamento to update.
+     */
+    where: FechamentoWhereUniqueInput
+  }
+
+  /**
+   * Fechamento updateMany
+   */
+  export type FechamentoUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Fechamentos.
+     */
+    data: XOR<FechamentoUpdateManyMutationInput, FechamentoUncheckedUpdateManyInput>
+    /**
+     * Filter which Fechamentos to update
+     */
+    where?: FechamentoWhereInput
+    /**
+     * Limit how many Fechamentos to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Fechamento updateManyAndReturn
+   */
+  export type FechamentoUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Fechamento
+     */
+    select?: FechamentoSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Fechamento
+     */
+    omit?: FechamentoOmit<ExtArgs> | null
+    /**
+     * The data used to update Fechamentos.
+     */
+    data: XOR<FechamentoUpdateManyMutationInput, FechamentoUncheckedUpdateManyInput>
+    /**
+     * Filter which Fechamentos to update
+     */
+    where?: FechamentoWhereInput
+    /**
+     * Limit how many Fechamentos to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FechamentoIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Fechamento upsert
+   */
+  export type FechamentoUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Fechamento
+     */
+    select?: FechamentoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Fechamento
+     */
+    omit?: FechamentoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FechamentoInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Fechamento to update in case it exists.
+     */
+    where: FechamentoWhereUniqueInput
+    /**
+     * In case the Fechamento found by the `where` argument doesn't exist, create a new Fechamento with this data.
+     */
+    create: XOR<FechamentoCreateInput, FechamentoUncheckedCreateInput>
+    /**
+     * In case the Fechamento was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<FechamentoUpdateInput, FechamentoUncheckedUpdateInput>
+  }
+
+  /**
+   * Fechamento delete
+   */
+  export type FechamentoDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Fechamento
+     */
+    select?: FechamentoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Fechamento
+     */
+    omit?: FechamentoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FechamentoInclude<ExtArgs> | null
+    /**
+     * Filter which Fechamento to delete.
+     */
+    where: FechamentoWhereUniqueInput
+  }
+
+  /**
+   * Fechamento deleteMany
+   */
+  export type FechamentoDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Fechamentos to delete
+     */
+    where?: FechamentoWhereInput
+    /**
+     * Limit how many Fechamentos to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Fechamento without action
+   */
+  export type FechamentoDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Fechamento
+     */
+    select?: FechamentoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Fechamento
+     */
+    omit?: FechamentoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FechamentoInclude<ExtArgs> | null
   }
 
 
@@ -27262,39 +30302,57 @@ export namespace Prisma {
   export type PedidoScalarFieldEnum = (typeof PedidoScalarFieldEnum)[keyof typeof PedidoScalarFieldEnum]
 
 
-  export const PagamentoScalarFieldEnum: {
+  export const ContaFinanceiraScalarFieldEnum: {
     id: 'id',
+    tipo: 'tipo',
     pedidoID: 'pedidoID',
+    registroID: 'registroID',
+    descricao: 'descricao',
     valor: 'valor',
+    data_documento: 'data_documento',
+    data_vencimento: 'data_vencimento',
+    data_pagamento: 'data_pagamento',
     forma: 'forma',
     data: 'data'
   };
 
-  export type PagamentoScalarFieldEnum = (typeof PagamentoScalarFieldEnum)[keyof typeof PagamentoScalarFieldEnum]
+  export type ContaFinanceiraScalarFieldEnum = (typeof ContaFinanceiraScalarFieldEnum)[keyof typeof ContaFinanceiraScalarFieldEnum]
 
 
-  export const ContaScalarFieldEnum: {
+  export const BancoScalarFieldEnum: {
     id: 'id',
     nome: 'nome',
     saldo: 'saldo'
   };
 
-  export type ContaScalarFieldEnum = (typeof ContaScalarFieldEnum)[keyof typeof ContaScalarFieldEnum]
+  export type BancoScalarFieldEnum = (typeof BancoScalarFieldEnum)[keyof typeof BancoScalarFieldEnum]
 
 
   export const MovimentacaoFinanceiraScalarFieldEnum: {
     id: 'id',
+    bancoID: 'bancoID',
+    caixaID: 'caixaID',
     contaID: 'contaID',
+    categoriaID: 'categoriaID',
     tipoMovimentacao: 'tipoMovimentacao',
-    valor: 'valor',
-    descricao: 'descricao',
     data: 'data',
-    origem: 'origem',
-    origemID: 'origemID',
-    caixaID: 'caixaID'
+    saldoAtual: 'saldoAtual',
+    valor: 'valor',
+    saldoFinal: 'saldoFinal',
+    descricao: 'descricao',
+    estornadoEm: 'estornadoEm'
   };
 
   export type MovimentacaoFinanceiraScalarFieldEnum = (typeof MovimentacaoFinanceiraScalarFieldEnum)[keyof typeof MovimentacaoFinanceiraScalarFieldEnum]
+
+
+  export const CategoriaCaixaScalarFieldEnum: {
+    id: 'id',
+    nome: 'nome',
+    deletedAt: 'deletedAt'
+  };
+
+  export type CategoriaCaixaScalarFieldEnum = (typeof CategoriaCaixaScalarFieldEnum)[keyof typeof CategoriaCaixaScalarFieldEnum]
 
 
   export const MovimentacaoEstoqueScalarFieldEnum: {
@@ -27327,13 +30385,41 @@ export namespace Prisma {
     id: 'id',
     dataAbertura: 'dataAbertura',
     dataFechamento: 'dataFechamento',
+    abertoPorID: 'abertoPorID',
     saldoInicial: 'saldoInicial',
     saldoFinal: 'saldoFinal',
-    status: 'status',
-    usuarioID: 'usuarioID'
+    status: 'status'
   };
 
   export type LivroCaixaScalarFieldEnum = (typeof LivroCaixaScalarFieldEnum)[keyof typeof LivroCaixaScalarFieldEnum]
+
+
+  export const FechamentoScalarFieldEnum: {
+    id: 'id',
+    caixaID: 'caixaID',
+    valor_abertura: 'valor_abertura',
+    valor_abastecimentos: 'valor_abastecimentos',
+    valor_despesas: 'valor_despesas',
+    data_abertura: 'data_abertura',
+    data_fechamento: 'data_fechamento',
+    userID_fechamento: 'userID_fechamento',
+    valor_esperado: 'valor_esperado',
+    valor_conferido: 'valor_conferido',
+    valor_diferenca: 'valor_diferenca',
+    valor_pago: 'valor_pago',
+    valor_recebido: 'valor_recebido',
+    valor_total_compras: 'valor_total_compras',
+    valor_total_vendas: 'valor_total_vendas',
+    peso_total_compras: 'peso_total_compras',
+    peso_total_vendas: 'peso_total_vendas',
+    lucro_total: 'lucro_total',
+    proj_lucro: 'proj_lucro',
+    proj_venda: 'proj_venda',
+    qnt_compras: 'qnt_compras',
+    qnt_vendas: 'qnt_vendas'
+  };
+
+  export type FechamentoScalarFieldEnum = (typeof FechamentoScalarFieldEnum)[keyof typeof FechamentoScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -27471,6 +30557,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'TipoConta'
+   */
+  export type EnumTipoContaFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TipoConta'>
+    
+
+
+  /**
+   * Reference to a field of type 'TipoConta[]'
+   */
+  export type ListEnumTipoContaFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TipoConta[]'>
+    
+
+
+  /**
    * Reference to a field of type 'FormaPagamento'
    */
   export type EnumFormaPagamentoFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FormaPagamento'>
@@ -27495,20 +30595,6 @@ export namespace Prisma {
    * Reference to a field of type 'TipoMovimentacao[]'
    */
   export type ListEnumTipoMovimentacaoFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TipoMovimentacao[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'TipoOrigem'
-   */
-  export type EnumTipoOrigemFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TipoOrigem'>
-    
-
-
-  /**
-   * Reference to a field of type 'TipoOrigem[]'
-   */
-  export type ListEnumTipoOrigemFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TipoOrigem[]'>
     
 
 
@@ -27584,7 +30670,8 @@ export namespace Prisma {
     deletedAt?: DateTimeNullableFilter<"User"> | Date | string | null
     pedidos?: PedidoListRelationFilter
     cargo?: XOR<CargoScalarRelationFilter, CargoWhereInput>
-    caixas?: LivroCaixaListRelationFilter
+    caixasAbertos?: LivroCaixaListRelationFilter
+    fechamentos?: FechamentoListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -27597,7 +30684,8 @@ export namespace Prisma {
     deletedAt?: SortOrderInput | SortOrder
     pedidos?: PedidoOrderByRelationAggregateInput
     cargo?: CargoOrderByWithRelationInput
-    caixas?: LivroCaixaOrderByRelationAggregateInput
+    caixasAbertos?: LivroCaixaOrderByRelationAggregateInput
+    fechamentos?: FechamentoOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -27613,7 +30701,8 @@ export namespace Prisma {
     deletedAt?: DateTimeNullableFilter<"User"> | Date | string | null
     pedidos?: PedidoListRelationFilter
     cargo?: XOR<CargoScalarRelationFilter, CargoWhereInput>
-    caixas?: LivroCaixaListRelationFilter
+    caixasAbertos?: LivroCaixaListRelationFilter
+    fechamentos?: FechamentoListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -27756,6 +30845,7 @@ export namespace Prisma {
     juridica?: XOR<PessoaJuridicaNullableScalarRelationFilter, PessoaJuridicaWhereInput> | null
     tabela?: XOR<TabelaScalarRelationFilter, TabelaWhereInput>
     saldo?: XOR<SaldoFinanceiroNullableScalarRelationFilter, SaldoFinanceiroWhereInput> | null
+    contas?: ContaFinanceiraListRelationFilter
   }
 
   export type RegistroOrderByWithRelationInput = {
@@ -27775,6 +30865,7 @@ export namespace Prisma {
     juridica?: PessoaJuridicaOrderByWithRelationInput
     tabela?: TabelaOrderByWithRelationInput
     saldo?: SaldoFinanceiroOrderByWithRelationInput
+    contas?: ContaFinanceiraOrderByRelationAggregateInput
   }
 
   export type RegistroWhereUniqueInput = Prisma.AtLeast<{
@@ -27797,6 +30888,7 @@ export namespace Prisma {
     juridica?: XOR<PessoaJuridicaNullableScalarRelationFilter, PessoaJuridicaWhereInput> | null
     tabela?: XOR<TabelaScalarRelationFilter, TabelaWhereInput>
     saldo?: XOR<SaldoFinanceiroNullableScalarRelationFilter, SaldoFinanceiroWhereInput> | null
+    contas?: ContaFinanceiraListRelationFilter
   }, "id">
 
   export type RegistroOrderByWithAggregationInput = {
@@ -28447,7 +31539,7 @@ export namespace Prisma {
     criado_em?: DateTimeFilter<"Pedido"> | Date | string
     atualizado?: DateTimeFilter<"Pedido"> | Date | string
     items?: ItemPedidoListRelationFilter
-    pagamentos?: PagamentoListRelationFilter
+    pagamentos?: ContaFinanceiraListRelationFilter
     registro?: XOR<RegistroNullableScalarRelationFilter, RegistroWhereInput> | null
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
@@ -28462,7 +31554,7 @@ export namespace Prisma {
     criado_em?: SortOrder
     atualizado?: SortOrder
     items?: ItemPedidoOrderByRelationAggregateInput
-    pagamentos?: PagamentoOrderByRelationAggregateInput
+    pagamentos?: ContaFinanceiraOrderByRelationAggregateInput
     registro?: RegistroOrderByWithRelationInput
     user?: UserOrderByWithRelationInput
   }
@@ -28480,7 +31572,7 @@ export namespace Prisma {
     criado_em?: DateTimeFilter<"Pedido"> | Date | string
     atualizado?: DateTimeFilter<"Pedido"> | Date | string
     items?: ItemPedidoListRelationFilter
-    pagamentos?: PagamentoListRelationFilter
+    pagamentos?: ContaFinanceiraListRelationFilter
     registro?: XOR<RegistroNullableScalarRelationFilter, RegistroWhereInput> | null
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }, "id">
@@ -28515,108 +31607,144 @@ export namespace Prisma {
     atualizado?: DateTimeWithAggregatesFilter<"Pedido"> | Date | string
   }
 
-  export type PagamentoWhereInput = {
-    AND?: PagamentoWhereInput | PagamentoWhereInput[]
-    OR?: PagamentoWhereInput[]
-    NOT?: PagamentoWhereInput | PagamentoWhereInput[]
-    id?: IntFilter<"Pagamento"> | number
-    pedidoID?: IntFilter<"Pagamento"> | number
-    valor?: DecimalFilter<"Pagamento"> | Decimal | DecimalJsLike | number | string
-    forma?: EnumFormaPagamentoFilter<"Pagamento"> | $Enums.FormaPagamento
-    data?: DateTimeFilter<"Pagamento"> | Date | string
-    pedido?: XOR<PedidoScalarRelationFilter, PedidoWhereInput>
+  export type ContaFinanceiraWhereInput = {
+    AND?: ContaFinanceiraWhereInput | ContaFinanceiraWhereInput[]
+    OR?: ContaFinanceiraWhereInput[]
+    NOT?: ContaFinanceiraWhereInput | ContaFinanceiraWhereInput[]
+    id?: IntFilter<"ContaFinanceira"> | number
+    tipo?: EnumTipoContaFilter<"ContaFinanceira"> | $Enums.TipoConta
+    pedidoID?: IntNullableFilter<"ContaFinanceira"> | number | null
+    registroID?: IntNullableFilter<"ContaFinanceira"> | number | null
+    descricao?: StringNullableFilter<"ContaFinanceira"> | string | null
+    valor?: DecimalFilter<"ContaFinanceira"> | Decimal | DecimalJsLike | number | string
+    data_documento?: DateTimeFilter<"ContaFinanceira"> | Date | string
+    data_vencimento?: DateTimeNullableFilter<"ContaFinanceira"> | Date | string | null
+    data_pagamento?: DateTimeNullableFilter<"ContaFinanceira"> | Date | string | null
+    forma?: EnumFormaPagamentoFilter<"ContaFinanceira"> | $Enums.FormaPagamento
+    data?: DateTimeFilter<"ContaFinanceira"> | Date | string
+    pedido?: XOR<PedidoNullableScalarRelationFilter, PedidoWhereInput> | null
+    registro?: XOR<RegistroNullableScalarRelationFilter, RegistroWhereInput> | null
+    movimentacao?: XOR<MovimentacaoFinanceiraNullableScalarRelationFilter, MovimentacaoFinanceiraWhereInput> | null
   }
 
-  export type PagamentoOrderByWithRelationInput = {
+  export type ContaFinanceiraOrderByWithRelationInput = {
     id?: SortOrder
-    pedidoID?: SortOrder
+    tipo?: SortOrder
+    pedidoID?: SortOrderInput | SortOrder
+    registroID?: SortOrderInput | SortOrder
+    descricao?: SortOrderInput | SortOrder
     valor?: SortOrder
+    data_documento?: SortOrder
+    data_vencimento?: SortOrderInput | SortOrder
+    data_pagamento?: SortOrderInput | SortOrder
     forma?: SortOrder
     data?: SortOrder
     pedido?: PedidoOrderByWithRelationInput
+    registro?: RegistroOrderByWithRelationInput
+    movimentacao?: MovimentacaoFinanceiraOrderByWithRelationInput
   }
 
-  export type PagamentoWhereUniqueInput = Prisma.AtLeast<{
+  export type ContaFinanceiraWhereUniqueInput = Prisma.AtLeast<{
     id?: number
-    AND?: PagamentoWhereInput | PagamentoWhereInput[]
-    OR?: PagamentoWhereInput[]
-    NOT?: PagamentoWhereInput | PagamentoWhereInput[]
-    pedidoID?: IntFilter<"Pagamento"> | number
-    valor?: DecimalFilter<"Pagamento"> | Decimal | DecimalJsLike | number | string
-    forma?: EnumFormaPagamentoFilter<"Pagamento"> | $Enums.FormaPagamento
-    data?: DateTimeFilter<"Pagamento"> | Date | string
-    pedido?: XOR<PedidoScalarRelationFilter, PedidoWhereInput>
+    AND?: ContaFinanceiraWhereInput | ContaFinanceiraWhereInput[]
+    OR?: ContaFinanceiraWhereInput[]
+    NOT?: ContaFinanceiraWhereInput | ContaFinanceiraWhereInput[]
+    tipo?: EnumTipoContaFilter<"ContaFinanceira"> | $Enums.TipoConta
+    pedidoID?: IntNullableFilter<"ContaFinanceira"> | number | null
+    registroID?: IntNullableFilter<"ContaFinanceira"> | number | null
+    descricao?: StringNullableFilter<"ContaFinanceira"> | string | null
+    valor?: DecimalFilter<"ContaFinanceira"> | Decimal | DecimalJsLike | number | string
+    data_documento?: DateTimeFilter<"ContaFinanceira"> | Date | string
+    data_vencimento?: DateTimeNullableFilter<"ContaFinanceira"> | Date | string | null
+    data_pagamento?: DateTimeNullableFilter<"ContaFinanceira"> | Date | string | null
+    forma?: EnumFormaPagamentoFilter<"ContaFinanceira"> | $Enums.FormaPagamento
+    data?: DateTimeFilter<"ContaFinanceira"> | Date | string
+    pedido?: XOR<PedidoNullableScalarRelationFilter, PedidoWhereInput> | null
+    registro?: XOR<RegistroNullableScalarRelationFilter, RegistroWhereInput> | null
+    movimentacao?: XOR<MovimentacaoFinanceiraNullableScalarRelationFilter, MovimentacaoFinanceiraWhereInput> | null
   }, "id">
 
-  export type PagamentoOrderByWithAggregationInput = {
+  export type ContaFinanceiraOrderByWithAggregationInput = {
     id?: SortOrder
-    pedidoID?: SortOrder
+    tipo?: SortOrder
+    pedidoID?: SortOrderInput | SortOrder
+    registroID?: SortOrderInput | SortOrder
+    descricao?: SortOrderInput | SortOrder
     valor?: SortOrder
+    data_documento?: SortOrder
+    data_vencimento?: SortOrderInput | SortOrder
+    data_pagamento?: SortOrderInput | SortOrder
     forma?: SortOrder
     data?: SortOrder
-    _count?: PagamentoCountOrderByAggregateInput
-    _avg?: PagamentoAvgOrderByAggregateInput
-    _max?: PagamentoMaxOrderByAggregateInput
-    _min?: PagamentoMinOrderByAggregateInput
-    _sum?: PagamentoSumOrderByAggregateInput
+    _count?: ContaFinanceiraCountOrderByAggregateInput
+    _avg?: ContaFinanceiraAvgOrderByAggregateInput
+    _max?: ContaFinanceiraMaxOrderByAggregateInput
+    _min?: ContaFinanceiraMinOrderByAggregateInput
+    _sum?: ContaFinanceiraSumOrderByAggregateInput
   }
 
-  export type PagamentoScalarWhereWithAggregatesInput = {
-    AND?: PagamentoScalarWhereWithAggregatesInput | PagamentoScalarWhereWithAggregatesInput[]
-    OR?: PagamentoScalarWhereWithAggregatesInput[]
-    NOT?: PagamentoScalarWhereWithAggregatesInput | PagamentoScalarWhereWithAggregatesInput[]
-    id?: IntWithAggregatesFilter<"Pagamento"> | number
-    pedidoID?: IntWithAggregatesFilter<"Pagamento"> | number
-    valor?: DecimalWithAggregatesFilter<"Pagamento"> | Decimal | DecimalJsLike | number | string
-    forma?: EnumFormaPagamentoWithAggregatesFilter<"Pagamento"> | $Enums.FormaPagamento
-    data?: DateTimeWithAggregatesFilter<"Pagamento"> | Date | string
+  export type ContaFinanceiraScalarWhereWithAggregatesInput = {
+    AND?: ContaFinanceiraScalarWhereWithAggregatesInput | ContaFinanceiraScalarWhereWithAggregatesInput[]
+    OR?: ContaFinanceiraScalarWhereWithAggregatesInput[]
+    NOT?: ContaFinanceiraScalarWhereWithAggregatesInput | ContaFinanceiraScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"ContaFinanceira"> | number
+    tipo?: EnumTipoContaWithAggregatesFilter<"ContaFinanceira"> | $Enums.TipoConta
+    pedidoID?: IntNullableWithAggregatesFilter<"ContaFinanceira"> | number | null
+    registroID?: IntNullableWithAggregatesFilter<"ContaFinanceira"> | number | null
+    descricao?: StringNullableWithAggregatesFilter<"ContaFinanceira"> | string | null
+    valor?: DecimalWithAggregatesFilter<"ContaFinanceira"> | Decimal | DecimalJsLike | number | string
+    data_documento?: DateTimeWithAggregatesFilter<"ContaFinanceira"> | Date | string
+    data_vencimento?: DateTimeNullableWithAggregatesFilter<"ContaFinanceira"> | Date | string | null
+    data_pagamento?: DateTimeNullableWithAggregatesFilter<"ContaFinanceira"> | Date | string | null
+    forma?: EnumFormaPagamentoWithAggregatesFilter<"ContaFinanceira"> | $Enums.FormaPagamento
+    data?: DateTimeWithAggregatesFilter<"ContaFinanceira"> | Date | string
   }
 
-  export type ContaWhereInput = {
-    AND?: ContaWhereInput | ContaWhereInput[]
-    OR?: ContaWhereInput[]
-    NOT?: ContaWhereInput | ContaWhereInput[]
-    id?: IntFilter<"Conta"> | number
-    nome?: StringFilter<"Conta"> | string
-    saldo?: DecimalFilter<"Conta"> | Decimal | DecimalJsLike | number | string
+  export type BancoWhereInput = {
+    AND?: BancoWhereInput | BancoWhereInput[]
+    OR?: BancoWhereInput[]
+    NOT?: BancoWhereInput | BancoWhereInput[]
+    id?: IntFilter<"Banco"> | number
+    nome?: StringFilter<"Banco"> | string
+    saldo?: DecimalFilter<"Banco"> | Decimal | DecimalJsLike | number | string
     movimentacoes?: MovimentacaoFinanceiraListRelationFilter
   }
 
-  export type ContaOrderByWithRelationInput = {
+  export type BancoOrderByWithRelationInput = {
     id?: SortOrder
     nome?: SortOrder
     saldo?: SortOrder
     movimentacoes?: MovimentacaoFinanceiraOrderByRelationAggregateInput
   }
 
-  export type ContaWhereUniqueInput = Prisma.AtLeast<{
+  export type BancoWhereUniqueInput = Prisma.AtLeast<{
     id?: number
-    AND?: ContaWhereInput | ContaWhereInput[]
-    OR?: ContaWhereInput[]
-    NOT?: ContaWhereInput | ContaWhereInput[]
-    nome?: StringFilter<"Conta"> | string
-    saldo?: DecimalFilter<"Conta"> | Decimal | DecimalJsLike | number | string
+    AND?: BancoWhereInput | BancoWhereInput[]
+    OR?: BancoWhereInput[]
+    NOT?: BancoWhereInput | BancoWhereInput[]
+    nome?: StringFilter<"Banco"> | string
+    saldo?: DecimalFilter<"Banco"> | Decimal | DecimalJsLike | number | string
     movimentacoes?: MovimentacaoFinanceiraListRelationFilter
   }, "id">
 
-  export type ContaOrderByWithAggregationInput = {
+  export type BancoOrderByWithAggregationInput = {
     id?: SortOrder
     nome?: SortOrder
     saldo?: SortOrder
-    _count?: ContaCountOrderByAggregateInput
-    _avg?: ContaAvgOrderByAggregateInput
-    _max?: ContaMaxOrderByAggregateInput
-    _min?: ContaMinOrderByAggregateInput
-    _sum?: ContaSumOrderByAggregateInput
+    _count?: BancoCountOrderByAggregateInput
+    _avg?: BancoAvgOrderByAggregateInput
+    _max?: BancoMaxOrderByAggregateInput
+    _min?: BancoMinOrderByAggregateInput
+    _sum?: BancoSumOrderByAggregateInput
   }
 
-  export type ContaScalarWhereWithAggregatesInput = {
-    AND?: ContaScalarWhereWithAggregatesInput | ContaScalarWhereWithAggregatesInput[]
-    OR?: ContaScalarWhereWithAggregatesInput[]
-    NOT?: ContaScalarWhereWithAggregatesInput | ContaScalarWhereWithAggregatesInput[]
-    id?: IntWithAggregatesFilter<"Conta"> | number
-    nome?: StringWithAggregatesFilter<"Conta"> | string
-    saldo?: DecimalWithAggregatesFilter<"Conta"> | Decimal | DecimalJsLike | number | string
+  export type BancoScalarWhereWithAggregatesInput = {
+    AND?: BancoScalarWhereWithAggregatesInput | BancoScalarWhereWithAggregatesInput[]
+    OR?: BancoScalarWhereWithAggregatesInput[]
+    NOT?: BancoScalarWhereWithAggregatesInput | BancoScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"Banco"> | number
+    nome?: StringWithAggregatesFilter<"Banco"> | string
+    saldo?: DecimalWithAggregatesFilter<"Banco"> | Decimal | DecimalJsLike | number | string
   }
 
   export type MovimentacaoFinanceiraWhereInput = {
@@ -28624,59 +31752,77 @@ export namespace Prisma {
     OR?: MovimentacaoFinanceiraWhereInput[]
     NOT?: MovimentacaoFinanceiraWhereInput | MovimentacaoFinanceiraWhereInput[]
     id?: IntFilter<"MovimentacaoFinanceira"> | number
-    contaID?: IntFilter<"MovimentacaoFinanceira"> | number
-    tipoMovimentacao?: EnumTipoMovimentacaoFilter<"MovimentacaoFinanceira"> | $Enums.TipoMovimentacao
-    valor?: DecimalFilter<"MovimentacaoFinanceira"> | Decimal | DecimalJsLike | number | string
-    descricao?: StringNullableFilter<"MovimentacaoFinanceira"> | string | null
-    data?: DateTimeFilter<"MovimentacaoFinanceira"> | Date | string
-    origem?: EnumTipoOrigemFilter<"MovimentacaoFinanceira"> | $Enums.TipoOrigem
-    origemID?: IntNullableFilter<"MovimentacaoFinanceira"> | number | null
+    bancoID?: IntNullableFilter<"MovimentacaoFinanceira"> | number | null
     caixaID?: IntFilter<"MovimentacaoFinanceira"> | number
-    conta?: XOR<ContaScalarRelationFilter, ContaWhereInput>
+    contaID?: IntNullableFilter<"MovimentacaoFinanceira"> | number | null
+    categoriaID?: IntFilter<"MovimentacaoFinanceira"> | number
+    tipoMovimentacao?: EnumTipoMovimentacaoFilter<"MovimentacaoFinanceira"> | $Enums.TipoMovimentacao
+    data?: DateTimeFilter<"MovimentacaoFinanceira"> | Date | string
+    saldoAtual?: DecimalFilter<"MovimentacaoFinanceira"> | Decimal | DecimalJsLike | number | string
+    valor?: DecimalFilter<"MovimentacaoFinanceira"> | Decimal | DecimalJsLike | number | string
+    saldoFinal?: DecimalFilter<"MovimentacaoFinanceira"> | Decimal | DecimalJsLike | number | string
+    descricao?: StringNullableFilter<"MovimentacaoFinanceira"> | string | null
+    estornadoEm?: DateTimeNullableFilter<"MovimentacaoFinanceira"> | Date | string | null
+    banco?: XOR<BancoNullableScalarRelationFilter, BancoWhereInput> | null
     caixa?: XOR<LivroCaixaScalarRelationFilter, LivroCaixaWhereInput>
+    conta?: XOR<ContaFinanceiraNullableScalarRelationFilter, ContaFinanceiraWhereInput> | null
+    categoria?: XOR<CategoriaCaixaScalarRelationFilter, CategoriaCaixaWhereInput>
   }
 
   export type MovimentacaoFinanceiraOrderByWithRelationInput = {
     id?: SortOrder
-    contaID?: SortOrder
-    tipoMovimentacao?: SortOrder
-    valor?: SortOrder
-    descricao?: SortOrderInput | SortOrder
-    data?: SortOrder
-    origem?: SortOrder
-    origemID?: SortOrderInput | SortOrder
+    bancoID?: SortOrderInput | SortOrder
     caixaID?: SortOrder
-    conta?: ContaOrderByWithRelationInput
+    contaID?: SortOrderInput | SortOrder
+    categoriaID?: SortOrder
+    tipoMovimentacao?: SortOrder
+    data?: SortOrder
+    saldoAtual?: SortOrder
+    valor?: SortOrder
+    saldoFinal?: SortOrder
+    descricao?: SortOrderInput | SortOrder
+    estornadoEm?: SortOrderInput | SortOrder
+    banco?: BancoOrderByWithRelationInput
     caixa?: LivroCaixaOrderByWithRelationInput
+    conta?: ContaFinanceiraOrderByWithRelationInput
+    categoria?: CategoriaCaixaOrderByWithRelationInput
   }
 
   export type MovimentacaoFinanceiraWhereUniqueInput = Prisma.AtLeast<{
     id?: number
+    contaID?: number
     AND?: MovimentacaoFinanceiraWhereInput | MovimentacaoFinanceiraWhereInput[]
     OR?: MovimentacaoFinanceiraWhereInput[]
     NOT?: MovimentacaoFinanceiraWhereInput | MovimentacaoFinanceiraWhereInput[]
-    contaID?: IntFilter<"MovimentacaoFinanceira"> | number
-    tipoMovimentacao?: EnumTipoMovimentacaoFilter<"MovimentacaoFinanceira"> | $Enums.TipoMovimentacao
-    valor?: DecimalFilter<"MovimentacaoFinanceira"> | Decimal | DecimalJsLike | number | string
-    descricao?: StringNullableFilter<"MovimentacaoFinanceira"> | string | null
-    data?: DateTimeFilter<"MovimentacaoFinanceira"> | Date | string
-    origem?: EnumTipoOrigemFilter<"MovimentacaoFinanceira"> | $Enums.TipoOrigem
-    origemID?: IntNullableFilter<"MovimentacaoFinanceira"> | number | null
+    bancoID?: IntNullableFilter<"MovimentacaoFinanceira"> | number | null
     caixaID?: IntFilter<"MovimentacaoFinanceira"> | number
-    conta?: XOR<ContaScalarRelationFilter, ContaWhereInput>
+    categoriaID?: IntFilter<"MovimentacaoFinanceira"> | number
+    tipoMovimentacao?: EnumTipoMovimentacaoFilter<"MovimentacaoFinanceira"> | $Enums.TipoMovimentacao
+    data?: DateTimeFilter<"MovimentacaoFinanceira"> | Date | string
+    saldoAtual?: DecimalFilter<"MovimentacaoFinanceira"> | Decimal | DecimalJsLike | number | string
+    valor?: DecimalFilter<"MovimentacaoFinanceira"> | Decimal | DecimalJsLike | number | string
+    saldoFinal?: DecimalFilter<"MovimentacaoFinanceira"> | Decimal | DecimalJsLike | number | string
+    descricao?: StringNullableFilter<"MovimentacaoFinanceira"> | string | null
+    estornadoEm?: DateTimeNullableFilter<"MovimentacaoFinanceira"> | Date | string | null
+    banco?: XOR<BancoNullableScalarRelationFilter, BancoWhereInput> | null
     caixa?: XOR<LivroCaixaScalarRelationFilter, LivroCaixaWhereInput>
-  }, "id">
+    conta?: XOR<ContaFinanceiraNullableScalarRelationFilter, ContaFinanceiraWhereInput> | null
+    categoria?: XOR<CategoriaCaixaScalarRelationFilter, CategoriaCaixaWhereInput>
+  }, "id" | "contaID">
 
   export type MovimentacaoFinanceiraOrderByWithAggregationInput = {
     id?: SortOrder
-    contaID?: SortOrder
-    tipoMovimentacao?: SortOrder
-    valor?: SortOrder
-    descricao?: SortOrderInput | SortOrder
-    data?: SortOrder
-    origem?: SortOrder
-    origemID?: SortOrderInput | SortOrder
+    bancoID?: SortOrderInput | SortOrder
     caixaID?: SortOrder
+    contaID?: SortOrderInput | SortOrder
+    categoriaID?: SortOrder
+    tipoMovimentacao?: SortOrder
+    data?: SortOrder
+    saldoAtual?: SortOrder
+    valor?: SortOrder
+    saldoFinal?: SortOrder
+    descricao?: SortOrderInput | SortOrder
+    estornadoEm?: SortOrderInput | SortOrder
     _count?: MovimentacaoFinanceiraCountOrderByAggregateInput
     _avg?: MovimentacaoFinanceiraAvgOrderByAggregateInput
     _max?: MovimentacaoFinanceiraMaxOrderByAggregateInput
@@ -28689,14 +31835,64 @@ export namespace Prisma {
     OR?: MovimentacaoFinanceiraScalarWhereWithAggregatesInput[]
     NOT?: MovimentacaoFinanceiraScalarWhereWithAggregatesInput | MovimentacaoFinanceiraScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"MovimentacaoFinanceira"> | number
-    contaID?: IntWithAggregatesFilter<"MovimentacaoFinanceira"> | number
-    tipoMovimentacao?: EnumTipoMovimentacaoWithAggregatesFilter<"MovimentacaoFinanceira"> | $Enums.TipoMovimentacao
-    valor?: DecimalWithAggregatesFilter<"MovimentacaoFinanceira"> | Decimal | DecimalJsLike | number | string
-    descricao?: StringNullableWithAggregatesFilter<"MovimentacaoFinanceira"> | string | null
-    data?: DateTimeWithAggregatesFilter<"MovimentacaoFinanceira"> | Date | string
-    origem?: EnumTipoOrigemWithAggregatesFilter<"MovimentacaoFinanceira"> | $Enums.TipoOrigem
-    origemID?: IntNullableWithAggregatesFilter<"MovimentacaoFinanceira"> | number | null
+    bancoID?: IntNullableWithAggregatesFilter<"MovimentacaoFinanceira"> | number | null
     caixaID?: IntWithAggregatesFilter<"MovimentacaoFinanceira"> | number
+    contaID?: IntNullableWithAggregatesFilter<"MovimentacaoFinanceira"> | number | null
+    categoriaID?: IntWithAggregatesFilter<"MovimentacaoFinanceira"> | number
+    tipoMovimentacao?: EnumTipoMovimentacaoWithAggregatesFilter<"MovimentacaoFinanceira"> | $Enums.TipoMovimentacao
+    data?: DateTimeWithAggregatesFilter<"MovimentacaoFinanceira"> | Date | string
+    saldoAtual?: DecimalWithAggregatesFilter<"MovimentacaoFinanceira"> | Decimal | DecimalJsLike | number | string
+    valor?: DecimalWithAggregatesFilter<"MovimentacaoFinanceira"> | Decimal | DecimalJsLike | number | string
+    saldoFinal?: DecimalWithAggregatesFilter<"MovimentacaoFinanceira"> | Decimal | DecimalJsLike | number | string
+    descricao?: StringNullableWithAggregatesFilter<"MovimentacaoFinanceira"> | string | null
+    estornadoEm?: DateTimeNullableWithAggregatesFilter<"MovimentacaoFinanceira"> | Date | string | null
+  }
+
+  export type CategoriaCaixaWhereInput = {
+    AND?: CategoriaCaixaWhereInput | CategoriaCaixaWhereInput[]
+    OR?: CategoriaCaixaWhereInput[]
+    NOT?: CategoriaCaixaWhereInput | CategoriaCaixaWhereInput[]
+    id?: IntFilter<"CategoriaCaixa"> | number
+    nome?: StringFilter<"CategoriaCaixa"> | string
+    deletedAt?: DateTimeNullableFilter<"CategoriaCaixa"> | Date | string | null
+    movimentacoes?: MovimentacaoFinanceiraListRelationFilter
+  }
+
+  export type CategoriaCaixaOrderByWithRelationInput = {
+    id?: SortOrder
+    nome?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    movimentacoes?: MovimentacaoFinanceiraOrderByRelationAggregateInput
+  }
+
+  export type CategoriaCaixaWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: CategoriaCaixaWhereInput | CategoriaCaixaWhereInput[]
+    OR?: CategoriaCaixaWhereInput[]
+    NOT?: CategoriaCaixaWhereInput | CategoriaCaixaWhereInput[]
+    nome?: StringFilter<"CategoriaCaixa"> | string
+    deletedAt?: DateTimeNullableFilter<"CategoriaCaixa"> | Date | string | null
+    movimentacoes?: MovimentacaoFinanceiraListRelationFilter
+  }, "id">
+
+  export type CategoriaCaixaOrderByWithAggregationInput = {
+    id?: SortOrder
+    nome?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    _count?: CategoriaCaixaCountOrderByAggregateInput
+    _avg?: CategoriaCaixaAvgOrderByAggregateInput
+    _max?: CategoriaCaixaMaxOrderByAggregateInput
+    _min?: CategoriaCaixaMinOrderByAggregateInput
+    _sum?: CategoriaCaixaSumOrderByAggregateInput
+  }
+
+  export type CategoriaCaixaScalarWhereWithAggregatesInput = {
+    AND?: CategoriaCaixaScalarWhereWithAggregatesInput | CategoriaCaixaScalarWhereWithAggregatesInput[]
+    OR?: CategoriaCaixaScalarWhereWithAggregatesInput[]
+    NOT?: CategoriaCaixaScalarWhereWithAggregatesInput | CategoriaCaixaScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"CategoriaCaixa"> | number
+    nome?: StringWithAggregatesFilter<"CategoriaCaixa"> | string
+    deletedAt?: DateTimeNullableWithAggregatesFilter<"CategoriaCaixa"> | Date | string | null
   }
 
   export type MovimentacaoEstoqueWhereInput = {
@@ -28843,24 +32039,26 @@ export namespace Prisma {
     id?: IntFilter<"LivroCaixa"> | number
     dataAbertura?: DateTimeFilter<"LivroCaixa"> | Date | string
     dataFechamento?: DateTimeNullableFilter<"LivroCaixa"> | Date | string | null
+    abertoPorID?: IntFilter<"LivroCaixa"> | number
     saldoInicial?: DecimalFilter<"LivroCaixa"> | Decimal | DecimalJsLike | number | string
-    saldoFinal?: DecimalNullableFilter<"LivroCaixa"> | Decimal | DecimalJsLike | number | string | null
+    saldoFinal?: DecimalFilter<"LivroCaixa"> | Decimal | DecimalJsLike | number | string
     status?: EnumStatusCaixaFilter<"LivroCaixa"> | $Enums.StatusCaixa
-    usuarioID?: IntFilter<"LivroCaixa"> | number
-    usuario?: XOR<UserScalarRelationFilter, UserWhereInput>
+    abertoPor?: XOR<UserScalarRelationFilter, UserWhereInput>
     movimentacoes?: MovimentacaoFinanceiraListRelationFilter
+    fechamento?: XOR<FechamentoNullableScalarRelationFilter, FechamentoWhereInput> | null
   }
 
   export type LivroCaixaOrderByWithRelationInput = {
     id?: SortOrder
     dataAbertura?: SortOrder
     dataFechamento?: SortOrderInput | SortOrder
+    abertoPorID?: SortOrder
     saldoInicial?: SortOrder
-    saldoFinal?: SortOrderInput | SortOrder
+    saldoFinal?: SortOrder
     status?: SortOrder
-    usuarioID?: SortOrder
-    usuario?: UserOrderByWithRelationInput
+    abertoPor?: UserOrderByWithRelationInput
     movimentacoes?: MovimentacaoFinanceiraOrderByRelationAggregateInput
+    fechamento?: FechamentoOrderByWithRelationInput
   }
 
   export type LivroCaixaWhereUniqueInput = Prisma.AtLeast<{
@@ -28870,22 +32068,23 @@ export namespace Prisma {
     NOT?: LivroCaixaWhereInput | LivroCaixaWhereInput[]
     dataAbertura?: DateTimeFilter<"LivroCaixa"> | Date | string
     dataFechamento?: DateTimeNullableFilter<"LivroCaixa"> | Date | string | null
+    abertoPorID?: IntFilter<"LivroCaixa"> | number
     saldoInicial?: DecimalFilter<"LivroCaixa"> | Decimal | DecimalJsLike | number | string
-    saldoFinal?: DecimalNullableFilter<"LivroCaixa"> | Decimal | DecimalJsLike | number | string | null
+    saldoFinal?: DecimalFilter<"LivroCaixa"> | Decimal | DecimalJsLike | number | string
     status?: EnumStatusCaixaFilter<"LivroCaixa"> | $Enums.StatusCaixa
-    usuarioID?: IntFilter<"LivroCaixa"> | number
-    usuario?: XOR<UserScalarRelationFilter, UserWhereInput>
+    abertoPor?: XOR<UserScalarRelationFilter, UserWhereInput>
     movimentacoes?: MovimentacaoFinanceiraListRelationFilter
+    fechamento?: XOR<FechamentoNullableScalarRelationFilter, FechamentoWhereInput> | null
   }, "id">
 
   export type LivroCaixaOrderByWithAggregationInput = {
     id?: SortOrder
     dataAbertura?: SortOrder
     dataFechamento?: SortOrderInput | SortOrder
+    abertoPorID?: SortOrder
     saldoInicial?: SortOrder
-    saldoFinal?: SortOrderInput | SortOrder
+    saldoFinal?: SortOrder
     status?: SortOrder
-    usuarioID?: SortOrder
     _count?: LivroCaixaCountOrderByAggregateInput
     _avg?: LivroCaixaAvgOrderByAggregateInput
     _max?: LivroCaixaMaxOrderByAggregateInput
@@ -28900,10 +32099,155 @@ export namespace Prisma {
     id?: IntWithAggregatesFilter<"LivroCaixa"> | number
     dataAbertura?: DateTimeWithAggregatesFilter<"LivroCaixa"> | Date | string
     dataFechamento?: DateTimeNullableWithAggregatesFilter<"LivroCaixa"> | Date | string | null
+    abertoPorID?: IntWithAggregatesFilter<"LivroCaixa"> | number
     saldoInicial?: DecimalWithAggregatesFilter<"LivroCaixa"> | Decimal | DecimalJsLike | number | string
-    saldoFinal?: DecimalNullableWithAggregatesFilter<"LivroCaixa"> | Decimal | DecimalJsLike | number | string | null
+    saldoFinal?: DecimalWithAggregatesFilter<"LivroCaixa"> | Decimal | DecimalJsLike | number | string
     status?: EnumStatusCaixaWithAggregatesFilter<"LivroCaixa"> | $Enums.StatusCaixa
-    usuarioID?: IntWithAggregatesFilter<"LivroCaixa"> | number
+  }
+
+  export type FechamentoWhereInput = {
+    AND?: FechamentoWhereInput | FechamentoWhereInput[]
+    OR?: FechamentoWhereInput[]
+    NOT?: FechamentoWhereInput | FechamentoWhereInput[]
+    id?: IntFilter<"Fechamento"> | number
+    caixaID?: IntFilter<"Fechamento"> | number
+    valor_abertura?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    valor_abastecimentos?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    valor_despesas?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    data_abertura?: DateTimeFilter<"Fechamento"> | Date | string
+    data_fechamento?: DateTimeFilter<"Fechamento"> | Date | string
+    userID_fechamento?: IntFilter<"Fechamento"> | number
+    valor_esperado?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    valor_conferido?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    valor_diferenca?: DecimalNullableFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string | null
+    valor_pago?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    valor_recebido?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    valor_total_compras?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    valor_total_vendas?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    peso_total_compras?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    peso_total_vendas?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    lucro_total?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    proj_lucro?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    proj_venda?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    qnt_compras?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    qnt_vendas?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    caixa?: XOR<LivroCaixaScalarRelationFilter, LivroCaixaWhereInput>
+    user_fechamento?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type FechamentoOrderByWithRelationInput = {
+    id?: SortOrder
+    caixaID?: SortOrder
+    valor_abertura?: SortOrder
+    valor_abastecimentos?: SortOrder
+    valor_despesas?: SortOrder
+    data_abertura?: SortOrder
+    data_fechamento?: SortOrder
+    userID_fechamento?: SortOrder
+    valor_esperado?: SortOrder
+    valor_conferido?: SortOrder
+    valor_diferenca?: SortOrderInput | SortOrder
+    valor_pago?: SortOrder
+    valor_recebido?: SortOrder
+    valor_total_compras?: SortOrder
+    valor_total_vendas?: SortOrder
+    peso_total_compras?: SortOrder
+    peso_total_vendas?: SortOrder
+    lucro_total?: SortOrder
+    proj_lucro?: SortOrder
+    proj_venda?: SortOrder
+    qnt_compras?: SortOrder
+    qnt_vendas?: SortOrder
+    caixa?: LivroCaixaOrderByWithRelationInput
+    user_fechamento?: UserOrderByWithRelationInput
+  }
+
+  export type FechamentoWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    caixaID?: number
+    AND?: FechamentoWhereInput | FechamentoWhereInput[]
+    OR?: FechamentoWhereInput[]
+    NOT?: FechamentoWhereInput | FechamentoWhereInput[]
+    valor_abertura?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    valor_abastecimentos?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    valor_despesas?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    data_abertura?: DateTimeFilter<"Fechamento"> | Date | string
+    data_fechamento?: DateTimeFilter<"Fechamento"> | Date | string
+    userID_fechamento?: IntFilter<"Fechamento"> | number
+    valor_esperado?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    valor_conferido?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    valor_diferenca?: DecimalNullableFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string | null
+    valor_pago?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    valor_recebido?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    valor_total_compras?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    valor_total_vendas?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    peso_total_compras?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    peso_total_vendas?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    lucro_total?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    proj_lucro?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    proj_venda?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    qnt_compras?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    qnt_vendas?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    caixa?: XOR<LivroCaixaScalarRelationFilter, LivroCaixaWhereInput>
+    user_fechamento?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id" | "caixaID">
+
+  export type FechamentoOrderByWithAggregationInput = {
+    id?: SortOrder
+    caixaID?: SortOrder
+    valor_abertura?: SortOrder
+    valor_abastecimentos?: SortOrder
+    valor_despesas?: SortOrder
+    data_abertura?: SortOrder
+    data_fechamento?: SortOrder
+    userID_fechamento?: SortOrder
+    valor_esperado?: SortOrder
+    valor_conferido?: SortOrder
+    valor_diferenca?: SortOrderInput | SortOrder
+    valor_pago?: SortOrder
+    valor_recebido?: SortOrder
+    valor_total_compras?: SortOrder
+    valor_total_vendas?: SortOrder
+    peso_total_compras?: SortOrder
+    peso_total_vendas?: SortOrder
+    lucro_total?: SortOrder
+    proj_lucro?: SortOrder
+    proj_venda?: SortOrder
+    qnt_compras?: SortOrder
+    qnt_vendas?: SortOrder
+    _count?: FechamentoCountOrderByAggregateInput
+    _avg?: FechamentoAvgOrderByAggregateInput
+    _max?: FechamentoMaxOrderByAggregateInput
+    _min?: FechamentoMinOrderByAggregateInput
+    _sum?: FechamentoSumOrderByAggregateInput
+  }
+
+  export type FechamentoScalarWhereWithAggregatesInput = {
+    AND?: FechamentoScalarWhereWithAggregatesInput | FechamentoScalarWhereWithAggregatesInput[]
+    OR?: FechamentoScalarWhereWithAggregatesInput[]
+    NOT?: FechamentoScalarWhereWithAggregatesInput | FechamentoScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"Fechamento"> | number
+    caixaID?: IntWithAggregatesFilter<"Fechamento"> | number
+    valor_abertura?: DecimalWithAggregatesFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    valor_abastecimentos?: DecimalWithAggregatesFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    valor_despesas?: DecimalWithAggregatesFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    data_abertura?: DateTimeWithAggregatesFilter<"Fechamento"> | Date | string
+    data_fechamento?: DateTimeWithAggregatesFilter<"Fechamento"> | Date | string
+    userID_fechamento?: IntWithAggregatesFilter<"Fechamento"> | number
+    valor_esperado?: DecimalWithAggregatesFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    valor_conferido?: DecimalWithAggregatesFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    valor_diferenca?: DecimalNullableWithAggregatesFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string | null
+    valor_pago?: DecimalWithAggregatesFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    valor_recebido?: DecimalWithAggregatesFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    valor_total_compras?: DecimalWithAggregatesFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    valor_total_vendas?: DecimalWithAggregatesFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    peso_total_compras?: DecimalWithAggregatesFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    peso_total_vendas?: DecimalWithAggregatesFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    lucro_total?: DecimalWithAggregatesFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    proj_lucro?: DecimalWithAggregatesFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    proj_venda?: DecimalWithAggregatesFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    qnt_compras?: DecimalWithAggregatesFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    qnt_vendas?: DecimalWithAggregatesFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
   }
 
   export type UserCreateInput = {
@@ -28914,7 +32258,8 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     pedidos?: PedidoCreateNestedManyWithoutUserInput
     cargo: CargoCreateNestedOneWithoutUsersInput
-    caixas?: LivroCaixaCreateNestedManyWithoutUsuarioInput
+    caixasAbertos?: LivroCaixaCreateNestedManyWithoutAbertoPorInput
+    fechamentos?: FechamentoCreateNestedManyWithoutUser_fechamentoInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -28926,7 +32271,8 @@ export namespace Prisma {
     cargoID: number
     deletedAt?: Date | string | null
     pedidos?: PedidoUncheckedCreateNestedManyWithoutUserInput
-    caixas?: LivroCaixaUncheckedCreateNestedManyWithoutUsuarioInput
+    caixasAbertos?: LivroCaixaUncheckedCreateNestedManyWithoutAbertoPorInput
+    fechamentos?: FechamentoUncheckedCreateNestedManyWithoutUser_fechamentoInput
   }
 
   export type UserUpdateInput = {
@@ -28937,7 +32283,8 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pedidos?: PedidoUpdateManyWithoutUserNestedInput
     cargo?: CargoUpdateOneRequiredWithoutUsersNestedInput
-    caixas?: LivroCaixaUpdateManyWithoutUsuarioNestedInput
+    caixasAbertos?: LivroCaixaUpdateManyWithoutAbertoPorNestedInput
+    fechamentos?: FechamentoUpdateManyWithoutUser_fechamentoNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -28949,7 +32296,8 @@ export namespace Prisma {
     cargoID?: IntFieldUpdateOperationsInput | number
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pedidos?: PedidoUncheckedUpdateManyWithoutUserNestedInput
-    caixas?: LivroCaixaUncheckedUpdateManyWithoutUsuarioNestedInput
+    caixasAbertos?: LivroCaixaUncheckedUpdateManyWithoutAbertoPorNestedInput
+    fechamentos?: FechamentoUncheckedUpdateManyWithoutUser_fechamentoNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -29078,6 +32426,7 @@ export namespace Prisma {
     juridica?: PessoaJuridicaCreateNestedOneWithoutRegistroInput
     tabela: TabelaCreateNestedOneWithoutRegistrosInput
     saldo?: SaldoFinanceiroCreateNestedOneWithoutRegistroInput
+    contas?: ContaFinanceiraCreateNestedManyWithoutRegistroInput
   }
 
   export type RegistroUncheckedCreateInput = {
@@ -29096,6 +32445,7 @@ export namespace Prisma {
     fisica?: PessoaFisicaUncheckedCreateNestedOneWithoutRegistroInput
     juridica?: PessoaJuridicaUncheckedCreateNestedOneWithoutRegistroInput
     saldo?: SaldoFinanceiroUncheckedCreateNestedOneWithoutRegistroInput
+    contas?: ContaFinanceiraUncheckedCreateNestedManyWithoutRegistroInput
   }
 
   export type RegistroUpdateInput = {
@@ -29113,6 +32463,7 @@ export namespace Prisma {
     juridica?: PessoaJuridicaUpdateOneWithoutRegistroNestedInput
     tabela?: TabelaUpdateOneRequiredWithoutRegistrosNestedInput
     saldo?: SaldoFinanceiroUpdateOneWithoutRegistroNestedInput
+    contas?: ContaFinanceiraUpdateManyWithoutRegistroNestedInput
   }
 
   export type RegistroUncheckedUpdateInput = {
@@ -29131,6 +32482,7 @@ export namespace Prisma {
     fisica?: PessoaFisicaUncheckedUpdateOneWithoutRegistroNestedInput
     juridica?: PessoaJuridicaUncheckedUpdateOneWithoutRegistroNestedInput
     saldo?: SaldoFinanceiroUncheckedUpdateOneWithoutRegistroNestedInput
+    contas?: ContaFinanceiraUncheckedUpdateManyWithoutRegistroNestedInput
   }
 
   export type RegistroCreateManyInput = {
@@ -29739,7 +33091,7 @@ export namespace Prisma {
     criado_em?: Date | string
     atualizado?: Date | string
     items?: ItemPedidoCreateNestedManyWithoutPedidoInput
-    pagamentos?: PagamentoCreateNestedManyWithoutPedidoInput
+    pagamentos?: ContaFinanceiraCreateNestedManyWithoutPedidoInput
     registro?: RegistroCreateNestedOneWithoutPedidosInput
     user: UserCreateNestedOneWithoutPedidosInput
   }
@@ -29754,7 +33106,7 @@ export namespace Prisma {
     criado_em?: Date | string
     atualizado?: Date | string
     items?: ItemPedidoUncheckedCreateNestedManyWithoutPedidoInput
-    pagamentos?: PagamentoUncheckedCreateNestedManyWithoutPedidoInput
+    pagamentos?: ContaFinanceiraUncheckedCreateNestedManyWithoutPedidoInput
   }
 
   export type PedidoUpdateInput = {
@@ -29764,7 +33116,7 @@ export namespace Prisma {
     criado_em?: DateTimeFieldUpdateOperationsInput | Date | string
     atualizado?: DateTimeFieldUpdateOperationsInput | Date | string
     items?: ItemPedidoUpdateManyWithoutPedidoNestedInput
-    pagamentos?: PagamentoUpdateManyWithoutPedidoNestedInput
+    pagamentos?: ContaFinanceiraUpdateManyWithoutPedidoNestedInput
     registro?: RegistroUpdateOneWithoutPedidosNestedInput
     user?: UserUpdateOneRequiredWithoutPedidosNestedInput
   }
@@ -29779,7 +33131,7 @@ export namespace Prisma {
     criado_em?: DateTimeFieldUpdateOperationsInput | Date | string
     atualizado?: DateTimeFieldUpdateOperationsInput | Date | string
     items?: ItemPedidoUncheckedUpdateManyWithoutPedidoNestedInput
-    pagamentos?: PagamentoUncheckedUpdateManyWithoutPedidoNestedInput
+    pagamentos?: ContaFinanceiraUncheckedUpdateManyWithoutPedidoNestedInput
   }
 
   export type PedidoCreateManyInput = {
@@ -29812,96 +33164,141 @@ export namespace Prisma {
     atualizado?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type PagamentoCreateInput = {
+  export type ContaFinanceiraCreateInput = {
+    tipo: $Enums.TipoConta
+    descricao?: string | null
     valor: Decimal | DecimalJsLike | number | string
+    data_documento?: Date | string
+    data_vencimento?: Date | string | null
+    data_pagamento?: Date | string | null
     forma: $Enums.FormaPagamento
     data?: Date | string
-    pedido: PedidoCreateNestedOneWithoutPagamentosInput
+    pedido?: PedidoCreateNestedOneWithoutPagamentosInput
+    registro?: RegistroCreateNestedOneWithoutContasInput
+    movimentacao?: MovimentacaoFinanceiraCreateNestedOneWithoutContaInput
   }
 
-  export type PagamentoUncheckedCreateInput = {
+  export type ContaFinanceiraUncheckedCreateInput = {
     id?: number
-    pedidoID: number
+    tipo: $Enums.TipoConta
+    pedidoID?: number | null
+    registroID?: number | null
+    descricao?: string | null
     valor: Decimal | DecimalJsLike | number | string
+    data_documento?: Date | string
+    data_vencimento?: Date | string | null
+    data_pagamento?: Date | string | null
+    forma: $Enums.FormaPagamento
+    data?: Date | string
+    movimentacao?: MovimentacaoFinanceiraUncheckedCreateNestedOneWithoutContaInput
+  }
+
+  export type ContaFinanceiraUpdateInput = {
+    tipo?: EnumTipoContaFieldUpdateOperationsInput | $Enums.TipoConta
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+    valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    data_documento?: DateTimeFieldUpdateOperationsInput | Date | string
+    data_vencimento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    data_pagamento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    forma?: EnumFormaPagamentoFieldUpdateOperationsInput | $Enums.FormaPagamento
+    data?: DateTimeFieldUpdateOperationsInput | Date | string
+    pedido?: PedidoUpdateOneWithoutPagamentosNestedInput
+    registro?: RegistroUpdateOneWithoutContasNestedInput
+    movimentacao?: MovimentacaoFinanceiraUpdateOneWithoutContaNestedInput
+  }
+
+  export type ContaFinanceiraUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    tipo?: EnumTipoContaFieldUpdateOperationsInput | $Enums.TipoConta
+    pedidoID?: NullableIntFieldUpdateOperationsInput | number | null
+    registroID?: NullableIntFieldUpdateOperationsInput | number | null
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+    valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    data_documento?: DateTimeFieldUpdateOperationsInput | Date | string
+    data_vencimento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    data_pagamento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    forma?: EnumFormaPagamentoFieldUpdateOperationsInput | $Enums.FormaPagamento
+    data?: DateTimeFieldUpdateOperationsInput | Date | string
+    movimentacao?: MovimentacaoFinanceiraUncheckedUpdateOneWithoutContaNestedInput
+  }
+
+  export type ContaFinanceiraCreateManyInput = {
+    id?: number
+    tipo: $Enums.TipoConta
+    pedidoID?: number | null
+    registroID?: number | null
+    descricao?: string | null
+    valor: Decimal | DecimalJsLike | number | string
+    data_documento?: Date | string
+    data_vencimento?: Date | string | null
+    data_pagamento?: Date | string | null
     forma: $Enums.FormaPagamento
     data?: Date | string
   }
 
-  export type PagamentoUpdateInput = {
+  export type ContaFinanceiraUpdateManyMutationInput = {
+    tipo?: EnumTipoContaFieldUpdateOperationsInput | $Enums.TipoConta
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
     valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    data_documento?: DateTimeFieldUpdateOperationsInput | Date | string
+    data_vencimento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    data_pagamento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     forma?: EnumFormaPagamentoFieldUpdateOperationsInput | $Enums.FormaPagamento
     data?: DateTimeFieldUpdateOperationsInput | Date | string
-    pedido?: PedidoUpdateOneRequiredWithoutPagamentosNestedInput
   }
 
-  export type PagamentoUncheckedUpdateInput = {
+  export type ContaFinanceiraUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
-    pedidoID?: IntFieldUpdateOperationsInput | number
+    tipo?: EnumTipoContaFieldUpdateOperationsInput | $Enums.TipoConta
+    pedidoID?: NullableIntFieldUpdateOperationsInput | number | null
+    registroID?: NullableIntFieldUpdateOperationsInput | number | null
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
     valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    data_documento?: DateTimeFieldUpdateOperationsInput | Date | string
+    data_vencimento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    data_pagamento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     forma?: EnumFormaPagamentoFieldUpdateOperationsInput | $Enums.FormaPagamento
     data?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type PagamentoCreateManyInput = {
-    id?: number
-    pedidoID: number
-    valor: Decimal | DecimalJsLike | number | string
-    forma: $Enums.FormaPagamento
-    data?: Date | string
-  }
-
-  export type PagamentoUpdateManyMutationInput = {
-    valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    forma?: EnumFormaPagamentoFieldUpdateOperationsInput | $Enums.FormaPagamento
-    data?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type PagamentoUncheckedUpdateManyInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    pedidoID?: IntFieldUpdateOperationsInput | number
-    valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    forma?: EnumFormaPagamentoFieldUpdateOperationsInput | $Enums.FormaPagamento
-    data?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ContaCreateInput = {
+  export type BancoCreateInput = {
     nome: string
     saldo: Decimal | DecimalJsLike | number | string
-    movimentacoes?: MovimentacaoFinanceiraCreateNestedManyWithoutContaInput
+    movimentacoes?: MovimentacaoFinanceiraCreateNestedManyWithoutBancoInput
   }
 
-  export type ContaUncheckedCreateInput = {
+  export type BancoUncheckedCreateInput = {
     id?: number
     nome: string
     saldo: Decimal | DecimalJsLike | number | string
-    movimentacoes?: MovimentacaoFinanceiraUncheckedCreateNestedManyWithoutContaInput
+    movimentacoes?: MovimentacaoFinanceiraUncheckedCreateNestedManyWithoutBancoInput
   }
 
-  export type ContaUpdateInput = {
+  export type BancoUpdateInput = {
     nome?: StringFieldUpdateOperationsInput | string
     saldo?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    movimentacoes?: MovimentacaoFinanceiraUpdateManyWithoutContaNestedInput
+    movimentacoes?: MovimentacaoFinanceiraUpdateManyWithoutBancoNestedInput
   }
 
-  export type ContaUncheckedUpdateInput = {
+  export type BancoUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     nome?: StringFieldUpdateOperationsInput | string
     saldo?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    movimentacoes?: MovimentacaoFinanceiraUncheckedUpdateManyWithoutContaNestedInput
+    movimentacoes?: MovimentacaoFinanceiraUncheckedUpdateManyWithoutBancoNestedInput
   }
 
-  export type ContaCreateManyInput = {
+  export type BancoCreateManyInput = {
     id?: number
     nome: string
     saldo: Decimal | DecimalJsLike | number | string
   }
 
-  export type ContaUpdateManyMutationInput = {
+  export type BancoUpdateManyMutationInput = {
     nome?: StringFieldUpdateOperationsInput | string
     saldo?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
-  export type ContaUncheckedUpdateManyInput = {
+  export type BancoUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     nome?: StringFieldUpdateOperationsInput | string
     saldo?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -29909,81 +33306,143 @@ export namespace Prisma {
 
   export type MovimentacaoFinanceiraCreateInput = {
     tipoMovimentacao: $Enums.TipoMovimentacao
-    valor: Decimal | DecimalJsLike | number | string
-    descricao?: string | null
     data?: Date | string
-    origem: $Enums.TipoOrigem
-    origemID?: number | null
-    conta: ContaCreateNestedOneWithoutMovimentacoesInput
+    saldoAtual: Decimal | DecimalJsLike | number | string
+    valor: Decimal | DecimalJsLike | number | string
+    saldoFinal: Decimal | DecimalJsLike | number | string
+    descricao?: string | null
+    estornadoEm?: Date | string | null
+    banco?: BancoCreateNestedOneWithoutMovimentacoesInput
     caixa: LivroCaixaCreateNestedOneWithoutMovimentacoesInput
+    conta?: ContaFinanceiraCreateNestedOneWithoutMovimentacaoInput
+    categoria: CategoriaCaixaCreateNestedOneWithoutMovimentacoesInput
   }
 
   export type MovimentacaoFinanceiraUncheckedCreateInput = {
     id?: number
-    contaID: number
-    tipoMovimentacao: $Enums.TipoMovimentacao
-    valor: Decimal | DecimalJsLike | number | string
-    descricao?: string | null
-    data?: Date | string
-    origem: $Enums.TipoOrigem
-    origemID?: number | null
+    bancoID?: number | null
     caixaID: number
+    contaID?: number | null
+    categoriaID: number
+    tipoMovimentacao: $Enums.TipoMovimentacao
+    data?: Date | string
+    saldoAtual: Decimal | DecimalJsLike | number | string
+    valor: Decimal | DecimalJsLike | number | string
+    saldoFinal: Decimal | DecimalJsLike | number | string
+    descricao?: string | null
+    estornadoEm?: Date | string | null
   }
 
   export type MovimentacaoFinanceiraUpdateInput = {
     tipoMovimentacao?: EnumTipoMovimentacaoFieldUpdateOperationsInput | $Enums.TipoMovimentacao
-    valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    descricao?: NullableStringFieldUpdateOperationsInput | string | null
     data?: DateTimeFieldUpdateOperationsInput | Date | string
-    origem?: EnumTipoOrigemFieldUpdateOperationsInput | $Enums.TipoOrigem
-    origemID?: NullableIntFieldUpdateOperationsInput | number | null
-    conta?: ContaUpdateOneRequiredWithoutMovimentacoesNestedInput
+    saldoAtual?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    saldoFinal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+    estornadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    banco?: BancoUpdateOneWithoutMovimentacoesNestedInput
     caixa?: LivroCaixaUpdateOneRequiredWithoutMovimentacoesNestedInput
+    conta?: ContaFinanceiraUpdateOneWithoutMovimentacaoNestedInput
+    categoria?: CategoriaCaixaUpdateOneRequiredWithoutMovimentacoesNestedInput
   }
 
   export type MovimentacaoFinanceiraUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
-    contaID?: IntFieldUpdateOperationsInput | number
-    tipoMovimentacao?: EnumTipoMovimentacaoFieldUpdateOperationsInput | $Enums.TipoMovimentacao
-    valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    descricao?: NullableStringFieldUpdateOperationsInput | string | null
-    data?: DateTimeFieldUpdateOperationsInput | Date | string
-    origem?: EnumTipoOrigemFieldUpdateOperationsInput | $Enums.TipoOrigem
-    origemID?: NullableIntFieldUpdateOperationsInput | number | null
+    bancoID?: NullableIntFieldUpdateOperationsInput | number | null
     caixaID?: IntFieldUpdateOperationsInput | number
+    contaID?: NullableIntFieldUpdateOperationsInput | number | null
+    categoriaID?: IntFieldUpdateOperationsInput | number
+    tipoMovimentacao?: EnumTipoMovimentacaoFieldUpdateOperationsInput | $Enums.TipoMovimentacao
+    data?: DateTimeFieldUpdateOperationsInput | Date | string
+    saldoAtual?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    saldoFinal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+    estornadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type MovimentacaoFinanceiraCreateManyInput = {
     id?: number
-    contaID: number
-    tipoMovimentacao: $Enums.TipoMovimentacao
-    valor: Decimal | DecimalJsLike | number | string
-    descricao?: string | null
-    data?: Date | string
-    origem: $Enums.TipoOrigem
-    origemID?: number | null
+    bancoID?: number | null
     caixaID: number
+    contaID?: number | null
+    categoriaID: number
+    tipoMovimentacao: $Enums.TipoMovimentacao
+    data?: Date | string
+    saldoAtual: Decimal | DecimalJsLike | number | string
+    valor: Decimal | DecimalJsLike | number | string
+    saldoFinal: Decimal | DecimalJsLike | number | string
+    descricao?: string | null
+    estornadoEm?: Date | string | null
   }
 
   export type MovimentacaoFinanceiraUpdateManyMutationInput = {
     tipoMovimentacao?: EnumTipoMovimentacaoFieldUpdateOperationsInput | $Enums.TipoMovimentacao
-    valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    descricao?: NullableStringFieldUpdateOperationsInput | string | null
     data?: DateTimeFieldUpdateOperationsInput | Date | string
-    origem?: EnumTipoOrigemFieldUpdateOperationsInput | $Enums.TipoOrigem
-    origemID?: NullableIntFieldUpdateOperationsInput | number | null
+    saldoAtual?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    saldoFinal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+    estornadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type MovimentacaoFinanceiraUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
-    contaID?: IntFieldUpdateOperationsInput | number
-    tipoMovimentacao?: EnumTipoMovimentacaoFieldUpdateOperationsInput | $Enums.TipoMovimentacao
-    valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    descricao?: NullableStringFieldUpdateOperationsInput | string | null
-    data?: DateTimeFieldUpdateOperationsInput | Date | string
-    origem?: EnumTipoOrigemFieldUpdateOperationsInput | $Enums.TipoOrigem
-    origemID?: NullableIntFieldUpdateOperationsInput | number | null
+    bancoID?: NullableIntFieldUpdateOperationsInput | number | null
     caixaID?: IntFieldUpdateOperationsInput | number
+    contaID?: NullableIntFieldUpdateOperationsInput | number | null
+    categoriaID?: IntFieldUpdateOperationsInput | number
+    tipoMovimentacao?: EnumTipoMovimentacaoFieldUpdateOperationsInput | $Enums.TipoMovimentacao
+    data?: DateTimeFieldUpdateOperationsInput | Date | string
+    saldoAtual?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    saldoFinal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+    estornadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type CategoriaCaixaCreateInput = {
+    nome: string
+    deletedAt?: Date | string | null
+    movimentacoes?: MovimentacaoFinanceiraCreateNestedManyWithoutCategoriaInput
+  }
+
+  export type CategoriaCaixaUncheckedCreateInput = {
+    id?: number
+    nome: string
+    deletedAt?: Date | string | null
+    movimentacoes?: MovimentacaoFinanceiraUncheckedCreateNestedManyWithoutCategoriaInput
+  }
+
+  export type CategoriaCaixaUpdateInput = {
+    nome?: StringFieldUpdateOperationsInput | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    movimentacoes?: MovimentacaoFinanceiraUpdateManyWithoutCategoriaNestedInput
+  }
+
+  export type CategoriaCaixaUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    nome?: StringFieldUpdateOperationsInput | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    movimentacoes?: MovimentacaoFinanceiraUncheckedUpdateManyWithoutCategoriaNestedInput
+  }
+
+  export type CategoriaCaixaCreateManyInput = {
+    id?: number
+    nome: string
+    deletedAt?: Date | string | null
+  }
+
+  export type CategoriaCaixaUpdateManyMutationInput = {
+    nome?: StringFieldUpdateOperationsInput | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type CategoriaCaixaUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    nome?: StringFieldUpdateOperationsInput | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type MovimentacaoEstoqueCreateInput = {
@@ -30126,59 +33585,63 @@ export namespace Prisma {
     dataAbertura?: Date | string
     dataFechamento?: Date | string | null
     saldoInicial: Decimal | DecimalJsLike | number | string
-    saldoFinal?: Decimal | DecimalJsLike | number | string | null
+    saldoFinal: Decimal | DecimalJsLike | number | string
     status?: $Enums.StatusCaixa
-    usuario: UserCreateNestedOneWithoutCaixasInput
+    abertoPor: UserCreateNestedOneWithoutCaixasAbertosInput
     movimentacoes?: MovimentacaoFinanceiraCreateNestedManyWithoutCaixaInput
+    fechamento?: FechamentoCreateNestedOneWithoutCaixaInput
   }
 
   export type LivroCaixaUncheckedCreateInput = {
     id?: number
     dataAbertura?: Date | string
     dataFechamento?: Date | string | null
+    abertoPorID: number
     saldoInicial: Decimal | DecimalJsLike | number | string
-    saldoFinal?: Decimal | DecimalJsLike | number | string | null
+    saldoFinal: Decimal | DecimalJsLike | number | string
     status?: $Enums.StatusCaixa
-    usuarioID: number
     movimentacoes?: MovimentacaoFinanceiraUncheckedCreateNestedManyWithoutCaixaInput
+    fechamento?: FechamentoUncheckedCreateNestedOneWithoutCaixaInput
   }
 
   export type LivroCaixaUpdateInput = {
     dataAbertura?: DateTimeFieldUpdateOperationsInput | Date | string
     dataFechamento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     saldoInicial?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    saldoFinal?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    saldoFinal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     status?: EnumStatusCaixaFieldUpdateOperationsInput | $Enums.StatusCaixa
-    usuario?: UserUpdateOneRequiredWithoutCaixasNestedInput
+    abertoPor?: UserUpdateOneRequiredWithoutCaixasAbertosNestedInput
     movimentacoes?: MovimentacaoFinanceiraUpdateManyWithoutCaixaNestedInput
+    fechamento?: FechamentoUpdateOneWithoutCaixaNestedInput
   }
 
   export type LivroCaixaUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     dataAbertura?: DateTimeFieldUpdateOperationsInput | Date | string
     dataFechamento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    abertoPorID?: IntFieldUpdateOperationsInput | number
     saldoInicial?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    saldoFinal?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    saldoFinal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     status?: EnumStatusCaixaFieldUpdateOperationsInput | $Enums.StatusCaixa
-    usuarioID?: IntFieldUpdateOperationsInput | number
     movimentacoes?: MovimentacaoFinanceiraUncheckedUpdateManyWithoutCaixaNestedInput
+    fechamento?: FechamentoUncheckedUpdateOneWithoutCaixaNestedInput
   }
 
   export type LivroCaixaCreateManyInput = {
     id?: number
     dataAbertura?: Date | string
     dataFechamento?: Date | string | null
+    abertoPorID: number
     saldoInicial: Decimal | DecimalJsLike | number | string
-    saldoFinal?: Decimal | DecimalJsLike | number | string | null
+    saldoFinal: Decimal | DecimalJsLike | number | string
     status?: $Enums.StatusCaixa
-    usuarioID: number
   }
 
   export type LivroCaixaUpdateManyMutationInput = {
     dataAbertura?: DateTimeFieldUpdateOperationsInput | Date | string
     dataFechamento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     saldoInicial?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    saldoFinal?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    saldoFinal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     status?: EnumStatusCaixaFieldUpdateOperationsInput | $Enums.StatusCaixa
   }
 
@@ -30186,10 +33649,180 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     dataAbertura?: DateTimeFieldUpdateOperationsInput | Date | string
     dataFechamento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    abertoPorID?: IntFieldUpdateOperationsInput | number
     saldoInicial?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    saldoFinal?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    saldoFinal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     status?: EnumStatusCaixaFieldUpdateOperationsInput | $Enums.StatusCaixa
-    usuarioID?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type FechamentoCreateInput = {
+    valor_abertura: Decimal | DecimalJsLike | number | string
+    valor_abastecimentos: Decimal | DecimalJsLike | number | string
+    valor_despesas: Decimal | DecimalJsLike | number | string
+    data_abertura: Date | string
+    data_fechamento: Date | string
+    valor_esperado: Decimal | DecimalJsLike | number | string
+    valor_conferido: Decimal | DecimalJsLike | number | string
+    valor_diferenca?: Decimal | DecimalJsLike | number | string | null
+    valor_pago: Decimal | DecimalJsLike | number | string
+    valor_recebido: Decimal | DecimalJsLike | number | string
+    valor_total_compras: Decimal | DecimalJsLike | number | string
+    valor_total_vendas: Decimal | DecimalJsLike | number | string
+    peso_total_compras: Decimal | DecimalJsLike | number | string
+    peso_total_vendas: Decimal | DecimalJsLike | number | string
+    lucro_total: Decimal | DecimalJsLike | number | string
+    proj_lucro: Decimal | DecimalJsLike | number | string
+    proj_venda: Decimal | DecimalJsLike | number | string
+    qnt_compras: Decimal | DecimalJsLike | number | string
+    qnt_vendas: Decimal | DecimalJsLike | number | string
+    caixa: LivroCaixaCreateNestedOneWithoutFechamentoInput
+    user_fechamento: UserCreateNestedOneWithoutFechamentosInput
+  }
+
+  export type FechamentoUncheckedCreateInput = {
+    id?: number
+    caixaID: number
+    valor_abertura: Decimal | DecimalJsLike | number | string
+    valor_abastecimentos: Decimal | DecimalJsLike | number | string
+    valor_despesas: Decimal | DecimalJsLike | number | string
+    data_abertura: Date | string
+    data_fechamento: Date | string
+    userID_fechamento: number
+    valor_esperado: Decimal | DecimalJsLike | number | string
+    valor_conferido: Decimal | DecimalJsLike | number | string
+    valor_diferenca?: Decimal | DecimalJsLike | number | string | null
+    valor_pago: Decimal | DecimalJsLike | number | string
+    valor_recebido: Decimal | DecimalJsLike | number | string
+    valor_total_compras: Decimal | DecimalJsLike | number | string
+    valor_total_vendas: Decimal | DecimalJsLike | number | string
+    peso_total_compras: Decimal | DecimalJsLike | number | string
+    peso_total_vendas: Decimal | DecimalJsLike | number | string
+    lucro_total: Decimal | DecimalJsLike | number | string
+    proj_lucro: Decimal | DecimalJsLike | number | string
+    proj_venda: Decimal | DecimalJsLike | number | string
+    qnt_compras: Decimal | DecimalJsLike | number | string
+    qnt_vendas: Decimal | DecimalJsLike | number | string
+  }
+
+  export type FechamentoUpdateInput = {
+    valor_abertura?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_abastecimentos?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_despesas?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    data_abertura?: DateTimeFieldUpdateOperationsInput | Date | string
+    data_fechamento?: DateTimeFieldUpdateOperationsInput | Date | string
+    valor_esperado?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_conferido?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_diferenca?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    valor_pago?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_recebido?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_total_compras?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_total_vendas?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    peso_total_compras?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    peso_total_vendas?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    lucro_total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    proj_lucro?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    proj_venda?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    qnt_compras?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    qnt_vendas?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    caixa?: LivroCaixaUpdateOneRequiredWithoutFechamentoNestedInput
+    user_fechamento?: UserUpdateOneRequiredWithoutFechamentosNestedInput
+  }
+
+  export type FechamentoUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    caixaID?: IntFieldUpdateOperationsInput | number
+    valor_abertura?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_abastecimentos?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_despesas?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    data_abertura?: DateTimeFieldUpdateOperationsInput | Date | string
+    data_fechamento?: DateTimeFieldUpdateOperationsInput | Date | string
+    userID_fechamento?: IntFieldUpdateOperationsInput | number
+    valor_esperado?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_conferido?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_diferenca?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    valor_pago?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_recebido?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_total_compras?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_total_vendas?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    peso_total_compras?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    peso_total_vendas?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    lucro_total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    proj_lucro?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    proj_venda?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    qnt_compras?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    qnt_vendas?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type FechamentoCreateManyInput = {
+    id?: number
+    caixaID: number
+    valor_abertura: Decimal | DecimalJsLike | number | string
+    valor_abastecimentos: Decimal | DecimalJsLike | number | string
+    valor_despesas: Decimal | DecimalJsLike | number | string
+    data_abertura: Date | string
+    data_fechamento: Date | string
+    userID_fechamento: number
+    valor_esperado: Decimal | DecimalJsLike | number | string
+    valor_conferido: Decimal | DecimalJsLike | number | string
+    valor_diferenca?: Decimal | DecimalJsLike | number | string | null
+    valor_pago: Decimal | DecimalJsLike | number | string
+    valor_recebido: Decimal | DecimalJsLike | number | string
+    valor_total_compras: Decimal | DecimalJsLike | number | string
+    valor_total_vendas: Decimal | DecimalJsLike | number | string
+    peso_total_compras: Decimal | DecimalJsLike | number | string
+    peso_total_vendas: Decimal | DecimalJsLike | number | string
+    lucro_total: Decimal | DecimalJsLike | number | string
+    proj_lucro: Decimal | DecimalJsLike | number | string
+    proj_venda: Decimal | DecimalJsLike | number | string
+    qnt_compras: Decimal | DecimalJsLike | number | string
+    qnt_vendas: Decimal | DecimalJsLike | number | string
+  }
+
+  export type FechamentoUpdateManyMutationInput = {
+    valor_abertura?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_abastecimentos?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_despesas?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    data_abertura?: DateTimeFieldUpdateOperationsInput | Date | string
+    data_fechamento?: DateTimeFieldUpdateOperationsInput | Date | string
+    valor_esperado?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_conferido?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_diferenca?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    valor_pago?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_recebido?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_total_compras?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_total_vendas?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    peso_total_compras?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    peso_total_vendas?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    lucro_total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    proj_lucro?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    proj_venda?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    qnt_compras?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    qnt_vendas?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type FechamentoUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    caixaID?: IntFieldUpdateOperationsInput | number
+    valor_abertura?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_abastecimentos?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_despesas?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    data_abertura?: DateTimeFieldUpdateOperationsInput | Date | string
+    data_fechamento?: DateTimeFieldUpdateOperationsInput | Date | string
+    userID_fechamento?: IntFieldUpdateOperationsInput | number
+    valor_esperado?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_conferido?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_diferenca?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    valor_pago?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_recebido?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_total_compras?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_total_vendas?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    peso_total_compras?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    peso_total_vendas?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    lucro_total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    proj_lucro?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    proj_venda?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    qnt_compras?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    qnt_vendas?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
   export type IntFilter<$PrismaModel = never> = {
@@ -30246,6 +33879,12 @@ export namespace Prisma {
     none?: LivroCaixaWhereInput
   }
 
+  export type FechamentoListRelationFilter = {
+    every?: FechamentoWhereInput
+    some?: FechamentoWhereInput
+    none?: FechamentoWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -30256,6 +33895,10 @@ export namespace Prisma {
   }
 
   export type LivroCaixaOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type FechamentoOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -30505,6 +34148,16 @@ export namespace Prisma {
   export type SaldoFinanceiroNullableScalarRelationFilter = {
     is?: SaldoFinanceiroWhereInput | null
     isNot?: SaldoFinanceiroWhereInput | null
+  }
+
+  export type ContaFinanceiraListRelationFilter = {
+    every?: ContaFinanceiraWhereInput
+    some?: ContaFinanceiraWhereInput
+    none?: ContaFinanceiraWhereInput
+  }
+
+  export type ContaFinanceiraOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type RegistroCountOrderByAggregateInput = {
@@ -31077,12 +34730,6 @@ export namespace Prisma {
     not?: NestedEnumTipoStatusPedidoFilter<$PrismaModel> | $Enums.TipoStatusPedido
   }
 
-  export type PagamentoListRelationFilter = {
-    every?: PagamentoWhereInput
-    some?: PagamentoWhereInput
-    none?: PagamentoWhereInput
-  }
-
   export type RegistroNullableScalarRelationFilter = {
     is?: RegistroWhereInput | null
     isNot?: RegistroWhereInput | null
@@ -31091,10 +34738,6 @@ export namespace Prisma {
   export type UserScalarRelationFilter = {
     is?: UserWhereInput
     isNot?: UserWhereInput
-  }
-
-  export type PagamentoOrderByRelationAggregateInput = {
-    _count?: SortOrder
   }
 
   export type PedidoCountOrderByAggregateInput = {
@@ -31180,6 +34823,13 @@ export namespace Prisma {
     _max?: NestedEnumTipoStatusPedidoFilter<$PrismaModel>
   }
 
+  export type EnumTipoContaFilter<$PrismaModel = never> = {
+    equals?: $Enums.TipoConta | EnumTipoContaFieldRefInput<$PrismaModel>
+    in?: $Enums.TipoConta[] | ListEnumTipoContaFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TipoConta[] | ListEnumTipoContaFieldRefInput<$PrismaModel>
+    not?: NestedEnumTipoContaFilter<$PrismaModel> | $Enums.TipoConta
+  }
+
   export type EnumFormaPagamentoFilter<$PrismaModel = never> = {
     equals?: $Enums.FormaPagamento | EnumFormaPagamentoFieldRefInput<$PrismaModel>
     in?: $Enums.FormaPagamento[] | ListEnumFormaPagamentoFieldRefInput<$PrismaModel>
@@ -31187,40 +34837,80 @@ export namespace Prisma {
     not?: NestedEnumFormaPagamentoFilter<$PrismaModel> | $Enums.FormaPagamento
   }
 
-  export type PagamentoCountOrderByAggregateInput = {
+  export type PedidoNullableScalarRelationFilter = {
+    is?: PedidoWhereInput | null
+    isNot?: PedidoWhereInput | null
+  }
+
+  export type MovimentacaoFinanceiraNullableScalarRelationFilter = {
+    is?: MovimentacaoFinanceiraWhereInput | null
+    isNot?: MovimentacaoFinanceiraWhereInput | null
+  }
+
+  export type ContaFinanceiraCountOrderByAggregateInput = {
     id?: SortOrder
+    tipo?: SortOrder
     pedidoID?: SortOrder
+    registroID?: SortOrder
+    descricao?: SortOrder
     valor?: SortOrder
+    data_documento?: SortOrder
+    data_vencimento?: SortOrder
+    data_pagamento?: SortOrder
     forma?: SortOrder
     data?: SortOrder
   }
 
-  export type PagamentoAvgOrderByAggregateInput = {
+  export type ContaFinanceiraAvgOrderByAggregateInput = {
     id?: SortOrder
     pedidoID?: SortOrder
+    registroID?: SortOrder
     valor?: SortOrder
   }
 
-  export type PagamentoMaxOrderByAggregateInput = {
+  export type ContaFinanceiraMaxOrderByAggregateInput = {
     id?: SortOrder
+    tipo?: SortOrder
     pedidoID?: SortOrder
+    registroID?: SortOrder
+    descricao?: SortOrder
     valor?: SortOrder
+    data_documento?: SortOrder
+    data_vencimento?: SortOrder
+    data_pagamento?: SortOrder
     forma?: SortOrder
     data?: SortOrder
   }
 
-  export type PagamentoMinOrderByAggregateInput = {
+  export type ContaFinanceiraMinOrderByAggregateInput = {
     id?: SortOrder
+    tipo?: SortOrder
     pedidoID?: SortOrder
+    registroID?: SortOrder
+    descricao?: SortOrder
     valor?: SortOrder
+    data_documento?: SortOrder
+    data_vencimento?: SortOrder
+    data_pagamento?: SortOrder
     forma?: SortOrder
     data?: SortOrder
   }
 
-  export type PagamentoSumOrderByAggregateInput = {
+  export type ContaFinanceiraSumOrderByAggregateInput = {
     id?: SortOrder
     pedidoID?: SortOrder
+    registroID?: SortOrder
     valor?: SortOrder
+  }
+
+  export type EnumTipoContaWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TipoConta | EnumTipoContaFieldRefInput<$PrismaModel>
+    in?: $Enums.TipoConta[] | ListEnumTipoContaFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TipoConta[] | ListEnumTipoContaFieldRefInput<$PrismaModel>
+    not?: NestedEnumTipoContaWithAggregatesFilter<$PrismaModel> | $Enums.TipoConta
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTipoContaFilter<$PrismaModel>
+    _max?: NestedEnumTipoContaFilter<$PrismaModel>
   }
 
   export type EnumFormaPagamentoWithAggregatesFilter<$PrismaModel = never> = {
@@ -31243,30 +34933,30 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
-  export type ContaCountOrderByAggregateInput = {
+  export type BancoCountOrderByAggregateInput = {
     id?: SortOrder
     nome?: SortOrder
     saldo?: SortOrder
   }
 
-  export type ContaAvgOrderByAggregateInput = {
+  export type BancoAvgOrderByAggregateInput = {
     id?: SortOrder
     saldo?: SortOrder
   }
 
-  export type ContaMaxOrderByAggregateInput = {
-    id?: SortOrder
-    nome?: SortOrder
-    saldo?: SortOrder
-  }
-
-  export type ContaMinOrderByAggregateInput = {
+  export type BancoMaxOrderByAggregateInput = {
     id?: SortOrder
     nome?: SortOrder
     saldo?: SortOrder
   }
 
-  export type ContaSumOrderByAggregateInput = {
+  export type BancoMinOrderByAggregateInput = {
+    id?: SortOrder
+    nome?: SortOrder
+    saldo?: SortOrder
+  }
+
+  export type BancoSumOrderByAggregateInput = {
     id?: SortOrder
     saldo?: SortOrder
   }
@@ -31278,16 +34968,9 @@ export namespace Prisma {
     not?: NestedEnumTipoMovimentacaoFilter<$PrismaModel> | $Enums.TipoMovimentacao
   }
 
-  export type EnumTipoOrigemFilter<$PrismaModel = never> = {
-    equals?: $Enums.TipoOrigem | EnumTipoOrigemFieldRefInput<$PrismaModel>
-    in?: $Enums.TipoOrigem[] | ListEnumTipoOrigemFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TipoOrigem[] | ListEnumTipoOrigemFieldRefInput<$PrismaModel>
-    not?: NestedEnumTipoOrigemFilter<$PrismaModel> | $Enums.TipoOrigem
-  }
-
-  export type ContaScalarRelationFilter = {
-    is?: ContaWhereInput
-    isNot?: ContaWhereInput
+  export type BancoNullableScalarRelationFilter = {
+    is?: BancoWhereInput | null
+    isNot?: BancoWhereInput | null
   }
 
   export type LivroCaixaScalarRelationFilter = {
@@ -31295,56 +34978,81 @@ export namespace Prisma {
     isNot?: LivroCaixaWhereInput
   }
 
+  export type ContaFinanceiraNullableScalarRelationFilter = {
+    is?: ContaFinanceiraWhereInput | null
+    isNot?: ContaFinanceiraWhereInput | null
+  }
+
+  export type CategoriaCaixaScalarRelationFilter = {
+    is?: CategoriaCaixaWhereInput
+    isNot?: CategoriaCaixaWhereInput
+  }
+
   export type MovimentacaoFinanceiraCountOrderByAggregateInput = {
     id?: SortOrder
-    contaID?: SortOrder
-    tipoMovimentacao?: SortOrder
-    valor?: SortOrder
-    descricao?: SortOrder
-    data?: SortOrder
-    origem?: SortOrder
-    origemID?: SortOrder
+    bancoID?: SortOrder
     caixaID?: SortOrder
+    contaID?: SortOrder
+    categoriaID?: SortOrder
+    tipoMovimentacao?: SortOrder
+    data?: SortOrder
+    saldoAtual?: SortOrder
+    valor?: SortOrder
+    saldoFinal?: SortOrder
+    descricao?: SortOrder
+    estornadoEm?: SortOrder
   }
 
   export type MovimentacaoFinanceiraAvgOrderByAggregateInput = {
     id?: SortOrder
-    contaID?: SortOrder
-    valor?: SortOrder
-    origemID?: SortOrder
+    bancoID?: SortOrder
     caixaID?: SortOrder
+    contaID?: SortOrder
+    categoriaID?: SortOrder
+    saldoAtual?: SortOrder
+    valor?: SortOrder
+    saldoFinal?: SortOrder
   }
 
   export type MovimentacaoFinanceiraMaxOrderByAggregateInput = {
     id?: SortOrder
-    contaID?: SortOrder
-    tipoMovimentacao?: SortOrder
-    valor?: SortOrder
-    descricao?: SortOrder
-    data?: SortOrder
-    origem?: SortOrder
-    origemID?: SortOrder
+    bancoID?: SortOrder
     caixaID?: SortOrder
+    contaID?: SortOrder
+    categoriaID?: SortOrder
+    tipoMovimentacao?: SortOrder
+    data?: SortOrder
+    saldoAtual?: SortOrder
+    valor?: SortOrder
+    saldoFinal?: SortOrder
+    descricao?: SortOrder
+    estornadoEm?: SortOrder
   }
 
   export type MovimentacaoFinanceiraMinOrderByAggregateInput = {
     id?: SortOrder
-    contaID?: SortOrder
-    tipoMovimentacao?: SortOrder
-    valor?: SortOrder
-    descricao?: SortOrder
-    data?: SortOrder
-    origem?: SortOrder
-    origemID?: SortOrder
+    bancoID?: SortOrder
     caixaID?: SortOrder
+    contaID?: SortOrder
+    categoriaID?: SortOrder
+    tipoMovimentacao?: SortOrder
+    data?: SortOrder
+    saldoAtual?: SortOrder
+    valor?: SortOrder
+    saldoFinal?: SortOrder
+    descricao?: SortOrder
+    estornadoEm?: SortOrder
   }
 
   export type MovimentacaoFinanceiraSumOrderByAggregateInput = {
     id?: SortOrder
-    contaID?: SortOrder
-    valor?: SortOrder
-    origemID?: SortOrder
+    bancoID?: SortOrder
     caixaID?: SortOrder
+    contaID?: SortOrder
+    categoriaID?: SortOrder
+    saldoAtual?: SortOrder
+    valor?: SortOrder
+    saldoFinal?: SortOrder
   }
 
   export type EnumTipoMovimentacaoWithAggregatesFilter<$PrismaModel = never> = {
@@ -31357,14 +35065,30 @@ export namespace Prisma {
     _max?: NestedEnumTipoMovimentacaoFilter<$PrismaModel>
   }
 
-  export type EnumTipoOrigemWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.TipoOrigem | EnumTipoOrigemFieldRefInput<$PrismaModel>
-    in?: $Enums.TipoOrigem[] | ListEnumTipoOrigemFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TipoOrigem[] | ListEnumTipoOrigemFieldRefInput<$PrismaModel>
-    not?: NestedEnumTipoOrigemWithAggregatesFilter<$PrismaModel> | $Enums.TipoOrigem
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumTipoOrigemFilter<$PrismaModel>
-    _max?: NestedEnumTipoOrigemFilter<$PrismaModel>
+  export type CategoriaCaixaCountOrderByAggregateInput = {
+    id?: SortOrder
+    nome?: SortOrder
+    deletedAt?: SortOrder
+  }
+
+  export type CategoriaCaixaAvgOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type CategoriaCaixaMaxOrderByAggregateInput = {
+    id?: SortOrder
+    nome?: SortOrder
+    deletedAt?: SortOrder
+  }
+
+  export type CategoriaCaixaMinOrderByAggregateInput = {
+    id?: SortOrder
+    nome?: SortOrder
+    deletedAt?: SortOrder
+  }
+
+  export type CategoriaCaixaSumOrderByAggregateInput = {
+    id?: SortOrder
   }
 
   export type EnumTipoMovimentacaoEstoqueFilter<$PrismaModel = never> = {
@@ -31496,6 +35220,72 @@ export namespace Prisma {
     quantidade?: SortOrder
   }
 
+  export type EnumStatusCaixaFilter<$PrismaModel = never> = {
+    equals?: $Enums.StatusCaixa | EnumStatusCaixaFieldRefInput<$PrismaModel>
+    in?: $Enums.StatusCaixa[] | ListEnumStatusCaixaFieldRefInput<$PrismaModel>
+    notIn?: $Enums.StatusCaixa[] | ListEnumStatusCaixaFieldRefInput<$PrismaModel>
+    not?: NestedEnumStatusCaixaFilter<$PrismaModel> | $Enums.StatusCaixa
+  }
+
+  export type FechamentoNullableScalarRelationFilter = {
+    is?: FechamentoWhereInput | null
+    isNot?: FechamentoWhereInput | null
+  }
+
+  export type LivroCaixaCountOrderByAggregateInput = {
+    id?: SortOrder
+    dataAbertura?: SortOrder
+    dataFechamento?: SortOrder
+    abertoPorID?: SortOrder
+    saldoInicial?: SortOrder
+    saldoFinal?: SortOrder
+    status?: SortOrder
+  }
+
+  export type LivroCaixaAvgOrderByAggregateInput = {
+    id?: SortOrder
+    abertoPorID?: SortOrder
+    saldoInicial?: SortOrder
+    saldoFinal?: SortOrder
+  }
+
+  export type LivroCaixaMaxOrderByAggregateInput = {
+    id?: SortOrder
+    dataAbertura?: SortOrder
+    dataFechamento?: SortOrder
+    abertoPorID?: SortOrder
+    saldoInicial?: SortOrder
+    saldoFinal?: SortOrder
+    status?: SortOrder
+  }
+
+  export type LivroCaixaMinOrderByAggregateInput = {
+    id?: SortOrder
+    dataAbertura?: SortOrder
+    dataFechamento?: SortOrder
+    abertoPorID?: SortOrder
+    saldoInicial?: SortOrder
+    saldoFinal?: SortOrder
+    status?: SortOrder
+  }
+
+  export type LivroCaixaSumOrderByAggregateInput = {
+    id?: SortOrder
+    abertoPorID?: SortOrder
+    saldoInicial?: SortOrder
+    saldoFinal?: SortOrder
+  }
+
+  export type EnumStatusCaixaWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.StatusCaixa | EnumStatusCaixaFieldRefInput<$PrismaModel>
+    in?: $Enums.StatusCaixa[] | ListEnumStatusCaixaFieldRefInput<$PrismaModel>
+    notIn?: $Enums.StatusCaixa[] | ListEnumStatusCaixaFieldRefInput<$PrismaModel>
+    not?: NestedEnumStatusCaixaWithAggregatesFilter<$PrismaModel> | $Enums.StatusCaixa
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumStatusCaixaFilter<$PrismaModel>
+    _max?: NestedEnumStatusCaixaFilter<$PrismaModel>
+  }
+
   export type DecimalNullableFilter<$PrismaModel = never> = {
     equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
     in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
@@ -31507,55 +35297,125 @@ export namespace Prisma {
     not?: NestedDecimalNullableFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
   }
 
-  export type EnumStatusCaixaFilter<$PrismaModel = never> = {
-    equals?: $Enums.StatusCaixa | EnumStatusCaixaFieldRefInput<$PrismaModel>
-    in?: $Enums.StatusCaixa[] | ListEnumStatusCaixaFieldRefInput<$PrismaModel>
-    notIn?: $Enums.StatusCaixa[] | ListEnumStatusCaixaFieldRefInput<$PrismaModel>
-    not?: NestedEnumStatusCaixaFilter<$PrismaModel> | $Enums.StatusCaixa
+  export type FechamentoCountOrderByAggregateInput = {
+    id?: SortOrder
+    caixaID?: SortOrder
+    valor_abertura?: SortOrder
+    valor_abastecimentos?: SortOrder
+    valor_despesas?: SortOrder
+    data_abertura?: SortOrder
+    data_fechamento?: SortOrder
+    userID_fechamento?: SortOrder
+    valor_esperado?: SortOrder
+    valor_conferido?: SortOrder
+    valor_diferenca?: SortOrder
+    valor_pago?: SortOrder
+    valor_recebido?: SortOrder
+    valor_total_compras?: SortOrder
+    valor_total_vendas?: SortOrder
+    peso_total_compras?: SortOrder
+    peso_total_vendas?: SortOrder
+    lucro_total?: SortOrder
+    proj_lucro?: SortOrder
+    proj_venda?: SortOrder
+    qnt_compras?: SortOrder
+    qnt_vendas?: SortOrder
   }
 
-  export type LivroCaixaCountOrderByAggregateInput = {
+  export type FechamentoAvgOrderByAggregateInput = {
     id?: SortOrder
-    dataAbertura?: SortOrder
-    dataFechamento?: SortOrder
-    saldoInicial?: SortOrder
-    saldoFinal?: SortOrder
-    status?: SortOrder
-    usuarioID?: SortOrder
+    caixaID?: SortOrder
+    valor_abertura?: SortOrder
+    valor_abastecimentos?: SortOrder
+    valor_despesas?: SortOrder
+    userID_fechamento?: SortOrder
+    valor_esperado?: SortOrder
+    valor_conferido?: SortOrder
+    valor_diferenca?: SortOrder
+    valor_pago?: SortOrder
+    valor_recebido?: SortOrder
+    valor_total_compras?: SortOrder
+    valor_total_vendas?: SortOrder
+    peso_total_compras?: SortOrder
+    peso_total_vendas?: SortOrder
+    lucro_total?: SortOrder
+    proj_lucro?: SortOrder
+    proj_venda?: SortOrder
+    qnt_compras?: SortOrder
+    qnt_vendas?: SortOrder
   }
 
-  export type LivroCaixaAvgOrderByAggregateInput = {
+  export type FechamentoMaxOrderByAggregateInput = {
     id?: SortOrder
-    saldoInicial?: SortOrder
-    saldoFinal?: SortOrder
-    usuarioID?: SortOrder
+    caixaID?: SortOrder
+    valor_abertura?: SortOrder
+    valor_abastecimentos?: SortOrder
+    valor_despesas?: SortOrder
+    data_abertura?: SortOrder
+    data_fechamento?: SortOrder
+    userID_fechamento?: SortOrder
+    valor_esperado?: SortOrder
+    valor_conferido?: SortOrder
+    valor_diferenca?: SortOrder
+    valor_pago?: SortOrder
+    valor_recebido?: SortOrder
+    valor_total_compras?: SortOrder
+    valor_total_vendas?: SortOrder
+    peso_total_compras?: SortOrder
+    peso_total_vendas?: SortOrder
+    lucro_total?: SortOrder
+    proj_lucro?: SortOrder
+    proj_venda?: SortOrder
+    qnt_compras?: SortOrder
+    qnt_vendas?: SortOrder
   }
 
-  export type LivroCaixaMaxOrderByAggregateInput = {
+  export type FechamentoMinOrderByAggregateInput = {
     id?: SortOrder
-    dataAbertura?: SortOrder
-    dataFechamento?: SortOrder
-    saldoInicial?: SortOrder
-    saldoFinal?: SortOrder
-    status?: SortOrder
-    usuarioID?: SortOrder
+    caixaID?: SortOrder
+    valor_abertura?: SortOrder
+    valor_abastecimentos?: SortOrder
+    valor_despesas?: SortOrder
+    data_abertura?: SortOrder
+    data_fechamento?: SortOrder
+    userID_fechamento?: SortOrder
+    valor_esperado?: SortOrder
+    valor_conferido?: SortOrder
+    valor_diferenca?: SortOrder
+    valor_pago?: SortOrder
+    valor_recebido?: SortOrder
+    valor_total_compras?: SortOrder
+    valor_total_vendas?: SortOrder
+    peso_total_compras?: SortOrder
+    peso_total_vendas?: SortOrder
+    lucro_total?: SortOrder
+    proj_lucro?: SortOrder
+    proj_venda?: SortOrder
+    qnt_compras?: SortOrder
+    qnt_vendas?: SortOrder
   }
 
-  export type LivroCaixaMinOrderByAggregateInput = {
+  export type FechamentoSumOrderByAggregateInput = {
     id?: SortOrder
-    dataAbertura?: SortOrder
-    dataFechamento?: SortOrder
-    saldoInicial?: SortOrder
-    saldoFinal?: SortOrder
-    status?: SortOrder
-    usuarioID?: SortOrder
-  }
-
-  export type LivroCaixaSumOrderByAggregateInput = {
-    id?: SortOrder
-    saldoInicial?: SortOrder
-    saldoFinal?: SortOrder
-    usuarioID?: SortOrder
+    caixaID?: SortOrder
+    valor_abertura?: SortOrder
+    valor_abastecimentos?: SortOrder
+    valor_despesas?: SortOrder
+    userID_fechamento?: SortOrder
+    valor_esperado?: SortOrder
+    valor_conferido?: SortOrder
+    valor_diferenca?: SortOrder
+    valor_pago?: SortOrder
+    valor_recebido?: SortOrder
+    valor_total_compras?: SortOrder
+    valor_total_vendas?: SortOrder
+    peso_total_compras?: SortOrder
+    peso_total_vendas?: SortOrder
+    lucro_total?: SortOrder
+    proj_lucro?: SortOrder
+    proj_venda?: SortOrder
+    qnt_compras?: SortOrder
+    qnt_vendas?: SortOrder
   }
 
   export type DecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -31574,16 +35434,6 @@ export namespace Prisma {
     _max?: NestedDecimalNullableFilter<$PrismaModel>
   }
 
-  export type EnumStatusCaixaWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.StatusCaixa | EnumStatusCaixaFieldRefInput<$PrismaModel>
-    in?: $Enums.StatusCaixa[] | ListEnumStatusCaixaFieldRefInput<$PrismaModel>
-    notIn?: $Enums.StatusCaixa[] | ListEnumStatusCaixaFieldRefInput<$PrismaModel>
-    not?: NestedEnumStatusCaixaWithAggregatesFilter<$PrismaModel> | $Enums.StatusCaixa
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumStatusCaixaFilter<$PrismaModel>
-    _max?: NestedEnumStatusCaixaFilter<$PrismaModel>
-  }
-
   export type PedidoCreateNestedManyWithoutUserInput = {
     create?: XOR<PedidoCreateWithoutUserInput, PedidoUncheckedCreateWithoutUserInput> | PedidoCreateWithoutUserInput[] | PedidoUncheckedCreateWithoutUserInput[]
     connectOrCreate?: PedidoCreateOrConnectWithoutUserInput | PedidoCreateOrConnectWithoutUserInput[]
@@ -31597,11 +35447,18 @@ export namespace Prisma {
     connect?: CargoWhereUniqueInput
   }
 
-  export type LivroCaixaCreateNestedManyWithoutUsuarioInput = {
-    create?: XOR<LivroCaixaCreateWithoutUsuarioInput, LivroCaixaUncheckedCreateWithoutUsuarioInput> | LivroCaixaCreateWithoutUsuarioInput[] | LivroCaixaUncheckedCreateWithoutUsuarioInput[]
-    connectOrCreate?: LivroCaixaCreateOrConnectWithoutUsuarioInput | LivroCaixaCreateOrConnectWithoutUsuarioInput[]
-    createMany?: LivroCaixaCreateManyUsuarioInputEnvelope
+  export type LivroCaixaCreateNestedManyWithoutAbertoPorInput = {
+    create?: XOR<LivroCaixaCreateWithoutAbertoPorInput, LivroCaixaUncheckedCreateWithoutAbertoPorInput> | LivroCaixaCreateWithoutAbertoPorInput[] | LivroCaixaUncheckedCreateWithoutAbertoPorInput[]
+    connectOrCreate?: LivroCaixaCreateOrConnectWithoutAbertoPorInput | LivroCaixaCreateOrConnectWithoutAbertoPorInput[]
+    createMany?: LivroCaixaCreateManyAbertoPorInputEnvelope
     connect?: LivroCaixaWhereUniqueInput | LivroCaixaWhereUniqueInput[]
+  }
+
+  export type FechamentoCreateNestedManyWithoutUser_fechamentoInput = {
+    create?: XOR<FechamentoCreateWithoutUser_fechamentoInput, FechamentoUncheckedCreateWithoutUser_fechamentoInput> | FechamentoCreateWithoutUser_fechamentoInput[] | FechamentoUncheckedCreateWithoutUser_fechamentoInput[]
+    connectOrCreate?: FechamentoCreateOrConnectWithoutUser_fechamentoInput | FechamentoCreateOrConnectWithoutUser_fechamentoInput[]
+    createMany?: FechamentoCreateManyUser_fechamentoInputEnvelope
+    connect?: FechamentoWhereUniqueInput | FechamentoWhereUniqueInput[]
   }
 
   export type PedidoUncheckedCreateNestedManyWithoutUserInput = {
@@ -31611,11 +35468,18 @@ export namespace Prisma {
     connect?: PedidoWhereUniqueInput | PedidoWhereUniqueInput[]
   }
 
-  export type LivroCaixaUncheckedCreateNestedManyWithoutUsuarioInput = {
-    create?: XOR<LivroCaixaCreateWithoutUsuarioInput, LivroCaixaUncheckedCreateWithoutUsuarioInput> | LivroCaixaCreateWithoutUsuarioInput[] | LivroCaixaUncheckedCreateWithoutUsuarioInput[]
-    connectOrCreate?: LivroCaixaCreateOrConnectWithoutUsuarioInput | LivroCaixaCreateOrConnectWithoutUsuarioInput[]
-    createMany?: LivroCaixaCreateManyUsuarioInputEnvelope
+  export type LivroCaixaUncheckedCreateNestedManyWithoutAbertoPorInput = {
+    create?: XOR<LivroCaixaCreateWithoutAbertoPorInput, LivroCaixaUncheckedCreateWithoutAbertoPorInput> | LivroCaixaCreateWithoutAbertoPorInput[] | LivroCaixaUncheckedCreateWithoutAbertoPorInput[]
+    connectOrCreate?: LivroCaixaCreateOrConnectWithoutAbertoPorInput | LivroCaixaCreateOrConnectWithoutAbertoPorInput[]
+    createMany?: LivroCaixaCreateManyAbertoPorInputEnvelope
     connect?: LivroCaixaWhereUniqueInput | LivroCaixaWhereUniqueInput[]
+  }
+
+  export type FechamentoUncheckedCreateNestedManyWithoutUser_fechamentoInput = {
+    create?: XOR<FechamentoCreateWithoutUser_fechamentoInput, FechamentoUncheckedCreateWithoutUser_fechamentoInput> | FechamentoCreateWithoutUser_fechamentoInput[] | FechamentoUncheckedCreateWithoutUser_fechamentoInput[]
+    connectOrCreate?: FechamentoCreateOrConnectWithoutUser_fechamentoInput | FechamentoCreateOrConnectWithoutUser_fechamentoInput[]
+    createMany?: FechamentoCreateManyUser_fechamentoInputEnvelope
+    connect?: FechamentoWhereUniqueInput | FechamentoWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -31648,18 +35512,32 @@ export namespace Prisma {
     update?: XOR<XOR<CargoUpdateToOneWithWhereWithoutUsersInput, CargoUpdateWithoutUsersInput>, CargoUncheckedUpdateWithoutUsersInput>
   }
 
-  export type LivroCaixaUpdateManyWithoutUsuarioNestedInput = {
-    create?: XOR<LivroCaixaCreateWithoutUsuarioInput, LivroCaixaUncheckedCreateWithoutUsuarioInput> | LivroCaixaCreateWithoutUsuarioInput[] | LivroCaixaUncheckedCreateWithoutUsuarioInput[]
-    connectOrCreate?: LivroCaixaCreateOrConnectWithoutUsuarioInput | LivroCaixaCreateOrConnectWithoutUsuarioInput[]
-    upsert?: LivroCaixaUpsertWithWhereUniqueWithoutUsuarioInput | LivroCaixaUpsertWithWhereUniqueWithoutUsuarioInput[]
-    createMany?: LivroCaixaCreateManyUsuarioInputEnvelope
+  export type LivroCaixaUpdateManyWithoutAbertoPorNestedInput = {
+    create?: XOR<LivroCaixaCreateWithoutAbertoPorInput, LivroCaixaUncheckedCreateWithoutAbertoPorInput> | LivroCaixaCreateWithoutAbertoPorInput[] | LivroCaixaUncheckedCreateWithoutAbertoPorInput[]
+    connectOrCreate?: LivroCaixaCreateOrConnectWithoutAbertoPorInput | LivroCaixaCreateOrConnectWithoutAbertoPorInput[]
+    upsert?: LivroCaixaUpsertWithWhereUniqueWithoutAbertoPorInput | LivroCaixaUpsertWithWhereUniqueWithoutAbertoPorInput[]
+    createMany?: LivroCaixaCreateManyAbertoPorInputEnvelope
     set?: LivroCaixaWhereUniqueInput | LivroCaixaWhereUniqueInput[]
     disconnect?: LivroCaixaWhereUniqueInput | LivroCaixaWhereUniqueInput[]
     delete?: LivroCaixaWhereUniqueInput | LivroCaixaWhereUniqueInput[]
     connect?: LivroCaixaWhereUniqueInput | LivroCaixaWhereUniqueInput[]
-    update?: LivroCaixaUpdateWithWhereUniqueWithoutUsuarioInput | LivroCaixaUpdateWithWhereUniqueWithoutUsuarioInput[]
-    updateMany?: LivroCaixaUpdateManyWithWhereWithoutUsuarioInput | LivroCaixaUpdateManyWithWhereWithoutUsuarioInput[]
+    update?: LivroCaixaUpdateWithWhereUniqueWithoutAbertoPorInput | LivroCaixaUpdateWithWhereUniqueWithoutAbertoPorInput[]
+    updateMany?: LivroCaixaUpdateManyWithWhereWithoutAbertoPorInput | LivroCaixaUpdateManyWithWhereWithoutAbertoPorInput[]
     deleteMany?: LivroCaixaScalarWhereInput | LivroCaixaScalarWhereInput[]
+  }
+
+  export type FechamentoUpdateManyWithoutUser_fechamentoNestedInput = {
+    create?: XOR<FechamentoCreateWithoutUser_fechamentoInput, FechamentoUncheckedCreateWithoutUser_fechamentoInput> | FechamentoCreateWithoutUser_fechamentoInput[] | FechamentoUncheckedCreateWithoutUser_fechamentoInput[]
+    connectOrCreate?: FechamentoCreateOrConnectWithoutUser_fechamentoInput | FechamentoCreateOrConnectWithoutUser_fechamentoInput[]
+    upsert?: FechamentoUpsertWithWhereUniqueWithoutUser_fechamentoInput | FechamentoUpsertWithWhereUniqueWithoutUser_fechamentoInput[]
+    createMany?: FechamentoCreateManyUser_fechamentoInputEnvelope
+    set?: FechamentoWhereUniqueInput | FechamentoWhereUniqueInput[]
+    disconnect?: FechamentoWhereUniqueInput | FechamentoWhereUniqueInput[]
+    delete?: FechamentoWhereUniqueInput | FechamentoWhereUniqueInput[]
+    connect?: FechamentoWhereUniqueInput | FechamentoWhereUniqueInput[]
+    update?: FechamentoUpdateWithWhereUniqueWithoutUser_fechamentoInput | FechamentoUpdateWithWhereUniqueWithoutUser_fechamentoInput[]
+    updateMany?: FechamentoUpdateManyWithWhereWithoutUser_fechamentoInput | FechamentoUpdateManyWithWhereWithoutUser_fechamentoInput[]
+    deleteMany?: FechamentoScalarWhereInput | FechamentoScalarWhereInput[]
   }
 
   export type IntFieldUpdateOperationsInput = {
@@ -31684,18 +35562,32 @@ export namespace Prisma {
     deleteMany?: PedidoScalarWhereInput | PedidoScalarWhereInput[]
   }
 
-  export type LivroCaixaUncheckedUpdateManyWithoutUsuarioNestedInput = {
-    create?: XOR<LivroCaixaCreateWithoutUsuarioInput, LivroCaixaUncheckedCreateWithoutUsuarioInput> | LivroCaixaCreateWithoutUsuarioInput[] | LivroCaixaUncheckedCreateWithoutUsuarioInput[]
-    connectOrCreate?: LivroCaixaCreateOrConnectWithoutUsuarioInput | LivroCaixaCreateOrConnectWithoutUsuarioInput[]
-    upsert?: LivroCaixaUpsertWithWhereUniqueWithoutUsuarioInput | LivroCaixaUpsertWithWhereUniqueWithoutUsuarioInput[]
-    createMany?: LivroCaixaCreateManyUsuarioInputEnvelope
+  export type LivroCaixaUncheckedUpdateManyWithoutAbertoPorNestedInput = {
+    create?: XOR<LivroCaixaCreateWithoutAbertoPorInput, LivroCaixaUncheckedCreateWithoutAbertoPorInput> | LivroCaixaCreateWithoutAbertoPorInput[] | LivroCaixaUncheckedCreateWithoutAbertoPorInput[]
+    connectOrCreate?: LivroCaixaCreateOrConnectWithoutAbertoPorInput | LivroCaixaCreateOrConnectWithoutAbertoPorInput[]
+    upsert?: LivroCaixaUpsertWithWhereUniqueWithoutAbertoPorInput | LivroCaixaUpsertWithWhereUniqueWithoutAbertoPorInput[]
+    createMany?: LivroCaixaCreateManyAbertoPorInputEnvelope
     set?: LivroCaixaWhereUniqueInput | LivroCaixaWhereUniqueInput[]
     disconnect?: LivroCaixaWhereUniqueInput | LivroCaixaWhereUniqueInput[]
     delete?: LivroCaixaWhereUniqueInput | LivroCaixaWhereUniqueInput[]
     connect?: LivroCaixaWhereUniqueInput | LivroCaixaWhereUniqueInput[]
-    update?: LivroCaixaUpdateWithWhereUniqueWithoutUsuarioInput | LivroCaixaUpdateWithWhereUniqueWithoutUsuarioInput[]
-    updateMany?: LivroCaixaUpdateManyWithWhereWithoutUsuarioInput | LivroCaixaUpdateManyWithWhereWithoutUsuarioInput[]
+    update?: LivroCaixaUpdateWithWhereUniqueWithoutAbertoPorInput | LivroCaixaUpdateWithWhereUniqueWithoutAbertoPorInput[]
+    updateMany?: LivroCaixaUpdateManyWithWhereWithoutAbertoPorInput | LivroCaixaUpdateManyWithWhereWithoutAbertoPorInput[]
     deleteMany?: LivroCaixaScalarWhereInput | LivroCaixaScalarWhereInput[]
+  }
+
+  export type FechamentoUncheckedUpdateManyWithoutUser_fechamentoNestedInput = {
+    create?: XOR<FechamentoCreateWithoutUser_fechamentoInput, FechamentoUncheckedCreateWithoutUser_fechamentoInput> | FechamentoCreateWithoutUser_fechamentoInput[] | FechamentoUncheckedCreateWithoutUser_fechamentoInput[]
+    connectOrCreate?: FechamentoCreateOrConnectWithoutUser_fechamentoInput | FechamentoCreateOrConnectWithoutUser_fechamentoInput[]
+    upsert?: FechamentoUpsertWithWhereUniqueWithoutUser_fechamentoInput | FechamentoUpsertWithWhereUniqueWithoutUser_fechamentoInput[]
+    createMany?: FechamentoCreateManyUser_fechamentoInputEnvelope
+    set?: FechamentoWhereUniqueInput | FechamentoWhereUniqueInput[]
+    disconnect?: FechamentoWhereUniqueInput | FechamentoWhereUniqueInput[]
+    delete?: FechamentoWhereUniqueInput | FechamentoWhereUniqueInput[]
+    connect?: FechamentoWhereUniqueInput | FechamentoWhereUniqueInput[]
+    update?: FechamentoUpdateWithWhereUniqueWithoutUser_fechamentoInput | FechamentoUpdateWithWhereUniqueWithoutUser_fechamentoInput[]
+    updateMany?: FechamentoUpdateManyWithWhereWithoutUser_fechamentoInput | FechamentoUpdateManyWithWhereWithoutUser_fechamentoInput[]
+    deleteMany?: FechamentoScalarWhereInput | FechamentoScalarWhereInput[]
   }
 
   export type CargoCreateNestedManyWithoutPermissoesInput = {
@@ -31863,6 +35755,13 @@ export namespace Prisma {
     connect?: SaldoFinanceiroWhereUniqueInput
   }
 
+  export type ContaFinanceiraCreateNestedManyWithoutRegistroInput = {
+    create?: XOR<ContaFinanceiraCreateWithoutRegistroInput, ContaFinanceiraUncheckedCreateWithoutRegistroInput> | ContaFinanceiraCreateWithoutRegistroInput[] | ContaFinanceiraUncheckedCreateWithoutRegistroInput[]
+    connectOrCreate?: ContaFinanceiraCreateOrConnectWithoutRegistroInput | ContaFinanceiraCreateOrConnectWithoutRegistroInput[]
+    createMany?: ContaFinanceiraCreateManyRegistroInputEnvelope
+    connect?: ContaFinanceiraWhereUniqueInput | ContaFinanceiraWhereUniqueInput[]
+  }
+
   export type DadosPagamentoUncheckedCreateNestedOneWithoutRegistroInput = {
     create?: XOR<DadosPagamentoCreateWithoutRegistroInput, DadosPagamentoUncheckedCreateWithoutRegistroInput>
     connectOrCreate?: DadosPagamentoCreateOrConnectWithoutRegistroInput
@@ -31898,6 +35797,13 @@ export namespace Prisma {
     create?: XOR<SaldoFinanceiroCreateWithoutRegistroInput, SaldoFinanceiroUncheckedCreateWithoutRegistroInput>
     connectOrCreate?: SaldoFinanceiroCreateOrConnectWithoutRegistroInput
     connect?: SaldoFinanceiroWhereUniqueInput
+  }
+
+  export type ContaFinanceiraUncheckedCreateNestedManyWithoutRegistroInput = {
+    create?: XOR<ContaFinanceiraCreateWithoutRegistroInput, ContaFinanceiraUncheckedCreateWithoutRegistroInput> | ContaFinanceiraCreateWithoutRegistroInput[] | ContaFinanceiraUncheckedCreateWithoutRegistroInput[]
+    connectOrCreate?: ContaFinanceiraCreateOrConnectWithoutRegistroInput | ContaFinanceiraCreateOrConnectWithoutRegistroInput[]
+    createMany?: ContaFinanceiraCreateManyRegistroInputEnvelope
+    connect?: ContaFinanceiraWhereUniqueInput | ContaFinanceiraWhereUniqueInput[]
   }
 
   export type EnumTipoRegistroFieldUpdateOperationsInput = {
@@ -31980,6 +35886,20 @@ export namespace Prisma {
     update?: XOR<XOR<SaldoFinanceiroUpdateToOneWithWhereWithoutRegistroInput, SaldoFinanceiroUpdateWithoutRegistroInput>, SaldoFinanceiroUncheckedUpdateWithoutRegistroInput>
   }
 
+  export type ContaFinanceiraUpdateManyWithoutRegistroNestedInput = {
+    create?: XOR<ContaFinanceiraCreateWithoutRegistroInput, ContaFinanceiraUncheckedCreateWithoutRegistroInput> | ContaFinanceiraCreateWithoutRegistroInput[] | ContaFinanceiraUncheckedCreateWithoutRegistroInput[]
+    connectOrCreate?: ContaFinanceiraCreateOrConnectWithoutRegistroInput | ContaFinanceiraCreateOrConnectWithoutRegistroInput[]
+    upsert?: ContaFinanceiraUpsertWithWhereUniqueWithoutRegistroInput | ContaFinanceiraUpsertWithWhereUniqueWithoutRegistroInput[]
+    createMany?: ContaFinanceiraCreateManyRegistroInputEnvelope
+    set?: ContaFinanceiraWhereUniqueInput | ContaFinanceiraWhereUniqueInput[]
+    disconnect?: ContaFinanceiraWhereUniqueInput | ContaFinanceiraWhereUniqueInput[]
+    delete?: ContaFinanceiraWhereUniqueInput | ContaFinanceiraWhereUniqueInput[]
+    connect?: ContaFinanceiraWhereUniqueInput | ContaFinanceiraWhereUniqueInput[]
+    update?: ContaFinanceiraUpdateWithWhereUniqueWithoutRegistroInput | ContaFinanceiraUpdateWithWhereUniqueWithoutRegistroInput[]
+    updateMany?: ContaFinanceiraUpdateManyWithWhereWithoutRegistroInput | ContaFinanceiraUpdateManyWithWhereWithoutRegistroInput[]
+    deleteMany?: ContaFinanceiraScalarWhereInput | ContaFinanceiraScalarWhereInput[]
+  }
+
   export type DadosPagamentoUncheckedUpdateOneWithoutRegistroNestedInput = {
     create?: XOR<DadosPagamentoCreateWithoutRegistroInput, DadosPagamentoUncheckedCreateWithoutRegistroInput>
     connectOrCreate?: DadosPagamentoCreateOrConnectWithoutRegistroInput
@@ -32042,6 +35962,20 @@ export namespace Prisma {
     delete?: SaldoFinanceiroWhereInput | boolean
     connect?: SaldoFinanceiroWhereUniqueInput
     update?: XOR<XOR<SaldoFinanceiroUpdateToOneWithWhereWithoutRegistroInput, SaldoFinanceiroUpdateWithoutRegistroInput>, SaldoFinanceiroUncheckedUpdateWithoutRegistroInput>
+  }
+
+  export type ContaFinanceiraUncheckedUpdateManyWithoutRegistroNestedInput = {
+    create?: XOR<ContaFinanceiraCreateWithoutRegistroInput, ContaFinanceiraUncheckedCreateWithoutRegistroInput> | ContaFinanceiraCreateWithoutRegistroInput[] | ContaFinanceiraUncheckedCreateWithoutRegistroInput[]
+    connectOrCreate?: ContaFinanceiraCreateOrConnectWithoutRegistroInput | ContaFinanceiraCreateOrConnectWithoutRegistroInput[]
+    upsert?: ContaFinanceiraUpsertWithWhereUniqueWithoutRegistroInput | ContaFinanceiraUpsertWithWhereUniqueWithoutRegistroInput[]
+    createMany?: ContaFinanceiraCreateManyRegistroInputEnvelope
+    set?: ContaFinanceiraWhereUniqueInput | ContaFinanceiraWhereUniqueInput[]
+    disconnect?: ContaFinanceiraWhereUniqueInput | ContaFinanceiraWhereUniqueInput[]
+    delete?: ContaFinanceiraWhereUniqueInput | ContaFinanceiraWhereUniqueInput[]
+    connect?: ContaFinanceiraWhereUniqueInput | ContaFinanceiraWhereUniqueInput[]
+    update?: ContaFinanceiraUpdateWithWhereUniqueWithoutRegistroInput | ContaFinanceiraUpdateWithWhereUniqueWithoutRegistroInput[]
+    updateMany?: ContaFinanceiraUpdateManyWithWhereWithoutRegistroInput | ContaFinanceiraUpdateManyWithWhereWithoutRegistroInput[]
+    deleteMany?: ContaFinanceiraScalarWhereInput | ContaFinanceiraScalarWhereInput[]
   }
 
   export type RegistroCreateNestedOneWithoutFisicaInput = {
@@ -32455,11 +36389,11 @@ export namespace Prisma {
     connect?: ItemPedidoWhereUniqueInput | ItemPedidoWhereUniqueInput[]
   }
 
-  export type PagamentoCreateNestedManyWithoutPedidoInput = {
-    create?: XOR<PagamentoCreateWithoutPedidoInput, PagamentoUncheckedCreateWithoutPedidoInput> | PagamentoCreateWithoutPedidoInput[] | PagamentoUncheckedCreateWithoutPedidoInput[]
-    connectOrCreate?: PagamentoCreateOrConnectWithoutPedidoInput | PagamentoCreateOrConnectWithoutPedidoInput[]
-    createMany?: PagamentoCreateManyPedidoInputEnvelope
-    connect?: PagamentoWhereUniqueInput | PagamentoWhereUniqueInput[]
+  export type ContaFinanceiraCreateNestedManyWithoutPedidoInput = {
+    create?: XOR<ContaFinanceiraCreateWithoutPedidoInput, ContaFinanceiraUncheckedCreateWithoutPedidoInput> | ContaFinanceiraCreateWithoutPedidoInput[] | ContaFinanceiraUncheckedCreateWithoutPedidoInput[]
+    connectOrCreate?: ContaFinanceiraCreateOrConnectWithoutPedidoInput | ContaFinanceiraCreateOrConnectWithoutPedidoInput[]
+    createMany?: ContaFinanceiraCreateManyPedidoInputEnvelope
+    connect?: ContaFinanceiraWhereUniqueInput | ContaFinanceiraWhereUniqueInput[]
   }
 
   export type RegistroCreateNestedOneWithoutPedidosInput = {
@@ -32481,11 +36415,11 @@ export namespace Prisma {
     connect?: ItemPedidoWhereUniqueInput | ItemPedidoWhereUniqueInput[]
   }
 
-  export type PagamentoUncheckedCreateNestedManyWithoutPedidoInput = {
-    create?: XOR<PagamentoCreateWithoutPedidoInput, PagamentoUncheckedCreateWithoutPedidoInput> | PagamentoCreateWithoutPedidoInput[] | PagamentoUncheckedCreateWithoutPedidoInput[]
-    connectOrCreate?: PagamentoCreateOrConnectWithoutPedidoInput | PagamentoCreateOrConnectWithoutPedidoInput[]
-    createMany?: PagamentoCreateManyPedidoInputEnvelope
-    connect?: PagamentoWhereUniqueInput | PagamentoWhereUniqueInput[]
+  export type ContaFinanceiraUncheckedCreateNestedManyWithoutPedidoInput = {
+    create?: XOR<ContaFinanceiraCreateWithoutPedidoInput, ContaFinanceiraUncheckedCreateWithoutPedidoInput> | ContaFinanceiraCreateWithoutPedidoInput[] | ContaFinanceiraUncheckedCreateWithoutPedidoInput[]
+    connectOrCreate?: ContaFinanceiraCreateOrConnectWithoutPedidoInput | ContaFinanceiraCreateOrConnectWithoutPedidoInput[]
+    createMany?: ContaFinanceiraCreateManyPedidoInputEnvelope
+    connect?: ContaFinanceiraWhereUniqueInput | ContaFinanceiraWhereUniqueInput[]
   }
 
   export type EnumTipoPedidoFieldUpdateOperationsInput = {
@@ -32510,18 +36444,18 @@ export namespace Prisma {
     deleteMany?: ItemPedidoScalarWhereInput | ItemPedidoScalarWhereInput[]
   }
 
-  export type PagamentoUpdateManyWithoutPedidoNestedInput = {
-    create?: XOR<PagamentoCreateWithoutPedidoInput, PagamentoUncheckedCreateWithoutPedidoInput> | PagamentoCreateWithoutPedidoInput[] | PagamentoUncheckedCreateWithoutPedidoInput[]
-    connectOrCreate?: PagamentoCreateOrConnectWithoutPedidoInput | PagamentoCreateOrConnectWithoutPedidoInput[]
-    upsert?: PagamentoUpsertWithWhereUniqueWithoutPedidoInput | PagamentoUpsertWithWhereUniqueWithoutPedidoInput[]
-    createMany?: PagamentoCreateManyPedidoInputEnvelope
-    set?: PagamentoWhereUniqueInput | PagamentoWhereUniqueInput[]
-    disconnect?: PagamentoWhereUniqueInput | PagamentoWhereUniqueInput[]
-    delete?: PagamentoWhereUniqueInput | PagamentoWhereUniqueInput[]
-    connect?: PagamentoWhereUniqueInput | PagamentoWhereUniqueInput[]
-    update?: PagamentoUpdateWithWhereUniqueWithoutPedidoInput | PagamentoUpdateWithWhereUniqueWithoutPedidoInput[]
-    updateMany?: PagamentoUpdateManyWithWhereWithoutPedidoInput | PagamentoUpdateManyWithWhereWithoutPedidoInput[]
-    deleteMany?: PagamentoScalarWhereInput | PagamentoScalarWhereInput[]
+  export type ContaFinanceiraUpdateManyWithoutPedidoNestedInput = {
+    create?: XOR<ContaFinanceiraCreateWithoutPedidoInput, ContaFinanceiraUncheckedCreateWithoutPedidoInput> | ContaFinanceiraCreateWithoutPedidoInput[] | ContaFinanceiraUncheckedCreateWithoutPedidoInput[]
+    connectOrCreate?: ContaFinanceiraCreateOrConnectWithoutPedidoInput | ContaFinanceiraCreateOrConnectWithoutPedidoInput[]
+    upsert?: ContaFinanceiraUpsertWithWhereUniqueWithoutPedidoInput | ContaFinanceiraUpsertWithWhereUniqueWithoutPedidoInput[]
+    createMany?: ContaFinanceiraCreateManyPedidoInputEnvelope
+    set?: ContaFinanceiraWhereUniqueInput | ContaFinanceiraWhereUniqueInput[]
+    disconnect?: ContaFinanceiraWhereUniqueInput | ContaFinanceiraWhereUniqueInput[]
+    delete?: ContaFinanceiraWhereUniqueInput | ContaFinanceiraWhereUniqueInput[]
+    connect?: ContaFinanceiraWhereUniqueInput | ContaFinanceiraWhereUniqueInput[]
+    update?: ContaFinanceiraUpdateWithWhereUniqueWithoutPedidoInput | ContaFinanceiraUpdateWithWhereUniqueWithoutPedidoInput[]
+    updateMany?: ContaFinanceiraUpdateManyWithWhereWithoutPedidoInput | ContaFinanceiraUpdateManyWithWhereWithoutPedidoInput[]
+    deleteMany?: ContaFinanceiraScalarWhereInput | ContaFinanceiraScalarWhereInput[]
   }
 
   export type RegistroUpdateOneWithoutPedidosNestedInput = {
@@ -32564,18 +36498,18 @@ export namespace Prisma {
     deleteMany?: ItemPedidoScalarWhereInput | ItemPedidoScalarWhereInput[]
   }
 
-  export type PagamentoUncheckedUpdateManyWithoutPedidoNestedInput = {
-    create?: XOR<PagamentoCreateWithoutPedidoInput, PagamentoUncheckedCreateWithoutPedidoInput> | PagamentoCreateWithoutPedidoInput[] | PagamentoUncheckedCreateWithoutPedidoInput[]
-    connectOrCreate?: PagamentoCreateOrConnectWithoutPedidoInput | PagamentoCreateOrConnectWithoutPedidoInput[]
-    upsert?: PagamentoUpsertWithWhereUniqueWithoutPedidoInput | PagamentoUpsertWithWhereUniqueWithoutPedidoInput[]
-    createMany?: PagamentoCreateManyPedidoInputEnvelope
-    set?: PagamentoWhereUniqueInput | PagamentoWhereUniqueInput[]
-    disconnect?: PagamentoWhereUniqueInput | PagamentoWhereUniqueInput[]
-    delete?: PagamentoWhereUniqueInput | PagamentoWhereUniqueInput[]
-    connect?: PagamentoWhereUniqueInput | PagamentoWhereUniqueInput[]
-    update?: PagamentoUpdateWithWhereUniqueWithoutPedidoInput | PagamentoUpdateWithWhereUniqueWithoutPedidoInput[]
-    updateMany?: PagamentoUpdateManyWithWhereWithoutPedidoInput | PagamentoUpdateManyWithWhereWithoutPedidoInput[]
-    deleteMany?: PagamentoScalarWhereInput | PagamentoScalarWhereInput[]
+  export type ContaFinanceiraUncheckedUpdateManyWithoutPedidoNestedInput = {
+    create?: XOR<ContaFinanceiraCreateWithoutPedidoInput, ContaFinanceiraUncheckedCreateWithoutPedidoInput> | ContaFinanceiraCreateWithoutPedidoInput[] | ContaFinanceiraUncheckedCreateWithoutPedidoInput[]
+    connectOrCreate?: ContaFinanceiraCreateOrConnectWithoutPedidoInput | ContaFinanceiraCreateOrConnectWithoutPedidoInput[]
+    upsert?: ContaFinanceiraUpsertWithWhereUniqueWithoutPedidoInput | ContaFinanceiraUpsertWithWhereUniqueWithoutPedidoInput[]
+    createMany?: ContaFinanceiraCreateManyPedidoInputEnvelope
+    set?: ContaFinanceiraWhereUniqueInput | ContaFinanceiraWhereUniqueInput[]
+    disconnect?: ContaFinanceiraWhereUniqueInput | ContaFinanceiraWhereUniqueInput[]
+    delete?: ContaFinanceiraWhereUniqueInput | ContaFinanceiraWhereUniqueInput[]
+    connect?: ContaFinanceiraWhereUniqueInput | ContaFinanceiraWhereUniqueInput[]
+    update?: ContaFinanceiraUpdateWithWhereUniqueWithoutPedidoInput | ContaFinanceiraUpdateWithWhereUniqueWithoutPedidoInput[]
+    updateMany?: ContaFinanceiraUpdateManyWithWhereWithoutPedidoInput | ContaFinanceiraUpdateManyWithWhereWithoutPedidoInput[]
+    deleteMany?: ContaFinanceiraScalarWhereInput | ContaFinanceiraScalarWhereInput[]
   }
 
   export type PedidoCreateNestedOneWithoutPagamentosInput = {
@@ -32584,64 +36518,118 @@ export namespace Prisma {
     connect?: PedidoWhereUniqueInput
   }
 
+  export type RegistroCreateNestedOneWithoutContasInput = {
+    create?: XOR<RegistroCreateWithoutContasInput, RegistroUncheckedCreateWithoutContasInput>
+    connectOrCreate?: RegistroCreateOrConnectWithoutContasInput
+    connect?: RegistroWhereUniqueInput
+  }
+
+  export type MovimentacaoFinanceiraCreateNestedOneWithoutContaInput = {
+    create?: XOR<MovimentacaoFinanceiraCreateWithoutContaInput, MovimentacaoFinanceiraUncheckedCreateWithoutContaInput>
+    connectOrCreate?: MovimentacaoFinanceiraCreateOrConnectWithoutContaInput
+    connect?: MovimentacaoFinanceiraWhereUniqueInput
+  }
+
+  export type MovimentacaoFinanceiraUncheckedCreateNestedOneWithoutContaInput = {
+    create?: XOR<MovimentacaoFinanceiraCreateWithoutContaInput, MovimentacaoFinanceiraUncheckedCreateWithoutContaInput>
+    connectOrCreate?: MovimentacaoFinanceiraCreateOrConnectWithoutContaInput
+    connect?: MovimentacaoFinanceiraWhereUniqueInput
+  }
+
+  export type EnumTipoContaFieldUpdateOperationsInput = {
+    set?: $Enums.TipoConta
+  }
+
   export type EnumFormaPagamentoFieldUpdateOperationsInput = {
     set?: $Enums.FormaPagamento
   }
 
-  export type PedidoUpdateOneRequiredWithoutPagamentosNestedInput = {
+  export type PedidoUpdateOneWithoutPagamentosNestedInput = {
     create?: XOR<PedidoCreateWithoutPagamentosInput, PedidoUncheckedCreateWithoutPagamentosInput>
     connectOrCreate?: PedidoCreateOrConnectWithoutPagamentosInput
     upsert?: PedidoUpsertWithoutPagamentosInput
+    disconnect?: PedidoWhereInput | boolean
+    delete?: PedidoWhereInput | boolean
     connect?: PedidoWhereUniqueInput
     update?: XOR<XOR<PedidoUpdateToOneWithWhereWithoutPagamentosInput, PedidoUpdateWithoutPagamentosInput>, PedidoUncheckedUpdateWithoutPagamentosInput>
   }
 
-  export type MovimentacaoFinanceiraCreateNestedManyWithoutContaInput = {
-    create?: XOR<MovimentacaoFinanceiraCreateWithoutContaInput, MovimentacaoFinanceiraUncheckedCreateWithoutContaInput> | MovimentacaoFinanceiraCreateWithoutContaInput[] | MovimentacaoFinanceiraUncheckedCreateWithoutContaInput[]
-    connectOrCreate?: MovimentacaoFinanceiraCreateOrConnectWithoutContaInput | MovimentacaoFinanceiraCreateOrConnectWithoutContaInput[]
-    createMany?: MovimentacaoFinanceiraCreateManyContaInputEnvelope
+  export type RegistroUpdateOneWithoutContasNestedInput = {
+    create?: XOR<RegistroCreateWithoutContasInput, RegistroUncheckedCreateWithoutContasInput>
+    connectOrCreate?: RegistroCreateOrConnectWithoutContasInput
+    upsert?: RegistroUpsertWithoutContasInput
+    disconnect?: RegistroWhereInput | boolean
+    delete?: RegistroWhereInput | boolean
+    connect?: RegistroWhereUniqueInput
+    update?: XOR<XOR<RegistroUpdateToOneWithWhereWithoutContasInput, RegistroUpdateWithoutContasInput>, RegistroUncheckedUpdateWithoutContasInput>
+  }
+
+  export type MovimentacaoFinanceiraUpdateOneWithoutContaNestedInput = {
+    create?: XOR<MovimentacaoFinanceiraCreateWithoutContaInput, MovimentacaoFinanceiraUncheckedCreateWithoutContaInput>
+    connectOrCreate?: MovimentacaoFinanceiraCreateOrConnectWithoutContaInput
+    upsert?: MovimentacaoFinanceiraUpsertWithoutContaInput
+    disconnect?: MovimentacaoFinanceiraWhereInput | boolean
+    delete?: MovimentacaoFinanceiraWhereInput | boolean
+    connect?: MovimentacaoFinanceiraWhereUniqueInput
+    update?: XOR<XOR<MovimentacaoFinanceiraUpdateToOneWithWhereWithoutContaInput, MovimentacaoFinanceiraUpdateWithoutContaInput>, MovimentacaoFinanceiraUncheckedUpdateWithoutContaInput>
+  }
+
+  export type MovimentacaoFinanceiraUncheckedUpdateOneWithoutContaNestedInput = {
+    create?: XOR<MovimentacaoFinanceiraCreateWithoutContaInput, MovimentacaoFinanceiraUncheckedCreateWithoutContaInput>
+    connectOrCreate?: MovimentacaoFinanceiraCreateOrConnectWithoutContaInput
+    upsert?: MovimentacaoFinanceiraUpsertWithoutContaInput
+    disconnect?: MovimentacaoFinanceiraWhereInput | boolean
+    delete?: MovimentacaoFinanceiraWhereInput | boolean
+    connect?: MovimentacaoFinanceiraWhereUniqueInput
+    update?: XOR<XOR<MovimentacaoFinanceiraUpdateToOneWithWhereWithoutContaInput, MovimentacaoFinanceiraUpdateWithoutContaInput>, MovimentacaoFinanceiraUncheckedUpdateWithoutContaInput>
+  }
+
+  export type MovimentacaoFinanceiraCreateNestedManyWithoutBancoInput = {
+    create?: XOR<MovimentacaoFinanceiraCreateWithoutBancoInput, MovimentacaoFinanceiraUncheckedCreateWithoutBancoInput> | MovimentacaoFinanceiraCreateWithoutBancoInput[] | MovimentacaoFinanceiraUncheckedCreateWithoutBancoInput[]
+    connectOrCreate?: MovimentacaoFinanceiraCreateOrConnectWithoutBancoInput | MovimentacaoFinanceiraCreateOrConnectWithoutBancoInput[]
+    createMany?: MovimentacaoFinanceiraCreateManyBancoInputEnvelope
     connect?: MovimentacaoFinanceiraWhereUniqueInput | MovimentacaoFinanceiraWhereUniqueInput[]
   }
 
-  export type MovimentacaoFinanceiraUncheckedCreateNestedManyWithoutContaInput = {
-    create?: XOR<MovimentacaoFinanceiraCreateWithoutContaInput, MovimentacaoFinanceiraUncheckedCreateWithoutContaInput> | MovimentacaoFinanceiraCreateWithoutContaInput[] | MovimentacaoFinanceiraUncheckedCreateWithoutContaInput[]
-    connectOrCreate?: MovimentacaoFinanceiraCreateOrConnectWithoutContaInput | MovimentacaoFinanceiraCreateOrConnectWithoutContaInput[]
-    createMany?: MovimentacaoFinanceiraCreateManyContaInputEnvelope
+  export type MovimentacaoFinanceiraUncheckedCreateNestedManyWithoutBancoInput = {
+    create?: XOR<MovimentacaoFinanceiraCreateWithoutBancoInput, MovimentacaoFinanceiraUncheckedCreateWithoutBancoInput> | MovimentacaoFinanceiraCreateWithoutBancoInput[] | MovimentacaoFinanceiraUncheckedCreateWithoutBancoInput[]
+    connectOrCreate?: MovimentacaoFinanceiraCreateOrConnectWithoutBancoInput | MovimentacaoFinanceiraCreateOrConnectWithoutBancoInput[]
+    createMany?: MovimentacaoFinanceiraCreateManyBancoInputEnvelope
     connect?: MovimentacaoFinanceiraWhereUniqueInput | MovimentacaoFinanceiraWhereUniqueInput[]
   }
 
-  export type MovimentacaoFinanceiraUpdateManyWithoutContaNestedInput = {
-    create?: XOR<MovimentacaoFinanceiraCreateWithoutContaInput, MovimentacaoFinanceiraUncheckedCreateWithoutContaInput> | MovimentacaoFinanceiraCreateWithoutContaInput[] | MovimentacaoFinanceiraUncheckedCreateWithoutContaInput[]
-    connectOrCreate?: MovimentacaoFinanceiraCreateOrConnectWithoutContaInput | MovimentacaoFinanceiraCreateOrConnectWithoutContaInput[]
-    upsert?: MovimentacaoFinanceiraUpsertWithWhereUniqueWithoutContaInput | MovimentacaoFinanceiraUpsertWithWhereUniqueWithoutContaInput[]
-    createMany?: MovimentacaoFinanceiraCreateManyContaInputEnvelope
+  export type MovimentacaoFinanceiraUpdateManyWithoutBancoNestedInput = {
+    create?: XOR<MovimentacaoFinanceiraCreateWithoutBancoInput, MovimentacaoFinanceiraUncheckedCreateWithoutBancoInput> | MovimentacaoFinanceiraCreateWithoutBancoInput[] | MovimentacaoFinanceiraUncheckedCreateWithoutBancoInput[]
+    connectOrCreate?: MovimentacaoFinanceiraCreateOrConnectWithoutBancoInput | MovimentacaoFinanceiraCreateOrConnectWithoutBancoInput[]
+    upsert?: MovimentacaoFinanceiraUpsertWithWhereUniqueWithoutBancoInput | MovimentacaoFinanceiraUpsertWithWhereUniqueWithoutBancoInput[]
+    createMany?: MovimentacaoFinanceiraCreateManyBancoInputEnvelope
     set?: MovimentacaoFinanceiraWhereUniqueInput | MovimentacaoFinanceiraWhereUniqueInput[]
     disconnect?: MovimentacaoFinanceiraWhereUniqueInput | MovimentacaoFinanceiraWhereUniqueInput[]
     delete?: MovimentacaoFinanceiraWhereUniqueInput | MovimentacaoFinanceiraWhereUniqueInput[]
     connect?: MovimentacaoFinanceiraWhereUniqueInput | MovimentacaoFinanceiraWhereUniqueInput[]
-    update?: MovimentacaoFinanceiraUpdateWithWhereUniqueWithoutContaInput | MovimentacaoFinanceiraUpdateWithWhereUniqueWithoutContaInput[]
-    updateMany?: MovimentacaoFinanceiraUpdateManyWithWhereWithoutContaInput | MovimentacaoFinanceiraUpdateManyWithWhereWithoutContaInput[]
+    update?: MovimentacaoFinanceiraUpdateWithWhereUniqueWithoutBancoInput | MovimentacaoFinanceiraUpdateWithWhereUniqueWithoutBancoInput[]
+    updateMany?: MovimentacaoFinanceiraUpdateManyWithWhereWithoutBancoInput | MovimentacaoFinanceiraUpdateManyWithWhereWithoutBancoInput[]
     deleteMany?: MovimentacaoFinanceiraScalarWhereInput | MovimentacaoFinanceiraScalarWhereInput[]
   }
 
-  export type MovimentacaoFinanceiraUncheckedUpdateManyWithoutContaNestedInput = {
-    create?: XOR<MovimentacaoFinanceiraCreateWithoutContaInput, MovimentacaoFinanceiraUncheckedCreateWithoutContaInput> | MovimentacaoFinanceiraCreateWithoutContaInput[] | MovimentacaoFinanceiraUncheckedCreateWithoutContaInput[]
-    connectOrCreate?: MovimentacaoFinanceiraCreateOrConnectWithoutContaInput | MovimentacaoFinanceiraCreateOrConnectWithoutContaInput[]
-    upsert?: MovimentacaoFinanceiraUpsertWithWhereUniqueWithoutContaInput | MovimentacaoFinanceiraUpsertWithWhereUniqueWithoutContaInput[]
-    createMany?: MovimentacaoFinanceiraCreateManyContaInputEnvelope
+  export type MovimentacaoFinanceiraUncheckedUpdateManyWithoutBancoNestedInput = {
+    create?: XOR<MovimentacaoFinanceiraCreateWithoutBancoInput, MovimentacaoFinanceiraUncheckedCreateWithoutBancoInput> | MovimentacaoFinanceiraCreateWithoutBancoInput[] | MovimentacaoFinanceiraUncheckedCreateWithoutBancoInput[]
+    connectOrCreate?: MovimentacaoFinanceiraCreateOrConnectWithoutBancoInput | MovimentacaoFinanceiraCreateOrConnectWithoutBancoInput[]
+    upsert?: MovimentacaoFinanceiraUpsertWithWhereUniqueWithoutBancoInput | MovimentacaoFinanceiraUpsertWithWhereUniqueWithoutBancoInput[]
+    createMany?: MovimentacaoFinanceiraCreateManyBancoInputEnvelope
     set?: MovimentacaoFinanceiraWhereUniqueInput | MovimentacaoFinanceiraWhereUniqueInput[]
     disconnect?: MovimentacaoFinanceiraWhereUniqueInput | MovimentacaoFinanceiraWhereUniqueInput[]
     delete?: MovimentacaoFinanceiraWhereUniqueInput | MovimentacaoFinanceiraWhereUniqueInput[]
     connect?: MovimentacaoFinanceiraWhereUniqueInput | MovimentacaoFinanceiraWhereUniqueInput[]
-    update?: MovimentacaoFinanceiraUpdateWithWhereUniqueWithoutContaInput | MovimentacaoFinanceiraUpdateWithWhereUniqueWithoutContaInput[]
-    updateMany?: MovimentacaoFinanceiraUpdateManyWithWhereWithoutContaInput | MovimentacaoFinanceiraUpdateManyWithWhereWithoutContaInput[]
+    update?: MovimentacaoFinanceiraUpdateWithWhereUniqueWithoutBancoInput | MovimentacaoFinanceiraUpdateWithWhereUniqueWithoutBancoInput[]
+    updateMany?: MovimentacaoFinanceiraUpdateManyWithWhereWithoutBancoInput | MovimentacaoFinanceiraUpdateManyWithWhereWithoutBancoInput[]
     deleteMany?: MovimentacaoFinanceiraScalarWhereInput | MovimentacaoFinanceiraScalarWhereInput[]
   }
 
-  export type ContaCreateNestedOneWithoutMovimentacoesInput = {
-    create?: XOR<ContaCreateWithoutMovimentacoesInput, ContaUncheckedCreateWithoutMovimentacoesInput>
-    connectOrCreate?: ContaCreateOrConnectWithoutMovimentacoesInput
-    connect?: ContaWhereUniqueInput
+  export type BancoCreateNestedOneWithoutMovimentacoesInput = {
+    create?: XOR<BancoCreateWithoutMovimentacoesInput, BancoUncheckedCreateWithoutMovimentacoesInput>
+    connectOrCreate?: BancoCreateOrConnectWithoutMovimentacoesInput
+    connect?: BancoWhereUniqueInput
   }
 
   export type LivroCaixaCreateNestedOneWithoutMovimentacoesInput = {
@@ -32650,20 +36638,30 @@ export namespace Prisma {
     connect?: LivroCaixaWhereUniqueInput
   }
 
+  export type ContaFinanceiraCreateNestedOneWithoutMovimentacaoInput = {
+    create?: XOR<ContaFinanceiraCreateWithoutMovimentacaoInput, ContaFinanceiraUncheckedCreateWithoutMovimentacaoInput>
+    connectOrCreate?: ContaFinanceiraCreateOrConnectWithoutMovimentacaoInput
+    connect?: ContaFinanceiraWhereUniqueInput
+  }
+
+  export type CategoriaCaixaCreateNestedOneWithoutMovimentacoesInput = {
+    create?: XOR<CategoriaCaixaCreateWithoutMovimentacoesInput, CategoriaCaixaUncheckedCreateWithoutMovimentacoesInput>
+    connectOrCreate?: CategoriaCaixaCreateOrConnectWithoutMovimentacoesInput
+    connect?: CategoriaCaixaWhereUniqueInput
+  }
+
   export type EnumTipoMovimentacaoFieldUpdateOperationsInput = {
     set?: $Enums.TipoMovimentacao
   }
 
-  export type EnumTipoOrigemFieldUpdateOperationsInput = {
-    set?: $Enums.TipoOrigem
-  }
-
-  export type ContaUpdateOneRequiredWithoutMovimentacoesNestedInput = {
-    create?: XOR<ContaCreateWithoutMovimentacoesInput, ContaUncheckedCreateWithoutMovimentacoesInput>
-    connectOrCreate?: ContaCreateOrConnectWithoutMovimentacoesInput
-    upsert?: ContaUpsertWithoutMovimentacoesInput
-    connect?: ContaWhereUniqueInput
-    update?: XOR<XOR<ContaUpdateToOneWithWhereWithoutMovimentacoesInput, ContaUpdateWithoutMovimentacoesInput>, ContaUncheckedUpdateWithoutMovimentacoesInput>
+  export type BancoUpdateOneWithoutMovimentacoesNestedInput = {
+    create?: XOR<BancoCreateWithoutMovimentacoesInput, BancoUncheckedCreateWithoutMovimentacoesInput>
+    connectOrCreate?: BancoCreateOrConnectWithoutMovimentacoesInput
+    upsert?: BancoUpsertWithoutMovimentacoesInput
+    disconnect?: BancoWhereInput | boolean
+    delete?: BancoWhereInput | boolean
+    connect?: BancoWhereUniqueInput
+    update?: XOR<XOR<BancoUpdateToOneWithWhereWithoutMovimentacoesInput, BancoUpdateWithoutMovimentacoesInput>, BancoUncheckedUpdateWithoutMovimentacoesInput>
   }
 
   export type LivroCaixaUpdateOneRequiredWithoutMovimentacoesNestedInput = {
@@ -32672,6 +36670,66 @@ export namespace Prisma {
     upsert?: LivroCaixaUpsertWithoutMovimentacoesInput
     connect?: LivroCaixaWhereUniqueInput
     update?: XOR<XOR<LivroCaixaUpdateToOneWithWhereWithoutMovimentacoesInput, LivroCaixaUpdateWithoutMovimentacoesInput>, LivroCaixaUncheckedUpdateWithoutMovimentacoesInput>
+  }
+
+  export type ContaFinanceiraUpdateOneWithoutMovimentacaoNestedInput = {
+    create?: XOR<ContaFinanceiraCreateWithoutMovimentacaoInput, ContaFinanceiraUncheckedCreateWithoutMovimentacaoInput>
+    connectOrCreate?: ContaFinanceiraCreateOrConnectWithoutMovimentacaoInput
+    upsert?: ContaFinanceiraUpsertWithoutMovimentacaoInput
+    disconnect?: ContaFinanceiraWhereInput | boolean
+    delete?: ContaFinanceiraWhereInput | boolean
+    connect?: ContaFinanceiraWhereUniqueInput
+    update?: XOR<XOR<ContaFinanceiraUpdateToOneWithWhereWithoutMovimentacaoInput, ContaFinanceiraUpdateWithoutMovimentacaoInput>, ContaFinanceiraUncheckedUpdateWithoutMovimentacaoInput>
+  }
+
+  export type CategoriaCaixaUpdateOneRequiredWithoutMovimentacoesNestedInput = {
+    create?: XOR<CategoriaCaixaCreateWithoutMovimentacoesInput, CategoriaCaixaUncheckedCreateWithoutMovimentacoesInput>
+    connectOrCreate?: CategoriaCaixaCreateOrConnectWithoutMovimentacoesInput
+    upsert?: CategoriaCaixaUpsertWithoutMovimentacoesInput
+    connect?: CategoriaCaixaWhereUniqueInput
+    update?: XOR<XOR<CategoriaCaixaUpdateToOneWithWhereWithoutMovimentacoesInput, CategoriaCaixaUpdateWithoutMovimentacoesInput>, CategoriaCaixaUncheckedUpdateWithoutMovimentacoesInput>
+  }
+
+  export type MovimentacaoFinanceiraCreateNestedManyWithoutCategoriaInput = {
+    create?: XOR<MovimentacaoFinanceiraCreateWithoutCategoriaInput, MovimentacaoFinanceiraUncheckedCreateWithoutCategoriaInput> | MovimentacaoFinanceiraCreateWithoutCategoriaInput[] | MovimentacaoFinanceiraUncheckedCreateWithoutCategoriaInput[]
+    connectOrCreate?: MovimentacaoFinanceiraCreateOrConnectWithoutCategoriaInput | MovimentacaoFinanceiraCreateOrConnectWithoutCategoriaInput[]
+    createMany?: MovimentacaoFinanceiraCreateManyCategoriaInputEnvelope
+    connect?: MovimentacaoFinanceiraWhereUniqueInput | MovimentacaoFinanceiraWhereUniqueInput[]
+  }
+
+  export type MovimentacaoFinanceiraUncheckedCreateNestedManyWithoutCategoriaInput = {
+    create?: XOR<MovimentacaoFinanceiraCreateWithoutCategoriaInput, MovimentacaoFinanceiraUncheckedCreateWithoutCategoriaInput> | MovimentacaoFinanceiraCreateWithoutCategoriaInput[] | MovimentacaoFinanceiraUncheckedCreateWithoutCategoriaInput[]
+    connectOrCreate?: MovimentacaoFinanceiraCreateOrConnectWithoutCategoriaInput | MovimentacaoFinanceiraCreateOrConnectWithoutCategoriaInput[]
+    createMany?: MovimentacaoFinanceiraCreateManyCategoriaInputEnvelope
+    connect?: MovimentacaoFinanceiraWhereUniqueInput | MovimentacaoFinanceiraWhereUniqueInput[]
+  }
+
+  export type MovimentacaoFinanceiraUpdateManyWithoutCategoriaNestedInput = {
+    create?: XOR<MovimentacaoFinanceiraCreateWithoutCategoriaInput, MovimentacaoFinanceiraUncheckedCreateWithoutCategoriaInput> | MovimentacaoFinanceiraCreateWithoutCategoriaInput[] | MovimentacaoFinanceiraUncheckedCreateWithoutCategoriaInput[]
+    connectOrCreate?: MovimentacaoFinanceiraCreateOrConnectWithoutCategoriaInput | MovimentacaoFinanceiraCreateOrConnectWithoutCategoriaInput[]
+    upsert?: MovimentacaoFinanceiraUpsertWithWhereUniqueWithoutCategoriaInput | MovimentacaoFinanceiraUpsertWithWhereUniqueWithoutCategoriaInput[]
+    createMany?: MovimentacaoFinanceiraCreateManyCategoriaInputEnvelope
+    set?: MovimentacaoFinanceiraWhereUniqueInput | MovimentacaoFinanceiraWhereUniqueInput[]
+    disconnect?: MovimentacaoFinanceiraWhereUniqueInput | MovimentacaoFinanceiraWhereUniqueInput[]
+    delete?: MovimentacaoFinanceiraWhereUniqueInput | MovimentacaoFinanceiraWhereUniqueInput[]
+    connect?: MovimentacaoFinanceiraWhereUniqueInput | MovimentacaoFinanceiraWhereUniqueInput[]
+    update?: MovimentacaoFinanceiraUpdateWithWhereUniqueWithoutCategoriaInput | MovimentacaoFinanceiraUpdateWithWhereUniqueWithoutCategoriaInput[]
+    updateMany?: MovimentacaoFinanceiraUpdateManyWithWhereWithoutCategoriaInput | MovimentacaoFinanceiraUpdateManyWithWhereWithoutCategoriaInput[]
+    deleteMany?: MovimentacaoFinanceiraScalarWhereInput | MovimentacaoFinanceiraScalarWhereInput[]
+  }
+
+  export type MovimentacaoFinanceiraUncheckedUpdateManyWithoutCategoriaNestedInput = {
+    create?: XOR<MovimentacaoFinanceiraCreateWithoutCategoriaInput, MovimentacaoFinanceiraUncheckedCreateWithoutCategoriaInput> | MovimentacaoFinanceiraCreateWithoutCategoriaInput[] | MovimentacaoFinanceiraUncheckedCreateWithoutCategoriaInput[]
+    connectOrCreate?: MovimentacaoFinanceiraCreateOrConnectWithoutCategoriaInput | MovimentacaoFinanceiraCreateOrConnectWithoutCategoriaInput[]
+    upsert?: MovimentacaoFinanceiraUpsertWithWhereUniqueWithoutCategoriaInput | MovimentacaoFinanceiraUpsertWithWhereUniqueWithoutCategoriaInput[]
+    createMany?: MovimentacaoFinanceiraCreateManyCategoriaInputEnvelope
+    set?: MovimentacaoFinanceiraWhereUniqueInput | MovimentacaoFinanceiraWhereUniqueInput[]
+    disconnect?: MovimentacaoFinanceiraWhereUniqueInput | MovimentacaoFinanceiraWhereUniqueInput[]
+    delete?: MovimentacaoFinanceiraWhereUniqueInput | MovimentacaoFinanceiraWhereUniqueInput[]
+    connect?: MovimentacaoFinanceiraWhereUniqueInput | MovimentacaoFinanceiraWhereUniqueInput[]
+    update?: MovimentacaoFinanceiraUpdateWithWhereUniqueWithoutCategoriaInput | MovimentacaoFinanceiraUpdateWithWhereUniqueWithoutCategoriaInput[]
+    updateMany?: MovimentacaoFinanceiraUpdateManyWithWhereWithoutCategoriaInput | MovimentacaoFinanceiraUpdateManyWithWhereWithoutCategoriaInput[]
+    deleteMany?: MovimentacaoFinanceiraScalarWhereInput | MovimentacaoFinanceiraScalarWhereInput[]
   }
 
   export type ConversaoEstoqueCreateNestedOneWithoutMovimentacoesInput = {
@@ -32754,9 +36812,9 @@ export namespace Prisma {
     deleteMany?: MovimentacaoEstoqueScalarWhereInput | MovimentacaoEstoqueScalarWhereInput[]
   }
 
-  export type UserCreateNestedOneWithoutCaixasInput = {
-    create?: XOR<UserCreateWithoutCaixasInput, UserUncheckedCreateWithoutCaixasInput>
-    connectOrCreate?: UserCreateOrConnectWithoutCaixasInput
+  export type UserCreateNestedOneWithoutCaixasAbertosInput = {
+    create?: XOR<UserCreateWithoutCaixasAbertosInput, UserUncheckedCreateWithoutCaixasAbertosInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCaixasAbertosInput
     connect?: UserWhereUniqueInput
   }
 
@@ -32767,6 +36825,12 @@ export namespace Prisma {
     connect?: MovimentacaoFinanceiraWhereUniqueInput | MovimentacaoFinanceiraWhereUniqueInput[]
   }
 
+  export type FechamentoCreateNestedOneWithoutCaixaInput = {
+    create?: XOR<FechamentoCreateWithoutCaixaInput, FechamentoUncheckedCreateWithoutCaixaInput>
+    connectOrCreate?: FechamentoCreateOrConnectWithoutCaixaInput
+    connect?: FechamentoWhereUniqueInput
+  }
+
   export type MovimentacaoFinanceiraUncheckedCreateNestedManyWithoutCaixaInput = {
     create?: XOR<MovimentacaoFinanceiraCreateWithoutCaixaInput, MovimentacaoFinanceiraUncheckedCreateWithoutCaixaInput> | MovimentacaoFinanceiraCreateWithoutCaixaInput[] | MovimentacaoFinanceiraUncheckedCreateWithoutCaixaInput[]
     connectOrCreate?: MovimentacaoFinanceiraCreateOrConnectWithoutCaixaInput | MovimentacaoFinanceiraCreateOrConnectWithoutCaixaInput[]
@@ -32774,24 +36838,22 @@ export namespace Prisma {
     connect?: MovimentacaoFinanceiraWhereUniqueInput | MovimentacaoFinanceiraWhereUniqueInput[]
   }
 
-  export type NullableDecimalFieldUpdateOperationsInput = {
-    set?: Decimal | DecimalJsLike | number | string | null
-    increment?: Decimal | DecimalJsLike | number | string
-    decrement?: Decimal | DecimalJsLike | number | string
-    multiply?: Decimal | DecimalJsLike | number | string
-    divide?: Decimal | DecimalJsLike | number | string
+  export type FechamentoUncheckedCreateNestedOneWithoutCaixaInput = {
+    create?: XOR<FechamentoCreateWithoutCaixaInput, FechamentoUncheckedCreateWithoutCaixaInput>
+    connectOrCreate?: FechamentoCreateOrConnectWithoutCaixaInput
+    connect?: FechamentoWhereUniqueInput
   }
 
   export type EnumStatusCaixaFieldUpdateOperationsInput = {
     set?: $Enums.StatusCaixa
   }
 
-  export type UserUpdateOneRequiredWithoutCaixasNestedInput = {
-    create?: XOR<UserCreateWithoutCaixasInput, UserUncheckedCreateWithoutCaixasInput>
-    connectOrCreate?: UserCreateOrConnectWithoutCaixasInput
-    upsert?: UserUpsertWithoutCaixasInput
+  export type UserUpdateOneRequiredWithoutCaixasAbertosNestedInput = {
+    create?: XOR<UserCreateWithoutCaixasAbertosInput, UserUncheckedCreateWithoutCaixasAbertosInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCaixasAbertosInput
+    upsert?: UserUpsertWithoutCaixasAbertosInput
     connect?: UserWhereUniqueInput
-    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutCaixasInput, UserUpdateWithoutCaixasInput>, UserUncheckedUpdateWithoutCaixasInput>
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutCaixasAbertosInput, UserUpdateWithoutCaixasAbertosInput>, UserUncheckedUpdateWithoutCaixasAbertosInput>
   }
 
   export type MovimentacaoFinanceiraUpdateManyWithoutCaixaNestedInput = {
@@ -32808,6 +36870,16 @@ export namespace Prisma {
     deleteMany?: MovimentacaoFinanceiraScalarWhereInput | MovimentacaoFinanceiraScalarWhereInput[]
   }
 
+  export type FechamentoUpdateOneWithoutCaixaNestedInput = {
+    create?: XOR<FechamentoCreateWithoutCaixaInput, FechamentoUncheckedCreateWithoutCaixaInput>
+    connectOrCreate?: FechamentoCreateOrConnectWithoutCaixaInput
+    upsert?: FechamentoUpsertWithoutCaixaInput
+    disconnect?: FechamentoWhereInput | boolean
+    delete?: FechamentoWhereInput | boolean
+    connect?: FechamentoWhereUniqueInput
+    update?: XOR<XOR<FechamentoUpdateToOneWithWhereWithoutCaixaInput, FechamentoUpdateWithoutCaixaInput>, FechamentoUncheckedUpdateWithoutCaixaInput>
+  }
+
   export type MovimentacaoFinanceiraUncheckedUpdateManyWithoutCaixaNestedInput = {
     create?: XOR<MovimentacaoFinanceiraCreateWithoutCaixaInput, MovimentacaoFinanceiraUncheckedCreateWithoutCaixaInput> | MovimentacaoFinanceiraCreateWithoutCaixaInput[] | MovimentacaoFinanceiraUncheckedCreateWithoutCaixaInput[]
     connectOrCreate?: MovimentacaoFinanceiraCreateOrConnectWithoutCaixaInput | MovimentacaoFinanceiraCreateOrConnectWithoutCaixaInput[]
@@ -32820,6 +36892,52 @@ export namespace Prisma {
     update?: MovimentacaoFinanceiraUpdateWithWhereUniqueWithoutCaixaInput | MovimentacaoFinanceiraUpdateWithWhereUniqueWithoutCaixaInput[]
     updateMany?: MovimentacaoFinanceiraUpdateManyWithWhereWithoutCaixaInput | MovimentacaoFinanceiraUpdateManyWithWhereWithoutCaixaInput[]
     deleteMany?: MovimentacaoFinanceiraScalarWhereInput | MovimentacaoFinanceiraScalarWhereInput[]
+  }
+
+  export type FechamentoUncheckedUpdateOneWithoutCaixaNestedInput = {
+    create?: XOR<FechamentoCreateWithoutCaixaInput, FechamentoUncheckedCreateWithoutCaixaInput>
+    connectOrCreate?: FechamentoCreateOrConnectWithoutCaixaInput
+    upsert?: FechamentoUpsertWithoutCaixaInput
+    disconnect?: FechamentoWhereInput | boolean
+    delete?: FechamentoWhereInput | boolean
+    connect?: FechamentoWhereUniqueInput
+    update?: XOR<XOR<FechamentoUpdateToOneWithWhereWithoutCaixaInput, FechamentoUpdateWithoutCaixaInput>, FechamentoUncheckedUpdateWithoutCaixaInput>
+  }
+
+  export type LivroCaixaCreateNestedOneWithoutFechamentoInput = {
+    create?: XOR<LivroCaixaCreateWithoutFechamentoInput, LivroCaixaUncheckedCreateWithoutFechamentoInput>
+    connectOrCreate?: LivroCaixaCreateOrConnectWithoutFechamentoInput
+    connect?: LivroCaixaWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutFechamentosInput = {
+    create?: XOR<UserCreateWithoutFechamentosInput, UserUncheckedCreateWithoutFechamentosInput>
+    connectOrCreate?: UserCreateOrConnectWithoutFechamentosInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type NullableDecimalFieldUpdateOperationsInput = {
+    set?: Decimal | DecimalJsLike | number | string | null
+    increment?: Decimal | DecimalJsLike | number | string
+    decrement?: Decimal | DecimalJsLike | number | string
+    multiply?: Decimal | DecimalJsLike | number | string
+    divide?: Decimal | DecimalJsLike | number | string
+  }
+
+  export type LivroCaixaUpdateOneRequiredWithoutFechamentoNestedInput = {
+    create?: XOR<LivroCaixaCreateWithoutFechamentoInput, LivroCaixaUncheckedCreateWithoutFechamentoInput>
+    connectOrCreate?: LivroCaixaCreateOrConnectWithoutFechamentoInput
+    upsert?: LivroCaixaUpsertWithoutFechamentoInput
+    connect?: LivroCaixaWhereUniqueInput
+    update?: XOR<XOR<LivroCaixaUpdateToOneWithWhereWithoutFechamentoInput, LivroCaixaUpdateWithoutFechamentoInput>, LivroCaixaUncheckedUpdateWithoutFechamentoInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutFechamentosNestedInput = {
+    create?: XOR<UserCreateWithoutFechamentosInput, UserUncheckedCreateWithoutFechamentosInput>
+    connectOrCreate?: UserCreateOrConnectWithoutFechamentosInput
+    upsert?: UserUpsertWithoutFechamentosInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutFechamentosInput, UserUpdateWithoutFechamentosInput>, UserUncheckedUpdateWithoutFechamentosInput>
   }
 
   export type NestedIntFilter<$PrismaModel = never> = {
@@ -33101,11 +37219,28 @@ export namespace Prisma {
     _max?: NestedEnumTipoStatusPedidoFilter<$PrismaModel>
   }
 
+  export type NestedEnumTipoContaFilter<$PrismaModel = never> = {
+    equals?: $Enums.TipoConta | EnumTipoContaFieldRefInput<$PrismaModel>
+    in?: $Enums.TipoConta[] | ListEnumTipoContaFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TipoConta[] | ListEnumTipoContaFieldRefInput<$PrismaModel>
+    not?: NestedEnumTipoContaFilter<$PrismaModel> | $Enums.TipoConta
+  }
+
   export type NestedEnumFormaPagamentoFilter<$PrismaModel = never> = {
     equals?: $Enums.FormaPagamento | EnumFormaPagamentoFieldRefInput<$PrismaModel>
     in?: $Enums.FormaPagamento[] | ListEnumFormaPagamentoFieldRefInput<$PrismaModel>
     notIn?: $Enums.FormaPagamento[] | ListEnumFormaPagamentoFieldRefInput<$PrismaModel>
     not?: NestedEnumFormaPagamentoFilter<$PrismaModel> | $Enums.FormaPagamento
+  }
+
+  export type NestedEnumTipoContaWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TipoConta | EnumTipoContaFieldRefInput<$PrismaModel>
+    in?: $Enums.TipoConta[] | ListEnumTipoContaFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TipoConta[] | ListEnumTipoContaFieldRefInput<$PrismaModel>
+    not?: NestedEnumTipoContaWithAggregatesFilter<$PrismaModel> | $Enums.TipoConta
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTipoContaFilter<$PrismaModel>
+    _max?: NestedEnumTipoContaFilter<$PrismaModel>
   }
 
   export type NestedEnumFormaPagamentoWithAggregatesFilter<$PrismaModel = never> = {
@@ -33125,13 +37260,6 @@ export namespace Prisma {
     not?: NestedEnumTipoMovimentacaoFilter<$PrismaModel> | $Enums.TipoMovimentacao
   }
 
-  export type NestedEnumTipoOrigemFilter<$PrismaModel = never> = {
-    equals?: $Enums.TipoOrigem | EnumTipoOrigemFieldRefInput<$PrismaModel>
-    in?: $Enums.TipoOrigem[] | ListEnumTipoOrigemFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TipoOrigem[] | ListEnumTipoOrigemFieldRefInput<$PrismaModel>
-    not?: NestedEnumTipoOrigemFilter<$PrismaModel> | $Enums.TipoOrigem
-  }
-
   export type NestedEnumTipoMovimentacaoWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.TipoMovimentacao | EnumTipoMovimentacaoFieldRefInput<$PrismaModel>
     in?: $Enums.TipoMovimentacao[] | ListEnumTipoMovimentacaoFieldRefInput<$PrismaModel>
@@ -33140,16 +37268,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumTipoMovimentacaoFilter<$PrismaModel>
     _max?: NestedEnumTipoMovimentacaoFilter<$PrismaModel>
-  }
-
-  export type NestedEnumTipoOrigemWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.TipoOrigem | EnumTipoOrigemFieldRefInput<$PrismaModel>
-    in?: $Enums.TipoOrigem[] | ListEnumTipoOrigemFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TipoOrigem[] | ListEnumTipoOrigemFieldRefInput<$PrismaModel>
-    not?: NestedEnumTipoOrigemWithAggregatesFilter<$PrismaModel> | $Enums.TipoOrigem
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumTipoOrigemFilter<$PrismaModel>
-    _max?: NestedEnumTipoOrigemFilter<$PrismaModel>
   }
 
   export type NestedEnumTipoMovimentacaoEstoqueFilter<$PrismaModel = never> = {
@@ -33186,6 +37304,23 @@ export namespace Prisma {
     _max?: NestedEnumOrigemMovimentacaoEstoqueFilter<$PrismaModel>
   }
 
+  export type NestedEnumStatusCaixaFilter<$PrismaModel = never> = {
+    equals?: $Enums.StatusCaixa | EnumStatusCaixaFieldRefInput<$PrismaModel>
+    in?: $Enums.StatusCaixa[] | ListEnumStatusCaixaFieldRefInput<$PrismaModel>
+    notIn?: $Enums.StatusCaixa[] | ListEnumStatusCaixaFieldRefInput<$PrismaModel>
+    not?: NestedEnumStatusCaixaFilter<$PrismaModel> | $Enums.StatusCaixa
+  }
+
+  export type NestedEnumStatusCaixaWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.StatusCaixa | EnumStatusCaixaFieldRefInput<$PrismaModel>
+    in?: $Enums.StatusCaixa[] | ListEnumStatusCaixaFieldRefInput<$PrismaModel>
+    notIn?: $Enums.StatusCaixa[] | ListEnumStatusCaixaFieldRefInput<$PrismaModel>
+    not?: NestedEnumStatusCaixaWithAggregatesFilter<$PrismaModel> | $Enums.StatusCaixa
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumStatusCaixaFilter<$PrismaModel>
+    _max?: NestedEnumStatusCaixaFilter<$PrismaModel>
+  }
+
   export type NestedDecimalNullableFilter<$PrismaModel = never> = {
     equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
     in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
@@ -33195,13 +37330,6 @@ export namespace Prisma {
     gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
     gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
     not?: NestedDecimalNullableFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
-  }
-
-  export type NestedEnumStatusCaixaFilter<$PrismaModel = never> = {
-    equals?: $Enums.StatusCaixa | EnumStatusCaixaFieldRefInput<$PrismaModel>
-    in?: $Enums.StatusCaixa[] | ListEnumStatusCaixaFieldRefInput<$PrismaModel>
-    notIn?: $Enums.StatusCaixa[] | ListEnumStatusCaixaFieldRefInput<$PrismaModel>
-    not?: NestedEnumStatusCaixaFilter<$PrismaModel> | $Enums.StatusCaixa
   }
 
   export type NestedDecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -33220,16 +37348,6 @@ export namespace Prisma {
     _max?: NestedDecimalNullableFilter<$PrismaModel>
   }
 
-  export type NestedEnumStatusCaixaWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.StatusCaixa | EnumStatusCaixaFieldRefInput<$PrismaModel>
-    in?: $Enums.StatusCaixa[] | ListEnumStatusCaixaFieldRefInput<$PrismaModel>
-    notIn?: $Enums.StatusCaixa[] | ListEnumStatusCaixaFieldRefInput<$PrismaModel>
-    not?: NestedEnumStatusCaixaWithAggregatesFilter<$PrismaModel> | $Enums.StatusCaixa
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumStatusCaixaFilter<$PrismaModel>
-    _max?: NestedEnumStatusCaixaFilter<$PrismaModel>
-  }
-
   export type PedidoCreateWithoutUserInput = {
     tipo: $Enums.TipoPedido
     valor_total?: Decimal | DecimalJsLike | number | string
@@ -33237,7 +37355,7 @@ export namespace Prisma {
     criado_em?: Date | string
     atualizado?: Date | string
     items?: ItemPedidoCreateNestedManyWithoutPedidoInput
-    pagamentos?: PagamentoCreateNestedManyWithoutPedidoInput
+    pagamentos?: ContaFinanceiraCreateNestedManyWithoutPedidoInput
     registro?: RegistroCreateNestedOneWithoutPedidosInput
   }
 
@@ -33250,7 +37368,7 @@ export namespace Prisma {
     criado_em?: Date | string
     atualizado?: Date | string
     items?: ItemPedidoUncheckedCreateNestedManyWithoutPedidoInput
-    pagamentos?: PagamentoUncheckedCreateNestedManyWithoutPedidoInput
+    pagamentos?: ContaFinanceiraUncheckedCreateNestedManyWithoutPedidoInput
   }
 
   export type PedidoCreateOrConnectWithoutUserInput = {
@@ -33279,32 +37397,91 @@ export namespace Prisma {
     create: XOR<CargoCreateWithoutUsersInput, CargoUncheckedCreateWithoutUsersInput>
   }
 
-  export type LivroCaixaCreateWithoutUsuarioInput = {
+  export type LivroCaixaCreateWithoutAbertoPorInput = {
     dataAbertura?: Date | string
     dataFechamento?: Date | string | null
     saldoInicial: Decimal | DecimalJsLike | number | string
-    saldoFinal?: Decimal | DecimalJsLike | number | string | null
+    saldoFinal: Decimal | DecimalJsLike | number | string
     status?: $Enums.StatusCaixa
     movimentacoes?: MovimentacaoFinanceiraCreateNestedManyWithoutCaixaInput
+    fechamento?: FechamentoCreateNestedOneWithoutCaixaInput
   }
 
-  export type LivroCaixaUncheckedCreateWithoutUsuarioInput = {
+  export type LivroCaixaUncheckedCreateWithoutAbertoPorInput = {
     id?: number
     dataAbertura?: Date | string
     dataFechamento?: Date | string | null
     saldoInicial: Decimal | DecimalJsLike | number | string
-    saldoFinal?: Decimal | DecimalJsLike | number | string | null
+    saldoFinal: Decimal | DecimalJsLike | number | string
     status?: $Enums.StatusCaixa
     movimentacoes?: MovimentacaoFinanceiraUncheckedCreateNestedManyWithoutCaixaInput
+    fechamento?: FechamentoUncheckedCreateNestedOneWithoutCaixaInput
   }
 
-  export type LivroCaixaCreateOrConnectWithoutUsuarioInput = {
+  export type LivroCaixaCreateOrConnectWithoutAbertoPorInput = {
     where: LivroCaixaWhereUniqueInput
-    create: XOR<LivroCaixaCreateWithoutUsuarioInput, LivroCaixaUncheckedCreateWithoutUsuarioInput>
+    create: XOR<LivroCaixaCreateWithoutAbertoPorInput, LivroCaixaUncheckedCreateWithoutAbertoPorInput>
   }
 
-  export type LivroCaixaCreateManyUsuarioInputEnvelope = {
-    data: LivroCaixaCreateManyUsuarioInput | LivroCaixaCreateManyUsuarioInput[]
+  export type LivroCaixaCreateManyAbertoPorInputEnvelope = {
+    data: LivroCaixaCreateManyAbertoPorInput | LivroCaixaCreateManyAbertoPorInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type FechamentoCreateWithoutUser_fechamentoInput = {
+    valor_abertura: Decimal | DecimalJsLike | number | string
+    valor_abastecimentos: Decimal | DecimalJsLike | number | string
+    valor_despesas: Decimal | DecimalJsLike | number | string
+    data_abertura: Date | string
+    data_fechamento: Date | string
+    valor_esperado: Decimal | DecimalJsLike | number | string
+    valor_conferido: Decimal | DecimalJsLike | number | string
+    valor_diferenca?: Decimal | DecimalJsLike | number | string | null
+    valor_pago: Decimal | DecimalJsLike | number | string
+    valor_recebido: Decimal | DecimalJsLike | number | string
+    valor_total_compras: Decimal | DecimalJsLike | number | string
+    valor_total_vendas: Decimal | DecimalJsLike | number | string
+    peso_total_compras: Decimal | DecimalJsLike | number | string
+    peso_total_vendas: Decimal | DecimalJsLike | number | string
+    lucro_total: Decimal | DecimalJsLike | number | string
+    proj_lucro: Decimal | DecimalJsLike | number | string
+    proj_venda: Decimal | DecimalJsLike | number | string
+    qnt_compras: Decimal | DecimalJsLike | number | string
+    qnt_vendas: Decimal | DecimalJsLike | number | string
+    caixa: LivroCaixaCreateNestedOneWithoutFechamentoInput
+  }
+
+  export type FechamentoUncheckedCreateWithoutUser_fechamentoInput = {
+    id?: number
+    caixaID: number
+    valor_abertura: Decimal | DecimalJsLike | number | string
+    valor_abastecimentos: Decimal | DecimalJsLike | number | string
+    valor_despesas: Decimal | DecimalJsLike | number | string
+    data_abertura: Date | string
+    data_fechamento: Date | string
+    valor_esperado: Decimal | DecimalJsLike | number | string
+    valor_conferido: Decimal | DecimalJsLike | number | string
+    valor_diferenca?: Decimal | DecimalJsLike | number | string | null
+    valor_pago: Decimal | DecimalJsLike | number | string
+    valor_recebido: Decimal | DecimalJsLike | number | string
+    valor_total_compras: Decimal | DecimalJsLike | number | string
+    valor_total_vendas: Decimal | DecimalJsLike | number | string
+    peso_total_compras: Decimal | DecimalJsLike | number | string
+    peso_total_vendas: Decimal | DecimalJsLike | number | string
+    lucro_total: Decimal | DecimalJsLike | number | string
+    proj_lucro: Decimal | DecimalJsLike | number | string
+    proj_venda: Decimal | DecimalJsLike | number | string
+    qnt_compras: Decimal | DecimalJsLike | number | string
+    qnt_vendas: Decimal | DecimalJsLike | number | string
+  }
+
+  export type FechamentoCreateOrConnectWithoutUser_fechamentoInput = {
+    where: FechamentoWhereUniqueInput
+    create: XOR<FechamentoCreateWithoutUser_fechamentoInput, FechamentoUncheckedCreateWithoutUser_fechamentoInput>
+  }
+
+  export type FechamentoCreateManyUser_fechamentoInputEnvelope = {
+    data: FechamentoCreateManyUser_fechamentoInput | FechamentoCreateManyUser_fechamentoInput[]
     skipDuplicates?: boolean
   }
 
@@ -33360,20 +37537,20 @@ export namespace Prisma {
     permissoes?: PermissoesUncheckedUpdateManyWithoutCargosNestedInput
   }
 
-  export type LivroCaixaUpsertWithWhereUniqueWithoutUsuarioInput = {
+  export type LivroCaixaUpsertWithWhereUniqueWithoutAbertoPorInput = {
     where: LivroCaixaWhereUniqueInput
-    update: XOR<LivroCaixaUpdateWithoutUsuarioInput, LivroCaixaUncheckedUpdateWithoutUsuarioInput>
-    create: XOR<LivroCaixaCreateWithoutUsuarioInput, LivroCaixaUncheckedCreateWithoutUsuarioInput>
+    update: XOR<LivroCaixaUpdateWithoutAbertoPorInput, LivroCaixaUncheckedUpdateWithoutAbertoPorInput>
+    create: XOR<LivroCaixaCreateWithoutAbertoPorInput, LivroCaixaUncheckedCreateWithoutAbertoPorInput>
   }
 
-  export type LivroCaixaUpdateWithWhereUniqueWithoutUsuarioInput = {
+  export type LivroCaixaUpdateWithWhereUniqueWithoutAbertoPorInput = {
     where: LivroCaixaWhereUniqueInput
-    data: XOR<LivroCaixaUpdateWithoutUsuarioInput, LivroCaixaUncheckedUpdateWithoutUsuarioInput>
+    data: XOR<LivroCaixaUpdateWithoutAbertoPorInput, LivroCaixaUncheckedUpdateWithoutAbertoPorInput>
   }
 
-  export type LivroCaixaUpdateManyWithWhereWithoutUsuarioInput = {
+  export type LivroCaixaUpdateManyWithWhereWithoutAbertoPorInput = {
     where: LivroCaixaScalarWhereInput
-    data: XOR<LivroCaixaUpdateManyMutationInput, LivroCaixaUncheckedUpdateManyWithoutUsuarioInput>
+    data: XOR<LivroCaixaUpdateManyMutationInput, LivroCaixaUncheckedUpdateManyWithoutAbertoPorInput>
   }
 
   export type LivroCaixaScalarWhereInput = {
@@ -33383,10 +37560,54 @@ export namespace Prisma {
     id?: IntFilter<"LivroCaixa"> | number
     dataAbertura?: DateTimeFilter<"LivroCaixa"> | Date | string
     dataFechamento?: DateTimeNullableFilter<"LivroCaixa"> | Date | string | null
+    abertoPorID?: IntFilter<"LivroCaixa"> | number
     saldoInicial?: DecimalFilter<"LivroCaixa"> | Decimal | DecimalJsLike | number | string
-    saldoFinal?: DecimalNullableFilter<"LivroCaixa"> | Decimal | DecimalJsLike | number | string | null
+    saldoFinal?: DecimalFilter<"LivroCaixa"> | Decimal | DecimalJsLike | number | string
     status?: EnumStatusCaixaFilter<"LivroCaixa"> | $Enums.StatusCaixa
-    usuarioID?: IntFilter<"LivroCaixa"> | number
+  }
+
+  export type FechamentoUpsertWithWhereUniqueWithoutUser_fechamentoInput = {
+    where: FechamentoWhereUniqueInput
+    update: XOR<FechamentoUpdateWithoutUser_fechamentoInput, FechamentoUncheckedUpdateWithoutUser_fechamentoInput>
+    create: XOR<FechamentoCreateWithoutUser_fechamentoInput, FechamentoUncheckedCreateWithoutUser_fechamentoInput>
+  }
+
+  export type FechamentoUpdateWithWhereUniqueWithoutUser_fechamentoInput = {
+    where: FechamentoWhereUniqueInput
+    data: XOR<FechamentoUpdateWithoutUser_fechamentoInput, FechamentoUncheckedUpdateWithoutUser_fechamentoInput>
+  }
+
+  export type FechamentoUpdateManyWithWhereWithoutUser_fechamentoInput = {
+    where: FechamentoScalarWhereInput
+    data: XOR<FechamentoUpdateManyMutationInput, FechamentoUncheckedUpdateManyWithoutUser_fechamentoInput>
+  }
+
+  export type FechamentoScalarWhereInput = {
+    AND?: FechamentoScalarWhereInput | FechamentoScalarWhereInput[]
+    OR?: FechamentoScalarWhereInput[]
+    NOT?: FechamentoScalarWhereInput | FechamentoScalarWhereInput[]
+    id?: IntFilter<"Fechamento"> | number
+    caixaID?: IntFilter<"Fechamento"> | number
+    valor_abertura?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    valor_abastecimentos?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    valor_despesas?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    data_abertura?: DateTimeFilter<"Fechamento"> | Date | string
+    data_fechamento?: DateTimeFilter<"Fechamento"> | Date | string
+    userID_fechamento?: IntFilter<"Fechamento"> | number
+    valor_esperado?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    valor_conferido?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    valor_diferenca?: DecimalNullableFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string | null
+    valor_pago?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    valor_recebido?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    valor_total_compras?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    valor_total_vendas?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    peso_total_compras?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    peso_total_vendas?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    lucro_total?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    proj_lucro?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    proj_venda?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    qnt_compras?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    qnt_vendas?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
   }
 
   export type CargoCreateWithoutPermissoesInput = {
@@ -33452,7 +37673,8 @@ export namespace Prisma {
     telefone: string
     deletedAt?: Date | string | null
     pedidos?: PedidoCreateNestedManyWithoutUserInput
-    caixas?: LivroCaixaCreateNestedManyWithoutUsuarioInput
+    caixasAbertos?: LivroCaixaCreateNestedManyWithoutAbertoPorInput
+    fechamentos?: FechamentoCreateNestedManyWithoutUser_fechamentoInput
   }
 
   export type UserUncheckedCreateWithoutCargoInput = {
@@ -33463,7 +37685,8 @@ export namespace Prisma {
     telefone: string
     deletedAt?: Date | string | null
     pedidos?: PedidoUncheckedCreateNestedManyWithoutUserInput
-    caixas?: LivroCaixaUncheckedCreateNestedManyWithoutUsuarioInput
+    caixasAbertos?: LivroCaixaUncheckedCreateNestedManyWithoutAbertoPorInput
+    fechamentos?: FechamentoUncheckedCreateNestedManyWithoutUser_fechamentoInput
   }
 
   export type UserCreateOrConnectWithoutCargoInput = {
@@ -33585,7 +37808,7 @@ export namespace Prisma {
     criado_em?: Date | string
     atualizado?: Date | string
     items?: ItemPedidoCreateNestedManyWithoutPedidoInput
-    pagamentos?: PagamentoCreateNestedManyWithoutPedidoInput
+    pagamentos?: ContaFinanceiraCreateNestedManyWithoutPedidoInput
     user: UserCreateNestedOneWithoutPedidosInput
   }
 
@@ -33598,7 +37821,7 @@ export namespace Prisma {
     criado_em?: Date | string
     atualizado?: Date | string
     items?: ItemPedidoUncheckedCreateNestedManyWithoutPedidoInput
-    pagamentos?: PagamentoUncheckedCreateNestedManyWithoutPedidoInput
+    pagamentos?: ContaFinanceiraUncheckedCreateNestedManyWithoutPedidoInput
   }
 
   export type PedidoCreateOrConnectWithoutRegistroInput = {
@@ -33675,6 +37898,43 @@ export namespace Prisma {
   export type SaldoFinanceiroCreateOrConnectWithoutRegistroInput = {
     where: SaldoFinanceiroWhereUniqueInput
     create: XOR<SaldoFinanceiroCreateWithoutRegistroInput, SaldoFinanceiroUncheckedCreateWithoutRegistroInput>
+  }
+
+  export type ContaFinanceiraCreateWithoutRegistroInput = {
+    tipo: $Enums.TipoConta
+    descricao?: string | null
+    valor: Decimal | DecimalJsLike | number | string
+    data_documento?: Date | string
+    data_vencimento?: Date | string | null
+    data_pagamento?: Date | string | null
+    forma: $Enums.FormaPagamento
+    data?: Date | string
+    pedido?: PedidoCreateNestedOneWithoutPagamentosInput
+    movimentacao?: MovimentacaoFinanceiraCreateNestedOneWithoutContaInput
+  }
+
+  export type ContaFinanceiraUncheckedCreateWithoutRegistroInput = {
+    id?: number
+    tipo: $Enums.TipoConta
+    pedidoID?: number | null
+    descricao?: string | null
+    valor: Decimal | DecimalJsLike | number | string
+    data_documento?: Date | string
+    data_vencimento?: Date | string | null
+    data_pagamento?: Date | string | null
+    forma: $Enums.FormaPagamento
+    data?: Date | string
+    movimentacao?: MovimentacaoFinanceiraUncheckedCreateNestedOneWithoutContaInput
+  }
+
+  export type ContaFinanceiraCreateOrConnectWithoutRegistroInput = {
+    where: ContaFinanceiraWhereUniqueInput
+    create: XOR<ContaFinanceiraCreateWithoutRegistroInput, ContaFinanceiraUncheckedCreateWithoutRegistroInput>
+  }
+
+  export type ContaFinanceiraCreateManyRegistroInputEnvelope = {
+    data: ContaFinanceiraCreateManyRegistroInput | ContaFinanceiraCreateManyRegistroInput[]
+    skipDuplicates?: boolean
   }
 
   export type DadosPagamentoUpsertWithoutRegistroInput = {
@@ -33843,6 +38103,39 @@ export namespace Prisma {
     saldo?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
+  export type ContaFinanceiraUpsertWithWhereUniqueWithoutRegistroInput = {
+    where: ContaFinanceiraWhereUniqueInput
+    update: XOR<ContaFinanceiraUpdateWithoutRegistroInput, ContaFinanceiraUncheckedUpdateWithoutRegistroInput>
+    create: XOR<ContaFinanceiraCreateWithoutRegistroInput, ContaFinanceiraUncheckedCreateWithoutRegistroInput>
+  }
+
+  export type ContaFinanceiraUpdateWithWhereUniqueWithoutRegistroInput = {
+    where: ContaFinanceiraWhereUniqueInput
+    data: XOR<ContaFinanceiraUpdateWithoutRegistroInput, ContaFinanceiraUncheckedUpdateWithoutRegistroInput>
+  }
+
+  export type ContaFinanceiraUpdateManyWithWhereWithoutRegistroInput = {
+    where: ContaFinanceiraScalarWhereInput
+    data: XOR<ContaFinanceiraUpdateManyMutationInput, ContaFinanceiraUncheckedUpdateManyWithoutRegistroInput>
+  }
+
+  export type ContaFinanceiraScalarWhereInput = {
+    AND?: ContaFinanceiraScalarWhereInput | ContaFinanceiraScalarWhereInput[]
+    OR?: ContaFinanceiraScalarWhereInput[]
+    NOT?: ContaFinanceiraScalarWhereInput | ContaFinanceiraScalarWhereInput[]
+    id?: IntFilter<"ContaFinanceira"> | number
+    tipo?: EnumTipoContaFilter<"ContaFinanceira"> | $Enums.TipoConta
+    pedidoID?: IntNullableFilter<"ContaFinanceira"> | number | null
+    registroID?: IntNullableFilter<"ContaFinanceira"> | number | null
+    descricao?: StringNullableFilter<"ContaFinanceira"> | string | null
+    valor?: DecimalFilter<"ContaFinanceira"> | Decimal | DecimalJsLike | number | string
+    data_documento?: DateTimeFilter<"ContaFinanceira"> | Date | string
+    data_vencimento?: DateTimeNullableFilter<"ContaFinanceira"> | Date | string | null
+    data_pagamento?: DateTimeNullableFilter<"ContaFinanceira"> | Date | string | null
+    forma?: EnumFormaPagamentoFilter<"ContaFinanceira"> | $Enums.FormaPagamento
+    data?: DateTimeFilter<"ContaFinanceira"> | Date | string
+  }
+
   export type RegistroCreateWithoutFisicaInput = {
     nome_razao: string
     apelido?: string | null
@@ -33857,6 +38150,7 @@ export namespace Prisma {
     juridica?: PessoaJuridicaCreateNestedOneWithoutRegistroInput
     tabela: TabelaCreateNestedOneWithoutRegistrosInput
     saldo?: SaldoFinanceiroCreateNestedOneWithoutRegistroInput
+    contas?: ContaFinanceiraCreateNestedManyWithoutRegistroInput
   }
 
   export type RegistroUncheckedCreateWithoutFisicaInput = {
@@ -33874,6 +38168,7 @@ export namespace Prisma {
     pedidos?: PedidoUncheckedCreateNestedManyWithoutRegistroInput
     juridica?: PessoaJuridicaUncheckedCreateNestedOneWithoutRegistroInput
     saldo?: SaldoFinanceiroUncheckedCreateNestedOneWithoutRegistroInput
+    contas?: ContaFinanceiraUncheckedCreateNestedManyWithoutRegistroInput
   }
 
   export type RegistroCreateOrConnectWithoutFisicaInput = {
@@ -33906,6 +38201,7 @@ export namespace Prisma {
     juridica?: PessoaJuridicaUpdateOneWithoutRegistroNestedInput
     tabela?: TabelaUpdateOneRequiredWithoutRegistrosNestedInput
     saldo?: SaldoFinanceiroUpdateOneWithoutRegistroNestedInput
+    contas?: ContaFinanceiraUpdateManyWithoutRegistroNestedInput
   }
 
   export type RegistroUncheckedUpdateWithoutFisicaInput = {
@@ -33923,6 +38219,7 @@ export namespace Prisma {
     pedidos?: PedidoUncheckedUpdateManyWithoutRegistroNestedInput
     juridica?: PessoaJuridicaUncheckedUpdateOneWithoutRegistroNestedInput
     saldo?: SaldoFinanceiroUncheckedUpdateOneWithoutRegistroNestedInput
+    contas?: ContaFinanceiraUncheckedUpdateManyWithoutRegistroNestedInput
   }
 
   export type RegistroCreateWithoutJuridicaInput = {
@@ -33939,6 +38236,7 @@ export namespace Prisma {
     fisica?: PessoaFisicaCreateNestedOneWithoutRegistroInput
     tabela: TabelaCreateNestedOneWithoutRegistrosInput
     saldo?: SaldoFinanceiroCreateNestedOneWithoutRegistroInput
+    contas?: ContaFinanceiraCreateNestedManyWithoutRegistroInput
   }
 
   export type RegistroUncheckedCreateWithoutJuridicaInput = {
@@ -33956,6 +38254,7 @@ export namespace Prisma {
     pedidos?: PedidoUncheckedCreateNestedManyWithoutRegistroInput
     fisica?: PessoaFisicaUncheckedCreateNestedOneWithoutRegistroInput
     saldo?: SaldoFinanceiroUncheckedCreateNestedOneWithoutRegistroInput
+    contas?: ContaFinanceiraUncheckedCreateNestedManyWithoutRegistroInput
   }
 
   export type RegistroCreateOrConnectWithoutJuridicaInput = {
@@ -33988,6 +38287,7 @@ export namespace Prisma {
     fisica?: PessoaFisicaUpdateOneWithoutRegistroNestedInput
     tabela?: TabelaUpdateOneRequiredWithoutRegistrosNestedInput
     saldo?: SaldoFinanceiroUpdateOneWithoutRegistroNestedInput
+    contas?: ContaFinanceiraUpdateManyWithoutRegistroNestedInput
   }
 
   export type RegistroUncheckedUpdateWithoutJuridicaInput = {
@@ -34005,6 +38305,7 @@ export namespace Prisma {
     pedidos?: PedidoUncheckedUpdateManyWithoutRegistroNestedInput
     fisica?: PessoaFisicaUncheckedUpdateOneWithoutRegistroNestedInput
     saldo?: SaldoFinanceiroUncheckedUpdateOneWithoutRegistroNestedInput
+    contas?: ContaFinanceiraUncheckedUpdateManyWithoutRegistroNestedInput
   }
 
   export type RegistroCreateWithoutSaldoInput = {
@@ -34021,6 +38322,7 @@ export namespace Prisma {
     fisica?: PessoaFisicaCreateNestedOneWithoutRegistroInput
     juridica?: PessoaJuridicaCreateNestedOneWithoutRegistroInput
     tabela: TabelaCreateNestedOneWithoutRegistrosInput
+    contas?: ContaFinanceiraCreateNestedManyWithoutRegistroInput
   }
 
   export type RegistroUncheckedCreateWithoutSaldoInput = {
@@ -34038,6 +38340,7 @@ export namespace Prisma {
     pedidos?: PedidoUncheckedCreateNestedManyWithoutRegistroInput
     fisica?: PessoaFisicaUncheckedCreateNestedOneWithoutRegistroInput
     juridica?: PessoaJuridicaUncheckedCreateNestedOneWithoutRegistroInput
+    contas?: ContaFinanceiraUncheckedCreateNestedManyWithoutRegistroInput
   }
 
   export type RegistroCreateOrConnectWithoutSaldoInput = {
@@ -34070,6 +38373,7 @@ export namespace Prisma {
     fisica?: PessoaFisicaUpdateOneWithoutRegistroNestedInput
     juridica?: PessoaJuridicaUpdateOneWithoutRegistroNestedInput
     tabela?: TabelaUpdateOneRequiredWithoutRegistrosNestedInput
+    contas?: ContaFinanceiraUpdateManyWithoutRegistroNestedInput
   }
 
   export type RegistroUncheckedUpdateWithoutSaldoInput = {
@@ -34087,6 +38391,7 @@ export namespace Prisma {
     pedidos?: PedidoUncheckedUpdateManyWithoutRegistroNestedInput
     fisica?: PessoaFisicaUncheckedUpdateOneWithoutRegistroNestedInput
     juridica?: PessoaJuridicaUncheckedUpdateOneWithoutRegistroNestedInput
+    contas?: ContaFinanceiraUncheckedUpdateManyWithoutRegistroNestedInput
   }
 
   export type RegistroCreateWithoutEnderecoInput = {
@@ -34103,6 +38408,7 @@ export namespace Prisma {
     juridica?: PessoaJuridicaCreateNestedOneWithoutRegistroInput
     tabela: TabelaCreateNestedOneWithoutRegistrosInput
     saldo?: SaldoFinanceiroCreateNestedOneWithoutRegistroInput
+    contas?: ContaFinanceiraCreateNestedManyWithoutRegistroInput
   }
 
   export type RegistroUncheckedCreateWithoutEnderecoInput = {
@@ -34120,6 +38426,7 @@ export namespace Prisma {
     fisica?: PessoaFisicaUncheckedCreateNestedOneWithoutRegistroInput
     juridica?: PessoaJuridicaUncheckedCreateNestedOneWithoutRegistroInput
     saldo?: SaldoFinanceiroUncheckedCreateNestedOneWithoutRegistroInput
+    contas?: ContaFinanceiraUncheckedCreateNestedManyWithoutRegistroInput
   }
 
   export type RegistroCreateOrConnectWithoutEnderecoInput = {
@@ -34152,6 +38459,7 @@ export namespace Prisma {
     juridica?: PessoaJuridicaUpdateOneWithoutRegistroNestedInput
     tabela?: TabelaUpdateOneRequiredWithoutRegistrosNestedInput
     saldo?: SaldoFinanceiroUpdateOneWithoutRegistroNestedInput
+    contas?: ContaFinanceiraUpdateManyWithoutRegistroNestedInput
   }
 
   export type RegistroUncheckedUpdateWithoutEnderecoInput = {
@@ -34169,6 +38477,7 @@ export namespace Prisma {
     fisica?: PessoaFisicaUncheckedUpdateOneWithoutRegistroNestedInput
     juridica?: PessoaJuridicaUncheckedUpdateOneWithoutRegistroNestedInput
     saldo?: SaldoFinanceiroUncheckedUpdateOneWithoutRegistroNestedInput
+    contas?: ContaFinanceiraUncheckedUpdateManyWithoutRegistroNestedInput
   }
 
   export type RegistroCreateWithoutDados_pagamentoInput = {
@@ -34185,6 +38494,7 @@ export namespace Prisma {
     juridica?: PessoaJuridicaCreateNestedOneWithoutRegistroInput
     tabela: TabelaCreateNestedOneWithoutRegistrosInput
     saldo?: SaldoFinanceiroCreateNestedOneWithoutRegistroInput
+    contas?: ContaFinanceiraCreateNestedManyWithoutRegistroInput
   }
 
   export type RegistroUncheckedCreateWithoutDados_pagamentoInput = {
@@ -34202,6 +38512,7 @@ export namespace Prisma {
     fisica?: PessoaFisicaUncheckedCreateNestedOneWithoutRegistroInput
     juridica?: PessoaJuridicaUncheckedCreateNestedOneWithoutRegistroInput
     saldo?: SaldoFinanceiroUncheckedCreateNestedOneWithoutRegistroInput
+    contas?: ContaFinanceiraUncheckedCreateNestedManyWithoutRegistroInput
   }
 
   export type RegistroCreateOrConnectWithoutDados_pagamentoInput = {
@@ -34234,6 +38545,7 @@ export namespace Prisma {
     juridica?: PessoaJuridicaUpdateOneWithoutRegistroNestedInput
     tabela?: TabelaUpdateOneRequiredWithoutRegistrosNestedInput
     saldo?: SaldoFinanceiroUpdateOneWithoutRegistroNestedInput
+    contas?: ContaFinanceiraUpdateManyWithoutRegistroNestedInput
   }
 
   export type RegistroUncheckedUpdateWithoutDados_pagamentoInput = {
@@ -34251,6 +38563,7 @@ export namespace Prisma {
     fisica?: PessoaFisicaUncheckedUpdateOneWithoutRegistroNestedInput
     juridica?: PessoaJuridicaUncheckedUpdateOneWithoutRegistroNestedInput
     saldo?: SaldoFinanceiroUncheckedUpdateOneWithoutRegistroNestedInput
+    contas?: ContaFinanceiraUncheckedUpdateManyWithoutRegistroNestedInput
   }
 
   export type PrecoPorTabelaCreateWithoutTabelaInput = {
@@ -34290,6 +38603,7 @@ export namespace Prisma {
     fisica?: PessoaFisicaCreateNestedOneWithoutRegistroInput
     juridica?: PessoaJuridicaCreateNestedOneWithoutRegistroInput
     saldo?: SaldoFinanceiroCreateNestedOneWithoutRegistroInput
+    contas?: ContaFinanceiraCreateNestedManyWithoutRegistroInput
   }
 
   export type RegistroUncheckedCreateWithoutTabelaInput = {
@@ -34307,6 +38621,7 @@ export namespace Prisma {
     fisica?: PessoaFisicaUncheckedCreateNestedOneWithoutRegistroInput
     juridica?: PessoaJuridicaUncheckedCreateNestedOneWithoutRegistroInput
     saldo?: SaldoFinanceiroUncheckedCreateNestedOneWithoutRegistroInput
+    contas?: ContaFinanceiraUncheckedCreateNestedManyWithoutRegistroInput
   }
 
   export type RegistroCreateOrConnectWithoutTabelaInput = {
@@ -34774,7 +39089,7 @@ export namespace Prisma {
     status: $Enums.TipoStatusPedido
     criado_em?: Date | string
     atualizado?: Date | string
-    pagamentos?: PagamentoCreateNestedManyWithoutPedidoInput
+    pagamentos?: ContaFinanceiraCreateNestedManyWithoutPedidoInput
     registro?: RegistroCreateNestedOneWithoutPedidosInput
     user: UserCreateNestedOneWithoutPedidosInput
   }
@@ -34788,7 +39103,7 @@ export namespace Prisma {
     userID: number
     criado_em?: Date | string
     atualizado?: Date | string
-    pagamentos?: PagamentoUncheckedCreateNestedManyWithoutPedidoInput
+    pagamentos?: ContaFinanceiraUncheckedCreateNestedManyWithoutPedidoInput
   }
 
   export type PedidoCreateOrConnectWithoutItemsInput = {
@@ -34849,7 +39164,7 @@ export namespace Prisma {
     status?: EnumTipoStatusPedidoFieldUpdateOperationsInput | $Enums.TipoStatusPedido
     criado_em?: DateTimeFieldUpdateOperationsInput | Date | string
     atualizado?: DateTimeFieldUpdateOperationsInput | Date | string
-    pagamentos?: PagamentoUpdateManyWithoutPedidoNestedInput
+    pagamentos?: ContaFinanceiraUpdateManyWithoutPedidoNestedInput
     registro?: RegistroUpdateOneWithoutPedidosNestedInput
     user?: UserUpdateOneRequiredWithoutPedidosNestedInput
   }
@@ -34863,7 +39178,7 @@ export namespace Prisma {
     userID?: IntFieldUpdateOperationsInput | number
     criado_em?: DateTimeFieldUpdateOperationsInput | Date | string
     atualizado?: DateTimeFieldUpdateOperationsInput | Date | string
-    pagamentos?: PagamentoUncheckedUpdateManyWithoutPedidoNestedInput
+    pagamentos?: ContaFinanceiraUncheckedUpdateManyWithoutPedidoNestedInput
   }
 
   export type ItemPedidoCreateWithoutPedidoInput = {
@@ -34893,26 +39208,40 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type PagamentoCreateWithoutPedidoInput = {
+  export type ContaFinanceiraCreateWithoutPedidoInput = {
+    tipo: $Enums.TipoConta
+    descricao?: string | null
     valor: Decimal | DecimalJsLike | number | string
+    data_documento?: Date | string
+    data_vencimento?: Date | string | null
+    data_pagamento?: Date | string | null
     forma: $Enums.FormaPagamento
     data?: Date | string
+    registro?: RegistroCreateNestedOneWithoutContasInput
+    movimentacao?: MovimentacaoFinanceiraCreateNestedOneWithoutContaInput
   }
 
-  export type PagamentoUncheckedCreateWithoutPedidoInput = {
+  export type ContaFinanceiraUncheckedCreateWithoutPedidoInput = {
     id?: number
+    tipo: $Enums.TipoConta
+    registroID?: number | null
+    descricao?: string | null
     valor: Decimal | DecimalJsLike | number | string
+    data_documento?: Date | string
+    data_vencimento?: Date | string | null
+    data_pagamento?: Date | string | null
     forma: $Enums.FormaPagamento
     data?: Date | string
+    movimentacao?: MovimentacaoFinanceiraUncheckedCreateNestedOneWithoutContaInput
   }
 
-  export type PagamentoCreateOrConnectWithoutPedidoInput = {
-    where: PagamentoWhereUniqueInput
-    create: XOR<PagamentoCreateWithoutPedidoInput, PagamentoUncheckedCreateWithoutPedidoInput>
+  export type ContaFinanceiraCreateOrConnectWithoutPedidoInput = {
+    where: ContaFinanceiraWhereUniqueInput
+    create: XOR<ContaFinanceiraCreateWithoutPedidoInput, ContaFinanceiraUncheckedCreateWithoutPedidoInput>
   }
 
-  export type PagamentoCreateManyPedidoInputEnvelope = {
-    data: PagamentoCreateManyPedidoInput | PagamentoCreateManyPedidoInput[]
+  export type ContaFinanceiraCreateManyPedidoInputEnvelope = {
+    data: ContaFinanceiraCreateManyPedidoInput | ContaFinanceiraCreateManyPedidoInput[]
     skipDuplicates?: boolean
   }
 
@@ -34930,6 +39259,7 @@ export namespace Prisma {
     juridica?: PessoaJuridicaCreateNestedOneWithoutRegistroInput
     tabela: TabelaCreateNestedOneWithoutRegistrosInput
     saldo?: SaldoFinanceiroCreateNestedOneWithoutRegistroInput
+    contas?: ContaFinanceiraCreateNestedManyWithoutRegistroInput
   }
 
   export type RegistroUncheckedCreateWithoutPedidosInput = {
@@ -34947,6 +39277,7 @@ export namespace Prisma {
     fisica?: PessoaFisicaUncheckedCreateNestedOneWithoutRegistroInput
     juridica?: PessoaJuridicaUncheckedCreateNestedOneWithoutRegistroInput
     saldo?: SaldoFinanceiroUncheckedCreateNestedOneWithoutRegistroInput
+    contas?: ContaFinanceiraUncheckedCreateNestedManyWithoutRegistroInput
   }
 
   export type RegistroCreateOrConnectWithoutPedidosInput = {
@@ -34961,7 +39292,8 @@ export namespace Prisma {
     telefone: string
     deletedAt?: Date | string | null
     cargo: CargoCreateNestedOneWithoutUsersInput
-    caixas?: LivroCaixaCreateNestedManyWithoutUsuarioInput
+    caixasAbertos?: LivroCaixaCreateNestedManyWithoutAbertoPorInput
+    fechamentos?: FechamentoCreateNestedManyWithoutUser_fechamentoInput
   }
 
   export type UserUncheckedCreateWithoutPedidosInput = {
@@ -34972,7 +39304,8 @@ export namespace Prisma {
     telefone: string
     cargoID: number
     deletedAt?: Date | string | null
-    caixas?: LivroCaixaUncheckedCreateNestedManyWithoutUsuarioInput
+    caixasAbertos?: LivroCaixaUncheckedCreateNestedManyWithoutAbertoPorInput
+    fechamentos?: FechamentoUncheckedCreateNestedManyWithoutUser_fechamentoInput
   }
 
   export type UserCreateOrConnectWithoutPedidosInput = {
@@ -34996,31 +39329,20 @@ export namespace Prisma {
     data: XOR<ItemPedidoUpdateManyMutationInput, ItemPedidoUncheckedUpdateManyWithoutPedidoInput>
   }
 
-  export type PagamentoUpsertWithWhereUniqueWithoutPedidoInput = {
-    where: PagamentoWhereUniqueInput
-    update: XOR<PagamentoUpdateWithoutPedidoInput, PagamentoUncheckedUpdateWithoutPedidoInput>
-    create: XOR<PagamentoCreateWithoutPedidoInput, PagamentoUncheckedCreateWithoutPedidoInput>
+  export type ContaFinanceiraUpsertWithWhereUniqueWithoutPedidoInput = {
+    where: ContaFinanceiraWhereUniqueInput
+    update: XOR<ContaFinanceiraUpdateWithoutPedidoInput, ContaFinanceiraUncheckedUpdateWithoutPedidoInput>
+    create: XOR<ContaFinanceiraCreateWithoutPedidoInput, ContaFinanceiraUncheckedCreateWithoutPedidoInput>
   }
 
-  export type PagamentoUpdateWithWhereUniqueWithoutPedidoInput = {
-    where: PagamentoWhereUniqueInput
-    data: XOR<PagamentoUpdateWithoutPedidoInput, PagamentoUncheckedUpdateWithoutPedidoInput>
+  export type ContaFinanceiraUpdateWithWhereUniqueWithoutPedidoInput = {
+    where: ContaFinanceiraWhereUniqueInput
+    data: XOR<ContaFinanceiraUpdateWithoutPedidoInput, ContaFinanceiraUncheckedUpdateWithoutPedidoInput>
   }
 
-  export type PagamentoUpdateManyWithWhereWithoutPedidoInput = {
-    where: PagamentoScalarWhereInput
-    data: XOR<PagamentoUpdateManyMutationInput, PagamentoUncheckedUpdateManyWithoutPedidoInput>
-  }
-
-  export type PagamentoScalarWhereInput = {
-    AND?: PagamentoScalarWhereInput | PagamentoScalarWhereInput[]
-    OR?: PagamentoScalarWhereInput[]
-    NOT?: PagamentoScalarWhereInput | PagamentoScalarWhereInput[]
-    id?: IntFilter<"Pagamento"> | number
-    pedidoID?: IntFilter<"Pagamento"> | number
-    valor?: DecimalFilter<"Pagamento"> | Decimal | DecimalJsLike | number | string
-    forma?: EnumFormaPagamentoFilter<"Pagamento"> | $Enums.FormaPagamento
-    data?: DateTimeFilter<"Pagamento"> | Date | string
+  export type ContaFinanceiraUpdateManyWithWhereWithoutPedidoInput = {
+    where: ContaFinanceiraScalarWhereInput
+    data: XOR<ContaFinanceiraUpdateManyMutationInput, ContaFinanceiraUncheckedUpdateManyWithoutPedidoInput>
   }
 
   export type RegistroUpsertWithoutPedidosInput = {
@@ -35048,6 +39370,7 @@ export namespace Prisma {
     juridica?: PessoaJuridicaUpdateOneWithoutRegistroNestedInput
     tabela?: TabelaUpdateOneRequiredWithoutRegistrosNestedInput
     saldo?: SaldoFinanceiroUpdateOneWithoutRegistroNestedInput
+    contas?: ContaFinanceiraUpdateManyWithoutRegistroNestedInput
   }
 
   export type RegistroUncheckedUpdateWithoutPedidosInput = {
@@ -35065,6 +39388,7 @@ export namespace Prisma {
     fisica?: PessoaFisicaUncheckedUpdateOneWithoutRegistroNestedInput
     juridica?: PessoaJuridicaUncheckedUpdateOneWithoutRegistroNestedInput
     saldo?: SaldoFinanceiroUncheckedUpdateOneWithoutRegistroNestedInput
+    contas?: ContaFinanceiraUncheckedUpdateManyWithoutRegistroNestedInput
   }
 
   export type UserUpsertWithoutPedidosInput = {
@@ -35085,7 +39409,8 @@ export namespace Prisma {
     telefone?: StringFieldUpdateOperationsInput | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cargo?: CargoUpdateOneRequiredWithoutUsersNestedInput
-    caixas?: LivroCaixaUpdateManyWithoutUsuarioNestedInput
+    caixasAbertos?: LivroCaixaUpdateManyWithoutAbertoPorNestedInput
+    fechamentos?: FechamentoUpdateManyWithoutUser_fechamentoNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPedidosInput = {
@@ -35096,7 +39421,8 @@ export namespace Prisma {
     telefone?: StringFieldUpdateOperationsInput | string
     cargoID?: IntFieldUpdateOperationsInput | number
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    caixas?: LivroCaixaUncheckedUpdateManyWithoutUsuarioNestedInput
+    caixasAbertos?: LivroCaixaUncheckedUpdateManyWithoutAbertoPorNestedInput
+    fechamentos?: FechamentoUncheckedUpdateManyWithoutUser_fechamentoNestedInput
   }
 
   export type PedidoCreateWithoutPagamentosInput = {
@@ -35125,6 +39451,78 @@ export namespace Prisma {
   export type PedidoCreateOrConnectWithoutPagamentosInput = {
     where: PedidoWhereUniqueInput
     create: XOR<PedidoCreateWithoutPagamentosInput, PedidoUncheckedCreateWithoutPagamentosInput>
+  }
+
+  export type RegistroCreateWithoutContasInput = {
+    nome_razao: string
+    apelido?: string | null
+    tipo: $Enums.TipoRegistro
+    email?: string | null
+    telefone?: string | null
+    criadoEm?: Date | string
+    deletedAt?: Date | string | null
+    dados_pagamento?: DadosPagamentoCreateNestedOneWithoutRegistroInput
+    endereco?: EnderecoCreateNestedOneWithoutRegistroInput
+    pedidos?: PedidoCreateNestedManyWithoutRegistroInput
+    fisica?: PessoaFisicaCreateNestedOneWithoutRegistroInput
+    juridica?: PessoaJuridicaCreateNestedOneWithoutRegistroInput
+    tabela: TabelaCreateNestedOneWithoutRegistrosInput
+    saldo?: SaldoFinanceiroCreateNestedOneWithoutRegistroInput
+  }
+
+  export type RegistroUncheckedCreateWithoutContasInput = {
+    id?: number
+    nome_razao: string
+    apelido?: string | null
+    tipo: $Enums.TipoRegistro
+    tabelaID: number
+    email?: string | null
+    telefone?: string | null
+    criadoEm?: Date | string
+    deletedAt?: Date | string | null
+    dados_pagamento?: DadosPagamentoUncheckedCreateNestedOneWithoutRegistroInput
+    endereco?: EnderecoUncheckedCreateNestedOneWithoutRegistroInput
+    pedidos?: PedidoUncheckedCreateNestedManyWithoutRegistroInput
+    fisica?: PessoaFisicaUncheckedCreateNestedOneWithoutRegistroInput
+    juridica?: PessoaJuridicaUncheckedCreateNestedOneWithoutRegistroInput
+    saldo?: SaldoFinanceiroUncheckedCreateNestedOneWithoutRegistroInput
+  }
+
+  export type RegistroCreateOrConnectWithoutContasInput = {
+    where: RegistroWhereUniqueInput
+    create: XOR<RegistroCreateWithoutContasInput, RegistroUncheckedCreateWithoutContasInput>
+  }
+
+  export type MovimentacaoFinanceiraCreateWithoutContaInput = {
+    tipoMovimentacao: $Enums.TipoMovimentacao
+    data?: Date | string
+    saldoAtual: Decimal | DecimalJsLike | number | string
+    valor: Decimal | DecimalJsLike | number | string
+    saldoFinal: Decimal | DecimalJsLike | number | string
+    descricao?: string | null
+    estornadoEm?: Date | string | null
+    banco?: BancoCreateNestedOneWithoutMovimentacoesInput
+    caixa: LivroCaixaCreateNestedOneWithoutMovimentacoesInput
+    categoria: CategoriaCaixaCreateNestedOneWithoutMovimentacoesInput
+  }
+
+  export type MovimentacaoFinanceiraUncheckedCreateWithoutContaInput = {
+    id?: number
+    bancoID?: number | null
+    caixaID: number
+    categoriaID: number
+    tipoMovimentacao: $Enums.TipoMovimentacao
+    data?: Date | string
+    saldoAtual: Decimal | DecimalJsLike | number | string
+    valor: Decimal | DecimalJsLike | number | string
+    saldoFinal: Decimal | DecimalJsLike | number | string
+    descricao?: string | null
+    estornadoEm?: Date | string | null
+  }
+
+  export type MovimentacaoFinanceiraCreateOrConnectWithoutContaInput = {
+    where: MovimentacaoFinanceiraWhereUniqueInput
+    create: XOR<MovimentacaoFinanceiraCreateWithoutContaInput, MovimentacaoFinanceiraUncheckedCreateWithoutContaInput>
   }
 
   export type PedidoUpsertWithoutPagamentosInput = {
@@ -35161,51 +39559,141 @@ export namespace Prisma {
     items?: ItemPedidoUncheckedUpdateManyWithoutPedidoNestedInput
   }
 
-  export type MovimentacaoFinanceiraCreateWithoutContaInput = {
-    tipoMovimentacao: $Enums.TipoMovimentacao
-    valor: Decimal | DecimalJsLike | number | string
-    descricao?: string | null
-    data?: Date | string
-    origem: $Enums.TipoOrigem
-    origemID?: number | null
-    caixa: LivroCaixaCreateNestedOneWithoutMovimentacoesInput
+  export type RegistroUpsertWithoutContasInput = {
+    update: XOR<RegistroUpdateWithoutContasInput, RegistroUncheckedUpdateWithoutContasInput>
+    create: XOR<RegistroCreateWithoutContasInput, RegistroUncheckedCreateWithoutContasInput>
+    where?: RegistroWhereInput
   }
 
-  export type MovimentacaoFinanceiraUncheckedCreateWithoutContaInput = {
-    id?: number
-    tipoMovimentacao: $Enums.TipoMovimentacao
-    valor: Decimal | DecimalJsLike | number | string
-    descricao?: string | null
-    data?: Date | string
-    origem: $Enums.TipoOrigem
-    origemID?: number | null
-    caixaID: number
+  export type RegistroUpdateToOneWithWhereWithoutContasInput = {
+    where?: RegistroWhereInput
+    data: XOR<RegistroUpdateWithoutContasInput, RegistroUncheckedUpdateWithoutContasInput>
   }
 
-  export type MovimentacaoFinanceiraCreateOrConnectWithoutContaInput = {
-    where: MovimentacaoFinanceiraWhereUniqueInput
-    create: XOR<MovimentacaoFinanceiraCreateWithoutContaInput, MovimentacaoFinanceiraUncheckedCreateWithoutContaInput>
+  export type RegistroUpdateWithoutContasInput = {
+    nome_razao?: StringFieldUpdateOperationsInput | string
+    apelido?: NullableStringFieldUpdateOperationsInput | string | null
+    tipo?: EnumTipoRegistroFieldUpdateOperationsInput | $Enums.TipoRegistro
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    telefone?: NullableStringFieldUpdateOperationsInput | string | null
+    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dados_pagamento?: DadosPagamentoUpdateOneWithoutRegistroNestedInput
+    endereco?: EnderecoUpdateOneWithoutRegistroNestedInput
+    pedidos?: PedidoUpdateManyWithoutRegistroNestedInput
+    fisica?: PessoaFisicaUpdateOneWithoutRegistroNestedInput
+    juridica?: PessoaJuridicaUpdateOneWithoutRegistroNestedInput
+    tabela?: TabelaUpdateOneRequiredWithoutRegistrosNestedInput
+    saldo?: SaldoFinanceiroUpdateOneWithoutRegistroNestedInput
   }
 
-  export type MovimentacaoFinanceiraCreateManyContaInputEnvelope = {
-    data: MovimentacaoFinanceiraCreateManyContaInput | MovimentacaoFinanceiraCreateManyContaInput[]
-    skipDuplicates?: boolean
+  export type RegistroUncheckedUpdateWithoutContasInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    nome_razao?: StringFieldUpdateOperationsInput | string
+    apelido?: NullableStringFieldUpdateOperationsInput | string | null
+    tipo?: EnumTipoRegistroFieldUpdateOperationsInput | $Enums.TipoRegistro
+    tabelaID?: IntFieldUpdateOperationsInput | number
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    telefone?: NullableStringFieldUpdateOperationsInput | string | null
+    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dados_pagamento?: DadosPagamentoUncheckedUpdateOneWithoutRegistroNestedInput
+    endereco?: EnderecoUncheckedUpdateOneWithoutRegistroNestedInput
+    pedidos?: PedidoUncheckedUpdateManyWithoutRegistroNestedInput
+    fisica?: PessoaFisicaUncheckedUpdateOneWithoutRegistroNestedInput
+    juridica?: PessoaJuridicaUncheckedUpdateOneWithoutRegistroNestedInput
+    saldo?: SaldoFinanceiroUncheckedUpdateOneWithoutRegistroNestedInput
   }
 
-  export type MovimentacaoFinanceiraUpsertWithWhereUniqueWithoutContaInput = {
-    where: MovimentacaoFinanceiraWhereUniqueInput
+  export type MovimentacaoFinanceiraUpsertWithoutContaInput = {
     update: XOR<MovimentacaoFinanceiraUpdateWithoutContaInput, MovimentacaoFinanceiraUncheckedUpdateWithoutContaInput>
     create: XOR<MovimentacaoFinanceiraCreateWithoutContaInput, MovimentacaoFinanceiraUncheckedCreateWithoutContaInput>
+    where?: MovimentacaoFinanceiraWhereInput
   }
 
-  export type MovimentacaoFinanceiraUpdateWithWhereUniqueWithoutContaInput = {
-    where: MovimentacaoFinanceiraWhereUniqueInput
+  export type MovimentacaoFinanceiraUpdateToOneWithWhereWithoutContaInput = {
+    where?: MovimentacaoFinanceiraWhereInput
     data: XOR<MovimentacaoFinanceiraUpdateWithoutContaInput, MovimentacaoFinanceiraUncheckedUpdateWithoutContaInput>
   }
 
-  export type MovimentacaoFinanceiraUpdateManyWithWhereWithoutContaInput = {
+  export type MovimentacaoFinanceiraUpdateWithoutContaInput = {
+    tipoMovimentacao?: EnumTipoMovimentacaoFieldUpdateOperationsInput | $Enums.TipoMovimentacao
+    data?: DateTimeFieldUpdateOperationsInput | Date | string
+    saldoAtual?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    saldoFinal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+    estornadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    banco?: BancoUpdateOneWithoutMovimentacoesNestedInput
+    caixa?: LivroCaixaUpdateOneRequiredWithoutMovimentacoesNestedInput
+    categoria?: CategoriaCaixaUpdateOneRequiredWithoutMovimentacoesNestedInput
+  }
+
+  export type MovimentacaoFinanceiraUncheckedUpdateWithoutContaInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    bancoID?: NullableIntFieldUpdateOperationsInput | number | null
+    caixaID?: IntFieldUpdateOperationsInput | number
+    categoriaID?: IntFieldUpdateOperationsInput | number
+    tipoMovimentacao?: EnumTipoMovimentacaoFieldUpdateOperationsInput | $Enums.TipoMovimentacao
+    data?: DateTimeFieldUpdateOperationsInput | Date | string
+    saldoAtual?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    saldoFinal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+    estornadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type MovimentacaoFinanceiraCreateWithoutBancoInput = {
+    tipoMovimentacao: $Enums.TipoMovimentacao
+    data?: Date | string
+    saldoAtual: Decimal | DecimalJsLike | number | string
+    valor: Decimal | DecimalJsLike | number | string
+    saldoFinal: Decimal | DecimalJsLike | number | string
+    descricao?: string | null
+    estornadoEm?: Date | string | null
+    caixa: LivroCaixaCreateNestedOneWithoutMovimentacoesInput
+    conta?: ContaFinanceiraCreateNestedOneWithoutMovimentacaoInput
+    categoria: CategoriaCaixaCreateNestedOneWithoutMovimentacoesInput
+  }
+
+  export type MovimentacaoFinanceiraUncheckedCreateWithoutBancoInput = {
+    id?: number
+    caixaID: number
+    contaID?: number | null
+    categoriaID: number
+    tipoMovimentacao: $Enums.TipoMovimentacao
+    data?: Date | string
+    saldoAtual: Decimal | DecimalJsLike | number | string
+    valor: Decimal | DecimalJsLike | number | string
+    saldoFinal: Decimal | DecimalJsLike | number | string
+    descricao?: string | null
+    estornadoEm?: Date | string | null
+  }
+
+  export type MovimentacaoFinanceiraCreateOrConnectWithoutBancoInput = {
+    where: MovimentacaoFinanceiraWhereUniqueInput
+    create: XOR<MovimentacaoFinanceiraCreateWithoutBancoInput, MovimentacaoFinanceiraUncheckedCreateWithoutBancoInput>
+  }
+
+  export type MovimentacaoFinanceiraCreateManyBancoInputEnvelope = {
+    data: MovimentacaoFinanceiraCreateManyBancoInput | MovimentacaoFinanceiraCreateManyBancoInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type MovimentacaoFinanceiraUpsertWithWhereUniqueWithoutBancoInput = {
+    where: MovimentacaoFinanceiraWhereUniqueInput
+    update: XOR<MovimentacaoFinanceiraUpdateWithoutBancoInput, MovimentacaoFinanceiraUncheckedUpdateWithoutBancoInput>
+    create: XOR<MovimentacaoFinanceiraCreateWithoutBancoInput, MovimentacaoFinanceiraUncheckedCreateWithoutBancoInput>
+  }
+
+  export type MovimentacaoFinanceiraUpdateWithWhereUniqueWithoutBancoInput = {
+    where: MovimentacaoFinanceiraWhereUniqueInput
+    data: XOR<MovimentacaoFinanceiraUpdateWithoutBancoInput, MovimentacaoFinanceiraUncheckedUpdateWithoutBancoInput>
+  }
+
+  export type MovimentacaoFinanceiraUpdateManyWithWhereWithoutBancoInput = {
     where: MovimentacaoFinanceiraScalarWhereInput
-    data: XOR<MovimentacaoFinanceiraUpdateManyMutationInput, MovimentacaoFinanceiraUncheckedUpdateManyWithoutContaInput>
+    data: XOR<MovimentacaoFinanceiraUpdateManyMutationInput, MovimentacaoFinanceiraUncheckedUpdateManyWithoutBancoInput>
   }
 
   export type MovimentacaoFinanceiraScalarWhereInput = {
@@ -35213,49 +39701,54 @@ export namespace Prisma {
     OR?: MovimentacaoFinanceiraScalarWhereInput[]
     NOT?: MovimentacaoFinanceiraScalarWhereInput | MovimentacaoFinanceiraScalarWhereInput[]
     id?: IntFilter<"MovimentacaoFinanceira"> | number
-    contaID?: IntFilter<"MovimentacaoFinanceira"> | number
-    tipoMovimentacao?: EnumTipoMovimentacaoFilter<"MovimentacaoFinanceira"> | $Enums.TipoMovimentacao
-    valor?: DecimalFilter<"MovimentacaoFinanceira"> | Decimal | DecimalJsLike | number | string
-    descricao?: StringNullableFilter<"MovimentacaoFinanceira"> | string | null
-    data?: DateTimeFilter<"MovimentacaoFinanceira"> | Date | string
-    origem?: EnumTipoOrigemFilter<"MovimentacaoFinanceira"> | $Enums.TipoOrigem
-    origemID?: IntNullableFilter<"MovimentacaoFinanceira"> | number | null
+    bancoID?: IntNullableFilter<"MovimentacaoFinanceira"> | number | null
     caixaID?: IntFilter<"MovimentacaoFinanceira"> | number
+    contaID?: IntNullableFilter<"MovimentacaoFinanceira"> | number | null
+    categoriaID?: IntFilter<"MovimentacaoFinanceira"> | number
+    tipoMovimentacao?: EnumTipoMovimentacaoFilter<"MovimentacaoFinanceira"> | $Enums.TipoMovimentacao
+    data?: DateTimeFilter<"MovimentacaoFinanceira"> | Date | string
+    saldoAtual?: DecimalFilter<"MovimentacaoFinanceira"> | Decimal | DecimalJsLike | number | string
+    valor?: DecimalFilter<"MovimentacaoFinanceira"> | Decimal | DecimalJsLike | number | string
+    saldoFinal?: DecimalFilter<"MovimentacaoFinanceira"> | Decimal | DecimalJsLike | number | string
+    descricao?: StringNullableFilter<"MovimentacaoFinanceira"> | string | null
+    estornadoEm?: DateTimeNullableFilter<"MovimentacaoFinanceira"> | Date | string | null
   }
 
-  export type ContaCreateWithoutMovimentacoesInput = {
+  export type BancoCreateWithoutMovimentacoesInput = {
     nome: string
     saldo: Decimal | DecimalJsLike | number | string
   }
 
-  export type ContaUncheckedCreateWithoutMovimentacoesInput = {
+  export type BancoUncheckedCreateWithoutMovimentacoesInput = {
     id?: number
     nome: string
     saldo: Decimal | DecimalJsLike | number | string
   }
 
-  export type ContaCreateOrConnectWithoutMovimentacoesInput = {
-    where: ContaWhereUniqueInput
-    create: XOR<ContaCreateWithoutMovimentacoesInput, ContaUncheckedCreateWithoutMovimentacoesInput>
+  export type BancoCreateOrConnectWithoutMovimentacoesInput = {
+    where: BancoWhereUniqueInput
+    create: XOR<BancoCreateWithoutMovimentacoesInput, BancoUncheckedCreateWithoutMovimentacoesInput>
   }
 
   export type LivroCaixaCreateWithoutMovimentacoesInput = {
     dataAbertura?: Date | string
     dataFechamento?: Date | string | null
     saldoInicial: Decimal | DecimalJsLike | number | string
-    saldoFinal?: Decimal | DecimalJsLike | number | string | null
+    saldoFinal: Decimal | DecimalJsLike | number | string
     status?: $Enums.StatusCaixa
-    usuario: UserCreateNestedOneWithoutCaixasInput
+    abertoPor: UserCreateNestedOneWithoutCaixasAbertosInput
+    fechamento?: FechamentoCreateNestedOneWithoutCaixaInput
   }
 
   export type LivroCaixaUncheckedCreateWithoutMovimentacoesInput = {
     id?: number
     dataAbertura?: Date | string
     dataFechamento?: Date | string | null
+    abertoPorID: number
     saldoInicial: Decimal | DecimalJsLike | number | string
-    saldoFinal?: Decimal | DecimalJsLike | number | string | null
+    saldoFinal: Decimal | DecimalJsLike | number | string
     status?: $Enums.StatusCaixa
-    usuarioID: number
+    fechamento?: FechamentoUncheckedCreateNestedOneWithoutCaixaInput
   }
 
   export type LivroCaixaCreateOrConnectWithoutMovimentacoesInput = {
@@ -35263,23 +39756,71 @@ export namespace Prisma {
     create: XOR<LivroCaixaCreateWithoutMovimentacoesInput, LivroCaixaUncheckedCreateWithoutMovimentacoesInput>
   }
 
-  export type ContaUpsertWithoutMovimentacoesInput = {
-    update: XOR<ContaUpdateWithoutMovimentacoesInput, ContaUncheckedUpdateWithoutMovimentacoesInput>
-    create: XOR<ContaCreateWithoutMovimentacoesInput, ContaUncheckedCreateWithoutMovimentacoesInput>
-    where?: ContaWhereInput
+  export type ContaFinanceiraCreateWithoutMovimentacaoInput = {
+    tipo: $Enums.TipoConta
+    descricao?: string | null
+    valor: Decimal | DecimalJsLike | number | string
+    data_documento?: Date | string
+    data_vencimento?: Date | string | null
+    data_pagamento?: Date | string | null
+    forma: $Enums.FormaPagamento
+    data?: Date | string
+    pedido?: PedidoCreateNestedOneWithoutPagamentosInput
+    registro?: RegistroCreateNestedOneWithoutContasInput
   }
 
-  export type ContaUpdateToOneWithWhereWithoutMovimentacoesInput = {
-    where?: ContaWhereInput
-    data: XOR<ContaUpdateWithoutMovimentacoesInput, ContaUncheckedUpdateWithoutMovimentacoesInput>
+  export type ContaFinanceiraUncheckedCreateWithoutMovimentacaoInput = {
+    id?: number
+    tipo: $Enums.TipoConta
+    pedidoID?: number | null
+    registroID?: number | null
+    descricao?: string | null
+    valor: Decimal | DecimalJsLike | number | string
+    data_documento?: Date | string
+    data_vencimento?: Date | string | null
+    data_pagamento?: Date | string | null
+    forma: $Enums.FormaPagamento
+    data?: Date | string
   }
 
-  export type ContaUpdateWithoutMovimentacoesInput = {
+  export type ContaFinanceiraCreateOrConnectWithoutMovimentacaoInput = {
+    where: ContaFinanceiraWhereUniqueInput
+    create: XOR<ContaFinanceiraCreateWithoutMovimentacaoInput, ContaFinanceiraUncheckedCreateWithoutMovimentacaoInput>
+  }
+
+  export type CategoriaCaixaCreateWithoutMovimentacoesInput = {
+    nome: string
+    deletedAt?: Date | string | null
+  }
+
+  export type CategoriaCaixaUncheckedCreateWithoutMovimentacoesInput = {
+    id?: number
+    nome: string
+    deletedAt?: Date | string | null
+  }
+
+  export type CategoriaCaixaCreateOrConnectWithoutMovimentacoesInput = {
+    where: CategoriaCaixaWhereUniqueInput
+    create: XOR<CategoriaCaixaCreateWithoutMovimentacoesInput, CategoriaCaixaUncheckedCreateWithoutMovimentacoesInput>
+  }
+
+  export type BancoUpsertWithoutMovimentacoesInput = {
+    update: XOR<BancoUpdateWithoutMovimentacoesInput, BancoUncheckedUpdateWithoutMovimentacoesInput>
+    create: XOR<BancoCreateWithoutMovimentacoesInput, BancoUncheckedCreateWithoutMovimentacoesInput>
+    where?: BancoWhereInput
+  }
+
+  export type BancoUpdateToOneWithWhereWithoutMovimentacoesInput = {
+    where?: BancoWhereInput
+    data: XOR<BancoUpdateWithoutMovimentacoesInput, BancoUncheckedUpdateWithoutMovimentacoesInput>
+  }
+
+  export type BancoUpdateWithoutMovimentacoesInput = {
     nome?: StringFieldUpdateOperationsInput | string
     saldo?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
-  export type ContaUncheckedUpdateWithoutMovimentacoesInput = {
+  export type BancoUncheckedUpdateWithoutMovimentacoesInput = {
     id?: IntFieldUpdateOperationsInput | number
     nome?: StringFieldUpdateOperationsInput | string
     saldo?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -35300,19 +39841,134 @@ export namespace Prisma {
     dataAbertura?: DateTimeFieldUpdateOperationsInput | Date | string
     dataFechamento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     saldoInicial?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    saldoFinal?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    saldoFinal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     status?: EnumStatusCaixaFieldUpdateOperationsInput | $Enums.StatusCaixa
-    usuario?: UserUpdateOneRequiredWithoutCaixasNestedInput
+    abertoPor?: UserUpdateOneRequiredWithoutCaixasAbertosNestedInput
+    fechamento?: FechamentoUpdateOneWithoutCaixaNestedInput
   }
 
   export type LivroCaixaUncheckedUpdateWithoutMovimentacoesInput = {
     id?: IntFieldUpdateOperationsInput | number
     dataAbertura?: DateTimeFieldUpdateOperationsInput | Date | string
     dataFechamento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    abertoPorID?: IntFieldUpdateOperationsInput | number
     saldoInicial?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    saldoFinal?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    saldoFinal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     status?: EnumStatusCaixaFieldUpdateOperationsInput | $Enums.StatusCaixa
-    usuarioID?: IntFieldUpdateOperationsInput | number
+    fechamento?: FechamentoUncheckedUpdateOneWithoutCaixaNestedInput
+  }
+
+  export type ContaFinanceiraUpsertWithoutMovimentacaoInput = {
+    update: XOR<ContaFinanceiraUpdateWithoutMovimentacaoInput, ContaFinanceiraUncheckedUpdateWithoutMovimentacaoInput>
+    create: XOR<ContaFinanceiraCreateWithoutMovimentacaoInput, ContaFinanceiraUncheckedCreateWithoutMovimentacaoInput>
+    where?: ContaFinanceiraWhereInput
+  }
+
+  export type ContaFinanceiraUpdateToOneWithWhereWithoutMovimentacaoInput = {
+    where?: ContaFinanceiraWhereInput
+    data: XOR<ContaFinanceiraUpdateWithoutMovimentacaoInput, ContaFinanceiraUncheckedUpdateWithoutMovimentacaoInput>
+  }
+
+  export type ContaFinanceiraUpdateWithoutMovimentacaoInput = {
+    tipo?: EnumTipoContaFieldUpdateOperationsInput | $Enums.TipoConta
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+    valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    data_documento?: DateTimeFieldUpdateOperationsInput | Date | string
+    data_vencimento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    data_pagamento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    forma?: EnumFormaPagamentoFieldUpdateOperationsInput | $Enums.FormaPagamento
+    data?: DateTimeFieldUpdateOperationsInput | Date | string
+    pedido?: PedidoUpdateOneWithoutPagamentosNestedInput
+    registro?: RegistroUpdateOneWithoutContasNestedInput
+  }
+
+  export type ContaFinanceiraUncheckedUpdateWithoutMovimentacaoInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    tipo?: EnumTipoContaFieldUpdateOperationsInput | $Enums.TipoConta
+    pedidoID?: NullableIntFieldUpdateOperationsInput | number | null
+    registroID?: NullableIntFieldUpdateOperationsInput | number | null
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+    valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    data_documento?: DateTimeFieldUpdateOperationsInput | Date | string
+    data_vencimento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    data_pagamento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    forma?: EnumFormaPagamentoFieldUpdateOperationsInput | $Enums.FormaPagamento
+    data?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CategoriaCaixaUpsertWithoutMovimentacoesInput = {
+    update: XOR<CategoriaCaixaUpdateWithoutMovimentacoesInput, CategoriaCaixaUncheckedUpdateWithoutMovimentacoesInput>
+    create: XOR<CategoriaCaixaCreateWithoutMovimentacoesInput, CategoriaCaixaUncheckedCreateWithoutMovimentacoesInput>
+    where?: CategoriaCaixaWhereInput
+  }
+
+  export type CategoriaCaixaUpdateToOneWithWhereWithoutMovimentacoesInput = {
+    where?: CategoriaCaixaWhereInput
+    data: XOR<CategoriaCaixaUpdateWithoutMovimentacoesInput, CategoriaCaixaUncheckedUpdateWithoutMovimentacoesInput>
+  }
+
+  export type CategoriaCaixaUpdateWithoutMovimentacoesInput = {
+    nome?: StringFieldUpdateOperationsInput | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type CategoriaCaixaUncheckedUpdateWithoutMovimentacoesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    nome?: StringFieldUpdateOperationsInput | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type MovimentacaoFinanceiraCreateWithoutCategoriaInput = {
+    tipoMovimentacao: $Enums.TipoMovimentacao
+    data?: Date | string
+    saldoAtual: Decimal | DecimalJsLike | number | string
+    valor: Decimal | DecimalJsLike | number | string
+    saldoFinal: Decimal | DecimalJsLike | number | string
+    descricao?: string | null
+    estornadoEm?: Date | string | null
+    banco?: BancoCreateNestedOneWithoutMovimentacoesInput
+    caixa: LivroCaixaCreateNestedOneWithoutMovimentacoesInput
+    conta?: ContaFinanceiraCreateNestedOneWithoutMovimentacaoInput
+  }
+
+  export type MovimentacaoFinanceiraUncheckedCreateWithoutCategoriaInput = {
+    id?: number
+    bancoID?: number | null
+    caixaID: number
+    contaID?: number | null
+    tipoMovimentacao: $Enums.TipoMovimentacao
+    data?: Date | string
+    saldoAtual: Decimal | DecimalJsLike | number | string
+    valor: Decimal | DecimalJsLike | number | string
+    saldoFinal: Decimal | DecimalJsLike | number | string
+    descricao?: string | null
+    estornadoEm?: Date | string | null
+  }
+
+  export type MovimentacaoFinanceiraCreateOrConnectWithoutCategoriaInput = {
+    where: MovimentacaoFinanceiraWhereUniqueInput
+    create: XOR<MovimentacaoFinanceiraCreateWithoutCategoriaInput, MovimentacaoFinanceiraUncheckedCreateWithoutCategoriaInput>
+  }
+
+  export type MovimentacaoFinanceiraCreateManyCategoriaInputEnvelope = {
+    data: MovimentacaoFinanceiraCreateManyCategoriaInput | MovimentacaoFinanceiraCreateManyCategoriaInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type MovimentacaoFinanceiraUpsertWithWhereUniqueWithoutCategoriaInput = {
+    where: MovimentacaoFinanceiraWhereUniqueInput
+    update: XOR<MovimentacaoFinanceiraUpdateWithoutCategoriaInput, MovimentacaoFinanceiraUncheckedUpdateWithoutCategoriaInput>
+    create: XOR<MovimentacaoFinanceiraCreateWithoutCategoriaInput, MovimentacaoFinanceiraUncheckedCreateWithoutCategoriaInput>
+  }
+
+  export type MovimentacaoFinanceiraUpdateWithWhereUniqueWithoutCategoriaInput = {
+    where: MovimentacaoFinanceiraWhereUniqueInput
+    data: XOR<MovimentacaoFinanceiraUpdateWithoutCategoriaInput, MovimentacaoFinanceiraUncheckedUpdateWithoutCategoriaInput>
+  }
+
+  export type MovimentacaoFinanceiraUpdateManyWithWhereWithoutCategoriaInput = {
+    where: MovimentacaoFinanceiraScalarWhereInput
+    data: XOR<MovimentacaoFinanceiraUpdateManyMutationInput, MovimentacaoFinanceiraUncheckedUpdateManyWithoutCategoriaInput>
   }
 
   export type ConversaoEstoqueCreateWithoutMovimentacoesInput = {
@@ -35476,7 +40132,7 @@ export namespace Prisma {
     data: XOR<MovimentacaoEstoqueUpdateManyMutationInput, MovimentacaoEstoqueUncheckedUpdateManyWithoutConversaoEstoqueInput>
   }
 
-  export type UserCreateWithoutCaixasInput = {
+  export type UserCreateWithoutCaixasAbertosInput = {
     nome: string
     email: string
     senha: string
@@ -35484,9 +40140,10 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     pedidos?: PedidoCreateNestedManyWithoutUserInput
     cargo: CargoCreateNestedOneWithoutUsersInput
+    fechamentos?: FechamentoCreateNestedManyWithoutUser_fechamentoInput
   }
 
-  export type UserUncheckedCreateWithoutCaixasInput = {
+  export type UserUncheckedCreateWithoutCaixasAbertosInput = {
     id?: number
     nome: string
     email: string
@@ -35495,32 +40152,39 @@ export namespace Prisma {
     cargoID: number
     deletedAt?: Date | string | null
     pedidos?: PedidoUncheckedCreateNestedManyWithoutUserInput
+    fechamentos?: FechamentoUncheckedCreateNestedManyWithoutUser_fechamentoInput
   }
 
-  export type UserCreateOrConnectWithoutCaixasInput = {
+  export type UserCreateOrConnectWithoutCaixasAbertosInput = {
     where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutCaixasInput, UserUncheckedCreateWithoutCaixasInput>
+    create: XOR<UserCreateWithoutCaixasAbertosInput, UserUncheckedCreateWithoutCaixasAbertosInput>
   }
 
   export type MovimentacaoFinanceiraCreateWithoutCaixaInput = {
     tipoMovimentacao: $Enums.TipoMovimentacao
-    valor: Decimal | DecimalJsLike | number | string
-    descricao?: string | null
     data?: Date | string
-    origem: $Enums.TipoOrigem
-    origemID?: number | null
-    conta: ContaCreateNestedOneWithoutMovimentacoesInput
+    saldoAtual: Decimal | DecimalJsLike | number | string
+    valor: Decimal | DecimalJsLike | number | string
+    saldoFinal: Decimal | DecimalJsLike | number | string
+    descricao?: string | null
+    estornadoEm?: Date | string | null
+    banco?: BancoCreateNestedOneWithoutMovimentacoesInput
+    conta?: ContaFinanceiraCreateNestedOneWithoutMovimentacaoInput
+    categoria: CategoriaCaixaCreateNestedOneWithoutMovimentacoesInput
   }
 
   export type MovimentacaoFinanceiraUncheckedCreateWithoutCaixaInput = {
     id?: number
-    contaID: number
+    bancoID?: number | null
+    contaID?: number | null
+    categoriaID: number
     tipoMovimentacao: $Enums.TipoMovimentacao
-    valor: Decimal | DecimalJsLike | number | string
-    descricao?: string | null
     data?: Date | string
-    origem: $Enums.TipoOrigem
-    origemID?: number | null
+    saldoAtual: Decimal | DecimalJsLike | number | string
+    valor: Decimal | DecimalJsLike | number | string
+    saldoFinal: Decimal | DecimalJsLike | number | string
+    descricao?: string | null
+    estornadoEm?: Date | string | null
   }
 
   export type MovimentacaoFinanceiraCreateOrConnectWithoutCaixaInput = {
@@ -35533,18 +40197,70 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type UserUpsertWithoutCaixasInput = {
-    update: XOR<UserUpdateWithoutCaixasInput, UserUncheckedUpdateWithoutCaixasInput>
-    create: XOR<UserCreateWithoutCaixasInput, UserUncheckedCreateWithoutCaixasInput>
+  export type FechamentoCreateWithoutCaixaInput = {
+    valor_abertura: Decimal | DecimalJsLike | number | string
+    valor_abastecimentos: Decimal | DecimalJsLike | number | string
+    valor_despesas: Decimal | DecimalJsLike | number | string
+    data_abertura: Date | string
+    data_fechamento: Date | string
+    valor_esperado: Decimal | DecimalJsLike | number | string
+    valor_conferido: Decimal | DecimalJsLike | number | string
+    valor_diferenca?: Decimal | DecimalJsLike | number | string | null
+    valor_pago: Decimal | DecimalJsLike | number | string
+    valor_recebido: Decimal | DecimalJsLike | number | string
+    valor_total_compras: Decimal | DecimalJsLike | number | string
+    valor_total_vendas: Decimal | DecimalJsLike | number | string
+    peso_total_compras: Decimal | DecimalJsLike | number | string
+    peso_total_vendas: Decimal | DecimalJsLike | number | string
+    lucro_total: Decimal | DecimalJsLike | number | string
+    proj_lucro: Decimal | DecimalJsLike | number | string
+    proj_venda: Decimal | DecimalJsLike | number | string
+    qnt_compras: Decimal | DecimalJsLike | number | string
+    qnt_vendas: Decimal | DecimalJsLike | number | string
+    user_fechamento: UserCreateNestedOneWithoutFechamentosInput
+  }
+
+  export type FechamentoUncheckedCreateWithoutCaixaInput = {
+    id?: number
+    valor_abertura: Decimal | DecimalJsLike | number | string
+    valor_abastecimentos: Decimal | DecimalJsLike | number | string
+    valor_despesas: Decimal | DecimalJsLike | number | string
+    data_abertura: Date | string
+    data_fechamento: Date | string
+    userID_fechamento: number
+    valor_esperado: Decimal | DecimalJsLike | number | string
+    valor_conferido: Decimal | DecimalJsLike | number | string
+    valor_diferenca?: Decimal | DecimalJsLike | number | string | null
+    valor_pago: Decimal | DecimalJsLike | number | string
+    valor_recebido: Decimal | DecimalJsLike | number | string
+    valor_total_compras: Decimal | DecimalJsLike | number | string
+    valor_total_vendas: Decimal | DecimalJsLike | number | string
+    peso_total_compras: Decimal | DecimalJsLike | number | string
+    peso_total_vendas: Decimal | DecimalJsLike | number | string
+    lucro_total: Decimal | DecimalJsLike | number | string
+    proj_lucro: Decimal | DecimalJsLike | number | string
+    proj_venda: Decimal | DecimalJsLike | number | string
+    qnt_compras: Decimal | DecimalJsLike | number | string
+    qnt_vendas: Decimal | DecimalJsLike | number | string
+  }
+
+  export type FechamentoCreateOrConnectWithoutCaixaInput = {
+    where: FechamentoWhereUniqueInput
+    create: XOR<FechamentoCreateWithoutCaixaInput, FechamentoUncheckedCreateWithoutCaixaInput>
+  }
+
+  export type UserUpsertWithoutCaixasAbertosInput = {
+    update: XOR<UserUpdateWithoutCaixasAbertosInput, UserUncheckedUpdateWithoutCaixasAbertosInput>
+    create: XOR<UserCreateWithoutCaixasAbertosInput, UserUncheckedCreateWithoutCaixasAbertosInput>
     where?: UserWhereInput
   }
 
-  export type UserUpdateToOneWithWhereWithoutCaixasInput = {
+  export type UserUpdateToOneWithWhereWithoutCaixasAbertosInput = {
     where?: UserWhereInput
-    data: XOR<UserUpdateWithoutCaixasInput, UserUncheckedUpdateWithoutCaixasInput>
+    data: XOR<UserUpdateWithoutCaixasAbertosInput, UserUncheckedUpdateWithoutCaixasAbertosInput>
   }
 
-  export type UserUpdateWithoutCaixasInput = {
+  export type UserUpdateWithoutCaixasAbertosInput = {
     nome?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     senha?: StringFieldUpdateOperationsInput | string
@@ -35552,9 +40268,10 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pedidos?: PedidoUpdateManyWithoutUserNestedInput
     cargo?: CargoUpdateOneRequiredWithoutUsersNestedInput
+    fechamentos?: FechamentoUpdateManyWithoutUser_fechamentoNestedInput
   }
 
-  export type UserUncheckedUpdateWithoutCaixasInput = {
+  export type UserUncheckedUpdateWithoutCaixasAbertosInput = {
     id?: IntFieldUpdateOperationsInput | number
     nome?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
@@ -35563,6 +40280,7 @@ export namespace Prisma {
     cargoID?: IntFieldUpdateOperationsInput | number
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pedidos?: PedidoUncheckedUpdateManyWithoutUserNestedInput
+    fechamentos?: FechamentoUncheckedUpdateManyWithoutUser_fechamentoNestedInput
   }
 
   export type MovimentacaoFinanceiraUpsertWithWhereUniqueWithoutCaixaInput = {
@@ -35581,6 +40299,184 @@ export namespace Prisma {
     data: XOR<MovimentacaoFinanceiraUpdateManyMutationInput, MovimentacaoFinanceiraUncheckedUpdateManyWithoutCaixaInput>
   }
 
+  export type FechamentoUpsertWithoutCaixaInput = {
+    update: XOR<FechamentoUpdateWithoutCaixaInput, FechamentoUncheckedUpdateWithoutCaixaInput>
+    create: XOR<FechamentoCreateWithoutCaixaInput, FechamentoUncheckedCreateWithoutCaixaInput>
+    where?: FechamentoWhereInput
+  }
+
+  export type FechamentoUpdateToOneWithWhereWithoutCaixaInput = {
+    where?: FechamentoWhereInput
+    data: XOR<FechamentoUpdateWithoutCaixaInput, FechamentoUncheckedUpdateWithoutCaixaInput>
+  }
+
+  export type FechamentoUpdateWithoutCaixaInput = {
+    valor_abertura?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_abastecimentos?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_despesas?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    data_abertura?: DateTimeFieldUpdateOperationsInput | Date | string
+    data_fechamento?: DateTimeFieldUpdateOperationsInput | Date | string
+    valor_esperado?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_conferido?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_diferenca?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    valor_pago?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_recebido?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_total_compras?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_total_vendas?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    peso_total_compras?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    peso_total_vendas?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    lucro_total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    proj_lucro?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    proj_venda?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    qnt_compras?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    qnt_vendas?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    user_fechamento?: UserUpdateOneRequiredWithoutFechamentosNestedInput
+  }
+
+  export type FechamentoUncheckedUpdateWithoutCaixaInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    valor_abertura?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_abastecimentos?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_despesas?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    data_abertura?: DateTimeFieldUpdateOperationsInput | Date | string
+    data_fechamento?: DateTimeFieldUpdateOperationsInput | Date | string
+    userID_fechamento?: IntFieldUpdateOperationsInput | number
+    valor_esperado?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_conferido?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_diferenca?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    valor_pago?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_recebido?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_total_compras?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_total_vendas?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    peso_total_compras?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    peso_total_vendas?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    lucro_total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    proj_lucro?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    proj_venda?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    qnt_compras?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    qnt_vendas?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type LivroCaixaCreateWithoutFechamentoInput = {
+    dataAbertura?: Date | string
+    dataFechamento?: Date | string | null
+    saldoInicial: Decimal | DecimalJsLike | number | string
+    saldoFinal: Decimal | DecimalJsLike | number | string
+    status?: $Enums.StatusCaixa
+    abertoPor: UserCreateNestedOneWithoutCaixasAbertosInput
+    movimentacoes?: MovimentacaoFinanceiraCreateNestedManyWithoutCaixaInput
+  }
+
+  export type LivroCaixaUncheckedCreateWithoutFechamentoInput = {
+    id?: number
+    dataAbertura?: Date | string
+    dataFechamento?: Date | string | null
+    abertoPorID: number
+    saldoInicial: Decimal | DecimalJsLike | number | string
+    saldoFinal: Decimal | DecimalJsLike | number | string
+    status?: $Enums.StatusCaixa
+    movimentacoes?: MovimentacaoFinanceiraUncheckedCreateNestedManyWithoutCaixaInput
+  }
+
+  export type LivroCaixaCreateOrConnectWithoutFechamentoInput = {
+    where: LivroCaixaWhereUniqueInput
+    create: XOR<LivroCaixaCreateWithoutFechamentoInput, LivroCaixaUncheckedCreateWithoutFechamentoInput>
+  }
+
+  export type UserCreateWithoutFechamentosInput = {
+    nome: string
+    email: string
+    senha: string
+    telefone: string
+    deletedAt?: Date | string | null
+    pedidos?: PedidoCreateNestedManyWithoutUserInput
+    cargo: CargoCreateNestedOneWithoutUsersInput
+    caixasAbertos?: LivroCaixaCreateNestedManyWithoutAbertoPorInput
+  }
+
+  export type UserUncheckedCreateWithoutFechamentosInput = {
+    id?: number
+    nome: string
+    email: string
+    senha: string
+    telefone: string
+    cargoID: number
+    deletedAt?: Date | string | null
+    pedidos?: PedidoUncheckedCreateNestedManyWithoutUserInput
+    caixasAbertos?: LivroCaixaUncheckedCreateNestedManyWithoutAbertoPorInput
+  }
+
+  export type UserCreateOrConnectWithoutFechamentosInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutFechamentosInput, UserUncheckedCreateWithoutFechamentosInput>
+  }
+
+  export type LivroCaixaUpsertWithoutFechamentoInput = {
+    update: XOR<LivroCaixaUpdateWithoutFechamentoInput, LivroCaixaUncheckedUpdateWithoutFechamentoInput>
+    create: XOR<LivroCaixaCreateWithoutFechamentoInput, LivroCaixaUncheckedCreateWithoutFechamentoInput>
+    where?: LivroCaixaWhereInput
+  }
+
+  export type LivroCaixaUpdateToOneWithWhereWithoutFechamentoInput = {
+    where?: LivroCaixaWhereInput
+    data: XOR<LivroCaixaUpdateWithoutFechamentoInput, LivroCaixaUncheckedUpdateWithoutFechamentoInput>
+  }
+
+  export type LivroCaixaUpdateWithoutFechamentoInput = {
+    dataAbertura?: DateTimeFieldUpdateOperationsInput | Date | string
+    dataFechamento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    saldoInicial?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    saldoFinal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumStatusCaixaFieldUpdateOperationsInput | $Enums.StatusCaixa
+    abertoPor?: UserUpdateOneRequiredWithoutCaixasAbertosNestedInput
+    movimentacoes?: MovimentacaoFinanceiraUpdateManyWithoutCaixaNestedInput
+  }
+
+  export type LivroCaixaUncheckedUpdateWithoutFechamentoInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    dataAbertura?: DateTimeFieldUpdateOperationsInput | Date | string
+    dataFechamento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    abertoPorID?: IntFieldUpdateOperationsInput | number
+    saldoInicial?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    saldoFinal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumStatusCaixaFieldUpdateOperationsInput | $Enums.StatusCaixa
+    movimentacoes?: MovimentacaoFinanceiraUncheckedUpdateManyWithoutCaixaNestedInput
+  }
+
+  export type UserUpsertWithoutFechamentosInput = {
+    update: XOR<UserUpdateWithoutFechamentosInput, UserUncheckedUpdateWithoutFechamentosInput>
+    create: XOR<UserCreateWithoutFechamentosInput, UserUncheckedCreateWithoutFechamentosInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutFechamentosInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutFechamentosInput, UserUncheckedUpdateWithoutFechamentosInput>
+  }
+
+  export type UserUpdateWithoutFechamentosInput = {
+    nome?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    senha?: StringFieldUpdateOperationsInput | string
+    telefone?: StringFieldUpdateOperationsInput | string
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    pedidos?: PedidoUpdateManyWithoutUserNestedInput
+    cargo?: CargoUpdateOneRequiredWithoutUsersNestedInput
+    caixasAbertos?: LivroCaixaUpdateManyWithoutAbertoPorNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutFechamentosInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    nome?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    senha?: StringFieldUpdateOperationsInput | string
+    telefone?: StringFieldUpdateOperationsInput | string
+    cargoID?: IntFieldUpdateOperationsInput | number
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    pedidos?: PedidoUncheckedUpdateManyWithoutUserNestedInput
+    caixasAbertos?: LivroCaixaUncheckedUpdateManyWithoutAbertoPorNestedInput
+  }
+
   export type PedidoCreateManyUserInput = {
     id?: number
     regID?: number | null
@@ -35591,13 +40487,37 @@ export namespace Prisma {
     atualizado?: Date | string
   }
 
-  export type LivroCaixaCreateManyUsuarioInput = {
+  export type LivroCaixaCreateManyAbertoPorInput = {
     id?: number
     dataAbertura?: Date | string
     dataFechamento?: Date | string | null
     saldoInicial: Decimal | DecimalJsLike | number | string
-    saldoFinal?: Decimal | DecimalJsLike | number | string | null
+    saldoFinal: Decimal | DecimalJsLike | number | string
     status?: $Enums.StatusCaixa
+  }
+
+  export type FechamentoCreateManyUser_fechamentoInput = {
+    id?: number
+    caixaID: number
+    valor_abertura: Decimal | DecimalJsLike | number | string
+    valor_abastecimentos: Decimal | DecimalJsLike | number | string
+    valor_despesas: Decimal | DecimalJsLike | number | string
+    data_abertura: Date | string
+    data_fechamento: Date | string
+    valor_esperado: Decimal | DecimalJsLike | number | string
+    valor_conferido: Decimal | DecimalJsLike | number | string
+    valor_diferenca?: Decimal | DecimalJsLike | number | string | null
+    valor_pago: Decimal | DecimalJsLike | number | string
+    valor_recebido: Decimal | DecimalJsLike | number | string
+    valor_total_compras: Decimal | DecimalJsLike | number | string
+    valor_total_vendas: Decimal | DecimalJsLike | number | string
+    peso_total_compras: Decimal | DecimalJsLike | number | string
+    peso_total_vendas: Decimal | DecimalJsLike | number | string
+    lucro_total: Decimal | DecimalJsLike | number | string
+    proj_lucro: Decimal | DecimalJsLike | number | string
+    proj_venda: Decimal | DecimalJsLike | number | string
+    qnt_compras: Decimal | DecimalJsLike | number | string
+    qnt_vendas: Decimal | DecimalJsLike | number | string
   }
 
   export type PedidoUpdateWithoutUserInput = {
@@ -35607,7 +40527,7 @@ export namespace Prisma {
     criado_em?: DateTimeFieldUpdateOperationsInput | Date | string
     atualizado?: DateTimeFieldUpdateOperationsInput | Date | string
     items?: ItemPedidoUpdateManyWithoutPedidoNestedInput
-    pagamentos?: PagamentoUpdateManyWithoutPedidoNestedInput
+    pagamentos?: ContaFinanceiraUpdateManyWithoutPedidoNestedInput
     registro?: RegistroUpdateOneWithoutPedidosNestedInput
   }
 
@@ -35620,7 +40540,7 @@ export namespace Prisma {
     criado_em?: DateTimeFieldUpdateOperationsInput | Date | string
     atualizado?: DateTimeFieldUpdateOperationsInput | Date | string
     items?: ItemPedidoUncheckedUpdateManyWithoutPedidoNestedInput
-    pagamentos?: PagamentoUncheckedUpdateManyWithoutPedidoNestedInput
+    pagamentos?: ContaFinanceiraUncheckedUpdateManyWithoutPedidoNestedInput
   }
 
   export type PedidoUncheckedUpdateManyWithoutUserInput = {
@@ -35633,32 +40553,105 @@ export namespace Prisma {
     atualizado?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type LivroCaixaUpdateWithoutUsuarioInput = {
+  export type LivroCaixaUpdateWithoutAbertoPorInput = {
     dataAbertura?: DateTimeFieldUpdateOperationsInput | Date | string
     dataFechamento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     saldoInicial?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    saldoFinal?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    saldoFinal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     status?: EnumStatusCaixaFieldUpdateOperationsInput | $Enums.StatusCaixa
     movimentacoes?: MovimentacaoFinanceiraUpdateManyWithoutCaixaNestedInput
+    fechamento?: FechamentoUpdateOneWithoutCaixaNestedInput
   }
 
-  export type LivroCaixaUncheckedUpdateWithoutUsuarioInput = {
+  export type LivroCaixaUncheckedUpdateWithoutAbertoPorInput = {
     id?: IntFieldUpdateOperationsInput | number
     dataAbertura?: DateTimeFieldUpdateOperationsInput | Date | string
     dataFechamento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     saldoInicial?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    saldoFinal?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    saldoFinal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     status?: EnumStatusCaixaFieldUpdateOperationsInput | $Enums.StatusCaixa
     movimentacoes?: MovimentacaoFinanceiraUncheckedUpdateManyWithoutCaixaNestedInput
+    fechamento?: FechamentoUncheckedUpdateOneWithoutCaixaNestedInput
   }
 
-  export type LivroCaixaUncheckedUpdateManyWithoutUsuarioInput = {
+  export type LivroCaixaUncheckedUpdateManyWithoutAbertoPorInput = {
     id?: IntFieldUpdateOperationsInput | number
     dataAbertura?: DateTimeFieldUpdateOperationsInput | Date | string
     dataFechamento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     saldoInicial?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    saldoFinal?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    saldoFinal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     status?: EnumStatusCaixaFieldUpdateOperationsInput | $Enums.StatusCaixa
+  }
+
+  export type FechamentoUpdateWithoutUser_fechamentoInput = {
+    valor_abertura?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_abastecimentos?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_despesas?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    data_abertura?: DateTimeFieldUpdateOperationsInput | Date | string
+    data_fechamento?: DateTimeFieldUpdateOperationsInput | Date | string
+    valor_esperado?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_conferido?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_diferenca?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    valor_pago?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_recebido?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_total_compras?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_total_vendas?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    peso_total_compras?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    peso_total_vendas?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    lucro_total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    proj_lucro?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    proj_venda?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    qnt_compras?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    qnt_vendas?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    caixa?: LivroCaixaUpdateOneRequiredWithoutFechamentoNestedInput
+  }
+
+  export type FechamentoUncheckedUpdateWithoutUser_fechamentoInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    caixaID?: IntFieldUpdateOperationsInput | number
+    valor_abertura?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_abastecimentos?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_despesas?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    data_abertura?: DateTimeFieldUpdateOperationsInput | Date | string
+    data_fechamento?: DateTimeFieldUpdateOperationsInput | Date | string
+    valor_esperado?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_conferido?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_diferenca?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    valor_pago?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_recebido?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_total_compras?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_total_vendas?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    peso_total_compras?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    peso_total_vendas?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    lucro_total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    proj_lucro?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    proj_venda?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    qnt_compras?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    qnt_vendas?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type FechamentoUncheckedUpdateManyWithoutUser_fechamentoInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    caixaID?: IntFieldUpdateOperationsInput | number
+    valor_abertura?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_abastecimentos?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_despesas?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    data_abertura?: DateTimeFieldUpdateOperationsInput | Date | string
+    data_fechamento?: DateTimeFieldUpdateOperationsInput | Date | string
+    valor_esperado?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_conferido?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_diferenca?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    valor_pago?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_recebido?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_total_compras?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_total_vendas?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    peso_total_compras?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    peso_total_vendas?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    lucro_total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    proj_lucro?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    proj_venda?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    qnt_compras?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    qnt_vendas?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
   export type CargoUpdateWithoutPermissoesInput = {
@@ -35710,7 +40703,8 @@ export namespace Prisma {
     telefone?: StringFieldUpdateOperationsInput | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pedidos?: PedidoUpdateManyWithoutUserNestedInput
-    caixas?: LivroCaixaUpdateManyWithoutUsuarioNestedInput
+    caixasAbertos?: LivroCaixaUpdateManyWithoutAbertoPorNestedInput
+    fechamentos?: FechamentoUpdateManyWithoutUser_fechamentoNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCargoInput = {
@@ -35721,7 +40715,8 @@ export namespace Prisma {
     telefone?: StringFieldUpdateOperationsInput | string
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pedidos?: PedidoUncheckedUpdateManyWithoutUserNestedInput
-    caixas?: LivroCaixaUncheckedUpdateManyWithoutUsuarioNestedInput
+    caixasAbertos?: LivroCaixaUncheckedUpdateManyWithoutAbertoPorNestedInput
+    fechamentos?: FechamentoUncheckedUpdateManyWithoutUser_fechamentoNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutCargoInput = {
@@ -35743,6 +40738,19 @@ export namespace Prisma {
     atualizado?: Date | string
   }
 
+  export type ContaFinanceiraCreateManyRegistroInput = {
+    id?: number
+    tipo: $Enums.TipoConta
+    pedidoID?: number | null
+    descricao?: string | null
+    valor: Decimal | DecimalJsLike | number | string
+    data_documento?: Date | string
+    data_vencimento?: Date | string | null
+    data_pagamento?: Date | string | null
+    forma: $Enums.FormaPagamento
+    data?: Date | string
+  }
+
   export type PedidoUpdateWithoutRegistroInput = {
     tipo?: EnumTipoPedidoFieldUpdateOperationsInput | $Enums.TipoPedido
     valor_total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -35750,7 +40758,7 @@ export namespace Prisma {
     criado_em?: DateTimeFieldUpdateOperationsInput | Date | string
     atualizado?: DateTimeFieldUpdateOperationsInput | Date | string
     items?: ItemPedidoUpdateManyWithoutPedidoNestedInput
-    pagamentos?: PagamentoUpdateManyWithoutPedidoNestedInput
+    pagamentos?: ContaFinanceiraUpdateManyWithoutPedidoNestedInput
     user?: UserUpdateOneRequiredWithoutPedidosNestedInput
   }
 
@@ -35763,7 +40771,7 @@ export namespace Prisma {
     criado_em?: DateTimeFieldUpdateOperationsInput | Date | string
     atualizado?: DateTimeFieldUpdateOperationsInput | Date | string
     items?: ItemPedidoUncheckedUpdateManyWithoutPedidoNestedInput
-    pagamentos?: PagamentoUncheckedUpdateManyWithoutPedidoNestedInput
+    pagamentos?: ContaFinanceiraUncheckedUpdateManyWithoutPedidoNestedInput
   }
 
   export type PedidoUncheckedUpdateManyWithoutRegistroInput = {
@@ -35774,6 +40782,46 @@ export namespace Prisma {
     userID?: IntFieldUpdateOperationsInput | number
     criado_em?: DateTimeFieldUpdateOperationsInput | Date | string
     atualizado?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ContaFinanceiraUpdateWithoutRegistroInput = {
+    tipo?: EnumTipoContaFieldUpdateOperationsInput | $Enums.TipoConta
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+    valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    data_documento?: DateTimeFieldUpdateOperationsInput | Date | string
+    data_vencimento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    data_pagamento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    forma?: EnumFormaPagamentoFieldUpdateOperationsInput | $Enums.FormaPagamento
+    data?: DateTimeFieldUpdateOperationsInput | Date | string
+    pedido?: PedidoUpdateOneWithoutPagamentosNestedInput
+    movimentacao?: MovimentacaoFinanceiraUpdateOneWithoutContaNestedInput
+  }
+
+  export type ContaFinanceiraUncheckedUpdateWithoutRegistroInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    tipo?: EnumTipoContaFieldUpdateOperationsInput | $Enums.TipoConta
+    pedidoID?: NullableIntFieldUpdateOperationsInput | number | null
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+    valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    data_documento?: DateTimeFieldUpdateOperationsInput | Date | string
+    data_vencimento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    data_pagamento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    forma?: EnumFormaPagamentoFieldUpdateOperationsInput | $Enums.FormaPagamento
+    data?: DateTimeFieldUpdateOperationsInput | Date | string
+    movimentacao?: MovimentacaoFinanceiraUncheckedUpdateOneWithoutContaNestedInput
+  }
+
+  export type ContaFinanceiraUncheckedUpdateManyWithoutRegistroInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    tipo?: EnumTipoContaFieldUpdateOperationsInput | $Enums.TipoConta
+    pedidoID?: NullableIntFieldUpdateOperationsInput | number | null
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+    valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    data_documento?: DateTimeFieldUpdateOperationsInput | Date | string
+    data_vencimento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    data_pagamento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    forma?: EnumFormaPagamentoFieldUpdateOperationsInput | $Enums.FormaPagamento
+    data?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type PrecoPorTabelaCreateManyTabelaInput = {
@@ -35828,6 +40876,7 @@ export namespace Prisma {
     fisica?: PessoaFisicaUpdateOneWithoutRegistroNestedInput
     juridica?: PessoaJuridicaUpdateOneWithoutRegistroNestedInput
     saldo?: SaldoFinanceiroUpdateOneWithoutRegistroNestedInput
+    contas?: ContaFinanceiraUpdateManyWithoutRegistroNestedInput
   }
 
   export type RegistroUncheckedUpdateWithoutTabelaInput = {
@@ -35845,6 +40894,7 @@ export namespace Prisma {
     fisica?: PessoaFisicaUncheckedUpdateOneWithoutRegistroNestedInput
     juridica?: PessoaJuridicaUncheckedUpdateOneWithoutRegistroNestedInput
     saldo?: SaldoFinanceiroUncheckedUpdateOneWithoutRegistroNestedInput
+    contas?: ContaFinanceiraUncheckedUpdateManyWithoutRegistroNestedInput
   }
 
   export type RegistroUncheckedUpdateManyWithoutTabelaInput = {
@@ -36013,9 +41063,15 @@ export namespace Prisma {
     impureza: Decimal | DecimalJsLike | number | string
   }
 
-  export type PagamentoCreateManyPedidoInput = {
+  export type ContaFinanceiraCreateManyPedidoInput = {
     id?: number
+    tipo: $Enums.TipoConta
+    registroID?: number | null
+    descricao?: string | null
     valor: Decimal | DecimalJsLike | number | string
+    data_documento?: Date | string
+    data_vencimento?: Date | string | null
+    data_pagamento?: Date | string | null
     forma: $Enums.FormaPagamento
     data?: Date | string
   }
@@ -36046,67 +41102,154 @@ export namespace Prisma {
     impureza?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
-  export type PagamentoUpdateWithoutPedidoInput = {
+  export type ContaFinanceiraUpdateWithoutPedidoInput = {
+    tipo?: EnumTipoContaFieldUpdateOperationsInput | $Enums.TipoConta
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
     valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    data_documento?: DateTimeFieldUpdateOperationsInput | Date | string
+    data_vencimento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    data_pagamento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     forma?: EnumFormaPagamentoFieldUpdateOperationsInput | $Enums.FormaPagamento
     data?: DateTimeFieldUpdateOperationsInput | Date | string
+    registro?: RegistroUpdateOneWithoutContasNestedInput
+    movimentacao?: MovimentacaoFinanceiraUpdateOneWithoutContaNestedInput
   }
 
-  export type PagamentoUncheckedUpdateWithoutPedidoInput = {
+  export type ContaFinanceiraUncheckedUpdateWithoutPedidoInput = {
     id?: IntFieldUpdateOperationsInput | number
+    tipo?: EnumTipoContaFieldUpdateOperationsInput | $Enums.TipoConta
+    registroID?: NullableIntFieldUpdateOperationsInput | number | null
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
     valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    data_documento?: DateTimeFieldUpdateOperationsInput | Date | string
+    data_vencimento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    data_pagamento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     forma?: EnumFormaPagamentoFieldUpdateOperationsInput | $Enums.FormaPagamento
     data?: DateTimeFieldUpdateOperationsInput | Date | string
+    movimentacao?: MovimentacaoFinanceiraUncheckedUpdateOneWithoutContaNestedInput
   }
 
-  export type PagamentoUncheckedUpdateManyWithoutPedidoInput = {
+  export type ContaFinanceiraUncheckedUpdateManyWithoutPedidoInput = {
     id?: IntFieldUpdateOperationsInput | number
+    tipo?: EnumTipoContaFieldUpdateOperationsInput | $Enums.TipoConta
+    registroID?: NullableIntFieldUpdateOperationsInput | number | null
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
     valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    data_documento?: DateTimeFieldUpdateOperationsInput | Date | string
+    data_vencimento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    data_pagamento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     forma?: EnumFormaPagamentoFieldUpdateOperationsInput | $Enums.FormaPagamento
     data?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type MovimentacaoFinanceiraCreateManyContaInput = {
+  export type MovimentacaoFinanceiraCreateManyBancoInput = {
     id?: number
-    tipoMovimentacao: $Enums.TipoMovimentacao
-    valor: Decimal | DecimalJsLike | number | string
-    descricao?: string | null
-    data?: Date | string
-    origem: $Enums.TipoOrigem
-    origemID?: number | null
     caixaID: number
+    contaID?: number | null
+    categoriaID: number
+    tipoMovimentacao: $Enums.TipoMovimentacao
+    data?: Date | string
+    saldoAtual: Decimal | DecimalJsLike | number | string
+    valor: Decimal | DecimalJsLike | number | string
+    saldoFinal: Decimal | DecimalJsLike | number | string
+    descricao?: string | null
+    estornadoEm?: Date | string | null
   }
 
-  export type MovimentacaoFinanceiraUpdateWithoutContaInput = {
+  export type MovimentacaoFinanceiraUpdateWithoutBancoInput = {
     tipoMovimentacao?: EnumTipoMovimentacaoFieldUpdateOperationsInput | $Enums.TipoMovimentacao
-    valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    descricao?: NullableStringFieldUpdateOperationsInput | string | null
     data?: DateTimeFieldUpdateOperationsInput | Date | string
-    origem?: EnumTipoOrigemFieldUpdateOperationsInput | $Enums.TipoOrigem
-    origemID?: NullableIntFieldUpdateOperationsInput | number | null
+    saldoAtual?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    saldoFinal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+    estornadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     caixa?: LivroCaixaUpdateOneRequiredWithoutMovimentacoesNestedInput
+    conta?: ContaFinanceiraUpdateOneWithoutMovimentacaoNestedInput
+    categoria?: CategoriaCaixaUpdateOneRequiredWithoutMovimentacoesNestedInput
   }
 
-  export type MovimentacaoFinanceiraUncheckedUpdateWithoutContaInput = {
+  export type MovimentacaoFinanceiraUncheckedUpdateWithoutBancoInput = {
     id?: IntFieldUpdateOperationsInput | number
-    tipoMovimentacao?: EnumTipoMovimentacaoFieldUpdateOperationsInput | $Enums.TipoMovimentacao
-    valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    descricao?: NullableStringFieldUpdateOperationsInput | string | null
-    data?: DateTimeFieldUpdateOperationsInput | Date | string
-    origem?: EnumTipoOrigemFieldUpdateOperationsInput | $Enums.TipoOrigem
-    origemID?: NullableIntFieldUpdateOperationsInput | number | null
     caixaID?: IntFieldUpdateOperationsInput | number
+    contaID?: NullableIntFieldUpdateOperationsInput | number | null
+    categoriaID?: IntFieldUpdateOperationsInput | number
+    tipoMovimentacao?: EnumTipoMovimentacaoFieldUpdateOperationsInput | $Enums.TipoMovimentacao
+    data?: DateTimeFieldUpdateOperationsInput | Date | string
+    saldoAtual?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    saldoFinal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+    estornadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
-  export type MovimentacaoFinanceiraUncheckedUpdateManyWithoutContaInput = {
+  export type MovimentacaoFinanceiraUncheckedUpdateManyWithoutBancoInput = {
     id?: IntFieldUpdateOperationsInput | number
-    tipoMovimentacao?: EnumTipoMovimentacaoFieldUpdateOperationsInput | $Enums.TipoMovimentacao
-    valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    descricao?: NullableStringFieldUpdateOperationsInput | string | null
-    data?: DateTimeFieldUpdateOperationsInput | Date | string
-    origem?: EnumTipoOrigemFieldUpdateOperationsInput | $Enums.TipoOrigem
-    origemID?: NullableIntFieldUpdateOperationsInput | number | null
     caixaID?: IntFieldUpdateOperationsInput | number
+    contaID?: NullableIntFieldUpdateOperationsInput | number | null
+    categoriaID?: IntFieldUpdateOperationsInput | number
+    tipoMovimentacao?: EnumTipoMovimentacaoFieldUpdateOperationsInput | $Enums.TipoMovimentacao
+    data?: DateTimeFieldUpdateOperationsInput | Date | string
+    saldoAtual?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    saldoFinal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+    estornadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type MovimentacaoFinanceiraCreateManyCategoriaInput = {
+    id?: number
+    bancoID?: number | null
+    caixaID: number
+    contaID?: number | null
+    tipoMovimentacao: $Enums.TipoMovimentacao
+    data?: Date | string
+    saldoAtual: Decimal | DecimalJsLike | number | string
+    valor: Decimal | DecimalJsLike | number | string
+    saldoFinal: Decimal | DecimalJsLike | number | string
+    descricao?: string | null
+    estornadoEm?: Date | string | null
+  }
+
+  export type MovimentacaoFinanceiraUpdateWithoutCategoriaInput = {
+    tipoMovimentacao?: EnumTipoMovimentacaoFieldUpdateOperationsInput | $Enums.TipoMovimentacao
+    data?: DateTimeFieldUpdateOperationsInput | Date | string
+    saldoAtual?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    saldoFinal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+    estornadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    banco?: BancoUpdateOneWithoutMovimentacoesNestedInput
+    caixa?: LivroCaixaUpdateOneRequiredWithoutMovimentacoesNestedInput
+    conta?: ContaFinanceiraUpdateOneWithoutMovimentacaoNestedInput
+  }
+
+  export type MovimentacaoFinanceiraUncheckedUpdateWithoutCategoriaInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    bancoID?: NullableIntFieldUpdateOperationsInput | number | null
+    caixaID?: IntFieldUpdateOperationsInput | number
+    contaID?: NullableIntFieldUpdateOperationsInput | number | null
+    tipoMovimentacao?: EnumTipoMovimentacaoFieldUpdateOperationsInput | $Enums.TipoMovimentacao
+    data?: DateTimeFieldUpdateOperationsInput | Date | string
+    saldoAtual?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    saldoFinal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+    estornadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type MovimentacaoFinanceiraUncheckedUpdateManyWithoutCategoriaInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    bancoID?: NullableIntFieldUpdateOperationsInput | number | null
+    caixaID?: IntFieldUpdateOperationsInput | number
+    contaID?: NullableIntFieldUpdateOperationsInput | number | null
+    tipoMovimentacao?: EnumTipoMovimentacaoFieldUpdateOperationsInput | $Enums.TipoMovimentacao
+    data?: DateTimeFieldUpdateOperationsInput | Date | string
+    saldoAtual?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    saldoFinal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+    estornadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type MovimentacaoEstoqueCreateManyConversaoEstoqueInput = {
@@ -36150,45 +41293,57 @@ export namespace Prisma {
 
   export type MovimentacaoFinanceiraCreateManyCaixaInput = {
     id?: number
-    contaID: number
+    bancoID?: number | null
+    contaID?: number | null
+    categoriaID: number
     tipoMovimentacao: $Enums.TipoMovimentacao
-    valor: Decimal | DecimalJsLike | number | string
-    descricao?: string | null
     data?: Date | string
-    origem: $Enums.TipoOrigem
-    origemID?: number | null
+    saldoAtual: Decimal | DecimalJsLike | number | string
+    valor: Decimal | DecimalJsLike | number | string
+    saldoFinal: Decimal | DecimalJsLike | number | string
+    descricao?: string | null
+    estornadoEm?: Date | string | null
   }
 
   export type MovimentacaoFinanceiraUpdateWithoutCaixaInput = {
     tipoMovimentacao?: EnumTipoMovimentacaoFieldUpdateOperationsInput | $Enums.TipoMovimentacao
-    valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    descricao?: NullableStringFieldUpdateOperationsInput | string | null
     data?: DateTimeFieldUpdateOperationsInput | Date | string
-    origem?: EnumTipoOrigemFieldUpdateOperationsInput | $Enums.TipoOrigem
-    origemID?: NullableIntFieldUpdateOperationsInput | number | null
-    conta?: ContaUpdateOneRequiredWithoutMovimentacoesNestedInput
+    saldoAtual?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    saldoFinal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+    estornadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    banco?: BancoUpdateOneWithoutMovimentacoesNestedInput
+    conta?: ContaFinanceiraUpdateOneWithoutMovimentacaoNestedInput
+    categoria?: CategoriaCaixaUpdateOneRequiredWithoutMovimentacoesNestedInput
   }
 
   export type MovimentacaoFinanceiraUncheckedUpdateWithoutCaixaInput = {
     id?: IntFieldUpdateOperationsInput | number
-    contaID?: IntFieldUpdateOperationsInput | number
+    bancoID?: NullableIntFieldUpdateOperationsInput | number | null
+    contaID?: NullableIntFieldUpdateOperationsInput | number | null
+    categoriaID?: IntFieldUpdateOperationsInput | number
     tipoMovimentacao?: EnumTipoMovimentacaoFieldUpdateOperationsInput | $Enums.TipoMovimentacao
-    valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    descricao?: NullableStringFieldUpdateOperationsInput | string | null
     data?: DateTimeFieldUpdateOperationsInput | Date | string
-    origem?: EnumTipoOrigemFieldUpdateOperationsInput | $Enums.TipoOrigem
-    origemID?: NullableIntFieldUpdateOperationsInput | number | null
+    saldoAtual?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    saldoFinal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+    estornadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type MovimentacaoFinanceiraUncheckedUpdateManyWithoutCaixaInput = {
     id?: IntFieldUpdateOperationsInput | number
-    contaID?: IntFieldUpdateOperationsInput | number
+    bancoID?: NullableIntFieldUpdateOperationsInput | number | null
+    contaID?: NullableIntFieldUpdateOperationsInput | number | null
+    categoriaID?: IntFieldUpdateOperationsInput | number
     tipoMovimentacao?: EnumTipoMovimentacaoFieldUpdateOperationsInput | $Enums.TipoMovimentacao
-    valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    descricao?: NullableStringFieldUpdateOperationsInput | string | null
     data?: DateTimeFieldUpdateOperationsInput | Date | string
-    origem?: EnumTipoOrigemFieldUpdateOperationsInput | $Enums.TipoOrigem
-    origemID?: NullableIntFieldUpdateOperationsInput | number | null
+    saldoAtual?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    saldoFinal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    descricao?: NullableStringFieldUpdateOperationsInput | string | null
+    estornadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
 

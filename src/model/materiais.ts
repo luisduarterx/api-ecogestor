@@ -41,10 +41,10 @@ export const createMaterial = async (data: MaterialType) => {
           "Não é possivel criar um material em um categoria inexistente."
         );
       }
-      return error;
+      throw error;
     }
 
-    return error;
+    throw error;
   }
 };
 export const updateMaterial = async (id: number, data: EditMaterialType) => {
@@ -96,9 +96,9 @@ export const updateMaterial = async (id: number, data: EditMaterialType) => {
       if (error.code === "P2025") {
         return new NotFound();
       }
-      return error;
+      throw error;
     }
-    return error;
+    throw error;
   }
 };
 export const findAllMateriais = async ({
@@ -147,6 +147,6 @@ export const findAllMateriais = async ({
     }));
   } catch (error) {
     console.log(error);
-    return error;
+    throw error;
   }
 };

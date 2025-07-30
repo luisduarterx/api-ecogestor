@@ -40,10 +40,10 @@ export const createUser = async (data: CreateUserArgs) => {
         };
       }
 
-      return error;
+      throw error;
     }
 
-    return error;
+    throw error;
   }
 };
 export const findUserByEmail = async (email: string) => {
@@ -61,7 +61,7 @@ export const findUserByEmail = async (email: string) => {
     return user;
   } catch (error) {
     console.log(error);
-    return error;
+    throw error;
   }
 };
 
@@ -109,7 +109,7 @@ export const getAllUsers = async () => {
 
     return users;
   } catch (error) {
-    return error;
+    throw error;
   }
 };
 export const deleteUserByID = async (id: number) => {
@@ -123,7 +123,7 @@ export const deleteUserByID = async (id: number) => {
 
     return user;
   } catch (error) {
-    return error;
+    throw error;
   }
 };
 export const getUserByID = async (id: number) => {

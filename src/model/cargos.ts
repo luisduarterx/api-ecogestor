@@ -18,7 +18,7 @@ export const getAllRoles = async () => {
 
     return roles;
   } catch (error) {
-    return error;
+    throw error;
   }
 };
 export const getRoleByID = async (id: number) => {
@@ -34,7 +34,7 @@ export const getRoleByID = async (id: number) => {
 
     return role;
   } catch (error) {
-    return error;
+    throw error;
   }
 };
 type roleData = {
@@ -75,7 +75,7 @@ export const addNewRole = async (x: roleData) => {
         );
       }
     }
-    return error;
+    throw error;
   }
 };
 export const deleteRoleByID = async (id: number) => {
@@ -112,6 +112,6 @@ export const deleteRoleByID = async (id: number) => {
         return new BadRequest("Não conseguimos encontrar nenhum registro.");
       }
     }
-    return error;
+    throw error;
   }
 };
