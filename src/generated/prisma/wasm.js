@@ -269,17 +269,25 @@ exports.Prisma.BancoScalarFieldEnum = {
 
 exports.Prisma.MovimentacaoFinanceiraScalarFieldEnum = {
   id: 'id',
+  estornoID: 'estornoID',
   bancoID: 'bancoID',
   caixaID: 'caixaID',
   contaID: 'contaID',
   categoriaID: 'categoriaID',
-  tipoMovimentacao: 'tipoMovimentacao',
+  tipoMovimentacaoID: 'tipoMovimentacaoID',
   data: 'data',
-  saldoAtual: 'saldoAtual',
+  saldoInicial: 'saldoInicial',
   valor: 'valor',
   saldoFinal: 'saldoFinal',
   descricao: 'descricao',
+  userID: 'userID',
   estornadoEm: 'estornadoEm'
+};
+
+exports.Prisma.Caixa_TipoMovimentacaoScalarFieldEnum = {
+  id: 'id',
+  nome: 'nome',
+  tipo: 'tipo'
 };
 
 exports.Prisma.CategoriaCaixaScalarFieldEnum = {
@@ -329,18 +337,7 @@ exports.Prisma.FechamentoScalarFieldEnum = {
   userID_fechamento: 'userID_fechamento',
   valor_esperado: 'valor_esperado',
   valor_conferido: 'valor_conferido',
-  valor_diferenca: 'valor_diferenca',
-  valor_pago: 'valor_pago',
-  valor_recebido: 'valor_recebido',
-  valor_total_compras: 'valor_total_compras',
-  valor_total_vendas: 'valor_total_vendas',
-  peso_total_compras: 'peso_total_compras',
-  peso_total_vendas: 'peso_total_vendas',
-  lucro_total: 'lucro_total',
-  proj_lucro: 'proj_lucro',
-  proj_venda: 'proj_venda',
-  qnt_compras: 'qnt_compras',
-  qnt_vendas: 'qnt_vendas'
+  valor_diferenca: 'valor_diferenca'
 };
 
 exports.Prisma.SortOrder = {
@@ -385,10 +382,9 @@ exports.FormaPagamento = exports.$Enums.FormaPagamento = {
   ABATER: 'ABATER'
 };
 
-exports.TipoMovimentacao = exports.$Enums.TipoMovimentacao = {
+exports.DirecaoFinanceira = exports.$Enums.DirecaoFinanceira = {
   ENTRADA: 'ENTRADA',
-  SAIDA: 'SAIDA',
-  ESTORNO: 'ESTORNO'
+  SAIDA: 'SAIDA'
 };
 
 exports.TipoMovimentacaoEstoque = exports.$Enums.TipoMovimentacaoEstoque = {
@@ -430,6 +426,7 @@ exports.Prisma.ModelName = {
   ContaFinanceira: 'ContaFinanceira',
   Banco: 'Banco',
   MovimentacaoFinanceira: 'MovimentacaoFinanceira',
+  Caixa_TipoMovimentacao: 'Caixa_TipoMovimentacao',
   CategoriaCaixa: 'CategoriaCaixa',
   MovimentacaoEstoque: 'MovimentacaoEstoque',
   ConversaoEstoque: 'ConversaoEstoque',

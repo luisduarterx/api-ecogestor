@@ -1,19 +1,21 @@
 import { BadRequest, InternalError, NotPossible } from "../error";
-import { Prisma, TipoMovimentacao } from "../generated/prisma";
+import { Prisma } from "../generated/prisma";
 import { prisma } from "../libs/prisma";
 
 type inputMovimentacao = {
   bancoID?: number;
   caixaID: number;
   contaID?: number;
-  categoriaID: number;
-  tipoMovimentacao: "ENTRADA" | "SAIDA";
+  categoriaID?: number;
+  tipoMovimentacaoID: number;
   valor: number;
   descricao?: string;
+  userID: number;
 };
 type inputEstorno = {
   id: number;
   motivo: string;
+  userID: number;
 };
 
 export const novaMovimentacao = async (data: inputMovimentacao) => {
@@ -37,18 +39,27 @@ export const novaMovimentacao = async (data: inputMovimentacao) => {
         "Não é possivel realizar uma movimentacao em um banco inexistente."
       );
     }
-    const valor =
-      data.tipoMovimentacao === "ENTRADA" ? data.valor : -data.valor;
+    //consultar direcao Financeira
+    const tipoMovimentacao = await prisma.caixa_TipoMovimentacao.findUnique({
+      where: { id: data.tipoMovimentacaoID },
+    });
+    if (!tipoMovimentacao) {
+      throw new InternalError();
+    }
+    const direcao = tipoMovimentacao?.tipo;
+    const valor = direcao === "ENTRADA" ? data.valor : -data.valor;
 
     const result = await prisma.$transaction(async (trx) => {
       const movimento = await trx.movimentacaoFinanceira.create({
         data: {
+          descricao: data.descricao,
+          userID: data.userID,
           bancoID: data.bancoID,
           caixaID: caixa.id,
           categoriaID: data.categoriaID,
-          saldoAtual: caixa.saldoFinal,
+          saldoInicial: caixa.saldoFinal,
           valor: valor,
-          tipoMovimentacao: data.tipoMovimentacao,
+          tipoMovimentacaoID: data.tipoMovimentacaoID,
           saldoFinal: banco
             ? caixa.saldoFinal
             : Number(caixa.saldoFinal) + valor,
@@ -83,19 +94,29 @@ export const novaMovimentacao = async (data: inputMovimentacao) => {
     throw error;
   }
 };
-
+// parei aqui nas asteracoes feitas em tipomovimentacao
 export const estornarMovimentacao = async (data: inputEstorno) => {
   try {
     const movimentacao = await prisma.movimentacaoFinanceira.findFirst({
       where: {
         id: data.id,
-        OR: [{ tipoMovimentacao: "ENTRADA" }, { tipoMovimentacao: "SAIDA" }],
+      },
+      include: {
+        tipoMovimentacao: {
+          select: {
+            tipo: true,
+          },
+        },
       },
     });
     if (!movimentacao) {
       throw new NotPossible("Não conseguimos encontrar essa movimentacão.");
     }
-
+    if (movimentacao.tipoMovimentacaoID === 1) {
+      throw new NotPossible(
+        "Não é possivel alterar o valor de abertura, entre em contato com seu gerente."
+      );
+    }
     if (movimentacao.estornadoEm) {
       throw new NotPossible("Essa movimentação já foi estornada.");
     }
@@ -122,17 +143,19 @@ export const estornarMovimentacao = async (data: inputEstorno) => {
         : Number(caixa.saldoFinal);
       const estorno = await prisma.movimentacaoFinanceira.create({
         data: {
-          tipoMovimentacao: "ESTORNO",
+          estornoID: movimentacao.id,
+          userID: data.userID,
+          tipoMovimentacaoID: movimentacao.tipoMovimentacaoID,
           caixaID: movimentacao.caixaID,
           bancoID: movimentacao.bancoID,
           categoriaID: movimentacao.categoriaID,
           contaID: movimentacao.contaID,
-          saldoAtual: banco ? banco.saldo : caixa.saldoFinal,
+          saldoInicial: banco ? banco.saldo : caixa.saldoFinal,
           descricao: data.motivo,
           valor: -Number(movimentacao.valor),
 
           saldoFinal:
-            movimentacao.tipoMovimentacao === "ENTRADA"
+            movimentacao.tipoMovimentacao.tipo === "ENTRADA"
               ? saldoOrigem - Number(movimentacao.valor)
               : saldoOrigem + Math.abs(Number(movimentacao.valor)),
         },
@@ -142,7 +165,7 @@ export const estornarMovimentacao = async (data: inputEstorno) => {
           where: { id: banco.id },
           data: {
             saldo:
-              movimentacao.tipoMovimentacao === "ENTRADA"
+              movimentacao.tipoMovimentacao.tipo === "ENTRADA"
                 ? Number(banco.saldo) - Number(movimentacao.valor)
                 : Number(banco.saldo) + Math.abs(Number(movimentacao.valor)),
           },

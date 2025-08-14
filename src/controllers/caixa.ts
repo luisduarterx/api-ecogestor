@@ -2,7 +2,7 @@ import { Response } from "express";
 import { ExtendedRequest } from "../types/extended-request";
 import { z } from "zod";
 import { BadRequest, UnAuthorized } from "../error";
-import { abrirCaixa } from "../model/caixa";
+import { abrirCaixa, fecharCaixa } from "../model/caixa";
 
 export const POST_A = async (req: ExtendedRequest, res: Response) => {
   try {
@@ -30,6 +30,14 @@ export const POST_A = async (req: ExtendedRequest, res: Response) => {
   }
 };
 
-export const POST_F = async (req: ExtendedRequest, res: Response) => {};
+export const POST_F = async (req: ExtendedRequest, res: Response) => {
+  if (!req.user?.id) {
+    throw new UnAuthorized();
+  }
+
+  const userID = req.user.id;
+  const fechamento = await fecharCaixa(userID);
+  res.json(fechamento);
+};
 
 export const GET = async (req: ExtendedRequest, res: Response) => {};

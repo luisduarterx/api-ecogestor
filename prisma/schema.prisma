@@ -19,7 +19,8 @@ model User {
   cargo      Cargo        @relation(fields: [cargoID], references: [id])
   deletedAt DateTime? 
   caixasAbertos LivroCaixa[] @relation("CaixaAbertoPor")
-  fechamentos Fechamento[] 
+  fechamentos Fechamento[]
+  movimentacoesFinanceiras MovimentacaoFinanceira[] 
 }
 
 model Permissoes {
@@ -196,25 +197,38 @@ model Banco {
 
 model MovimentacaoFinanceira {
   id               Int                   @id @default(autoincrement())
+  estornoID        Int? @unique
   bancoID          Int?
   caixaID          Int
   contaID          Int? @unique
-  categoriaID      Int
-  tipoMovimentacao TipoMovimentacao
+  categoriaID      Int?
+  tipoMovimentacaoID Int
   data             DateTime              @default(now())
-  saldoAtual       Decimal
+  saldoInicial       Decimal
   valor            Decimal
   saldoFinal       Decimal
   descricao        String?
+  userID           Int
   estornadoEm        DateTime?
   banco            Banco?                 @relation(fields: [bancoID], references: [id])
   caixa            LivroCaixa @relation(fields: [caixaID],references: [id])
   conta           ContaFinanceira? @relation(fields: [contaID],references: [id])
-  categoria       CategoriaCaixa    @relation(fields: [categoriaID],references: [id])
+  categoria       CategoriaCaixa?    @relation(fields: [categoriaID],references: [id])
+  user            User  @relation(fields:[userID],references:[id])
+  tipoMovimentacao  Caixa_TipoMovimentacao @relation(fields: [tipoMovimentacaoID],references: [id])
+  estorno         MovimentacaoFinanceira? @relation("Estorno",fields: [estornoID],references: [id])
+  movimentacaoEstorno MovimentacaoFinanceira? @relation("Estorno")
   
   
   
 }
+model Caixa_TipoMovimentacao {
+  id Int @id @default(autoincrement())
+  nome String @unique
+  tipo DirecaoFinanceira
+  movimentacoes MovimentacaoFinanceira[]
+}
+
 model CategoriaCaixa {
   id Int @id @default(autoincrement())
   nome String
@@ -269,20 +283,24 @@ model Fechamento {
   valor_esperado Decimal
   valor_conferido Decimal
   valor_diferenca Decimal?
-  valor_pago Decimal
-  valor_recebido Decimal
-  valor_total_compras Decimal
-  valor_total_vendas Decimal
-  peso_total_compras Decimal
-  peso_total_vendas Decimal
-  lucro_total Decimal
-  proj_lucro Decimal
-  proj_venda Decimal
-  qnt_compras Decimal
-  qnt_vendas Decimal
+  //valor_pago Decimal
+  //valor_recebido Decimal
+  //valor_total_compras Decimal
+  //valor_total_vendas Decimal
+  //peso_total_compras Decimal
+  //peso_total_vendas Decimal
+  //lucro_total Decimal
+  //proj_lucro Decimal
+  //proj_venda Decimal
+  //qnt_compras Decimal
+  //qnt_vendas Decimal
   
 
 
+}
+enum DirecaoFinanceira {
+  ENTRADA
+  SAIDA
 }
 enum TipoConta {
   PAGAR
@@ -308,11 +326,7 @@ enum TipoStatusPedido {
   PAGO
 }
 
-enum TipoMovimentacao {
-  ENTRADA
-  SAIDA
-  ESTORNO
-}
+
 
 enum FormaPagamento {
   DINHEIRO
