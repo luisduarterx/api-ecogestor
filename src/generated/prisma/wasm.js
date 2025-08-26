@@ -232,8 +232,10 @@ exports.Prisma.ItemPedidoScalarFieldEnum = {
   materialID: 'materialID',
   preco: 'preco',
   quantidade: 'quantidade',
+  pesoBruto: 'pesoBruto',
   tara: 'tara',
-  impureza: 'impureza'
+  impureza: 'impureza',
+  subtotal: 'subtotal'
 };
 
 exports.Prisma.PedidoScalarFieldEnum = {
@@ -299,12 +301,14 @@ exports.Prisma.CategoriaCaixaScalarFieldEnum = {
 exports.Prisma.MovimentacaoEstoqueScalarFieldEnum = {
   id: 'id',
   materialID: 'materialID',
-  tipo: 'tipo',
+  tipoMovimentacao: 'tipoMovimentacao',
+  origem: 'origem',
+  origemID: 'origemID',
+  devolucaoID: 'devolucaoID',
   quantidade: 'quantidade',
   createdAt: 'createdAt',
-  origemID: 'origemID',
-  origemTipo: 'origemTipo',
-  conversaoEstoqueId: 'conversaoEstoqueId'
+  devolvidaEm: 'devolvidaEm',
+  observacao: 'observacao'
 };
 
 exports.Prisma.ConversaoEstoqueScalarFieldEnum = {
@@ -366,8 +370,7 @@ exports.TipoPedido = exports.$Enums.TipoPedido = {
 
 exports.TipoStatusPedido = exports.$Enums.TipoStatusPedido = {
   ABERTO: 'ABERTO',
-  FECHADO: 'FECHADO',
-  PAGO: 'PAGO'
+  FECHADO: 'FECHADO'
 };
 
 exports.TipoConta = exports.$Enums.TipoConta = {
@@ -382,24 +385,17 @@ exports.FormaPagamento = exports.$Enums.FormaPagamento = {
   ABATER: 'ABATER'
 };
 
-exports.DirecaoFinanceira = exports.$Enums.DirecaoFinanceira = {
+exports.DirecaoMovimentacao = exports.$Enums.DirecaoMovimentacao = {
   ENTRADA: 'ENTRADA',
   SAIDA: 'SAIDA'
 };
 
-exports.TipoMovimentacaoEstoque = exports.$Enums.TipoMovimentacaoEstoque = {
-  VENDA: 'VENDA',
-  COMPRA: 'COMPRA',
-  ENTRADA_MANUAL: 'ENTRADA_MANUAL',
-  SAIDA_MANUAL: 'SAIDA_MANUAL',
-  ENTRADA_CONVERSAO: 'ENTRADA_CONVERSAO',
-  SAIDA_CONVERSAO: 'SAIDA_CONVERSAO'
-};
-
 exports.OrigemMovimentacaoEstoque = exports.$Enums.OrigemMovimentacaoEstoque = {
   PEDIDO: 'PEDIDO',
+  CONVERSAO: 'CONVERSAO',
+  AVULSO: 'AVULSO',
   AJUSTE: 'AJUSTE',
-  CONVERSAO: 'CONVERSAO'
+  DEVOLUCAO: 'DEVOLUCAO'
 };
 
 exports.StatusCaixa = exports.$Enums.StatusCaixa = {

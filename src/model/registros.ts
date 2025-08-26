@@ -300,3 +300,45 @@ export const findAllRegisters = async (page: number, take: number) => {
     throw error;
   }
 };
+export const findRegisterByID = async (id: number) => {
+  try {
+    const registro = await prisma.registro.findUnique({
+      where: { id, deletedAt: null },
+      select: {
+        id: true,
+        nome_razao: true,
+        dados_pagamento: true,
+        saldo: true,
+        juridica: true,
+        fisica: true,
+        tipo: true,
+      },
+    });
+
+    if (!registro) {
+      throw new NotFound("Registro não encontrado!");
+    }
+
+    return registro;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+export const findRegisterTable = async (id: number) => {
+  try {
+    const regTable = await prisma.registro.findUnique({
+      where: { id },
+      select: { tabelaID: true },
+    });
+
+    if (!regTable) {
+      throw new Error();
+    }
+
+    return regTable.tabelaID;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};

@@ -1,0 +1,87 @@
+PROXIMOS PASSOS
+
+
+
+
+// IMPLEMENTAR RBAC COM PERMISSOES E VERIFICACOES DE PERMISSOES NOS ENDPOINTS JA CRIADOS
+continuar recriacao do schema de movimentacao de estoque
+
+
+entender mais sobre o fluxo de caixa
+
+// lembrete
+
+JA COMECEI A FECHAR O PEDIDO
+
+PRECISO ENVIAR ESSE JSON NA REQUISICAO COM OS PAGAMENTOS
+{
+	"pagamento":[
+		{"forma":"PIX","valor":10.40},
+		{"forma":"DINHEIRO",valor:10.00}
+	]
+}
+NAO PERMITIR ESTORNO DE MOVIMENTACAO DE PEDIDO/ DEVERA SER FEITO REABERTURA DO PEDIDO OU CANCELAMENTO
+AO ADICIONAR ITEM DE VENDA ELE PRECISA BUSCAR O PRECO DE VENDA E NAO O DE COMPRA
+
+TERMINAR DE DESENVOLVER O FECHAMENTO DE PEDIDO
+
+PENSAR SOBRE O REABRIR PEDIDO, COMO SE COMPORTARA O SISTEMA EM RELACAO AO ESTOQUE E FINANCEIRO
+
+
+PERMISSOES
+
+- USUARIOS
+    * read:User
+    * edit:User
+    * create:User
+    * delete:User
+    * create:Role
+    * asign:Permissions
+    * edit:Role
+    * delete:Role
+    * read:Role
+- FINANCEIRO
+    * read:Transactions
+    * create:Transactions
+    * edit:Transactions
+    * delete:Transactions
+    * create:ClosureCash
+    * edit:ClosureCash
+    
+
+- PEDIDO
+    * read:Order
+    * edit:Order
+    * create:Order
+    * delete:Order
+    * edit:PriceOnOrder
+- ESTOQUE
+    * read:Stock
+    * create:StockMovement
+    * create:StockConversion
+    * delete:TotalStock
+    * delete:ResetAllStock
+
+- REGISTROS
+    * create:Record
+    * edit:Record
+    * read:Record
+    * delete:Record
+    * create:Unidentified
+    
+- TABELAS
+    * create:Table
+    * edit:Table
+    * edit:PriceInTable
+    * asign:Table
+    * delete:Table
+    * read:Table
+- MATERIAIS
+    * create:Material
+    * edit:Material
+    * create:MaterialGroup
+    * edit:MaterialGroup
+    * delete:Material
+    * delete:MaterialGroup
+    * read:Material
+    * read:MaterialGroup

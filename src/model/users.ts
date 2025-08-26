@@ -1,6 +1,6 @@
 import { prisma } from "../libs/prisma";
 
-import { InternalError, UserNotFound } from "../error";
+import { InternalError, UnAuthorized, UserNotFound } from "../error";
 import { encriptarSenha } from "../services/password";
 import bcrypt from "bcrypt";
 import { error } from "console";
@@ -182,4 +182,25 @@ export const editUserData = async (data: UserDataEdit) => {
     console.error("Erro inesperado:", error);
     throw new InternalError("Erro inesperado no servidor.");
   }
+};
+export const userHasPermission = async (userID: number, permission: string) => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: userID },
+      select: {
+        cargo: {
+          select: {
+            id: true,
+            nome: true,
+            permissoes: { select: { nome: true } },
+          },
+        },
+      },
+    });
+    if (!user?.cargo) {
+      throw new UnAuthorized();
+    }
+
+    return user.cargo.permissoes.some((p) => p.nome === permission);
+  } catch (error) {}
 };

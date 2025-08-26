@@ -10,6 +10,7 @@ import { categoriasRoutes } from "./routes/categorias";
 import { materiaisRoutes } from "./routes/materiais";
 import { caixasRoutes } from "./routes/caixa";
 import { movimRoutes } from "./routes/movFinanceiro";
+import { pedidosRoutes } from "./routes/pedidos";
 
 const server = express();
 
@@ -25,6 +26,7 @@ server.use("/v1", categoriasRoutes);
 server.use("/v1", materiaisRoutes);
 server.use("/v1", caixasRoutes);
 server.use("/v1", movimRoutes);
+server.use("/v1", pedidosRoutes);
 
 server.listen(3000, () => {
   console.log("EcoGestor API rodando...");

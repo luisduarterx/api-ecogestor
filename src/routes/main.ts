@@ -1,4 +1,5 @@
 import { Request, Response, Router } from "express";
+import { popular } from "../inicial";
 
 export const mainRoutes = Router();
 

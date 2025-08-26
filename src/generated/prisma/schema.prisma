@@ -150,8 +150,10 @@ model ItemPedido {
   materialID Int
   preco      Decimal
   quantidade Decimal
+  pesoBruto  Decimal
   tara       Decimal
   impureza   Decimal
+  subtotal   Decimal
   material   Material @relation(fields: [materialID], references: [id])
   pedido     Pedido   @relation(fields: [pedidoID], references: [id], onDelete: Cascade)
 }
@@ -161,10 +163,10 @@ model Pedido {
   regID       Int?
   tipo        TipoPedido
   valor_total Decimal           @default(0)
-  status      TipoStatusPedido
+  status      TipoStatusPedido  @default(ABERTO)
   userID      Int
   criado_em   DateTime          @default(now())
-  atualizado  DateTime          @default(now())
+  atualizado  DateTime          @updatedAt
   items       ItemPedido[]
   pagamentos  ContaFinanceira[]
   registro    Registro?         @relation(fields: [regID], references: [id])
@@ -223,7 +225,7 @@ model MovimentacaoFinanceira {
 model Caixa_TipoMovimentacao {
   id            Int                      @id @default(autoincrement())
   nome          String                   @unique
-  tipo          DirecaoFinanceira
+  tipo          DirecaoMovimentacao
   movimentacoes MovimentacaoFinanceira[]
 }
 
@@ -235,26 +237,28 @@ model CategoriaCaixa {
 }
 
 model MovimentacaoEstoque {
-  id                 Int                       @id @default(autoincrement())
-  materialID         Int
-  tipo               TipoMovimentacaoEstoque
-  quantidade         Decimal
-  createdAt          DateTime                  @default(now())
-  origemID           Int?
-  origemTipo         OrigemMovimentacaoEstoque
-  conversaoEstoqueId Int?
-  conversaoEstoque   ConversaoEstoque?         @relation(fields: [conversaoEstoqueId], references: [id])
-  material           Material                  @relation(fields: [materialID], references: [id])
+  id                    Int                       @id @default(autoincrement())
+  materialID            Int
+  tipoMovimentacao      DirecaoMovimentacao
+  origem                OrigemMovimentacaoEstoque
+  origemID              Int?
+  devolucaoID           Int?                      @unique
+  quantidade            Decimal
+  createdAt             DateTime                  @default(now())
+  devolvidaEm           DateTime?
+  observacao            String?
+  material              Material                  @relation(fields: [materialID], references: [id])
+  devolucao             MovimentacaoEstoque?      @relation("Devolucao", fields: [devolucaoID], references: [id])
+  movimentacaoDevolvida MovimentacaoEstoque?      @relation("Devolucao")
 }
 
 model ConversaoEstoque {
-  id            Int                   @id @default(autoincrement())
+  id            Int      @id @default(autoincrement())
   mat_origemID  Int
   mat_destinoID Int
   quantidade    Decimal
   descricao     String?
-  createdAt     DateTime              @default(now())
-  movimentacoes MovimentacaoEstoque[]
+  createdAt     DateTime @default(now())
 }
 
 model LivroCaixa {
@@ -297,7 +301,7 @@ model Fechamento {
   //qnt_vendas Decimal
 }
 
-enum DirecaoFinanceira {
+enum DirecaoMovimentacao {
   ENTRADA
   SAIDA
 }
@@ -325,7 +329,6 @@ enum TipoPedido {
 enum TipoStatusPedido {
   ABERTO
   FECHADO
-  PAGO
 }
 
 enum FormaPagamento {
@@ -346,6 +349,8 @@ enum TipoMovimentacaoEstoque {
 
 enum OrigemMovimentacaoEstoque {
   PEDIDO
-  AJUSTE
   CONVERSAO
+  AVULSO
+  AJUSTE
+  DEVOLUCAO
 }

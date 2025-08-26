@@ -138,12 +138,12 @@ export type Fechamento = $Result.DefaultSelection<Prisma.$FechamentoPayload>
  * Enums
  */
 export namespace $Enums {
-  export const DirecaoFinanceira: {
+  export const DirecaoMovimentacao: {
   ENTRADA: 'ENTRADA',
   SAIDA: 'SAIDA'
 };
 
-export type DirecaoFinanceira = (typeof DirecaoFinanceira)[keyof typeof DirecaoFinanceira]
+export type DirecaoMovimentacao = (typeof DirecaoMovimentacao)[keyof typeof DirecaoMovimentacao]
 
 
 export const TipoConta: {
@@ -180,8 +180,7 @@ export type TipoPedido = (typeof TipoPedido)[keyof typeof TipoPedido]
 
 export const TipoStatusPedido: {
   ABERTO: 'ABERTO',
-  FECHADO: 'FECHADO',
-  PAGO: 'PAGO'
+  FECHADO: 'FECHADO'
 };
 
 export type TipoStatusPedido = (typeof TipoStatusPedido)[keyof typeof TipoStatusPedido]
@@ -211,17 +210,19 @@ export type TipoMovimentacaoEstoque = (typeof TipoMovimentacaoEstoque)[keyof typ
 
 export const OrigemMovimentacaoEstoque: {
   PEDIDO: 'PEDIDO',
+  CONVERSAO: 'CONVERSAO',
+  AVULSO: 'AVULSO',
   AJUSTE: 'AJUSTE',
-  CONVERSAO: 'CONVERSAO'
+  DEVOLUCAO: 'DEVOLUCAO'
 };
 
 export type OrigemMovimentacaoEstoque = (typeof OrigemMovimentacaoEstoque)[keyof typeof OrigemMovimentacaoEstoque]
 
 }
 
-export type DirecaoFinanceira = $Enums.DirecaoFinanceira
+export type DirecaoMovimentacao = $Enums.DirecaoMovimentacao
 
-export const DirecaoFinanceira: typeof $Enums.DirecaoFinanceira
+export const DirecaoMovimentacao: typeof $Enums.DirecaoMovimentacao
 
 export type TipoConta = $Enums.TipoConta
 
@@ -3497,37 +3498,6 @@ export namespace Prisma {
    */
   export type CategoriaCaixaCountOutputTypeCountMovimentacoesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: MovimentacaoFinanceiraWhereInput
-  }
-
-
-  /**
-   * Count Type ConversaoEstoqueCountOutputType
-   */
-
-  export type ConversaoEstoqueCountOutputType = {
-    movimentacoes: number
-  }
-
-  export type ConversaoEstoqueCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    movimentacoes?: boolean | ConversaoEstoqueCountOutputTypeCountMovimentacoesArgs
-  }
-
-  // Custom InputTypes
-  /**
-   * ConversaoEstoqueCountOutputType without action
-   */
-  export type ConversaoEstoqueCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ConversaoEstoqueCountOutputType
-     */
-    select?: ConversaoEstoqueCountOutputTypeSelect<ExtArgs> | null
-  }
-
-  /**
-   * ConversaoEstoqueCountOutputType without action
-   */
-  export type ConversaoEstoqueCountOutputTypeCountMovimentacoesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: MovimentacaoEstoqueWhereInput
   }
 
 
@@ -18347,8 +18317,10 @@ export namespace Prisma {
     materialID: number | null
     preco: Decimal | null
     quantidade: Decimal | null
+    pesoBruto: Decimal | null
     tara: Decimal | null
     impureza: Decimal | null
+    subtotal: Decimal | null
   }
 
   export type ItemPedidoSumAggregateOutputType = {
@@ -18357,8 +18329,10 @@ export namespace Prisma {
     materialID: number | null
     preco: Decimal | null
     quantidade: Decimal | null
+    pesoBruto: Decimal | null
     tara: Decimal | null
     impureza: Decimal | null
+    subtotal: Decimal | null
   }
 
   export type ItemPedidoMinAggregateOutputType = {
@@ -18367,8 +18341,10 @@ export namespace Prisma {
     materialID: number | null
     preco: Decimal | null
     quantidade: Decimal | null
+    pesoBruto: Decimal | null
     tara: Decimal | null
     impureza: Decimal | null
+    subtotal: Decimal | null
   }
 
   export type ItemPedidoMaxAggregateOutputType = {
@@ -18377,8 +18353,10 @@ export namespace Prisma {
     materialID: number | null
     preco: Decimal | null
     quantidade: Decimal | null
+    pesoBruto: Decimal | null
     tara: Decimal | null
     impureza: Decimal | null
+    subtotal: Decimal | null
   }
 
   export type ItemPedidoCountAggregateOutputType = {
@@ -18387,8 +18365,10 @@ export namespace Prisma {
     materialID: number
     preco: number
     quantidade: number
+    pesoBruto: number
     tara: number
     impureza: number
+    subtotal: number
     _all: number
   }
 
@@ -18399,8 +18379,10 @@ export namespace Prisma {
     materialID?: true
     preco?: true
     quantidade?: true
+    pesoBruto?: true
     tara?: true
     impureza?: true
+    subtotal?: true
   }
 
   export type ItemPedidoSumAggregateInputType = {
@@ -18409,8 +18391,10 @@ export namespace Prisma {
     materialID?: true
     preco?: true
     quantidade?: true
+    pesoBruto?: true
     tara?: true
     impureza?: true
+    subtotal?: true
   }
 
   export type ItemPedidoMinAggregateInputType = {
@@ -18419,8 +18403,10 @@ export namespace Prisma {
     materialID?: true
     preco?: true
     quantidade?: true
+    pesoBruto?: true
     tara?: true
     impureza?: true
+    subtotal?: true
   }
 
   export type ItemPedidoMaxAggregateInputType = {
@@ -18429,8 +18415,10 @@ export namespace Prisma {
     materialID?: true
     preco?: true
     quantidade?: true
+    pesoBruto?: true
     tara?: true
     impureza?: true
+    subtotal?: true
   }
 
   export type ItemPedidoCountAggregateInputType = {
@@ -18439,8 +18427,10 @@ export namespace Prisma {
     materialID?: true
     preco?: true
     quantidade?: true
+    pesoBruto?: true
     tara?: true
     impureza?: true
+    subtotal?: true
     _all?: true
   }
 
@@ -18536,8 +18526,10 @@ export namespace Prisma {
     materialID: number
     preco: Decimal
     quantidade: Decimal
+    pesoBruto: Decimal
     tara: Decimal
     impureza: Decimal
+    subtotal: Decimal
     _count: ItemPedidoCountAggregateOutputType | null
     _avg: ItemPedidoAvgAggregateOutputType | null
     _sum: ItemPedidoSumAggregateOutputType | null
@@ -18565,8 +18557,10 @@ export namespace Prisma {
     materialID?: boolean
     preco?: boolean
     quantidade?: boolean
+    pesoBruto?: boolean
     tara?: boolean
     impureza?: boolean
+    subtotal?: boolean
     material?: boolean | MaterialDefaultArgs<ExtArgs>
     pedido?: boolean | PedidoDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["itemPedido"]>
@@ -18577,8 +18571,10 @@ export namespace Prisma {
     materialID?: boolean
     preco?: boolean
     quantidade?: boolean
+    pesoBruto?: boolean
     tara?: boolean
     impureza?: boolean
+    subtotal?: boolean
     material?: boolean | MaterialDefaultArgs<ExtArgs>
     pedido?: boolean | PedidoDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["itemPedido"]>
@@ -18589,8 +18585,10 @@ export namespace Prisma {
     materialID?: boolean
     preco?: boolean
     quantidade?: boolean
+    pesoBruto?: boolean
     tara?: boolean
     impureza?: boolean
+    subtotal?: boolean
     material?: boolean | MaterialDefaultArgs<ExtArgs>
     pedido?: boolean | PedidoDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["itemPedido"]>
@@ -18601,11 +18599,13 @@ export namespace Prisma {
     materialID?: boolean
     preco?: boolean
     quantidade?: boolean
+    pesoBruto?: boolean
     tara?: boolean
     impureza?: boolean
+    subtotal?: boolean
   }
 
-  export type ItemPedidoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "pedidoID" | "materialID" | "preco" | "quantidade" | "tara" | "impureza", ExtArgs["result"]["itemPedido"]>
+  export type ItemPedidoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "pedidoID" | "materialID" | "preco" | "quantidade" | "pesoBruto" | "tara" | "impureza" | "subtotal", ExtArgs["result"]["itemPedido"]>
   export type ItemPedidoInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     material?: boolean | MaterialDefaultArgs<ExtArgs>
     pedido?: boolean | PedidoDefaultArgs<ExtArgs>
@@ -18631,8 +18631,10 @@ export namespace Prisma {
       materialID: number
       preco: Prisma.Decimal
       quantidade: Prisma.Decimal
+      pesoBruto: Prisma.Decimal
       tara: Prisma.Decimal
       impureza: Prisma.Decimal
+      subtotal: Prisma.Decimal
     }, ExtArgs["result"]["itemPedido"]>
     composites: {}
   }
@@ -19063,8 +19065,10 @@ export namespace Prisma {
     readonly materialID: FieldRef<"ItemPedido", 'Int'>
     readonly preco: FieldRef<"ItemPedido", 'Decimal'>
     readonly quantidade: FieldRef<"ItemPedido", 'Decimal'>
+    readonly pesoBruto: FieldRef<"ItemPedido", 'Decimal'>
     readonly tara: FieldRef<"ItemPedido", 'Decimal'>
     readonly impureza: FieldRef<"ItemPedido", 'Decimal'>
+    readonly subtotal: FieldRef<"ItemPedido", 'Decimal'>
   }
     
 
@@ -24459,13 +24463,13 @@ export namespace Prisma {
   export type Caixa_TipoMovimentacaoMinAggregateOutputType = {
     id: number | null
     nome: string | null
-    tipo: $Enums.DirecaoFinanceira | null
+    tipo: $Enums.DirecaoMovimentacao | null
   }
 
   export type Caixa_TipoMovimentacaoMaxAggregateOutputType = {
     id: number | null
     nome: string | null
-    tipo: $Enums.DirecaoFinanceira | null
+    tipo: $Enums.DirecaoMovimentacao | null
   }
 
   export type Caixa_TipoMovimentacaoCountAggregateOutputType = {
@@ -24592,7 +24596,7 @@ export namespace Prisma {
   export type Caixa_TipoMovimentacaoGroupByOutputType = {
     id: number
     nome: string
-    tipo: $Enums.DirecaoFinanceira
+    tipo: $Enums.DirecaoMovimentacao
     _count: Caixa_TipoMovimentacaoCountAggregateOutputType | null
     _avg: Caixa_TipoMovimentacaoAvgAggregateOutputType | null
     _sum: Caixa_TipoMovimentacaoSumAggregateOutputType | null
@@ -24656,7 +24660,7 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: number
       nome: string
-      tipo: $Enums.DirecaoFinanceira
+      tipo: $Enums.DirecaoMovimentacao
     }, ExtArgs["result"]["caixa_TipoMovimentacao"]>
     composites: {}
   }
@@ -25083,7 +25087,7 @@ export namespace Prisma {
   interface Caixa_TipoMovimentacaoFieldRefs {
     readonly id: FieldRef<"Caixa_TipoMovimentacao", 'Int'>
     readonly nome: FieldRef<"Caixa_TipoMovimentacao", 'String'>
-    readonly tipo: FieldRef<"Caixa_TipoMovimentacao", 'DirecaoFinanceira'>
+    readonly tipo: FieldRef<"Caixa_TipoMovimentacao", 'DirecaoMovimentacao'>
   }
     
 
@@ -26607,50 +26611,56 @@ export namespace Prisma {
   export type MovimentacaoEstoqueAvgAggregateOutputType = {
     id: number | null
     materialID: number | null
-    quantidade: Decimal | null
     origemID: number | null
-    conversaoEstoqueId: number | null
+    devolucaoID: number | null
+    quantidade: Decimal | null
   }
 
   export type MovimentacaoEstoqueSumAggregateOutputType = {
     id: number | null
     materialID: number | null
-    quantidade: Decimal | null
     origemID: number | null
-    conversaoEstoqueId: number | null
+    devolucaoID: number | null
+    quantidade: Decimal | null
   }
 
   export type MovimentacaoEstoqueMinAggregateOutputType = {
     id: number | null
     materialID: number | null
-    tipo: $Enums.TipoMovimentacaoEstoque | null
+    tipoMovimentacao: $Enums.DirecaoMovimentacao | null
+    origem: $Enums.OrigemMovimentacaoEstoque | null
+    origemID: number | null
+    devolucaoID: number | null
     quantidade: Decimal | null
     createdAt: Date | null
-    origemID: number | null
-    origemTipo: $Enums.OrigemMovimentacaoEstoque | null
-    conversaoEstoqueId: number | null
+    devolvidaEm: Date | null
+    observacao: string | null
   }
 
   export type MovimentacaoEstoqueMaxAggregateOutputType = {
     id: number | null
     materialID: number | null
-    tipo: $Enums.TipoMovimentacaoEstoque | null
+    tipoMovimentacao: $Enums.DirecaoMovimentacao | null
+    origem: $Enums.OrigemMovimentacaoEstoque | null
+    origemID: number | null
+    devolucaoID: number | null
     quantidade: Decimal | null
     createdAt: Date | null
-    origemID: number | null
-    origemTipo: $Enums.OrigemMovimentacaoEstoque | null
-    conversaoEstoqueId: number | null
+    devolvidaEm: Date | null
+    observacao: string | null
   }
 
   export type MovimentacaoEstoqueCountAggregateOutputType = {
     id: number
     materialID: number
-    tipo: number
+    tipoMovimentacao: number
+    origem: number
+    origemID: number
+    devolucaoID: number
     quantidade: number
     createdAt: number
-    origemID: number
-    origemTipo: number
-    conversaoEstoqueId: number
+    devolvidaEm: number
+    observacao: number
     _all: number
   }
 
@@ -26658,50 +26668,56 @@ export namespace Prisma {
   export type MovimentacaoEstoqueAvgAggregateInputType = {
     id?: true
     materialID?: true
-    quantidade?: true
     origemID?: true
-    conversaoEstoqueId?: true
+    devolucaoID?: true
+    quantidade?: true
   }
 
   export type MovimentacaoEstoqueSumAggregateInputType = {
     id?: true
     materialID?: true
-    quantidade?: true
     origemID?: true
-    conversaoEstoqueId?: true
+    devolucaoID?: true
+    quantidade?: true
   }
 
   export type MovimentacaoEstoqueMinAggregateInputType = {
     id?: true
     materialID?: true
-    tipo?: true
+    tipoMovimentacao?: true
+    origem?: true
+    origemID?: true
+    devolucaoID?: true
     quantidade?: true
     createdAt?: true
-    origemID?: true
-    origemTipo?: true
-    conversaoEstoqueId?: true
+    devolvidaEm?: true
+    observacao?: true
   }
 
   export type MovimentacaoEstoqueMaxAggregateInputType = {
     id?: true
     materialID?: true
-    tipo?: true
+    tipoMovimentacao?: true
+    origem?: true
+    origemID?: true
+    devolucaoID?: true
     quantidade?: true
     createdAt?: true
-    origemID?: true
-    origemTipo?: true
-    conversaoEstoqueId?: true
+    devolvidaEm?: true
+    observacao?: true
   }
 
   export type MovimentacaoEstoqueCountAggregateInputType = {
     id?: true
     materialID?: true
-    tipo?: true
+    tipoMovimentacao?: true
+    origem?: true
+    origemID?: true
+    devolucaoID?: true
     quantidade?: true
     createdAt?: true
-    origemID?: true
-    origemTipo?: true
-    conversaoEstoqueId?: true
+    devolvidaEm?: true
+    observacao?: true
     _all?: true
   }
 
@@ -26794,12 +26810,14 @@ export namespace Prisma {
   export type MovimentacaoEstoqueGroupByOutputType = {
     id: number
     materialID: number
-    tipo: $Enums.TipoMovimentacaoEstoque
+    tipoMovimentacao: $Enums.DirecaoMovimentacao
+    origem: $Enums.OrigemMovimentacaoEstoque
+    origemID: number | null
+    devolucaoID: number | null
     quantidade: Decimal
     createdAt: Date
-    origemID: number | null
-    origemTipo: $Enums.OrigemMovimentacaoEstoque
-    conversaoEstoqueId: number | null
+    devolvidaEm: Date | null
+    observacao: string | null
     _count: MovimentacaoEstoqueCountAggregateOutputType | null
     _avg: MovimentacaoEstoqueAvgAggregateOutputType | null
     _sum: MovimentacaoEstoqueSumAggregateOutputType | null
@@ -26824,82 +26842,95 @@ export namespace Prisma {
   export type MovimentacaoEstoqueSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     materialID?: boolean
-    tipo?: boolean
+    tipoMovimentacao?: boolean
+    origem?: boolean
+    origemID?: boolean
+    devolucaoID?: boolean
     quantidade?: boolean
     createdAt?: boolean
-    origemID?: boolean
-    origemTipo?: boolean
-    conversaoEstoqueId?: boolean
-    conversaoEstoque?: boolean | MovimentacaoEstoque$conversaoEstoqueArgs<ExtArgs>
+    devolvidaEm?: boolean
+    observacao?: boolean
     material?: boolean | MaterialDefaultArgs<ExtArgs>
+    devolucao?: boolean | MovimentacaoEstoque$devolucaoArgs<ExtArgs>
+    movimentacaoDevolvida?: boolean | MovimentacaoEstoque$movimentacaoDevolvidaArgs<ExtArgs>
   }, ExtArgs["result"]["movimentacaoEstoque"]>
 
   export type MovimentacaoEstoqueSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     materialID?: boolean
-    tipo?: boolean
+    tipoMovimentacao?: boolean
+    origem?: boolean
+    origemID?: boolean
+    devolucaoID?: boolean
     quantidade?: boolean
     createdAt?: boolean
-    origemID?: boolean
-    origemTipo?: boolean
-    conversaoEstoqueId?: boolean
-    conversaoEstoque?: boolean | MovimentacaoEstoque$conversaoEstoqueArgs<ExtArgs>
+    devolvidaEm?: boolean
+    observacao?: boolean
     material?: boolean | MaterialDefaultArgs<ExtArgs>
+    devolucao?: boolean | MovimentacaoEstoque$devolucaoArgs<ExtArgs>
   }, ExtArgs["result"]["movimentacaoEstoque"]>
 
   export type MovimentacaoEstoqueSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     materialID?: boolean
-    tipo?: boolean
+    tipoMovimentacao?: boolean
+    origem?: boolean
+    origemID?: boolean
+    devolucaoID?: boolean
     quantidade?: boolean
     createdAt?: boolean
-    origemID?: boolean
-    origemTipo?: boolean
-    conversaoEstoqueId?: boolean
-    conversaoEstoque?: boolean | MovimentacaoEstoque$conversaoEstoqueArgs<ExtArgs>
+    devolvidaEm?: boolean
+    observacao?: boolean
     material?: boolean | MaterialDefaultArgs<ExtArgs>
+    devolucao?: boolean | MovimentacaoEstoque$devolucaoArgs<ExtArgs>
   }, ExtArgs["result"]["movimentacaoEstoque"]>
 
   export type MovimentacaoEstoqueSelectScalar = {
     id?: boolean
     materialID?: boolean
-    tipo?: boolean
+    tipoMovimentacao?: boolean
+    origem?: boolean
+    origemID?: boolean
+    devolucaoID?: boolean
     quantidade?: boolean
     createdAt?: boolean
-    origemID?: boolean
-    origemTipo?: boolean
-    conversaoEstoqueId?: boolean
+    devolvidaEm?: boolean
+    observacao?: boolean
   }
 
-  export type MovimentacaoEstoqueOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "materialID" | "tipo" | "quantidade" | "createdAt" | "origemID" | "origemTipo" | "conversaoEstoqueId", ExtArgs["result"]["movimentacaoEstoque"]>
+  export type MovimentacaoEstoqueOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "materialID" | "tipoMovimentacao" | "origem" | "origemID" | "devolucaoID" | "quantidade" | "createdAt" | "devolvidaEm" | "observacao", ExtArgs["result"]["movimentacaoEstoque"]>
   export type MovimentacaoEstoqueInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    conversaoEstoque?: boolean | MovimentacaoEstoque$conversaoEstoqueArgs<ExtArgs>
     material?: boolean | MaterialDefaultArgs<ExtArgs>
+    devolucao?: boolean | MovimentacaoEstoque$devolucaoArgs<ExtArgs>
+    movimentacaoDevolvida?: boolean | MovimentacaoEstoque$movimentacaoDevolvidaArgs<ExtArgs>
   }
   export type MovimentacaoEstoqueIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    conversaoEstoque?: boolean | MovimentacaoEstoque$conversaoEstoqueArgs<ExtArgs>
     material?: boolean | MaterialDefaultArgs<ExtArgs>
+    devolucao?: boolean | MovimentacaoEstoque$devolucaoArgs<ExtArgs>
   }
   export type MovimentacaoEstoqueIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    conversaoEstoque?: boolean | MovimentacaoEstoque$conversaoEstoqueArgs<ExtArgs>
     material?: boolean | MaterialDefaultArgs<ExtArgs>
+    devolucao?: boolean | MovimentacaoEstoque$devolucaoArgs<ExtArgs>
   }
 
   export type $MovimentacaoEstoquePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "MovimentacaoEstoque"
     objects: {
-      conversaoEstoque: Prisma.$ConversaoEstoquePayload<ExtArgs> | null
       material: Prisma.$MaterialPayload<ExtArgs>
+      devolucao: Prisma.$MovimentacaoEstoquePayload<ExtArgs> | null
+      movimentacaoDevolvida: Prisma.$MovimentacaoEstoquePayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
       materialID: number
-      tipo: $Enums.TipoMovimentacaoEstoque
+      tipoMovimentacao: $Enums.DirecaoMovimentacao
+      origem: $Enums.OrigemMovimentacaoEstoque
+      origemID: number | null
+      devolucaoID: number | null
       quantidade: Prisma.Decimal
       createdAt: Date
-      origemID: number | null
-      origemTipo: $Enums.OrigemMovimentacaoEstoque
-      conversaoEstoqueId: number | null
+      devolvidaEm: Date | null
+      observacao: string | null
     }, ExtArgs["result"]["movimentacaoEstoque"]>
     composites: {}
   }
@@ -27294,8 +27325,9 @@ export namespace Prisma {
    */
   export interface Prisma__MovimentacaoEstoqueClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    conversaoEstoque<T extends MovimentacaoEstoque$conversaoEstoqueArgs<ExtArgs> = {}>(args?: Subset<T, MovimentacaoEstoque$conversaoEstoqueArgs<ExtArgs>>): Prisma__ConversaoEstoqueClient<$Result.GetResult<Prisma.$ConversaoEstoquePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     material<T extends MaterialDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MaterialDefaultArgs<ExtArgs>>): Prisma__MaterialClient<$Result.GetResult<Prisma.$MaterialPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    devolucao<T extends MovimentacaoEstoque$devolucaoArgs<ExtArgs> = {}>(args?: Subset<T, MovimentacaoEstoque$devolucaoArgs<ExtArgs>>): Prisma__MovimentacaoEstoqueClient<$Result.GetResult<Prisma.$MovimentacaoEstoquePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    movimentacaoDevolvida<T extends MovimentacaoEstoque$movimentacaoDevolvidaArgs<ExtArgs> = {}>(args?: Subset<T, MovimentacaoEstoque$movimentacaoDevolvidaArgs<ExtArgs>>): Prisma__MovimentacaoEstoqueClient<$Result.GetResult<Prisma.$MovimentacaoEstoquePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -27327,12 +27359,14 @@ export namespace Prisma {
   interface MovimentacaoEstoqueFieldRefs {
     readonly id: FieldRef<"MovimentacaoEstoque", 'Int'>
     readonly materialID: FieldRef<"MovimentacaoEstoque", 'Int'>
-    readonly tipo: FieldRef<"MovimentacaoEstoque", 'TipoMovimentacaoEstoque'>
+    readonly tipoMovimentacao: FieldRef<"MovimentacaoEstoque", 'DirecaoMovimentacao'>
+    readonly origem: FieldRef<"MovimentacaoEstoque", 'OrigemMovimentacaoEstoque'>
+    readonly origemID: FieldRef<"MovimentacaoEstoque", 'Int'>
+    readonly devolucaoID: FieldRef<"MovimentacaoEstoque", 'Int'>
     readonly quantidade: FieldRef<"MovimentacaoEstoque", 'Decimal'>
     readonly createdAt: FieldRef<"MovimentacaoEstoque", 'DateTime'>
-    readonly origemID: FieldRef<"MovimentacaoEstoque", 'Int'>
-    readonly origemTipo: FieldRef<"MovimentacaoEstoque", 'OrigemMovimentacaoEstoque'>
-    readonly conversaoEstoqueId: FieldRef<"MovimentacaoEstoque", 'Int'>
+    readonly devolvidaEm: FieldRef<"MovimentacaoEstoque", 'DateTime'>
+    readonly observacao: FieldRef<"MovimentacaoEstoque", 'String'>
   }
     
 
@@ -27729,22 +27763,41 @@ export namespace Prisma {
   }
 
   /**
-   * MovimentacaoEstoque.conversaoEstoque
+   * MovimentacaoEstoque.devolucao
    */
-  export type MovimentacaoEstoque$conversaoEstoqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type MovimentacaoEstoque$devolucaoArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ConversaoEstoque
+     * Select specific fields to fetch from the MovimentacaoEstoque
      */
-    select?: ConversaoEstoqueSelect<ExtArgs> | null
+    select?: MovimentacaoEstoqueSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the ConversaoEstoque
+     * Omit specific fields from the MovimentacaoEstoque
      */
-    omit?: ConversaoEstoqueOmit<ExtArgs> | null
+    omit?: MovimentacaoEstoqueOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ConversaoEstoqueInclude<ExtArgs> | null
-    where?: ConversaoEstoqueWhereInput
+    include?: MovimentacaoEstoqueInclude<ExtArgs> | null
+    where?: MovimentacaoEstoqueWhereInput
+  }
+
+  /**
+   * MovimentacaoEstoque.movimentacaoDevolvida
+   */
+  export type MovimentacaoEstoque$movimentacaoDevolvidaArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MovimentacaoEstoque
+     */
+    select?: MovimentacaoEstoqueSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MovimentacaoEstoque
+     */
+    omit?: MovimentacaoEstoqueOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MovimentacaoEstoqueInclude<ExtArgs> | null
+    where?: MovimentacaoEstoqueWhereInput
   }
 
   /**
@@ -27984,8 +28037,6 @@ export namespace Prisma {
     quantidade?: boolean
     descricao?: boolean
     createdAt?: boolean
-    movimentacoes?: boolean | ConversaoEstoque$movimentacoesArgs<ExtArgs>
-    _count?: boolean | ConversaoEstoqueCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["conversaoEstoque"]>
 
   export type ConversaoEstoqueSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -28016,18 +28067,10 @@ export namespace Prisma {
   }
 
   export type ConversaoEstoqueOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "mat_origemID" | "mat_destinoID" | "quantidade" | "descricao" | "createdAt", ExtArgs["result"]["conversaoEstoque"]>
-  export type ConversaoEstoqueInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    movimentacoes?: boolean | ConversaoEstoque$movimentacoesArgs<ExtArgs>
-    _count?: boolean | ConversaoEstoqueCountOutputTypeDefaultArgs<ExtArgs>
-  }
-  export type ConversaoEstoqueIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
-  export type ConversaoEstoqueIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
 
   export type $ConversaoEstoquePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "ConversaoEstoque"
-    objects: {
-      movimentacoes: Prisma.$MovimentacaoEstoquePayload<ExtArgs>[]
-    }
+    objects: {}
     scalars: $Extensions.GetPayloadResult<{
       id: number
       mat_origemID: number
@@ -28429,7 +28472,6 @@ export namespace Prisma {
    */
   export interface Prisma__ConversaoEstoqueClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    movimentacoes<T extends ConversaoEstoque$movimentacoesArgs<ExtArgs> = {}>(args?: Subset<T, ConversaoEstoque$movimentacoesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MovimentacaoEstoquePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -28482,10 +28524,6 @@ export namespace Prisma {
      */
     omit?: ConversaoEstoqueOmit<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ConversaoEstoqueInclude<ExtArgs> | null
-    /**
      * Filter, which ConversaoEstoque to fetch.
      */
     where: ConversaoEstoqueWhereUniqueInput
@@ -28504,10 +28542,6 @@ export namespace Prisma {
      */
     omit?: ConversaoEstoqueOmit<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ConversaoEstoqueInclude<ExtArgs> | null
-    /**
      * Filter, which ConversaoEstoque to fetch.
      */
     where: ConversaoEstoqueWhereUniqueInput
@@ -28525,10 +28559,6 @@ export namespace Prisma {
      * Omit specific fields from the ConversaoEstoque
      */
     omit?: ConversaoEstoqueOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ConversaoEstoqueInclude<ExtArgs> | null
     /**
      * Filter, which ConversaoEstoque to fetch.
      */
@@ -28578,10 +28608,6 @@ export namespace Prisma {
      */
     omit?: ConversaoEstoqueOmit<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ConversaoEstoqueInclude<ExtArgs> | null
-    /**
      * Filter, which ConversaoEstoque to fetch.
      */
     where?: ConversaoEstoqueWhereInput
@@ -28630,10 +28656,6 @@ export namespace Prisma {
      */
     omit?: ConversaoEstoqueOmit<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ConversaoEstoqueInclude<ExtArgs> | null
-    /**
      * Filter, which ConversaoEstoques to fetch.
      */
     where?: ConversaoEstoqueWhereInput
@@ -28676,10 +28698,6 @@ export namespace Prisma {
      * Omit specific fields from the ConversaoEstoque
      */
     omit?: ConversaoEstoqueOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ConversaoEstoqueInclude<ExtArgs> | null
     /**
      * The data needed to create a ConversaoEstoque.
      */
@@ -28728,10 +28746,6 @@ export namespace Prisma {
      * Omit specific fields from the ConversaoEstoque
      */
     omit?: ConversaoEstoqueOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ConversaoEstoqueInclude<ExtArgs> | null
     /**
      * The data needed to update a ConversaoEstoque.
      */
@@ -28799,10 +28813,6 @@ export namespace Prisma {
      */
     omit?: ConversaoEstoqueOmit<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ConversaoEstoqueInclude<ExtArgs> | null
-    /**
      * The filter to search for the ConversaoEstoque to update in case it exists.
      */
     where: ConversaoEstoqueWhereUniqueInput
@@ -28829,10 +28839,6 @@ export namespace Prisma {
      */
     omit?: ConversaoEstoqueOmit<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ConversaoEstoqueInclude<ExtArgs> | null
-    /**
      * Filter which ConversaoEstoque to delete.
      */
     where: ConversaoEstoqueWhereUniqueInput
@@ -28853,30 +28859,6 @@ export namespace Prisma {
   }
 
   /**
-   * ConversaoEstoque.movimentacoes
-   */
-  export type ConversaoEstoque$movimentacoesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the MovimentacaoEstoque
-     */
-    select?: MovimentacaoEstoqueSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the MovimentacaoEstoque
-     */
-    omit?: MovimentacaoEstoqueOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: MovimentacaoEstoqueInclude<ExtArgs> | null
-    where?: MovimentacaoEstoqueWhereInput
-    orderBy?: MovimentacaoEstoqueOrderByWithRelationInput | MovimentacaoEstoqueOrderByWithRelationInput[]
-    cursor?: MovimentacaoEstoqueWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: MovimentacaoEstoqueScalarFieldEnum | MovimentacaoEstoqueScalarFieldEnum[]
-  }
-
-  /**
    * ConversaoEstoque without action
    */
   export type ConversaoEstoqueDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -28888,10 +28870,6 @@ export namespace Prisma {
      * Omit specific fields from the ConversaoEstoque
      */
     omit?: ConversaoEstoqueOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ConversaoEstoqueInclude<ExtArgs> | null
   }
 
 
@@ -31453,8 +31431,10 @@ export namespace Prisma {
     materialID: 'materialID',
     preco: 'preco',
     quantidade: 'quantidade',
+    pesoBruto: 'pesoBruto',
     tara: 'tara',
-    impureza: 'impureza'
+    impureza: 'impureza',
+    subtotal: 'subtotal'
   };
 
   export type ItemPedidoScalarFieldEnum = (typeof ItemPedidoScalarFieldEnum)[keyof typeof ItemPedidoScalarFieldEnum]
@@ -31541,12 +31521,14 @@ export namespace Prisma {
   export const MovimentacaoEstoqueScalarFieldEnum: {
     id: 'id',
     materialID: 'materialID',
-    tipo: 'tipo',
+    tipoMovimentacao: 'tipoMovimentacao',
+    origem: 'origem',
+    origemID: 'origemID',
+    devolucaoID: 'devolucaoID',
     quantidade: 'quantidade',
     createdAt: 'createdAt',
-    origemID: 'origemID',
-    origemTipo: 'origemTipo',
-    conversaoEstoqueId: 'conversaoEstoqueId'
+    devolvidaEm: 'devolvidaEm',
+    observacao: 'observacao'
   };
 
   export type MovimentacaoEstoqueScalarFieldEnum = (typeof MovimentacaoEstoqueScalarFieldEnum)[keyof typeof MovimentacaoEstoqueScalarFieldEnum]
@@ -31757,30 +31739,16 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'DirecaoFinanceira'
+   * Reference to a field of type 'DirecaoMovimentacao'
    */
-  export type EnumDirecaoFinanceiraFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DirecaoFinanceira'>
+  export type EnumDirecaoMovimentacaoFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DirecaoMovimentacao'>
     
 
 
   /**
-   * Reference to a field of type 'DirecaoFinanceira[]'
+   * Reference to a field of type 'DirecaoMovimentacao[]'
    */
-  export type ListEnumDirecaoFinanceiraFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DirecaoFinanceira[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'TipoMovimentacaoEstoque'
-   */
-  export type EnumTipoMovimentacaoEstoqueFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TipoMovimentacaoEstoque'>
-    
-
-
-  /**
-   * Reference to a field of type 'TipoMovimentacaoEstoque[]'
-   */
-  export type ListEnumTipoMovimentacaoEstoqueFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TipoMovimentacaoEstoque[]'>
+  export type ListEnumDirecaoMovimentacaoFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DirecaoMovimentacao[]'>
     
 
 
@@ -32640,8 +32608,10 @@ export namespace Prisma {
     materialID?: IntFilter<"ItemPedido"> | number
     preco?: DecimalFilter<"ItemPedido"> | Decimal | DecimalJsLike | number | string
     quantidade?: DecimalFilter<"ItemPedido"> | Decimal | DecimalJsLike | number | string
+    pesoBruto?: DecimalFilter<"ItemPedido"> | Decimal | DecimalJsLike | number | string
     tara?: DecimalFilter<"ItemPedido"> | Decimal | DecimalJsLike | number | string
     impureza?: DecimalFilter<"ItemPedido"> | Decimal | DecimalJsLike | number | string
+    subtotal?: DecimalFilter<"ItemPedido"> | Decimal | DecimalJsLike | number | string
     material?: XOR<MaterialScalarRelationFilter, MaterialWhereInput>
     pedido?: XOR<PedidoScalarRelationFilter, PedidoWhereInput>
   }
@@ -32652,8 +32622,10 @@ export namespace Prisma {
     materialID?: SortOrder
     preco?: SortOrder
     quantidade?: SortOrder
+    pesoBruto?: SortOrder
     tara?: SortOrder
     impureza?: SortOrder
+    subtotal?: SortOrder
     material?: MaterialOrderByWithRelationInput
     pedido?: PedidoOrderByWithRelationInput
   }
@@ -32667,8 +32639,10 @@ export namespace Prisma {
     materialID?: IntFilter<"ItemPedido"> | number
     preco?: DecimalFilter<"ItemPedido"> | Decimal | DecimalJsLike | number | string
     quantidade?: DecimalFilter<"ItemPedido"> | Decimal | DecimalJsLike | number | string
+    pesoBruto?: DecimalFilter<"ItemPedido"> | Decimal | DecimalJsLike | number | string
     tara?: DecimalFilter<"ItemPedido"> | Decimal | DecimalJsLike | number | string
     impureza?: DecimalFilter<"ItemPedido"> | Decimal | DecimalJsLike | number | string
+    subtotal?: DecimalFilter<"ItemPedido"> | Decimal | DecimalJsLike | number | string
     material?: XOR<MaterialScalarRelationFilter, MaterialWhereInput>
     pedido?: XOR<PedidoScalarRelationFilter, PedidoWhereInput>
   }, "id">
@@ -32679,8 +32653,10 @@ export namespace Prisma {
     materialID?: SortOrder
     preco?: SortOrder
     quantidade?: SortOrder
+    pesoBruto?: SortOrder
     tara?: SortOrder
     impureza?: SortOrder
+    subtotal?: SortOrder
     _count?: ItemPedidoCountOrderByAggregateInput
     _avg?: ItemPedidoAvgOrderByAggregateInput
     _max?: ItemPedidoMaxOrderByAggregateInput
@@ -32697,8 +32673,10 @@ export namespace Prisma {
     materialID?: IntWithAggregatesFilter<"ItemPedido"> | number
     preco?: DecimalWithAggregatesFilter<"ItemPedido"> | Decimal | DecimalJsLike | number | string
     quantidade?: DecimalWithAggregatesFilter<"ItemPedido"> | Decimal | DecimalJsLike | number | string
+    pesoBruto?: DecimalWithAggregatesFilter<"ItemPedido"> | Decimal | DecimalJsLike | number | string
     tara?: DecimalWithAggregatesFilter<"ItemPedido"> | Decimal | DecimalJsLike | number | string
     impureza?: DecimalWithAggregatesFilter<"ItemPedido"> | Decimal | DecimalJsLike | number | string
+    subtotal?: DecimalWithAggregatesFilter<"ItemPedido"> | Decimal | DecimalJsLike | number | string
   }
 
   export type PedidoWhereInput = {
@@ -33051,7 +33029,7 @@ export namespace Prisma {
     NOT?: Caixa_TipoMovimentacaoWhereInput | Caixa_TipoMovimentacaoWhereInput[]
     id?: IntFilter<"Caixa_TipoMovimentacao"> | number
     nome?: StringFilter<"Caixa_TipoMovimentacao"> | string
-    tipo?: EnumDirecaoFinanceiraFilter<"Caixa_TipoMovimentacao"> | $Enums.DirecaoFinanceira
+    tipo?: EnumDirecaoMovimentacaoFilter<"Caixa_TipoMovimentacao"> | $Enums.DirecaoMovimentacao
     movimentacoes?: MovimentacaoFinanceiraListRelationFilter
   }
 
@@ -33068,7 +33046,7 @@ export namespace Prisma {
     AND?: Caixa_TipoMovimentacaoWhereInput | Caixa_TipoMovimentacaoWhereInput[]
     OR?: Caixa_TipoMovimentacaoWhereInput[]
     NOT?: Caixa_TipoMovimentacaoWhereInput | Caixa_TipoMovimentacaoWhereInput[]
-    tipo?: EnumDirecaoFinanceiraFilter<"Caixa_TipoMovimentacao"> | $Enums.DirecaoFinanceira
+    tipo?: EnumDirecaoMovimentacaoFilter<"Caixa_TipoMovimentacao"> | $Enums.DirecaoMovimentacao
     movimentacoes?: MovimentacaoFinanceiraListRelationFilter
   }, "id" | "nome">
 
@@ -33089,7 +33067,7 @@ export namespace Prisma {
     NOT?: Caixa_TipoMovimentacaoScalarWhereWithAggregatesInput | Caixa_TipoMovimentacaoScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"Caixa_TipoMovimentacao"> | number
     nome?: StringWithAggregatesFilter<"Caixa_TipoMovimentacao"> | string
-    tipo?: EnumDirecaoFinanceiraWithAggregatesFilter<"Caixa_TipoMovimentacao"> | $Enums.DirecaoFinanceira
+    tipo?: EnumDirecaoMovimentacaoWithAggregatesFilter<"Caixa_TipoMovimentacao"> | $Enums.DirecaoMovimentacao
   }
 
   export type CategoriaCaixaWhereInput = {
@@ -33145,54 +33123,65 @@ export namespace Prisma {
     NOT?: MovimentacaoEstoqueWhereInput | MovimentacaoEstoqueWhereInput[]
     id?: IntFilter<"MovimentacaoEstoque"> | number
     materialID?: IntFilter<"MovimentacaoEstoque"> | number
-    tipo?: EnumTipoMovimentacaoEstoqueFilter<"MovimentacaoEstoque"> | $Enums.TipoMovimentacaoEstoque
+    tipoMovimentacao?: EnumDirecaoMovimentacaoFilter<"MovimentacaoEstoque"> | $Enums.DirecaoMovimentacao
+    origem?: EnumOrigemMovimentacaoEstoqueFilter<"MovimentacaoEstoque"> | $Enums.OrigemMovimentacaoEstoque
+    origemID?: IntNullableFilter<"MovimentacaoEstoque"> | number | null
+    devolucaoID?: IntNullableFilter<"MovimentacaoEstoque"> | number | null
     quantidade?: DecimalFilter<"MovimentacaoEstoque"> | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFilter<"MovimentacaoEstoque"> | Date | string
-    origemID?: IntNullableFilter<"MovimentacaoEstoque"> | number | null
-    origemTipo?: EnumOrigemMovimentacaoEstoqueFilter<"MovimentacaoEstoque"> | $Enums.OrigemMovimentacaoEstoque
-    conversaoEstoqueId?: IntNullableFilter<"MovimentacaoEstoque"> | number | null
-    conversaoEstoque?: XOR<ConversaoEstoqueNullableScalarRelationFilter, ConversaoEstoqueWhereInput> | null
+    devolvidaEm?: DateTimeNullableFilter<"MovimentacaoEstoque"> | Date | string | null
+    observacao?: StringNullableFilter<"MovimentacaoEstoque"> | string | null
     material?: XOR<MaterialScalarRelationFilter, MaterialWhereInput>
+    devolucao?: XOR<MovimentacaoEstoqueNullableScalarRelationFilter, MovimentacaoEstoqueWhereInput> | null
+    movimentacaoDevolvida?: XOR<MovimentacaoEstoqueNullableScalarRelationFilter, MovimentacaoEstoqueWhereInput> | null
   }
 
   export type MovimentacaoEstoqueOrderByWithRelationInput = {
     id?: SortOrder
     materialID?: SortOrder
-    tipo?: SortOrder
+    tipoMovimentacao?: SortOrder
+    origem?: SortOrder
+    origemID?: SortOrderInput | SortOrder
+    devolucaoID?: SortOrderInput | SortOrder
     quantidade?: SortOrder
     createdAt?: SortOrder
-    origemID?: SortOrderInput | SortOrder
-    origemTipo?: SortOrder
-    conversaoEstoqueId?: SortOrderInput | SortOrder
-    conversaoEstoque?: ConversaoEstoqueOrderByWithRelationInput
+    devolvidaEm?: SortOrderInput | SortOrder
+    observacao?: SortOrderInput | SortOrder
     material?: MaterialOrderByWithRelationInput
+    devolucao?: MovimentacaoEstoqueOrderByWithRelationInput
+    movimentacaoDevolvida?: MovimentacaoEstoqueOrderByWithRelationInput
   }
 
   export type MovimentacaoEstoqueWhereUniqueInput = Prisma.AtLeast<{
     id?: number
+    devolucaoID?: number
     AND?: MovimentacaoEstoqueWhereInput | MovimentacaoEstoqueWhereInput[]
     OR?: MovimentacaoEstoqueWhereInput[]
     NOT?: MovimentacaoEstoqueWhereInput | MovimentacaoEstoqueWhereInput[]
     materialID?: IntFilter<"MovimentacaoEstoque"> | number
-    tipo?: EnumTipoMovimentacaoEstoqueFilter<"MovimentacaoEstoque"> | $Enums.TipoMovimentacaoEstoque
+    tipoMovimentacao?: EnumDirecaoMovimentacaoFilter<"MovimentacaoEstoque"> | $Enums.DirecaoMovimentacao
+    origem?: EnumOrigemMovimentacaoEstoqueFilter<"MovimentacaoEstoque"> | $Enums.OrigemMovimentacaoEstoque
+    origemID?: IntNullableFilter<"MovimentacaoEstoque"> | number | null
     quantidade?: DecimalFilter<"MovimentacaoEstoque"> | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFilter<"MovimentacaoEstoque"> | Date | string
-    origemID?: IntNullableFilter<"MovimentacaoEstoque"> | number | null
-    origemTipo?: EnumOrigemMovimentacaoEstoqueFilter<"MovimentacaoEstoque"> | $Enums.OrigemMovimentacaoEstoque
-    conversaoEstoqueId?: IntNullableFilter<"MovimentacaoEstoque"> | number | null
-    conversaoEstoque?: XOR<ConversaoEstoqueNullableScalarRelationFilter, ConversaoEstoqueWhereInput> | null
+    devolvidaEm?: DateTimeNullableFilter<"MovimentacaoEstoque"> | Date | string | null
+    observacao?: StringNullableFilter<"MovimentacaoEstoque"> | string | null
     material?: XOR<MaterialScalarRelationFilter, MaterialWhereInput>
-  }, "id">
+    devolucao?: XOR<MovimentacaoEstoqueNullableScalarRelationFilter, MovimentacaoEstoqueWhereInput> | null
+    movimentacaoDevolvida?: XOR<MovimentacaoEstoqueNullableScalarRelationFilter, MovimentacaoEstoqueWhereInput> | null
+  }, "id" | "devolucaoID">
 
   export type MovimentacaoEstoqueOrderByWithAggregationInput = {
     id?: SortOrder
     materialID?: SortOrder
-    tipo?: SortOrder
+    tipoMovimentacao?: SortOrder
+    origem?: SortOrder
+    origemID?: SortOrderInput | SortOrder
+    devolucaoID?: SortOrderInput | SortOrder
     quantidade?: SortOrder
     createdAt?: SortOrder
-    origemID?: SortOrderInput | SortOrder
-    origemTipo?: SortOrder
-    conversaoEstoqueId?: SortOrderInput | SortOrder
+    devolvidaEm?: SortOrderInput | SortOrder
+    observacao?: SortOrderInput | SortOrder
     _count?: MovimentacaoEstoqueCountOrderByAggregateInput
     _avg?: MovimentacaoEstoqueAvgOrderByAggregateInput
     _max?: MovimentacaoEstoqueMaxOrderByAggregateInput
@@ -33206,12 +33195,14 @@ export namespace Prisma {
     NOT?: MovimentacaoEstoqueScalarWhereWithAggregatesInput | MovimentacaoEstoqueScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"MovimentacaoEstoque"> | number
     materialID?: IntWithAggregatesFilter<"MovimentacaoEstoque"> | number
-    tipo?: EnumTipoMovimentacaoEstoqueWithAggregatesFilter<"MovimentacaoEstoque"> | $Enums.TipoMovimentacaoEstoque
+    tipoMovimentacao?: EnumDirecaoMovimentacaoWithAggregatesFilter<"MovimentacaoEstoque"> | $Enums.DirecaoMovimentacao
+    origem?: EnumOrigemMovimentacaoEstoqueWithAggregatesFilter<"MovimentacaoEstoque"> | $Enums.OrigemMovimentacaoEstoque
+    origemID?: IntNullableWithAggregatesFilter<"MovimentacaoEstoque"> | number | null
+    devolucaoID?: IntNullableWithAggregatesFilter<"MovimentacaoEstoque"> | number | null
     quantidade?: DecimalWithAggregatesFilter<"MovimentacaoEstoque"> | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeWithAggregatesFilter<"MovimentacaoEstoque"> | Date | string
-    origemID?: IntNullableWithAggregatesFilter<"MovimentacaoEstoque"> | number | null
-    origemTipo?: EnumOrigemMovimentacaoEstoqueWithAggregatesFilter<"MovimentacaoEstoque"> | $Enums.OrigemMovimentacaoEstoque
-    conversaoEstoqueId?: IntNullableWithAggregatesFilter<"MovimentacaoEstoque"> | number | null
+    devolvidaEm?: DateTimeNullableWithAggregatesFilter<"MovimentacaoEstoque"> | Date | string | null
+    observacao?: StringNullableWithAggregatesFilter<"MovimentacaoEstoque"> | string | null
   }
 
   export type ConversaoEstoqueWhereInput = {
@@ -33224,7 +33215,6 @@ export namespace Prisma {
     quantidade?: DecimalFilter<"ConversaoEstoque"> | Decimal | DecimalJsLike | number | string
     descricao?: StringNullableFilter<"ConversaoEstoque"> | string | null
     createdAt?: DateTimeFilter<"ConversaoEstoque"> | Date | string
-    movimentacoes?: MovimentacaoEstoqueListRelationFilter
   }
 
   export type ConversaoEstoqueOrderByWithRelationInput = {
@@ -33234,7 +33224,6 @@ export namespace Prisma {
     quantidade?: SortOrder
     descricao?: SortOrderInput | SortOrder
     createdAt?: SortOrder
-    movimentacoes?: MovimentacaoEstoqueOrderByRelationAggregateInput
   }
 
   export type ConversaoEstoqueWhereUniqueInput = Prisma.AtLeast<{
@@ -33247,7 +33236,6 @@ export namespace Prisma {
     quantidade?: DecimalFilter<"ConversaoEstoque"> | Decimal | DecimalJsLike | number | string
     descricao?: StringNullableFilter<"ConversaoEstoque"> | string | null
     createdAt?: DateTimeFilter<"ConversaoEstoque"> | Date | string
-    movimentacoes?: MovimentacaoEstoqueListRelationFilter
   }, "id">
 
   export type ConversaoEstoqueOrderByWithAggregationInput = {
@@ -34215,8 +34203,10 @@ export namespace Prisma {
   export type ItemPedidoCreateInput = {
     preco: Decimal | DecimalJsLike | number | string
     quantidade: Decimal | DecimalJsLike | number | string
+    pesoBruto: Decimal | DecimalJsLike | number | string
     tara: Decimal | DecimalJsLike | number | string
     impureza: Decimal | DecimalJsLike | number | string
+    subtotal: Decimal | DecimalJsLike | number | string
     material: MaterialCreateNestedOneWithoutItemsInput
     pedido: PedidoCreateNestedOneWithoutItemsInput
   }
@@ -34227,15 +34217,19 @@ export namespace Prisma {
     materialID: number
     preco: Decimal | DecimalJsLike | number | string
     quantidade: Decimal | DecimalJsLike | number | string
+    pesoBruto: Decimal | DecimalJsLike | number | string
     tara: Decimal | DecimalJsLike | number | string
     impureza: Decimal | DecimalJsLike | number | string
+    subtotal: Decimal | DecimalJsLike | number | string
   }
 
   export type ItemPedidoUpdateInput = {
     preco?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     quantidade?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    pesoBruto?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     tara?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     impureza?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    subtotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     material?: MaterialUpdateOneRequiredWithoutItemsNestedInput
     pedido?: PedidoUpdateOneRequiredWithoutItemsNestedInput
   }
@@ -34246,8 +34240,10 @@ export namespace Prisma {
     materialID?: IntFieldUpdateOperationsInput | number
     preco?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     quantidade?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    pesoBruto?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     tara?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     impureza?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    subtotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
   export type ItemPedidoCreateManyInput = {
@@ -34256,15 +34252,19 @@ export namespace Prisma {
     materialID: number
     preco: Decimal | DecimalJsLike | number | string
     quantidade: Decimal | DecimalJsLike | number | string
+    pesoBruto: Decimal | DecimalJsLike | number | string
     tara: Decimal | DecimalJsLike | number | string
     impureza: Decimal | DecimalJsLike | number | string
+    subtotal: Decimal | DecimalJsLike | number | string
   }
 
   export type ItemPedidoUpdateManyMutationInput = {
     preco?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     quantidade?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    pesoBruto?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     tara?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     impureza?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    subtotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
   export type ItemPedidoUncheckedUpdateManyInput = {
@@ -34273,14 +34273,16 @@ export namespace Prisma {
     materialID?: IntFieldUpdateOperationsInput | number
     preco?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     quantidade?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    pesoBruto?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     tara?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     impureza?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    subtotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
   export type PedidoCreateInput = {
     tipo: $Enums.TipoPedido
     valor_total?: Decimal | DecimalJsLike | number | string
-    status: $Enums.TipoStatusPedido
+    status?: $Enums.TipoStatusPedido
     criado_em?: Date | string
     atualizado?: Date | string
     items?: ItemPedidoCreateNestedManyWithoutPedidoInput
@@ -34294,7 +34296,7 @@ export namespace Prisma {
     regID?: number | null
     tipo: $Enums.TipoPedido
     valor_total?: Decimal | DecimalJsLike | number | string
-    status: $Enums.TipoStatusPedido
+    status?: $Enums.TipoStatusPedido
     userID: number
     criado_em?: Date | string
     atualizado?: Date | string
@@ -34332,7 +34334,7 @@ export namespace Prisma {
     regID?: number | null
     tipo: $Enums.TipoPedido
     valor_total?: Decimal | DecimalJsLike | number | string
-    status: $Enums.TipoStatusPedido
+    status?: $Enums.TipoStatusPedido
     userID: number
     criado_em?: Date | string
     atualizado?: Date | string
@@ -34612,45 +34614,45 @@ export namespace Prisma {
 
   export type Caixa_TipoMovimentacaoCreateInput = {
     nome: string
-    tipo: $Enums.DirecaoFinanceira
+    tipo: $Enums.DirecaoMovimentacao
     movimentacoes?: MovimentacaoFinanceiraCreateNestedManyWithoutTipoMovimentacaoInput
   }
 
   export type Caixa_TipoMovimentacaoUncheckedCreateInput = {
     id?: number
     nome: string
-    tipo: $Enums.DirecaoFinanceira
+    tipo: $Enums.DirecaoMovimentacao
     movimentacoes?: MovimentacaoFinanceiraUncheckedCreateNestedManyWithoutTipoMovimentacaoInput
   }
 
   export type Caixa_TipoMovimentacaoUpdateInput = {
     nome?: StringFieldUpdateOperationsInput | string
-    tipo?: EnumDirecaoFinanceiraFieldUpdateOperationsInput | $Enums.DirecaoFinanceira
+    tipo?: EnumDirecaoMovimentacaoFieldUpdateOperationsInput | $Enums.DirecaoMovimentacao
     movimentacoes?: MovimentacaoFinanceiraUpdateManyWithoutTipoMovimentacaoNestedInput
   }
 
   export type Caixa_TipoMovimentacaoUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     nome?: StringFieldUpdateOperationsInput | string
-    tipo?: EnumDirecaoFinanceiraFieldUpdateOperationsInput | $Enums.DirecaoFinanceira
+    tipo?: EnumDirecaoMovimentacaoFieldUpdateOperationsInput | $Enums.DirecaoMovimentacao
     movimentacoes?: MovimentacaoFinanceiraUncheckedUpdateManyWithoutTipoMovimentacaoNestedInput
   }
 
   export type Caixa_TipoMovimentacaoCreateManyInput = {
     id?: number
     nome: string
-    tipo: $Enums.DirecaoFinanceira
+    tipo: $Enums.DirecaoMovimentacao
   }
 
   export type Caixa_TipoMovimentacaoUpdateManyMutationInput = {
     nome?: StringFieldUpdateOperationsInput | string
-    tipo?: EnumDirecaoFinanceiraFieldUpdateOperationsInput | $Enums.DirecaoFinanceira
+    tipo?: EnumDirecaoMovimentacaoFieldUpdateOperationsInput | $Enums.DirecaoMovimentacao
   }
 
   export type Caixa_TipoMovimentacaoUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     nome?: StringFieldUpdateOperationsInput | string
-    tipo?: EnumDirecaoFinanceiraFieldUpdateOperationsInput | $Enums.DirecaoFinanceira
+    tipo?: EnumDirecaoMovimentacaoFieldUpdateOperationsInput | $Enums.DirecaoMovimentacao
   }
 
   export type CategoriaCaixaCreateInput = {
@@ -34697,75 +34699,93 @@ export namespace Prisma {
   }
 
   export type MovimentacaoEstoqueCreateInput = {
-    tipo: $Enums.TipoMovimentacaoEstoque
+    tipoMovimentacao: $Enums.DirecaoMovimentacao
+    origem: $Enums.OrigemMovimentacaoEstoque
+    origemID?: number | null
     quantidade: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
-    origemID?: number | null
-    origemTipo: $Enums.OrigemMovimentacaoEstoque
-    conversaoEstoque?: ConversaoEstoqueCreateNestedOneWithoutMovimentacoesInput
+    devolvidaEm?: Date | string | null
+    observacao?: string | null
     material: MaterialCreateNestedOneWithoutMovimentacoesInput
+    devolucao?: MovimentacaoEstoqueCreateNestedOneWithoutMovimentacaoDevolvidaInput
+    movimentacaoDevolvida?: MovimentacaoEstoqueCreateNestedOneWithoutDevolucaoInput
   }
 
   export type MovimentacaoEstoqueUncheckedCreateInput = {
     id?: number
     materialID: number
-    tipo: $Enums.TipoMovimentacaoEstoque
+    tipoMovimentacao: $Enums.DirecaoMovimentacao
+    origem: $Enums.OrigemMovimentacaoEstoque
+    origemID?: number | null
+    devolucaoID?: number | null
     quantidade: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
-    origemID?: number | null
-    origemTipo: $Enums.OrigemMovimentacaoEstoque
-    conversaoEstoqueId?: number | null
+    devolvidaEm?: Date | string | null
+    observacao?: string | null
+    movimentacaoDevolvida?: MovimentacaoEstoqueUncheckedCreateNestedOneWithoutDevolucaoInput
   }
 
   export type MovimentacaoEstoqueUpdateInput = {
-    tipo?: EnumTipoMovimentacaoEstoqueFieldUpdateOperationsInput | $Enums.TipoMovimentacaoEstoque
+    tipoMovimentacao?: EnumDirecaoMovimentacaoFieldUpdateOperationsInput | $Enums.DirecaoMovimentacao
+    origem?: EnumOrigemMovimentacaoEstoqueFieldUpdateOperationsInput | $Enums.OrigemMovimentacaoEstoque
+    origemID?: NullableIntFieldUpdateOperationsInput | number | null
     quantidade?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    origemID?: NullableIntFieldUpdateOperationsInput | number | null
-    origemTipo?: EnumOrigemMovimentacaoEstoqueFieldUpdateOperationsInput | $Enums.OrigemMovimentacaoEstoque
-    conversaoEstoque?: ConversaoEstoqueUpdateOneWithoutMovimentacoesNestedInput
+    devolvidaEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    observacao?: NullableStringFieldUpdateOperationsInput | string | null
     material?: MaterialUpdateOneRequiredWithoutMovimentacoesNestedInput
+    devolucao?: MovimentacaoEstoqueUpdateOneWithoutMovimentacaoDevolvidaNestedInput
+    movimentacaoDevolvida?: MovimentacaoEstoqueUpdateOneWithoutDevolucaoNestedInput
   }
 
   export type MovimentacaoEstoqueUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     materialID?: IntFieldUpdateOperationsInput | number
-    tipo?: EnumTipoMovimentacaoEstoqueFieldUpdateOperationsInput | $Enums.TipoMovimentacaoEstoque
+    tipoMovimentacao?: EnumDirecaoMovimentacaoFieldUpdateOperationsInput | $Enums.DirecaoMovimentacao
+    origem?: EnumOrigemMovimentacaoEstoqueFieldUpdateOperationsInput | $Enums.OrigemMovimentacaoEstoque
+    origemID?: NullableIntFieldUpdateOperationsInput | number | null
+    devolucaoID?: NullableIntFieldUpdateOperationsInput | number | null
     quantidade?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    origemID?: NullableIntFieldUpdateOperationsInput | number | null
-    origemTipo?: EnumOrigemMovimentacaoEstoqueFieldUpdateOperationsInput | $Enums.OrigemMovimentacaoEstoque
-    conversaoEstoqueId?: NullableIntFieldUpdateOperationsInput | number | null
+    devolvidaEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    observacao?: NullableStringFieldUpdateOperationsInput | string | null
+    movimentacaoDevolvida?: MovimentacaoEstoqueUncheckedUpdateOneWithoutDevolucaoNestedInput
   }
 
   export type MovimentacaoEstoqueCreateManyInput = {
     id?: number
     materialID: number
-    tipo: $Enums.TipoMovimentacaoEstoque
+    tipoMovimentacao: $Enums.DirecaoMovimentacao
+    origem: $Enums.OrigemMovimentacaoEstoque
+    origemID?: number | null
+    devolucaoID?: number | null
     quantidade: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
-    origemID?: number | null
-    origemTipo: $Enums.OrigemMovimentacaoEstoque
-    conversaoEstoqueId?: number | null
+    devolvidaEm?: Date | string | null
+    observacao?: string | null
   }
 
   export type MovimentacaoEstoqueUpdateManyMutationInput = {
-    tipo?: EnumTipoMovimentacaoEstoqueFieldUpdateOperationsInput | $Enums.TipoMovimentacaoEstoque
+    tipoMovimentacao?: EnumDirecaoMovimentacaoFieldUpdateOperationsInput | $Enums.DirecaoMovimentacao
+    origem?: EnumOrigemMovimentacaoEstoqueFieldUpdateOperationsInput | $Enums.OrigemMovimentacaoEstoque
+    origemID?: NullableIntFieldUpdateOperationsInput | number | null
     quantidade?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    origemID?: NullableIntFieldUpdateOperationsInput | number | null
-    origemTipo?: EnumOrigemMovimentacaoEstoqueFieldUpdateOperationsInput | $Enums.OrigemMovimentacaoEstoque
+    devolvidaEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    observacao?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type MovimentacaoEstoqueUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     materialID?: IntFieldUpdateOperationsInput | number
-    tipo?: EnumTipoMovimentacaoEstoqueFieldUpdateOperationsInput | $Enums.TipoMovimentacaoEstoque
+    tipoMovimentacao?: EnumDirecaoMovimentacaoFieldUpdateOperationsInput | $Enums.DirecaoMovimentacao
+    origem?: EnumOrigemMovimentacaoEstoqueFieldUpdateOperationsInput | $Enums.OrigemMovimentacaoEstoque
+    origemID?: NullableIntFieldUpdateOperationsInput | number | null
+    devolucaoID?: NullableIntFieldUpdateOperationsInput | number | null
     quantidade?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    origemID?: NullableIntFieldUpdateOperationsInput | number | null
-    origemTipo?: EnumOrigemMovimentacaoEstoqueFieldUpdateOperationsInput | $Enums.OrigemMovimentacaoEstoque
-    conversaoEstoqueId?: NullableIntFieldUpdateOperationsInput | number | null
+    devolvidaEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    observacao?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ConversaoEstoqueCreateInput = {
@@ -34774,7 +34794,6 @@ export namespace Prisma {
     quantidade: Decimal | DecimalJsLike | number | string
     descricao?: string | null
     createdAt?: Date | string
-    movimentacoes?: MovimentacaoEstoqueCreateNestedManyWithoutConversaoEstoqueInput
   }
 
   export type ConversaoEstoqueUncheckedCreateInput = {
@@ -34784,7 +34803,6 @@ export namespace Prisma {
     quantidade: Decimal | DecimalJsLike | number | string
     descricao?: string | null
     createdAt?: Date | string
-    movimentacoes?: MovimentacaoEstoqueUncheckedCreateNestedManyWithoutConversaoEstoqueInput
   }
 
   export type ConversaoEstoqueUpdateInput = {
@@ -34793,7 +34811,6 @@ export namespace Prisma {
     quantidade?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     descricao?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    movimentacoes?: MovimentacaoEstoqueUpdateManyWithoutConversaoEstoqueNestedInput
   }
 
   export type ConversaoEstoqueUncheckedUpdateInput = {
@@ -34803,7 +34820,6 @@ export namespace Prisma {
     quantidade?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     descricao?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    movimentacoes?: MovimentacaoEstoqueUncheckedUpdateManyWithoutConversaoEstoqueNestedInput
   }
 
   export type ConversaoEstoqueCreateManyInput = {
@@ -35845,8 +35861,10 @@ export namespace Prisma {
     materialID?: SortOrder
     preco?: SortOrder
     quantidade?: SortOrder
+    pesoBruto?: SortOrder
     tara?: SortOrder
     impureza?: SortOrder
+    subtotal?: SortOrder
   }
 
   export type ItemPedidoAvgOrderByAggregateInput = {
@@ -35855,8 +35873,10 @@ export namespace Prisma {
     materialID?: SortOrder
     preco?: SortOrder
     quantidade?: SortOrder
+    pesoBruto?: SortOrder
     tara?: SortOrder
     impureza?: SortOrder
+    subtotal?: SortOrder
   }
 
   export type ItemPedidoMaxOrderByAggregateInput = {
@@ -35865,8 +35885,10 @@ export namespace Prisma {
     materialID?: SortOrder
     preco?: SortOrder
     quantidade?: SortOrder
+    pesoBruto?: SortOrder
     tara?: SortOrder
     impureza?: SortOrder
+    subtotal?: SortOrder
   }
 
   export type ItemPedidoMinOrderByAggregateInput = {
@@ -35875,8 +35897,10 @@ export namespace Prisma {
     materialID?: SortOrder
     preco?: SortOrder
     quantidade?: SortOrder
+    pesoBruto?: SortOrder
     tara?: SortOrder
     impureza?: SortOrder
+    subtotal?: SortOrder
   }
 
   export type ItemPedidoSumOrderByAggregateInput = {
@@ -35885,8 +35909,10 @@ export namespace Prisma {
     materialID?: SortOrder
     preco?: SortOrder
     quantidade?: SortOrder
+    pesoBruto?: SortOrder
     tara?: SortOrder
     impureza?: SortOrder
+    subtotal?: SortOrder
   }
 
   export type IntNullableFilter<$PrismaModel = never> = {
@@ -36239,11 +36265,11 @@ export namespace Prisma {
     userID?: SortOrder
   }
 
-  export type EnumDirecaoFinanceiraFilter<$PrismaModel = never> = {
-    equals?: $Enums.DirecaoFinanceira | EnumDirecaoFinanceiraFieldRefInput<$PrismaModel>
-    in?: $Enums.DirecaoFinanceira[] | ListEnumDirecaoFinanceiraFieldRefInput<$PrismaModel>
-    notIn?: $Enums.DirecaoFinanceira[] | ListEnumDirecaoFinanceiraFieldRefInput<$PrismaModel>
-    not?: NestedEnumDirecaoFinanceiraFilter<$PrismaModel> | $Enums.DirecaoFinanceira
+  export type EnumDirecaoMovimentacaoFilter<$PrismaModel = never> = {
+    equals?: $Enums.DirecaoMovimentacao | EnumDirecaoMovimentacaoFieldRefInput<$PrismaModel>
+    in?: $Enums.DirecaoMovimentacao[] | ListEnumDirecaoMovimentacaoFieldRefInput<$PrismaModel>
+    notIn?: $Enums.DirecaoMovimentacao[] | ListEnumDirecaoMovimentacaoFieldRefInput<$PrismaModel>
+    not?: NestedEnumDirecaoMovimentacaoFilter<$PrismaModel> | $Enums.DirecaoMovimentacao
   }
 
   export type Caixa_TipoMovimentacaoCountOrderByAggregateInput = {
@@ -36272,14 +36298,14 @@ export namespace Prisma {
     id?: SortOrder
   }
 
-  export type EnumDirecaoFinanceiraWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.DirecaoFinanceira | EnumDirecaoFinanceiraFieldRefInput<$PrismaModel>
-    in?: $Enums.DirecaoFinanceira[] | ListEnumDirecaoFinanceiraFieldRefInput<$PrismaModel>
-    notIn?: $Enums.DirecaoFinanceira[] | ListEnumDirecaoFinanceiraFieldRefInput<$PrismaModel>
-    not?: NestedEnumDirecaoFinanceiraWithAggregatesFilter<$PrismaModel> | $Enums.DirecaoFinanceira
+  export type EnumDirecaoMovimentacaoWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.DirecaoMovimentacao | EnumDirecaoMovimentacaoFieldRefInput<$PrismaModel>
+    in?: $Enums.DirecaoMovimentacao[] | ListEnumDirecaoMovimentacaoFieldRefInput<$PrismaModel>
+    notIn?: $Enums.DirecaoMovimentacao[] | ListEnumDirecaoMovimentacaoFieldRefInput<$PrismaModel>
+    not?: NestedEnumDirecaoMovimentacaoWithAggregatesFilter<$PrismaModel> | $Enums.DirecaoMovimentacao
     _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumDirecaoFinanceiraFilter<$PrismaModel>
-    _max?: NestedEnumDirecaoFinanceiraFilter<$PrismaModel>
+    _min?: NestedEnumDirecaoMovimentacaoFilter<$PrismaModel>
+    _max?: NestedEnumDirecaoMovimentacaoFilter<$PrismaModel>
   }
 
   export type CategoriaCaixaCountOrderByAggregateInput = {
@@ -36308,13 +36334,6 @@ export namespace Prisma {
     id?: SortOrder
   }
 
-  export type EnumTipoMovimentacaoEstoqueFilter<$PrismaModel = never> = {
-    equals?: $Enums.TipoMovimentacaoEstoque | EnumTipoMovimentacaoEstoqueFieldRefInput<$PrismaModel>
-    in?: $Enums.TipoMovimentacaoEstoque[] | ListEnumTipoMovimentacaoEstoqueFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TipoMovimentacaoEstoque[] | ListEnumTipoMovimentacaoEstoqueFieldRefInput<$PrismaModel>
-    not?: NestedEnumTipoMovimentacaoEstoqueFilter<$PrismaModel> | $Enums.TipoMovimentacaoEstoque
-  }
-
   export type EnumOrigemMovimentacaoEstoqueFilter<$PrismaModel = never> = {
     equals?: $Enums.OrigemMovimentacaoEstoque | EnumOrigemMovimentacaoEstoqueFieldRefInput<$PrismaModel>
     in?: $Enums.OrigemMovimentacaoEstoque[] | ListEnumOrigemMovimentacaoEstoqueFieldRefInput<$PrismaModel>
@@ -36322,68 +36341,64 @@ export namespace Prisma {
     not?: NestedEnumOrigemMovimentacaoEstoqueFilter<$PrismaModel> | $Enums.OrigemMovimentacaoEstoque
   }
 
-  export type ConversaoEstoqueNullableScalarRelationFilter = {
-    is?: ConversaoEstoqueWhereInput | null
-    isNot?: ConversaoEstoqueWhereInput | null
+  export type MovimentacaoEstoqueNullableScalarRelationFilter = {
+    is?: MovimentacaoEstoqueWhereInput | null
+    isNot?: MovimentacaoEstoqueWhereInput | null
   }
 
   export type MovimentacaoEstoqueCountOrderByAggregateInput = {
     id?: SortOrder
     materialID?: SortOrder
-    tipo?: SortOrder
+    tipoMovimentacao?: SortOrder
+    origem?: SortOrder
+    origemID?: SortOrder
+    devolucaoID?: SortOrder
     quantidade?: SortOrder
     createdAt?: SortOrder
-    origemID?: SortOrder
-    origemTipo?: SortOrder
-    conversaoEstoqueId?: SortOrder
+    devolvidaEm?: SortOrder
+    observacao?: SortOrder
   }
 
   export type MovimentacaoEstoqueAvgOrderByAggregateInput = {
     id?: SortOrder
     materialID?: SortOrder
-    quantidade?: SortOrder
     origemID?: SortOrder
-    conversaoEstoqueId?: SortOrder
+    devolucaoID?: SortOrder
+    quantidade?: SortOrder
   }
 
   export type MovimentacaoEstoqueMaxOrderByAggregateInput = {
     id?: SortOrder
     materialID?: SortOrder
-    tipo?: SortOrder
+    tipoMovimentacao?: SortOrder
+    origem?: SortOrder
+    origemID?: SortOrder
+    devolucaoID?: SortOrder
     quantidade?: SortOrder
     createdAt?: SortOrder
-    origemID?: SortOrder
-    origemTipo?: SortOrder
-    conversaoEstoqueId?: SortOrder
+    devolvidaEm?: SortOrder
+    observacao?: SortOrder
   }
 
   export type MovimentacaoEstoqueMinOrderByAggregateInput = {
     id?: SortOrder
     materialID?: SortOrder
-    tipo?: SortOrder
+    tipoMovimentacao?: SortOrder
+    origem?: SortOrder
+    origemID?: SortOrder
+    devolucaoID?: SortOrder
     quantidade?: SortOrder
     createdAt?: SortOrder
-    origemID?: SortOrder
-    origemTipo?: SortOrder
-    conversaoEstoqueId?: SortOrder
+    devolvidaEm?: SortOrder
+    observacao?: SortOrder
   }
 
   export type MovimentacaoEstoqueSumOrderByAggregateInput = {
     id?: SortOrder
     materialID?: SortOrder
-    quantidade?: SortOrder
     origemID?: SortOrder
-    conversaoEstoqueId?: SortOrder
-  }
-
-  export type EnumTipoMovimentacaoEstoqueWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.TipoMovimentacaoEstoque | EnumTipoMovimentacaoEstoqueFieldRefInput<$PrismaModel>
-    in?: $Enums.TipoMovimentacaoEstoque[] | ListEnumTipoMovimentacaoEstoqueFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TipoMovimentacaoEstoque[] | ListEnumTipoMovimentacaoEstoqueFieldRefInput<$PrismaModel>
-    not?: NestedEnumTipoMovimentacaoEstoqueWithAggregatesFilter<$PrismaModel> | $Enums.TipoMovimentacaoEstoque
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumTipoMovimentacaoEstoqueFilter<$PrismaModel>
-    _max?: NestedEnumTipoMovimentacaoEstoqueFilter<$PrismaModel>
+    devolucaoID?: SortOrder
+    quantidade?: SortOrder
   }
 
   export type EnumOrigemMovimentacaoEstoqueWithAggregatesFilter<$PrismaModel = never> = {
@@ -37982,8 +37997,8 @@ export namespace Prisma {
     connect?: MovimentacaoFinanceiraWhereUniqueInput | MovimentacaoFinanceiraWhereUniqueInput[]
   }
 
-  export type EnumDirecaoFinanceiraFieldUpdateOperationsInput = {
-    set?: $Enums.DirecaoFinanceira
+  export type EnumDirecaoMovimentacaoFieldUpdateOperationsInput = {
+    set?: $Enums.DirecaoMovimentacao
   }
 
   export type MovimentacaoFinanceiraUpdateManyWithoutTipoMovimentacaoNestedInput = {
@@ -38056,34 +38071,32 @@ export namespace Prisma {
     deleteMany?: MovimentacaoFinanceiraScalarWhereInput | MovimentacaoFinanceiraScalarWhereInput[]
   }
 
-  export type ConversaoEstoqueCreateNestedOneWithoutMovimentacoesInput = {
-    create?: XOR<ConversaoEstoqueCreateWithoutMovimentacoesInput, ConversaoEstoqueUncheckedCreateWithoutMovimentacoesInput>
-    connectOrCreate?: ConversaoEstoqueCreateOrConnectWithoutMovimentacoesInput
-    connect?: ConversaoEstoqueWhereUniqueInput
-  }
-
   export type MaterialCreateNestedOneWithoutMovimentacoesInput = {
     create?: XOR<MaterialCreateWithoutMovimentacoesInput, MaterialUncheckedCreateWithoutMovimentacoesInput>
     connectOrCreate?: MaterialCreateOrConnectWithoutMovimentacoesInput
     connect?: MaterialWhereUniqueInput
   }
 
-  export type EnumTipoMovimentacaoEstoqueFieldUpdateOperationsInput = {
-    set?: $Enums.TipoMovimentacaoEstoque
+  export type MovimentacaoEstoqueCreateNestedOneWithoutMovimentacaoDevolvidaInput = {
+    create?: XOR<MovimentacaoEstoqueCreateWithoutMovimentacaoDevolvidaInput, MovimentacaoEstoqueUncheckedCreateWithoutMovimentacaoDevolvidaInput>
+    connectOrCreate?: MovimentacaoEstoqueCreateOrConnectWithoutMovimentacaoDevolvidaInput
+    connect?: MovimentacaoEstoqueWhereUniqueInput
+  }
+
+  export type MovimentacaoEstoqueCreateNestedOneWithoutDevolucaoInput = {
+    create?: XOR<MovimentacaoEstoqueCreateWithoutDevolucaoInput, MovimentacaoEstoqueUncheckedCreateWithoutDevolucaoInput>
+    connectOrCreate?: MovimentacaoEstoqueCreateOrConnectWithoutDevolucaoInput
+    connect?: MovimentacaoEstoqueWhereUniqueInput
+  }
+
+  export type MovimentacaoEstoqueUncheckedCreateNestedOneWithoutDevolucaoInput = {
+    create?: XOR<MovimentacaoEstoqueCreateWithoutDevolucaoInput, MovimentacaoEstoqueUncheckedCreateWithoutDevolucaoInput>
+    connectOrCreate?: MovimentacaoEstoqueCreateOrConnectWithoutDevolucaoInput
+    connect?: MovimentacaoEstoqueWhereUniqueInput
   }
 
   export type EnumOrigemMovimentacaoEstoqueFieldUpdateOperationsInput = {
     set?: $Enums.OrigemMovimentacaoEstoque
-  }
-
-  export type ConversaoEstoqueUpdateOneWithoutMovimentacoesNestedInput = {
-    create?: XOR<ConversaoEstoqueCreateWithoutMovimentacoesInput, ConversaoEstoqueUncheckedCreateWithoutMovimentacoesInput>
-    connectOrCreate?: ConversaoEstoqueCreateOrConnectWithoutMovimentacoesInput
-    upsert?: ConversaoEstoqueUpsertWithoutMovimentacoesInput
-    disconnect?: ConversaoEstoqueWhereInput | boolean
-    delete?: ConversaoEstoqueWhereInput | boolean
-    connect?: ConversaoEstoqueWhereUniqueInput
-    update?: XOR<XOR<ConversaoEstoqueUpdateToOneWithWhereWithoutMovimentacoesInput, ConversaoEstoqueUpdateWithoutMovimentacoesInput>, ConversaoEstoqueUncheckedUpdateWithoutMovimentacoesInput>
   }
 
   export type MaterialUpdateOneRequiredWithoutMovimentacoesNestedInput = {
@@ -38094,46 +38107,34 @@ export namespace Prisma {
     update?: XOR<XOR<MaterialUpdateToOneWithWhereWithoutMovimentacoesInput, MaterialUpdateWithoutMovimentacoesInput>, MaterialUncheckedUpdateWithoutMovimentacoesInput>
   }
 
-  export type MovimentacaoEstoqueCreateNestedManyWithoutConversaoEstoqueInput = {
-    create?: XOR<MovimentacaoEstoqueCreateWithoutConversaoEstoqueInput, MovimentacaoEstoqueUncheckedCreateWithoutConversaoEstoqueInput> | MovimentacaoEstoqueCreateWithoutConversaoEstoqueInput[] | MovimentacaoEstoqueUncheckedCreateWithoutConversaoEstoqueInput[]
-    connectOrCreate?: MovimentacaoEstoqueCreateOrConnectWithoutConversaoEstoqueInput | MovimentacaoEstoqueCreateOrConnectWithoutConversaoEstoqueInput[]
-    createMany?: MovimentacaoEstoqueCreateManyConversaoEstoqueInputEnvelope
-    connect?: MovimentacaoEstoqueWhereUniqueInput | MovimentacaoEstoqueWhereUniqueInput[]
+  export type MovimentacaoEstoqueUpdateOneWithoutMovimentacaoDevolvidaNestedInput = {
+    create?: XOR<MovimentacaoEstoqueCreateWithoutMovimentacaoDevolvidaInput, MovimentacaoEstoqueUncheckedCreateWithoutMovimentacaoDevolvidaInput>
+    connectOrCreate?: MovimentacaoEstoqueCreateOrConnectWithoutMovimentacaoDevolvidaInput
+    upsert?: MovimentacaoEstoqueUpsertWithoutMovimentacaoDevolvidaInput
+    disconnect?: MovimentacaoEstoqueWhereInput | boolean
+    delete?: MovimentacaoEstoqueWhereInput | boolean
+    connect?: MovimentacaoEstoqueWhereUniqueInput
+    update?: XOR<XOR<MovimentacaoEstoqueUpdateToOneWithWhereWithoutMovimentacaoDevolvidaInput, MovimentacaoEstoqueUpdateWithoutMovimentacaoDevolvidaInput>, MovimentacaoEstoqueUncheckedUpdateWithoutMovimentacaoDevolvidaInput>
   }
 
-  export type MovimentacaoEstoqueUncheckedCreateNestedManyWithoutConversaoEstoqueInput = {
-    create?: XOR<MovimentacaoEstoqueCreateWithoutConversaoEstoqueInput, MovimentacaoEstoqueUncheckedCreateWithoutConversaoEstoqueInput> | MovimentacaoEstoqueCreateWithoutConversaoEstoqueInput[] | MovimentacaoEstoqueUncheckedCreateWithoutConversaoEstoqueInput[]
-    connectOrCreate?: MovimentacaoEstoqueCreateOrConnectWithoutConversaoEstoqueInput | MovimentacaoEstoqueCreateOrConnectWithoutConversaoEstoqueInput[]
-    createMany?: MovimentacaoEstoqueCreateManyConversaoEstoqueInputEnvelope
-    connect?: MovimentacaoEstoqueWhereUniqueInput | MovimentacaoEstoqueWhereUniqueInput[]
+  export type MovimentacaoEstoqueUpdateOneWithoutDevolucaoNestedInput = {
+    create?: XOR<MovimentacaoEstoqueCreateWithoutDevolucaoInput, MovimentacaoEstoqueUncheckedCreateWithoutDevolucaoInput>
+    connectOrCreate?: MovimentacaoEstoqueCreateOrConnectWithoutDevolucaoInput
+    upsert?: MovimentacaoEstoqueUpsertWithoutDevolucaoInput
+    disconnect?: MovimentacaoEstoqueWhereInput | boolean
+    delete?: MovimentacaoEstoqueWhereInput | boolean
+    connect?: MovimentacaoEstoqueWhereUniqueInput
+    update?: XOR<XOR<MovimentacaoEstoqueUpdateToOneWithWhereWithoutDevolucaoInput, MovimentacaoEstoqueUpdateWithoutDevolucaoInput>, MovimentacaoEstoqueUncheckedUpdateWithoutDevolucaoInput>
   }
 
-  export type MovimentacaoEstoqueUpdateManyWithoutConversaoEstoqueNestedInput = {
-    create?: XOR<MovimentacaoEstoqueCreateWithoutConversaoEstoqueInput, MovimentacaoEstoqueUncheckedCreateWithoutConversaoEstoqueInput> | MovimentacaoEstoqueCreateWithoutConversaoEstoqueInput[] | MovimentacaoEstoqueUncheckedCreateWithoutConversaoEstoqueInput[]
-    connectOrCreate?: MovimentacaoEstoqueCreateOrConnectWithoutConversaoEstoqueInput | MovimentacaoEstoqueCreateOrConnectWithoutConversaoEstoqueInput[]
-    upsert?: MovimentacaoEstoqueUpsertWithWhereUniqueWithoutConversaoEstoqueInput | MovimentacaoEstoqueUpsertWithWhereUniqueWithoutConversaoEstoqueInput[]
-    createMany?: MovimentacaoEstoqueCreateManyConversaoEstoqueInputEnvelope
-    set?: MovimentacaoEstoqueWhereUniqueInput | MovimentacaoEstoqueWhereUniqueInput[]
-    disconnect?: MovimentacaoEstoqueWhereUniqueInput | MovimentacaoEstoqueWhereUniqueInput[]
-    delete?: MovimentacaoEstoqueWhereUniqueInput | MovimentacaoEstoqueWhereUniqueInput[]
-    connect?: MovimentacaoEstoqueWhereUniqueInput | MovimentacaoEstoqueWhereUniqueInput[]
-    update?: MovimentacaoEstoqueUpdateWithWhereUniqueWithoutConversaoEstoqueInput | MovimentacaoEstoqueUpdateWithWhereUniqueWithoutConversaoEstoqueInput[]
-    updateMany?: MovimentacaoEstoqueUpdateManyWithWhereWithoutConversaoEstoqueInput | MovimentacaoEstoqueUpdateManyWithWhereWithoutConversaoEstoqueInput[]
-    deleteMany?: MovimentacaoEstoqueScalarWhereInput | MovimentacaoEstoqueScalarWhereInput[]
-  }
-
-  export type MovimentacaoEstoqueUncheckedUpdateManyWithoutConversaoEstoqueNestedInput = {
-    create?: XOR<MovimentacaoEstoqueCreateWithoutConversaoEstoqueInput, MovimentacaoEstoqueUncheckedCreateWithoutConversaoEstoqueInput> | MovimentacaoEstoqueCreateWithoutConversaoEstoqueInput[] | MovimentacaoEstoqueUncheckedCreateWithoutConversaoEstoqueInput[]
-    connectOrCreate?: MovimentacaoEstoqueCreateOrConnectWithoutConversaoEstoqueInput | MovimentacaoEstoqueCreateOrConnectWithoutConversaoEstoqueInput[]
-    upsert?: MovimentacaoEstoqueUpsertWithWhereUniqueWithoutConversaoEstoqueInput | MovimentacaoEstoqueUpsertWithWhereUniqueWithoutConversaoEstoqueInput[]
-    createMany?: MovimentacaoEstoqueCreateManyConversaoEstoqueInputEnvelope
-    set?: MovimentacaoEstoqueWhereUniqueInput | MovimentacaoEstoqueWhereUniqueInput[]
-    disconnect?: MovimentacaoEstoqueWhereUniqueInput | MovimentacaoEstoqueWhereUniqueInput[]
-    delete?: MovimentacaoEstoqueWhereUniqueInput | MovimentacaoEstoqueWhereUniqueInput[]
-    connect?: MovimentacaoEstoqueWhereUniqueInput | MovimentacaoEstoqueWhereUniqueInput[]
-    update?: MovimentacaoEstoqueUpdateWithWhereUniqueWithoutConversaoEstoqueInput | MovimentacaoEstoqueUpdateWithWhereUniqueWithoutConversaoEstoqueInput[]
-    updateMany?: MovimentacaoEstoqueUpdateManyWithWhereWithoutConversaoEstoqueInput | MovimentacaoEstoqueUpdateManyWithWhereWithoutConversaoEstoqueInput[]
-    deleteMany?: MovimentacaoEstoqueScalarWhereInput | MovimentacaoEstoqueScalarWhereInput[]
+  export type MovimentacaoEstoqueUncheckedUpdateOneWithoutDevolucaoNestedInput = {
+    create?: XOR<MovimentacaoEstoqueCreateWithoutDevolucaoInput, MovimentacaoEstoqueUncheckedCreateWithoutDevolucaoInput>
+    connectOrCreate?: MovimentacaoEstoqueCreateOrConnectWithoutDevolucaoInput
+    upsert?: MovimentacaoEstoqueUpsertWithoutDevolucaoInput
+    disconnect?: MovimentacaoEstoqueWhereInput | boolean
+    delete?: MovimentacaoEstoqueWhereInput | boolean
+    connect?: MovimentacaoEstoqueWhereUniqueInput
+    update?: XOR<XOR<MovimentacaoEstoqueUpdateToOneWithWhereWithoutDevolucaoInput, MovimentacaoEstoqueUpdateWithoutDevolucaoInput>, MovimentacaoEstoqueUncheckedUpdateWithoutDevolucaoInput>
   }
 
   export type UserCreateNestedOneWithoutCaixasAbertosInput = {
@@ -38577,28 +38578,21 @@ export namespace Prisma {
     _max?: NestedEnumFormaPagamentoFilter<$PrismaModel>
   }
 
-  export type NestedEnumDirecaoFinanceiraFilter<$PrismaModel = never> = {
-    equals?: $Enums.DirecaoFinanceira | EnumDirecaoFinanceiraFieldRefInput<$PrismaModel>
-    in?: $Enums.DirecaoFinanceira[] | ListEnumDirecaoFinanceiraFieldRefInput<$PrismaModel>
-    notIn?: $Enums.DirecaoFinanceira[] | ListEnumDirecaoFinanceiraFieldRefInput<$PrismaModel>
-    not?: NestedEnumDirecaoFinanceiraFilter<$PrismaModel> | $Enums.DirecaoFinanceira
+  export type NestedEnumDirecaoMovimentacaoFilter<$PrismaModel = never> = {
+    equals?: $Enums.DirecaoMovimentacao | EnumDirecaoMovimentacaoFieldRefInput<$PrismaModel>
+    in?: $Enums.DirecaoMovimentacao[] | ListEnumDirecaoMovimentacaoFieldRefInput<$PrismaModel>
+    notIn?: $Enums.DirecaoMovimentacao[] | ListEnumDirecaoMovimentacaoFieldRefInput<$PrismaModel>
+    not?: NestedEnumDirecaoMovimentacaoFilter<$PrismaModel> | $Enums.DirecaoMovimentacao
   }
 
-  export type NestedEnumDirecaoFinanceiraWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.DirecaoFinanceira | EnumDirecaoFinanceiraFieldRefInput<$PrismaModel>
-    in?: $Enums.DirecaoFinanceira[] | ListEnumDirecaoFinanceiraFieldRefInput<$PrismaModel>
-    notIn?: $Enums.DirecaoFinanceira[] | ListEnumDirecaoFinanceiraFieldRefInput<$PrismaModel>
-    not?: NestedEnumDirecaoFinanceiraWithAggregatesFilter<$PrismaModel> | $Enums.DirecaoFinanceira
+  export type NestedEnumDirecaoMovimentacaoWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.DirecaoMovimentacao | EnumDirecaoMovimentacaoFieldRefInput<$PrismaModel>
+    in?: $Enums.DirecaoMovimentacao[] | ListEnumDirecaoMovimentacaoFieldRefInput<$PrismaModel>
+    notIn?: $Enums.DirecaoMovimentacao[] | ListEnumDirecaoMovimentacaoFieldRefInput<$PrismaModel>
+    not?: NestedEnumDirecaoMovimentacaoWithAggregatesFilter<$PrismaModel> | $Enums.DirecaoMovimentacao
     _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumDirecaoFinanceiraFilter<$PrismaModel>
-    _max?: NestedEnumDirecaoFinanceiraFilter<$PrismaModel>
-  }
-
-  export type NestedEnumTipoMovimentacaoEstoqueFilter<$PrismaModel = never> = {
-    equals?: $Enums.TipoMovimentacaoEstoque | EnumTipoMovimentacaoEstoqueFieldRefInput<$PrismaModel>
-    in?: $Enums.TipoMovimentacaoEstoque[] | ListEnumTipoMovimentacaoEstoqueFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TipoMovimentacaoEstoque[] | ListEnumTipoMovimentacaoEstoqueFieldRefInput<$PrismaModel>
-    not?: NestedEnumTipoMovimentacaoEstoqueFilter<$PrismaModel> | $Enums.TipoMovimentacaoEstoque
+    _min?: NestedEnumDirecaoMovimentacaoFilter<$PrismaModel>
+    _max?: NestedEnumDirecaoMovimentacaoFilter<$PrismaModel>
   }
 
   export type NestedEnumOrigemMovimentacaoEstoqueFilter<$PrismaModel = never> = {
@@ -38606,16 +38600,6 @@ export namespace Prisma {
     in?: $Enums.OrigemMovimentacaoEstoque[] | ListEnumOrigemMovimentacaoEstoqueFieldRefInput<$PrismaModel>
     notIn?: $Enums.OrigemMovimentacaoEstoque[] | ListEnumOrigemMovimentacaoEstoqueFieldRefInput<$PrismaModel>
     not?: NestedEnumOrigemMovimentacaoEstoqueFilter<$PrismaModel> | $Enums.OrigemMovimentacaoEstoque
-  }
-
-  export type NestedEnumTipoMovimentacaoEstoqueWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.TipoMovimentacaoEstoque | EnumTipoMovimentacaoEstoqueFieldRefInput<$PrismaModel>
-    in?: $Enums.TipoMovimentacaoEstoque[] | ListEnumTipoMovimentacaoEstoqueFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TipoMovimentacaoEstoque[] | ListEnumTipoMovimentacaoEstoqueFieldRefInput<$PrismaModel>
-    not?: NestedEnumTipoMovimentacaoEstoqueWithAggregatesFilter<$PrismaModel> | $Enums.TipoMovimentacaoEstoque
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumTipoMovimentacaoEstoqueFilter<$PrismaModel>
-    _max?: NestedEnumTipoMovimentacaoEstoqueFilter<$PrismaModel>
   }
 
   export type NestedEnumOrigemMovimentacaoEstoqueWithAggregatesFilter<$PrismaModel = never> = {
@@ -38675,7 +38659,7 @@ export namespace Prisma {
   export type PedidoCreateWithoutUserInput = {
     tipo: $Enums.TipoPedido
     valor_total?: Decimal | DecimalJsLike | number | string
-    status: $Enums.TipoStatusPedido
+    status?: $Enums.TipoStatusPedido
     criado_em?: Date | string
     atualizado?: Date | string
     items?: ItemPedidoCreateNestedManyWithoutPedidoInput
@@ -38688,7 +38672,7 @@ export namespace Prisma {
     regID?: number | null
     tipo: $Enums.TipoPedido
     valor_total?: Decimal | DecimalJsLike | number | string
-    status: $Enums.TipoStatusPedido
+    status?: $Enums.TipoStatusPedido
     criado_em?: Date | string
     atualizado?: Date | string
     items?: ItemPedidoUncheckedCreateNestedManyWithoutPedidoInput
@@ -39176,7 +39160,7 @@ export namespace Prisma {
   export type PedidoCreateWithoutRegistroInput = {
     tipo: $Enums.TipoPedido
     valor_total?: Decimal | DecimalJsLike | number | string
-    status: $Enums.TipoStatusPedido
+    status?: $Enums.TipoStatusPedido
     criado_em?: Date | string
     atualizado?: Date | string
     items?: ItemPedidoCreateNestedManyWithoutPedidoInput
@@ -39188,7 +39172,7 @@ export namespace Prisma {
     id?: number
     tipo: $Enums.TipoPedido
     valor_total?: Decimal | DecimalJsLike | number | string
-    status: $Enums.TipoStatusPedido
+    status?: $Enums.TipoStatusPedido
     userID: number
     criado_em?: Date | string
     atualizado?: Date | string
@@ -40175,8 +40159,10 @@ export namespace Prisma {
   export type ItemPedidoCreateWithoutMaterialInput = {
     preco: Decimal | DecimalJsLike | number | string
     quantidade: Decimal | DecimalJsLike | number | string
+    pesoBruto: Decimal | DecimalJsLike | number | string
     tara: Decimal | DecimalJsLike | number | string
     impureza: Decimal | DecimalJsLike | number | string
+    subtotal: Decimal | DecimalJsLike | number | string
     pedido: PedidoCreateNestedOneWithoutItemsInput
   }
 
@@ -40185,8 +40171,10 @@ export namespace Prisma {
     pedidoID: number
     preco: Decimal | DecimalJsLike | number | string
     quantidade: Decimal | DecimalJsLike | number | string
+    pesoBruto: Decimal | DecimalJsLike | number | string
     tara: Decimal | DecimalJsLike | number | string
     impureza: Decimal | DecimalJsLike | number | string
+    subtotal: Decimal | DecimalJsLike | number | string
   }
 
   export type ItemPedidoCreateOrConnectWithoutMaterialInput = {
@@ -40214,22 +40202,28 @@ export namespace Prisma {
   }
 
   export type MovimentacaoEstoqueCreateWithoutMaterialInput = {
-    tipo: $Enums.TipoMovimentacaoEstoque
+    tipoMovimentacao: $Enums.DirecaoMovimentacao
+    origem: $Enums.OrigemMovimentacaoEstoque
+    origemID?: number | null
     quantidade: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
-    origemID?: number | null
-    origemTipo: $Enums.OrigemMovimentacaoEstoque
-    conversaoEstoque?: ConversaoEstoqueCreateNestedOneWithoutMovimentacoesInput
+    devolvidaEm?: Date | string | null
+    observacao?: string | null
+    devolucao?: MovimentacaoEstoqueCreateNestedOneWithoutMovimentacaoDevolvidaInput
+    movimentacaoDevolvida?: MovimentacaoEstoqueCreateNestedOneWithoutDevolucaoInput
   }
 
   export type MovimentacaoEstoqueUncheckedCreateWithoutMaterialInput = {
     id?: number
-    tipo: $Enums.TipoMovimentacaoEstoque
+    tipoMovimentacao: $Enums.DirecaoMovimentacao
+    origem: $Enums.OrigemMovimentacaoEstoque
+    origemID?: number | null
+    devolucaoID?: number | null
     quantidade: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
-    origemID?: number | null
-    origemTipo: $Enums.OrigemMovimentacaoEstoque
-    conversaoEstoqueId?: number | null
+    devolvidaEm?: Date | string | null
+    observacao?: string | null
+    movimentacaoDevolvida?: MovimentacaoEstoqueUncheckedCreateNestedOneWithoutDevolucaoInput
   }
 
   export type MovimentacaoEstoqueCreateOrConnectWithoutMaterialInput = {
@@ -40290,8 +40284,10 @@ export namespace Prisma {
     materialID?: IntFilter<"ItemPedido"> | number
     preco?: DecimalFilter<"ItemPedido"> | Decimal | DecimalJsLike | number | string
     quantidade?: DecimalFilter<"ItemPedido"> | Decimal | DecimalJsLike | number | string
+    pesoBruto?: DecimalFilter<"ItemPedido"> | Decimal | DecimalJsLike | number | string
     tara?: DecimalFilter<"ItemPedido"> | Decimal | DecimalJsLike | number | string
     impureza?: DecimalFilter<"ItemPedido"> | Decimal | DecimalJsLike | number | string
+    subtotal?: DecimalFilter<"ItemPedido"> | Decimal | DecimalJsLike | number | string
   }
 
   export type CategoriaMaterialUpsertWithoutMateriaisInput = {
@@ -40336,12 +40332,14 @@ export namespace Prisma {
     NOT?: MovimentacaoEstoqueScalarWhereInput | MovimentacaoEstoqueScalarWhereInput[]
     id?: IntFilter<"MovimentacaoEstoque"> | number
     materialID?: IntFilter<"MovimentacaoEstoque"> | number
-    tipo?: EnumTipoMovimentacaoEstoqueFilter<"MovimentacaoEstoque"> | $Enums.TipoMovimentacaoEstoque
+    tipoMovimentacao?: EnumDirecaoMovimentacaoFilter<"MovimentacaoEstoque"> | $Enums.DirecaoMovimentacao
+    origem?: EnumOrigemMovimentacaoEstoqueFilter<"MovimentacaoEstoque"> | $Enums.OrigemMovimentacaoEstoque
+    origemID?: IntNullableFilter<"MovimentacaoEstoque"> | number | null
+    devolucaoID?: IntNullableFilter<"MovimentacaoEstoque"> | number | null
     quantidade?: DecimalFilter<"MovimentacaoEstoque"> | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFilter<"MovimentacaoEstoque"> | Date | string
-    origemID?: IntNullableFilter<"MovimentacaoEstoque"> | number | null
-    origemTipo?: EnumOrigemMovimentacaoEstoqueFilter<"MovimentacaoEstoque"> | $Enums.OrigemMovimentacaoEstoque
-    conversaoEstoqueId?: IntNullableFilter<"MovimentacaoEstoque"> | number | null
+    devolvidaEm?: DateTimeNullableFilter<"MovimentacaoEstoque"> | Date | string | null
+    observacao?: StringNullableFilter<"MovimentacaoEstoque"> | string | null
   }
 
   export type PrecoPorTabelaUpsertWithWhereUniqueWithoutMaterialInput = {
@@ -40458,7 +40456,7 @@ export namespace Prisma {
   export type PedidoCreateWithoutItemsInput = {
     tipo: $Enums.TipoPedido
     valor_total?: Decimal | DecimalJsLike | number | string
-    status: $Enums.TipoStatusPedido
+    status?: $Enums.TipoStatusPedido
     criado_em?: Date | string
     atualizado?: Date | string
     pagamentos?: ContaFinanceiraCreateNestedManyWithoutPedidoInput
@@ -40471,7 +40469,7 @@ export namespace Prisma {
     regID?: number | null
     tipo: $Enums.TipoPedido
     valor_total?: Decimal | DecimalJsLike | number | string
-    status: $Enums.TipoStatusPedido
+    status?: $Enums.TipoStatusPedido
     userID: number
     criado_em?: Date | string
     atualizado?: Date | string
@@ -40556,8 +40554,10 @@ export namespace Prisma {
   export type ItemPedidoCreateWithoutPedidoInput = {
     preco: Decimal | DecimalJsLike | number | string
     quantidade: Decimal | DecimalJsLike | number | string
+    pesoBruto: Decimal | DecimalJsLike | number | string
     tara: Decimal | DecimalJsLike | number | string
     impureza: Decimal | DecimalJsLike | number | string
+    subtotal: Decimal | DecimalJsLike | number | string
     material: MaterialCreateNestedOneWithoutItemsInput
   }
 
@@ -40566,8 +40566,10 @@ export namespace Prisma {
     materialID: number
     preco: Decimal | DecimalJsLike | number | string
     quantidade: Decimal | DecimalJsLike | number | string
+    pesoBruto: Decimal | DecimalJsLike | number | string
     tara: Decimal | DecimalJsLike | number | string
     impureza: Decimal | DecimalJsLike | number | string
+    subtotal: Decimal | DecimalJsLike | number | string
   }
 
   export type ItemPedidoCreateOrConnectWithoutPedidoInput = {
@@ -40804,7 +40806,7 @@ export namespace Prisma {
   export type PedidoCreateWithoutPagamentosInput = {
     tipo: $Enums.TipoPedido
     valor_total?: Decimal | DecimalJsLike | number | string
-    status: $Enums.TipoStatusPedido
+    status?: $Enums.TipoStatusPedido
     criado_em?: Date | string
     atualizado?: Date | string
     items?: ItemPedidoCreateNestedManyWithoutPedidoInput
@@ -40817,7 +40819,7 @@ export namespace Prisma {
     regID?: number | null
     tipo: $Enums.TipoPedido
     valor_total?: Decimal | DecimalJsLike | number | string
-    status: $Enums.TipoStatusPedido
+    status?: $Enums.TipoStatusPedido
     userID: number
     criado_em?: Date | string
     atualizado?: Date | string
@@ -41212,13 +41214,13 @@ export namespace Prisma {
 
   export type Caixa_TipoMovimentacaoCreateWithoutMovimentacoesInput = {
     nome: string
-    tipo: $Enums.DirecaoFinanceira
+    tipo: $Enums.DirecaoMovimentacao
   }
 
   export type Caixa_TipoMovimentacaoUncheckedCreateWithoutMovimentacoesInput = {
     id?: number
     nome: string
-    tipo: $Enums.DirecaoFinanceira
+    tipo: $Enums.DirecaoMovimentacao
   }
 
   export type Caixa_TipoMovimentacaoCreateOrConnectWithoutMovimentacoesInput = {
@@ -41465,13 +41467,13 @@ export namespace Prisma {
 
   export type Caixa_TipoMovimentacaoUpdateWithoutMovimentacoesInput = {
     nome?: StringFieldUpdateOperationsInput | string
-    tipo?: EnumDirecaoFinanceiraFieldUpdateOperationsInput | $Enums.DirecaoFinanceira
+    tipo?: EnumDirecaoMovimentacaoFieldUpdateOperationsInput | $Enums.DirecaoMovimentacao
   }
 
   export type Caixa_TipoMovimentacaoUncheckedUpdateWithoutMovimentacoesInput = {
     id?: IntFieldUpdateOperationsInput | number
     nome?: StringFieldUpdateOperationsInput | string
-    tipo?: EnumDirecaoFinanceiraFieldUpdateOperationsInput | $Enums.DirecaoFinanceira
+    tipo?: EnumDirecaoMovimentacaoFieldUpdateOperationsInput | $Enums.DirecaoMovimentacao
   }
 
   export type MovimentacaoFinanceiraUpsertWithoutMovimentacaoEstornoInput = {
@@ -41680,28 +41682,6 @@ export namespace Prisma {
     data: XOR<MovimentacaoFinanceiraUpdateManyMutationInput, MovimentacaoFinanceiraUncheckedUpdateManyWithoutCategoriaInput>
   }
 
-  export type ConversaoEstoqueCreateWithoutMovimentacoesInput = {
-    mat_origemID: number
-    mat_destinoID: number
-    quantidade: Decimal | DecimalJsLike | number | string
-    descricao?: string | null
-    createdAt?: Date | string
-  }
-
-  export type ConversaoEstoqueUncheckedCreateWithoutMovimentacoesInput = {
-    id?: number
-    mat_origemID: number
-    mat_destinoID: number
-    quantidade: Decimal | DecimalJsLike | number | string
-    descricao?: string | null
-    createdAt?: Date | string
-  }
-
-  export type ConversaoEstoqueCreateOrConnectWithoutMovimentacoesInput = {
-    where: ConversaoEstoqueWhereUniqueInput
-    create: XOR<ConversaoEstoqueCreateWithoutMovimentacoesInput, ConversaoEstoqueUncheckedCreateWithoutMovimentacoesInput>
-  }
-
   export type MaterialCreateWithoutMovimentacoesInput = {
     nome: string
     v_venda: Decimal | DecimalJsLike | number | string
@@ -41732,32 +41712,64 @@ export namespace Prisma {
     create: XOR<MaterialCreateWithoutMovimentacoesInput, MaterialUncheckedCreateWithoutMovimentacoesInput>
   }
 
-  export type ConversaoEstoqueUpsertWithoutMovimentacoesInput = {
-    update: XOR<ConversaoEstoqueUpdateWithoutMovimentacoesInput, ConversaoEstoqueUncheckedUpdateWithoutMovimentacoesInput>
-    create: XOR<ConversaoEstoqueCreateWithoutMovimentacoesInput, ConversaoEstoqueUncheckedCreateWithoutMovimentacoesInput>
-    where?: ConversaoEstoqueWhereInput
+  export type MovimentacaoEstoqueCreateWithoutMovimentacaoDevolvidaInput = {
+    tipoMovimentacao: $Enums.DirecaoMovimentacao
+    origem: $Enums.OrigemMovimentacaoEstoque
+    origemID?: number | null
+    quantidade: Decimal | DecimalJsLike | number | string
+    createdAt?: Date | string
+    devolvidaEm?: Date | string | null
+    observacao?: string | null
+    material: MaterialCreateNestedOneWithoutMovimentacoesInput
+    devolucao?: MovimentacaoEstoqueCreateNestedOneWithoutMovimentacaoDevolvidaInput
   }
 
-  export type ConversaoEstoqueUpdateToOneWithWhereWithoutMovimentacoesInput = {
-    where?: ConversaoEstoqueWhereInput
-    data: XOR<ConversaoEstoqueUpdateWithoutMovimentacoesInput, ConversaoEstoqueUncheckedUpdateWithoutMovimentacoesInput>
+  export type MovimentacaoEstoqueUncheckedCreateWithoutMovimentacaoDevolvidaInput = {
+    id?: number
+    materialID: number
+    tipoMovimentacao: $Enums.DirecaoMovimentacao
+    origem: $Enums.OrigemMovimentacaoEstoque
+    origemID?: number | null
+    devolucaoID?: number | null
+    quantidade: Decimal | DecimalJsLike | number | string
+    createdAt?: Date | string
+    devolvidaEm?: Date | string | null
+    observacao?: string | null
   }
 
-  export type ConversaoEstoqueUpdateWithoutMovimentacoesInput = {
-    mat_origemID?: IntFieldUpdateOperationsInput | number
-    mat_destinoID?: IntFieldUpdateOperationsInput | number
-    quantidade?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    descricao?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  export type MovimentacaoEstoqueCreateOrConnectWithoutMovimentacaoDevolvidaInput = {
+    where: MovimentacaoEstoqueWhereUniqueInput
+    create: XOR<MovimentacaoEstoqueCreateWithoutMovimentacaoDevolvidaInput, MovimentacaoEstoqueUncheckedCreateWithoutMovimentacaoDevolvidaInput>
   }
 
-  export type ConversaoEstoqueUncheckedUpdateWithoutMovimentacoesInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    mat_origemID?: IntFieldUpdateOperationsInput | number
-    mat_destinoID?: IntFieldUpdateOperationsInput | number
-    quantidade?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    descricao?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  export type MovimentacaoEstoqueCreateWithoutDevolucaoInput = {
+    tipoMovimentacao: $Enums.DirecaoMovimentacao
+    origem: $Enums.OrigemMovimentacaoEstoque
+    origemID?: number | null
+    quantidade: Decimal | DecimalJsLike | number | string
+    createdAt?: Date | string
+    devolvidaEm?: Date | string | null
+    observacao?: string | null
+    material: MaterialCreateNestedOneWithoutMovimentacoesInput
+    movimentacaoDevolvida?: MovimentacaoEstoqueCreateNestedOneWithoutDevolucaoInput
+  }
+
+  export type MovimentacaoEstoqueUncheckedCreateWithoutDevolucaoInput = {
+    id?: number
+    materialID: number
+    tipoMovimentacao: $Enums.DirecaoMovimentacao
+    origem: $Enums.OrigemMovimentacaoEstoque
+    origemID?: number | null
+    quantidade: Decimal | DecimalJsLike | number | string
+    createdAt?: Date | string
+    devolvidaEm?: Date | string | null
+    observacao?: string | null
+    movimentacaoDevolvida?: MovimentacaoEstoqueUncheckedCreateNestedOneWithoutDevolucaoInput
+  }
+
+  export type MovimentacaoEstoqueCreateOrConnectWithoutDevolucaoInput = {
+    where: MovimentacaoEstoqueWhereUniqueInput
+    create: XOR<MovimentacaoEstoqueCreateWithoutDevolucaoInput, MovimentacaoEstoqueUncheckedCreateWithoutDevolucaoInput>
   }
 
   export type MaterialUpsertWithoutMovimentacoesInput = {
@@ -41796,49 +41808,76 @@ export namespace Prisma {
     preco_tabela?: PrecoPorTabelaUncheckedUpdateManyWithoutMaterialNestedInput
   }
 
-  export type MovimentacaoEstoqueCreateWithoutConversaoEstoqueInput = {
-    tipo: $Enums.TipoMovimentacaoEstoque
-    quantidade: Decimal | DecimalJsLike | number | string
-    createdAt?: Date | string
-    origemID?: number | null
-    origemTipo: $Enums.OrigemMovimentacaoEstoque
-    material: MaterialCreateNestedOneWithoutMovimentacoesInput
+  export type MovimentacaoEstoqueUpsertWithoutMovimentacaoDevolvidaInput = {
+    update: XOR<MovimentacaoEstoqueUpdateWithoutMovimentacaoDevolvidaInput, MovimentacaoEstoqueUncheckedUpdateWithoutMovimentacaoDevolvidaInput>
+    create: XOR<MovimentacaoEstoqueCreateWithoutMovimentacaoDevolvidaInput, MovimentacaoEstoqueUncheckedCreateWithoutMovimentacaoDevolvidaInput>
+    where?: MovimentacaoEstoqueWhereInput
   }
 
-  export type MovimentacaoEstoqueUncheckedCreateWithoutConversaoEstoqueInput = {
-    id?: number
-    materialID: number
-    tipo: $Enums.TipoMovimentacaoEstoque
-    quantidade: Decimal | DecimalJsLike | number | string
-    createdAt?: Date | string
-    origemID?: number | null
-    origemTipo: $Enums.OrigemMovimentacaoEstoque
+  export type MovimentacaoEstoqueUpdateToOneWithWhereWithoutMovimentacaoDevolvidaInput = {
+    where?: MovimentacaoEstoqueWhereInput
+    data: XOR<MovimentacaoEstoqueUpdateWithoutMovimentacaoDevolvidaInput, MovimentacaoEstoqueUncheckedUpdateWithoutMovimentacaoDevolvidaInput>
   }
 
-  export type MovimentacaoEstoqueCreateOrConnectWithoutConversaoEstoqueInput = {
-    where: MovimentacaoEstoqueWhereUniqueInput
-    create: XOR<MovimentacaoEstoqueCreateWithoutConversaoEstoqueInput, MovimentacaoEstoqueUncheckedCreateWithoutConversaoEstoqueInput>
+  export type MovimentacaoEstoqueUpdateWithoutMovimentacaoDevolvidaInput = {
+    tipoMovimentacao?: EnumDirecaoMovimentacaoFieldUpdateOperationsInput | $Enums.DirecaoMovimentacao
+    origem?: EnumOrigemMovimentacaoEstoqueFieldUpdateOperationsInput | $Enums.OrigemMovimentacaoEstoque
+    origemID?: NullableIntFieldUpdateOperationsInput | number | null
+    quantidade?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    devolvidaEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    observacao?: NullableStringFieldUpdateOperationsInput | string | null
+    material?: MaterialUpdateOneRequiredWithoutMovimentacoesNestedInput
+    devolucao?: MovimentacaoEstoqueUpdateOneWithoutMovimentacaoDevolvidaNestedInput
   }
 
-  export type MovimentacaoEstoqueCreateManyConversaoEstoqueInputEnvelope = {
-    data: MovimentacaoEstoqueCreateManyConversaoEstoqueInput | MovimentacaoEstoqueCreateManyConversaoEstoqueInput[]
-    skipDuplicates?: boolean
+  export type MovimentacaoEstoqueUncheckedUpdateWithoutMovimentacaoDevolvidaInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    materialID?: IntFieldUpdateOperationsInput | number
+    tipoMovimentacao?: EnumDirecaoMovimentacaoFieldUpdateOperationsInput | $Enums.DirecaoMovimentacao
+    origem?: EnumOrigemMovimentacaoEstoqueFieldUpdateOperationsInput | $Enums.OrigemMovimentacaoEstoque
+    origemID?: NullableIntFieldUpdateOperationsInput | number | null
+    devolucaoID?: NullableIntFieldUpdateOperationsInput | number | null
+    quantidade?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    devolvidaEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    observacao?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type MovimentacaoEstoqueUpsertWithWhereUniqueWithoutConversaoEstoqueInput = {
-    where: MovimentacaoEstoqueWhereUniqueInput
-    update: XOR<MovimentacaoEstoqueUpdateWithoutConversaoEstoqueInput, MovimentacaoEstoqueUncheckedUpdateWithoutConversaoEstoqueInput>
-    create: XOR<MovimentacaoEstoqueCreateWithoutConversaoEstoqueInput, MovimentacaoEstoqueUncheckedCreateWithoutConversaoEstoqueInput>
+  export type MovimentacaoEstoqueUpsertWithoutDevolucaoInput = {
+    update: XOR<MovimentacaoEstoqueUpdateWithoutDevolucaoInput, MovimentacaoEstoqueUncheckedUpdateWithoutDevolucaoInput>
+    create: XOR<MovimentacaoEstoqueCreateWithoutDevolucaoInput, MovimentacaoEstoqueUncheckedCreateWithoutDevolucaoInput>
+    where?: MovimentacaoEstoqueWhereInput
   }
 
-  export type MovimentacaoEstoqueUpdateWithWhereUniqueWithoutConversaoEstoqueInput = {
-    where: MovimentacaoEstoqueWhereUniqueInput
-    data: XOR<MovimentacaoEstoqueUpdateWithoutConversaoEstoqueInput, MovimentacaoEstoqueUncheckedUpdateWithoutConversaoEstoqueInput>
+  export type MovimentacaoEstoqueUpdateToOneWithWhereWithoutDevolucaoInput = {
+    where?: MovimentacaoEstoqueWhereInput
+    data: XOR<MovimentacaoEstoqueUpdateWithoutDevolucaoInput, MovimentacaoEstoqueUncheckedUpdateWithoutDevolucaoInput>
   }
 
-  export type MovimentacaoEstoqueUpdateManyWithWhereWithoutConversaoEstoqueInput = {
-    where: MovimentacaoEstoqueScalarWhereInput
-    data: XOR<MovimentacaoEstoqueUpdateManyMutationInput, MovimentacaoEstoqueUncheckedUpdateManyWithoutConversaoEstoqueInput>
+  export type MovimentacaoEstoqueUpdateWithoutDevolucaoInput = {
+    tipoMovimentacao?: EnumDirecaoMovimentacaoFieldUpdateOperationsInput | $Enums.DirecaoMovimentacao
+    origem?: EnumOrigemMovimentacaoEstoqueFieldUpdateOperationsInput | $Enums.OrigemMovimentacaoEstoque
+    origemID?: NullableIntFieldUpdateOperationsInput | number | null
+    quantidade?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    devolvidaEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    observacao?: NullableStringFieldUpdateOperationsInput | string | null
+    material?: MaterialUpdateOneRequiredWithoutMovimentacoesNestedInput
+    movimentacaoDevolvida?: MovimentacaoEstoqueUpdateOneWithoutDevolucaoNestedInput
+  }
+
+  export type MovimentacaoEstoqueUncheckedUpdateWithoutDevolucaoInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    materialID?: IntFieldUpdateOperationsInput | number
+    tipoMovimentacao?: EnumDirecaoMovimentacaoFieldUpdateOperationsInput | $Enums.DirecaoMovimentacao
+    origem?: EnumOrigemMovimentacaoEstoqueFieldUpdateOperationsInput | $Enums.OrigemMovimentacaoEstoque
+    origemID?: NullableIntFieldUpdateOperationsInput | number | null
+    quantidade?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    devolvidaEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    observacao?: NullableStringFieldUpdateOperationsInput | string | null
+    movimentacaoDevolvida?: MovimentacaoEstoqueUncheckedUpdateOneWithoutDevolucaoNestedInput
   }
 
   export type UserCreateWithoutCaixasAbertosInput = {
@@ -42161,7 +42200,7 @@ export namespace Prisma {
     regID?: number | null
     tipo: $Enums.TipoPedido
     valor_total?: Decimal | DecimalJsLike | number | string
-    status: $Enums.TipoStatusPedido
+    status?: $Enums.TipoStatusPedido
     criado_em?: Date | string
     atualizado?: Date | string
   }
@@ -42434,7 +42473,7 @@ export namespace Prisma {
     id?: number
     tipo: $Enums.TipoPedido
     valor_total?: Decimal | DecimalJsLike | number | string
-    status: $Enums.TipoStatusPedido
+    status?: $Enums.TipoStatusPedido
     userID: number
     criado_em?: Date | string
     atualizado?: Date | string
@@ -42615,18 +42654,22 @@ export namespace Prisma {
     pedidoID: number
     preco: Decimal | DecimalJsLike | number | string
     quantidade: Decimal | DecimalJsLike | number | string
+    pesoBruto: Decimal | DecimalJsLike | number | string
     tara: Decimal | DecimalJsLike | number | string
     impureza: Decimal | DecimalJsLike | number | string
+    subtotal: Decimal | DecimalJsLike | number | string
   }
 
   export type MovimentacaoEstoqueCreateManyMaterialInput = {
     id?: number
-    tipo: $Enums.TipoMovimentacaoEstoque
+    tipoMovimentacao: $Enums.DirecaoMovimentacao
+    origem: $Enums.OrigemMovimentacaoEstoque
+    origemID?: number | null
+    devolucaoID?: number | null
     quantidade: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
-    origemID?: number | null
-    origemTipo: $Enums.OrigemMovimentacaoEstoque
-    conversaoEstoqueId?: number | null
+    devolvidaEm?: Date | string | null
+    observacao?: string | null
   }
 
   export type PrecoPorTabelaCreateManyMaterialInput = {
@@ -42639,8 +42682,10 @@ export namespace Prisma {
   export type ItemPedidoUpdateWithoutMaterialInput = {
     preco?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     quantidade?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    pesoBruto?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     tara?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     impureza?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    subtotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     pedido?: PedidoUpdateOneRequiredWithoutItemsNestedInput
   }
 
@@ -42649,8 +42694,10 @@ export namespace Prisma {
     pedidoID?: IntFieldUpdateOperationsInput | number
     preco?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     quantidade?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    pesoBruto?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     tara?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     impureza?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    subtotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
   export type ItemPedidoUncheckedUpdateManyWithoutMaterialInput = {
@@ -42658,37 +42705,47 @@ export namespace Prisma {
     pedidoID?: IntFieldUpdateOperationsInput | number
     preco?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     quantidade?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    pesoBruto?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     tara?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     impureza?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    subtotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
   export type MovimentacaoEstoqueUpdateWithoutMaterialInput = {
-    tipo?: EnumTipoMovimentacaoEstoqueFieldUpdateOperationsInput | $Enums.TipoMovimentacaoEstoque
+    tipoMovimentacao?: EnumDirecaoMovimentacaoFieldUpdateOperationsInput | $Enums.DirecaoMovimentacao
+    origem?: EnumOrigemMovimentacaoEstoqueFieldUpdateOperationsInput | $Enums.OrigemMovimentacaoEstoque
+    origemID?: NullableIntFieldUpdateOperationsInput | number | null
     quantidade?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    origemID?: NullableIntFieldUpdateOperationsInput | number | null
-    origemTipo?: EnumOrigemMovimentacaoEstoqueFieldUpdateOperationsInput | $Enums.OrigemMovimentacaoEstoque
-    conversaoEstoque?: ConversaoEstoqueUpdateOneWithoutMovimentacoesNestedInput
+    devolvidaEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    observacao?: NullableStringFieldUpdateOperationsInput | string | null
+    devolucao?: MovimentacaoEstoqueUpdateOneWithoutMovimentacaoDevolvidaNestedInput
+    movimentacaoDevolvida?: MovimentacaoEstoqueUpdateOneWithoutDevolucaoNestedInput
   }
 
   export type MovimentacaoEstoqueUncheckedUpdateWithoutMaterialInput = {
     id?: IntFieldUpdateOperationsInput | number
-    tipo?: EnumTipoMovimentacaoEstoqueFieldUpdateOperationsInput | $Enums.TipoMovimentacaoEstoque
+    tipoMovimentacao?: EnumDirecaoMovimentacaoFieldUpdateOperationsInput | $Enums.DirecaoMovimentacao
+    origem?: EnumOrigemMovimentacaoEstoqueFieldUpdateOperationsInput | $Enums.OrigemMovimentacaoEstoque
+    origemID?: NullableIntFieldUpdateOperationsInput | number | null
+    devolucaoID?: NullableIntFieldUpdateOperationsInput | number | null
     quantidade?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    origemID?: NullableIntFieldUpdateOperationsInput | number | null
-    origemTipo?: EnumOrigemMovimentacaoEstoqueFieldUpdateOperationsInput | $Enums.OrigemMovimentacaoEstoque
-    conversaoEstoqueId?: NullableIntFieldUpdateOperationsInput | number | null
+    devolvidaEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    observacao?: NullableStringFieldUpdateOperationsInput | string | null
+    movimentacaoDevolvida?: MovimentacaoEstoqueUncheckedUpdateOneWithoutDevolucaoNestedInput
   }
 
   export type MovimentacaoEstoqueUncheckedUpdateManyWithoutMaterialInput = {
     id?: IntFieldUpdateOperationsInput | number
-    tipo?: EnumTipoMovimentacaoEstoqueFieldUpdateOperationsInput | $Enums.TipoMovimentacaoEstoque
+    tipoMovimentacao?: EnumDirecaoMovimentacaoFieldUpdateOperationsInput | $Enums.DirecaoMovimentacao
+    origem?: EnumOrigemMovimentacaoEstoqueFieldUpdateOperationsInput | $Enums.OrigemMovimentacaoEstoque
+    origemID?: NullableIntFieldUpdateOperationsInput | number | null
+    devolucaoID?: NullableIntFieldUpdateOperationsInput | number | null
     quantidade?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    origemID?: NullableIntFieldUpdateOperationsInput | number | null
-    origemTipo?: EnumOrigemMovimentacaoEstoqueFieldUpdateOperationsInput | $Enums.OrigemMovimentacaoEstoque
-    conversaoEstoqueId?: NullableIntFieldUpdateOperationsInput | number | null
+    devolvidaEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    observacao?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type PrecoPorTabelaUpdateWithoutMaterialInput = {
@@ -42761,8 +42818,10 @@ export namespace Prisma {
     materialID: number
     preco: Decimal | DecimalJsLike | number | string
     quantidade: Decimal | DecimalJsLike | number | string
+    pesoBruto: Decimal | DecimalJsLike | number | string
     tara: Decimal | DecimalJsLike | number | string
     impureza: Decimal | DecimalJsLike | number | string
+    subtotal: Decimal | DecimalJsLike | number | string
   }
 
   export type ContaFinanceiraCreateManyPedidoInput = {
@@ -42781,8 +42840,10 @@ export namespace Prisma {
   export type ItemPedidoUpdateWithoutPedidoInput = {
     preco?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     quantidade?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    pesoBruto?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     tara?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     impureza?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    subtotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     material?: MaterialUpdateOneRequiredWithoutItemsNestedInput
   }
 
@@ -42791,8 +42852,10 @@ export namespace Prisma {
     materialID?: IntFieldUpdateOperationsInput | number
     preco?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     quantidade?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    pesoBruto?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     tara?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     impureza?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    subtotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
   export type ItemPedidoUncheckedUpdateManyWithoutPedidoInput = {
@@ -42800,8 +42863,10 @@ export namespace Prisma {
     materialID?: IntFieldUpdateOperationsInput | number
     preco?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     quantidade?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    pesoBruto?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     tara?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     impureza?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    subtotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
   export type ContaFinanceiraUpdateWithoutPedidoInput = {
@@ -43037,45 +43102,6 @@ export namespace Prisma {
     descricao?: NullableStringFieldUpdateOperationsInput | string | null
     userID?: IntFieldUpdateOperationsInput | number
     estornadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  }
-
-  export type MovimentacaoEstoqueCreateManyConversaoEstoqueInput = {
-    id?: number
-    materialID: number
-    tipo: $Enums.TipoMovimentacaoEstoque
-    quantidade: Decimal | DecimalJsLike | number | string
-    createdAt?: Date | string
-    origemID?: number | null
-    origemTipo: $Enums.OrigemMovimentacaoEstoque
-  }
-
-  export type MovimentacaoEstoqueUpdateWithoutConversaoEstoqueInput = {
-    tipo?: EnumTipoMovimentacaoEstoqueFieldUpdateOperationsInput | $Enums.TipoMovimentacaoEstoque
-    quantidade?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    origemID?: NullableIntFieldUpdateOperationsInput | number | null
-    origemTipo?: EnumOrigemMovimentacaoEstoqueFieldUpdateOperationsInput | $Enums.OrigemMovimentacaoEstoque
-    material?: MaterialUpdateOneRequiredWithoutMovimentacoesNestedInput
-  }
-
-  export type MovimentacaoEstoqueUncheckedUpdateWithoutConversaoEstoqueInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    materialID?: IntFieldUpdateOperationsInput | number
-    tipo?: EnumTipoMovimentacaoEstoqueFieldUpdateOperationsInput | $Enums.TipoMovimentacaoEstoque
-    quantidade?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    origemID?: NullableIntFieldUpdateOperationsInput | number | null
-    origemTipo?: EnumOrigemMovimentacaoEstoqueFieldUpdateOperationsInput | $Enums.OrigemMovimentacaoEstoque
-  }
-
-  export type MovimentacaoEstoqueUncheckedUpdateManyWithoutConversaoEstoqueInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    materialID?: IntFieldUpdateOperationsInput | number
-    tipo?: EnumTipoMovimentacaoEstoqueFieldUpdateOperationsInput | $Enums.TipoMovimentacaoEstoque
-    quantidade?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    origemID?: NullableIntFieldUpdateOperationsInput | number | null
-    origemTipo?: EnumOrigemMovimentacaoEstoqueFieldUpdateOperationsInput | $Enums.OrigemMovimentacaoEstoque
   }
 
   export type MovimentacaoFinanceiraCreateManyCaixaInput = {

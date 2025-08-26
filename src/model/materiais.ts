@@ -150,3 +150,15 @@ export const findAllMateriais = async ({
     throw error;
   }
 };
+export const getMaterialByID = async (id: number) => {
+  try {
+    const material = await prisma.material.findUnique({ where: { id } });
+    if (!material) {
+      throw new NotFound();
+    }
+    return material;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};

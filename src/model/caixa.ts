@@ -135,3 +135,15 @@ export const fecharCaixa = async (userID: number) => {
     return error;
   }
 };
+export const caixaAberto = async () => {
+  try {
+    const caixa = await prisma.livroCaixa.findFirst({
+      where: { status: "ABERTO" },
+    });
+
+    return caixa ? caixa.id : false;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};

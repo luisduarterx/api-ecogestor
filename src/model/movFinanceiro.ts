@@ -1,8 +1,9 @@
 import { BadRequest, InternalError, NotPossible } from "../error";
 import { Prisma } from "../generated/prisma";
 import { prisma } from "../libs/prisma";
+import { findRegisterByID } from "./registros";
 
-type inputMovimentacao = {
+export type inputMovimentacao = {
   bancoID?: number;
   caixaID: number;
   contaID?: number;
@@ -11,6 +12,7 @@ type inputMovimentacao = {
   valor: number;
   descricao?: string;
   userID: number;
+  regID?: number;
 };
 type inputEstorno = {
   id: number;
@@ -39,13 +41,19 @@ export const novaMovimentacao = async (data: inputMovimentacao) => {
         "Não é possivel realizar uma movimentacao em um banco inexistente."
       );
     }
-    //consultar direcao Financeira
+    if (data.tipoMovimentacaoID === 1) {
+      throw new BadRequest(
+        "O abastecimento ja foi registrado na abertura de caixa."
+      );
+    }
+    //consultar o tipo de movimentacao
     const tipoMovimentacao = await prisma.caixa_TipoMovimentacao.findUnique({
       where: { id: data.tipoMovimentacaoID },
     });
     if (!tipoMovimentacao) {
       throw new InternalError();
     }
+    // define a direcao financeira
     const direcao = tipoMovimentacao?.tipo;
     const valor = direcao === "ENTRADA" ? data.valor : -data.valor;
 
@@ -54,6 +62,7 @@ export const novaMovimentacao = async (data: inputMovimentacao) => {
         data: {
           descricao: data.descricao,
           userID: data.userID,
+          contaID: data.contaID,
           bancoID: data.bancoID,
           caixaID: caixa.id,
           categoriaID: data.categoriaID,
@@ -65,6 +74,33 @@ export const novaMovimentacao = async (data: inputMovimentacao) => {
             : Number(caixa.saldoFinal) + valor,
         },
       });
+      if (
+        tipoMovimentacao.nome === "RECEBER" ||
+        tipoMovimentacao.nome === "PAGAR"
+      ) {
+        //verifica se tem registro e existe ??
+        if (!data.regID || !(await findRegisterByID(data.regID))) {
+          throw new NotPossible(
+            "Não é possivel utilizar o saldo de um Registro que não existe"
+          );
+        }
+
+        const atualizaSaldoRegistro = await trx.saldoFinanceiro.update({
+          where: {
+            regID: data.regID,
+          },
+          data: {
+            saldo:
+              direcao === "ENTRADA"
+                ? {
+                    increment: Number(data.valor),
+                  }
+                : {
+                    decrement: Number(data.valor),
+                  },
+          },
+        });
+      }
 
       if (banco) {
         await trx.banco.update({
