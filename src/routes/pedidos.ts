@@ -41,8 +41,8 @@ pedidosRoutes.delete(
 
 // Funçoes do pedido
 
-pedidosRoutes.post(
-  "/pedidos/:pedID/vincular-registro",
+pedidosRoutes.put(
+  "/pedidos/:pedID/vincular-registro/",
   AuthMiddleware,
   P.PED_POST_REGIS
 );

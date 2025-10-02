@@ -2,7 +2,13 @@ import { Response } from "express";
 import { ExtendedRequest } from "../types/extended-request";
 import { z } from "zod";
 import { error } from "console";
-import { BadRequest, NotPossible, UnAuthorized } from "../error";
+import {
+  BadRequest,
+  InternalError,
+  NotFound,
+  NotPossible,
+  UnAuthorized,
+} from "../error";
 import { findRegisterByID } from "../model/registros";
 import {
   addNewItemOrder,
@@ -10,6 +16,7 @@ import {
   createNewOrder,
   findOrderByID,
   removeItemOrder,
+  vincularRegistro,
 } from "../model/pedido";
 import { User } from "../generated/prisma";
 // criar pedido
@@ -99,7 +106,48 @@ export const PED_POST_ESTO = async (req: ExtendedRequest, res: Response) => {};
 //excluir pedido
 export const PED_DEL_CANC = async (req: ExtendedRequest, res: Response) => {};
 
-export const PED_POST_REGIS = async (req: ExtendedRequest, res: Response) => {};
+export const PED_POST_REGIS = async (req: ExtendedRequest, res: Response) => {
+  try {
+    const pedID = parseInt(req.params.pedID as string);
+    const regID = parseInt(req.body.regID as string);
+
+    const dataSchema = z.object({
+      pedID: z.number().int().max(2147483646),
+      regID: z.number().int().max(2147483646).optional(),
+    });
+    const dataValidation = dataSchema.safeParse({ pedID, regID });
+    if (!dataValidation.success) {
+      throw new BadRequest();
+    }
+
+    // verifica se registro e pedido existe
+    const pedido = await findOrderByID(pedID);
+
+    if (!pedido) {
+      throw new NotFound("Pedido não encontrado");
+    }
+    if (regID !== 0) {
+      const registro = await findRegisterByID(regID);
+
+      if (!registro) {
+        throw new NotFound("Registro não encontrado");
+      }
+    }
+
+    const pedidoAlterado = await vincularRegistro(pedID, regID);
+
+    if (!pedidoAlterado) {
+      throw new InternalError();
+    }
+
+    res.status(200).json(pedidoAlterado);
+  } catch (error: any) {
+    console.log(error);
+    const status = error?.statusCode || 500;
+    res.status(status).json(error);
+    return;
+  }
+};
 //incluir item
 export const ITE_GET = async (req: ExtendedRequest, res: Response) => {};
 export const ITE_POST = async (req: ExtendedRequest, res: Response) => {

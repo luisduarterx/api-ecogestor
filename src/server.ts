@@ -28,6 +28,6 @@ server.use("/v1", caixasRoutes);
 server.use("/v1", movimRoutes);
 server.use("/v1", pedidosRoutes);
 
-server.listen(3000, () => {
+server.listen(4000, () => {
   console.log("EcoGestor API rodando...");
 });

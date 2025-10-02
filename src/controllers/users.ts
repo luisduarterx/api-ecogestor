@@ -91,7 +91,7 @@ export const PUT: RequestHandler = async (req, res) => {
       cargoID: z.number().optional(),
     });
     const userData = userDataSchema.safeParse(req.body);
-
+    console.log("data:", userData.data);
     if (!userData.success) {
       throw new BadRequest();
     }

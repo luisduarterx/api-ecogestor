@@ -1,6 +1,11 @@
 import { prisma } from "../libs/prisma";
 
-import { InternalError, UnAuthorized, UserNotFound } from "../error";
+import {
+  BadRequest,
+  InternalError,
+  UnAuthorized,
+  UserNotFound,
+} from "../error";
 import { encriptarSenha } from "../services/password";
 import bcrypt from "bcrypt";
 import { error } from "console";
@@ -147,6 +152,7 @@ export const getUserByID = async (id: number) => {
 };
 export const editUserData = async (data: UserDataEdit) => {
   try {
+    console.log(data);
     const user = await prisma.user.update({
       where: { id: data.id },
       data: {
@@ -171,11 +177,11 @@ export const editUserData = async (data: UserDataEdit) => {
   } catch (error: any) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       if (error.code === "P2003") {
-        throw new InternalError("Cargo inexistente. Escolha um cargo válido."); // futuramente alterar erro interno nao é o certo
+        throw new BadRequest("Cargo inexistente. Escolha um cargo válido.");
       }
 
       if (error.code === "P2002") {
-        throw new InternalError("Email já cadastrado.");
+        throw new BadRequest("Email já cadastrado.");
       }
     }
 

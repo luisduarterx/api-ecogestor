@@ -260,7 +260,25 @@ export const addNewItemOrder = async (it: CreateItemOrderArgs) => {
     throw error;
   }
 };
+export const vincularRegistro = async (pedID: number, regID: number) => {
+  try {
+    const pedido = await prisma.pedido.update({
+      where: { id: pedID },
+      data: { regID: regID === 0 ? null : regID },
+      select: {
+        id: true,
+        regID: true,
+        status: true,
+        atualizado: true,
+      },
+    });
 
+    return pedido;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
 // pedido
 
 export const createNewOrder = async ({

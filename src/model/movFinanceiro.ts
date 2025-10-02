@@ -137,6 +137,7 @@ export const estornarMovimentacao = async (data: inputEstorno) => {
       where: {
         id: data.id,
       },
+
       include: {
         tipoMovimentacao: {
           select: {
@@ -151,6 +152,11 @@ export const estornarMovimentacao = async (data: inputEstorno) => {
     if (movimentacao.tipoMovimentacaoID === 1) {
       throw new NotPossible(
         "Não é possivel alterar o valor de abertura, entre em contato com seu gerente."
+      );
+    }
+    if (movimentacao.contaID) {
+      throw new NotPossible(
+        "Para estornar essa movimentação primeiro deve estornar a conta referente."
       );
     }
     if (movimentacao.estornadoEm) {

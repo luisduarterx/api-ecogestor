@@ -125,7 +125,7 @@ model PrecoPorTabela {
 
 model Material {
   id            Int                   @id @default(autoincrement())
-  nome          String
+  nome          String                @unique
   catID         Int
   v_venda       Decimal
   estoque       Decimal

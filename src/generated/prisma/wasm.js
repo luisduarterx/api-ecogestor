@@ -5,13 +5,28 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 
 const {
+  PrismaClientKnownRequestError,
+  PrismaClientUnknownRequestError,
+  PrismaClientRustPanicError,
+  PrismaClientInitializationError,
+  PrismaClientValidationError,
+  getPrismaClient,
+  sqltag,
+  empty,
+  join,
+  raw,
+  skip,
   Decimal,
+  Debug,
   objectEnumValues,
   makeStrictEnum,
+  Extensions,
+  warnOnce,
+  defineDmmfProperty,
   Public,
   getRuntime,
-  skip
-} = require('./runtime/index-browser.js')
+  createParam,
+} = require('./runtime/wasm-engine-edge.js')
 
 
 const Prisma = {}
@@ -20,79 +35,35 @@ exports.Prisma = Prisma
 exports.$Enums = {}
 
 /**
- * Prisma Client JS version: 6.7.0
- * Query Engine version: 3cff47a7f5d65c3ea74883f1d736e41d68ce91ed
+ * Prisma Client JS version: 6.16.0
+ * Query Engine version: 1c57fdcd7e44b29b9313256c76699e91c3ac3c43
  */
 Prisma.prismaVersion = {
-  client: "6.7.0",
-  engine: "3cff47a7f5d65c3ea74883f1d736e41d68ce91ed"
+  client: "6.16.0",
+  engine: "1c57fdcd7e44b29b9313256c76699e91c3ac3c43"
 }
 
-Prisma.PrismaClientKnownRequestError = () => {
-  const runtimeName = getRuntime().prettyName;
-  throw new Error(`PrismaClientKnownRequestError is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
-In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
-)};
-Prisma.PrismaClientUnknownRequestError = () => {
-  const runtimeName = getRuntime().prettyName;
-  throw new Error(`PrismaClientUnknownRequestError is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
-In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
-)}
-Prisma.PrismaClientRustPanicError = () => {
-  const runtimeName = getRuntime().prettyName;
-  throw new Error(`PrismaClientRustPanicError is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
-In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
-)}
-Prisma.PrismaClientInitializationError = () => {
-  const runtimeName = getRuntime().prettyName;
-  throw new Error(`PrismaClientInitializationError is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
-In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
-)}
-Prisma.PrismaClientValidationError = () => {
-  const runtimeName = getRuntime().prettyName;
-  throw new Error(`PrismaClientValidationError is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
-In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
-)}
+Prisma.PrismaClientKnownRequestError = PrismaClientKnownRequestError;
+Prisma.PrismaClientUnknownRequestError = PrismaClientUnknownRequestError
+Prisma.PrismaClientRustPanicError = PrismaClientRustPanicError
+Prisma.PrismaClientInitializationError = PrismaClientInitializationError
+Prisma.PrismaClientValidationError = PrismaClientValidationError
 Prisma.Decimal = Decimal
 
 /**
  * Re-export of sql-template-tag
  */
-Prisma.sql = () => {
-  const runtimeName = getRuntime().prettyName;
-  throw new Error(`sqltag is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
-In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
-)}
-Prisma.empty = () => {
-  const runtimeName = getRuntime().prettyName;
-  throw new Error(`empty is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
-In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
-)}
-Prisma.join = () => {
-  const runtimeName = getRuntime().prettyName;
-  throw new Error(`join is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
-In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
-)}
-Prisma.raw = () => {
-  const runtimeName = getRuntime().prettyName;
-  throw new Error(`raw is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
-In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
-)}
+Prisma.sql = sqltag
+Prisma.empty = empty
+Prisma.join = join
+Prisma.raw = raw
 Prisma.validator = Public.validator
 
 /**
 * Extensions
 */
-Prisma.getExtensionContext = () => {
-  const runtimeName = getRuntime().prettyName;
-  throw new Error(`Extensions.getExtensionContext is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
-In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
-)}
-Prisma.defineExtension = () => {
-  const runtimeName = getRuntime().prettyName;
-  throw new Error(`Extensions.defineExtension is unable to run in this browser environment, or has been bundled for the browser (running in ${runtimeName}).
-In case this error is unexpected for you, please report it in https://pris.ly/prisma-prisma-bug-report`,
-)}
+Prisma.getExtensionContext = Extensions.getExtensionContext
+Prisma.defineExtension = Extensions.defineExtension
 
 /**
  * Shorthand utilities for JSON filtering
@@ -109,10 +80,11 @@ Prisma.NullTypes = {
 
 
 
+
+
 /**
  * Enums
  */
-
 exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   ReadUncommitted: 'ReadUncommitted',
   ReadCommitted: 'ReadCommitted',
@@ -358,6 +330,21 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
+exports.DirecaoMovimentacao = exports.$Enums.DirecaoMovimentacao = {
+  ENTRADA: 'ENTRADA',
+  SAIDA: 'SAIDA'
+};
+
+exports.TipoConta = exports.$Enums.TipoConta = {
+  PAGAR: 'PAGAR',
+  RECEBER: 'RECEBER'
+};
+
+exports.StatusCaixa = exports.$Enums.StatusCaixa = {
+  ABERTO: 'ABERTO',
+  FECHADO: 'FECHADO'
+};
+
 exports.TipoRegistro = exports.$Enums.TipoRegistro = {
   FISICA: 'FISICA',
   JURIDICA: 'JURIDICA'
@@ -373,11 +360,6 @@ exports.TipoStatusPedido = exports.$Enums.TipoStatusPedido = {
   FECHADO: 'FECHADO'
 };
 
-exports.TipoConta = exports.$Enums.TipoConta = {
-  PAGAR: 'PAGAR',
-  RECEBER: 'RECEBER'
-};
-
 exports.FormaPagamento = exports.$Enums.FormaPagamento = {
   DINHEIRO: 'DINHEIRO',
   PIX: 'PIX',
@@ -385,9 +367,13 @@ exports.FormaPagamento = exports.$Enums.FormaPagamento = {
   ABATER: 'ABATER'
 };
 
-exports.DirecaoMovimentacao = exports.$Enums.DirecaoMovimentacao = {
-  ENTRADA: 'ENTRADA',
-  SAIDA: 'SAIDA'
+exports.TipoMovimentacaoEstoque = exports.$Enums.TipoMovimentacaoEstoque = {
+  VENDA: 'VENDA',
+  COMPRA: 'COMPRA',
+  ENTRADA_MANUAL: 'ENTRADA_MANUAL',
+  SAIDA_MANUAL: 'SAIDA_MANUAL',
+  ENTRADA_CONVERSAO: 'ENTRADA_CONVERSAO',
+  SAIDA_CONVERSAO: 'SAIDA_CONVERSAO'
 };
 
 exports.OrigemMovimentacaoEstoque = exports.$Enums.OrigemMovimentacaoEstoque = {
@@ -396,11 +382,6 @@ exports.OrigemMovimentacaoEstoque = exports.$Enums.OrigemMovimentacaoEstoque = {
   AVULSO: 'AVULSO',
   AJUSTE: 'AJUSTE',
   DEVOLUCAO: 'DEVOLUCAO'
-};
-
-exports.StatusCaixa = exports.$Enums.StatusCaixa = {
-  ABERTO: 'ABERTO',
-  FECHADO: 'FECHADO'
 };
 
 exports.Prisma.ModelName = {
@@ -429,34 +410,83 @@ exports.Prisma.ModelName = {
   LivroCaixa: 'LivroCaixa',
   Fechamento: 'Fechamento'
 };
-
 /**
- * This is a stub Prisma Client that will error at runtime if called.
+ * Create the Client
  */
-class PrismaClient {
-  constructor() {
-    return new Proxy(this, {
-      get(target, prop) {
-        let message
-        const runtime = getRuntime()
-        if (runtime.isEdge) {
-          message = `PrismaClient is not configured to run in ${runtime.prettyName}. In order to run Prisma Client on edge runtime, either:
-- Use Prisma Accelerate: https://pris.ly/d/accelerate
-- Use Driver Adapters: https://pris.ly/d/driver-adapters
-`;
-        } else {
-          message = 'PrismaClient is unable to run in this browser environment, or has been bundled for the browser (running in `' + runtime.prettyName + '`).'
-        }
-
-        message += `
-If this is unexpected, please open an issue: https://pris.ly/prisma-prisma-bug-report`
-
-        throw new Error(message)
+const config = {
+  "generator": {
+    "name": "client",
+    "provider": {
+      "fromEnvVar": null,
+      "value": "prisma-client-js"
+    },
+    "output": {
+      "value": "/Users/luisclaudio/Documents/apps/api-ecogestor/src/generated/prisma",
+      "fromEnvVar": null
+    },
+    "config": {
+      "engineType": "library"
+    },
+    "binaryTargets": [
+      {
+        "fromEnvVar": null,
+        "value": "darwin-arm64",
+        "native": true
       }
-    })
+    ],
+    "previewFeatures": [],
+    "sourceFilePath": "/Users/luisclaudio/Documents/apps/api-ecogestor/prisma/schema.prisma",
+    "isCustomOutput": true
+  },
+  "relativeEnvPaths": {
+    "rootEnvPath": null,
+    "schemaEnvPath": "../../../.env"
+  },
+  "relativePath": "../../../prisma",
+  "clientVersion": "6.16.0",
+  "engineVersion": "1c57fdcd7e44b29b9313256c76699e91c3ac3c43",
+  "datasourceNames": [
+    "db"
+  ],
+  "activeProvider": "postgresql",
+  "postinstall": true,
+  "inlineDatasources": {
+    "db": {
+      "url": {
+        "fromEnvVar": "DATABASE_URL",
+        "value": null
+      }
+    }
+  },
+  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id                       Int                      @id @default(autoincrement())\n  nome                     String\n  email                    String                   @unique\n  senha                    String\n  telefone                 String\n  cargoID                  Int\n  pedidos                  Pedido[]\n  cargo                    Cargo                    @relation(fields: [cargoID], references: [id])\n  deletedAt                DateTime?\n  caixasAbertos            LivroCaixa[]             @relation(\"CaixaAbertoPor\")\n  fechamentos              Fechamento[]\n  movimentacoesFinanceiras MovimentacaoFinanceira[]\n}\n\nmodel Permissoes {\n  id        Int     @id @default(autoincrement())\n  nome      String  @unique\n  descricao String?\n  cargos    Cargo[] @relation(\"UserPermissions\")\n}\n\nmodel Cargo {\n  id         Int          @id @default(autoincrement())\n  nome       String       @unique\n  permissoes Permissoes[] @relation(\"UserPermissions\")\n  users      User[]\n}\n\nmodel Registro {\n  id              Int               @id @default(autoincrement())\n  nome_razao      String\n  apelido         String?\n  tipo            TipoRegistro\n  tabelaID        Int\n  email           String?\n  telefone        String?\n  criadoEm        DateTime          @default(now())\n  dados_pagamento DadosPagamento?\n  endereco        Endereco?\n  pedidos         Pedido[]\n  fisica          PessoaFisica?\n  juridica        PessoaJuridica?\n  tabela          Tabela            @relation(fields: [tabelaID], references: [id])\n  saldo           SaldoFinanceiro?\n  deletedAt       DateTime?\n  contas          ContaFinanceira[]\n}\n\nmodel PessoaFisica {\n  id         Int       @id @default(autoincrement())\n  cpf        String    @unique\n  nascimento DateTime?\n  registroID Int       @unique\n  registro   Registro  @relation(fields: [registroID], references: [id])\n}\n\nmodel PessoaJuridica {\n  id         Int      @id @default(autoincrement())\n  cnpj       String   @unique\n  ie         String?\n  fantasia   String?\n  registroID Int      @unique\n  registro   Registro @relation(fields: [registroID], references: [id])\n}\n\nmodel SaldoFinanceiro {\n  id       Int      @id @default(autoincrement())\n  regID    Int      @unique\n  saldo    Decimal\n  registro Registro @relation(fields: [regID], references: [id])\n}\n\nmodel Endereco {\n  id          Int      @id @default(autoincrement())\n  regID       Int      @unique\n  cep         String?\n  estado      String?\n  cidade      String?\n  bairro      String?\n  logradouro  String?\n  numero      String?\n  complemento String?\n  registro    Registro @relation(fields: [regID], references: [id])\n}\n\nmodel DadosPagamento {\n  id       Int      @id @default(autoincrement())\n  banco    String?\n  agencia  String?\n  conta    String?\n  chave    String?\n  cpf      String?\n  regID    Int      @unique\n  registro Registro @relation(fields: [regID], references: [id])\n}\n\nmodel Tabela {\n  id        Int              @id @default(autoincrement())\n  nome      String           @unique\n  updatedAt DateTime         @default(now()) @updatedAt\n  materiais PrecoPorTabela[]\n  registros Registro[]\n}\n\nmodel PrecoPorTabela {\n  id         Int      @id @default(autoincrement())\n  v_compra   Decimal\n  materialID Int\n  tabelaID   Int\n  editadoEm  DateTime @default(now()) @updatedAt\n  material   Material @relation(fields: [materialID], references: [id])\n  tabela     Tabela   @relation(fields: [tabelaID], references: [id])\n}\n\nmodel Material {\n  id            Int                   @id @default(autoincrement())\n  nome          String\n  catID         Int\n  v_venda       Decimal\n  estoque       Decimal\n  criado_em     DateTime              @default(now())\n  editado_em    DateTime              @default(now()) @updatedAt\n  status        Boolean               @default(true)\n  items         ItemPedido[]\n  categoria     CategoriaMaterial     @relation(fields: [catID], references: [id])\n  movimentacoes MovimentacaoEstoque[]\n  preco_tabela  PrecoPorTabela[]\n}\n\nmodel CategoriaMaterial {\n  id        Int        @id @default(autoincrement())\n  name      String     @unique\n  materiais Material[]\n}\n\nmodel ItemPedido {\n  id         Int      @id @default(autoincrement())\n  pedidoID   Int\n  materialID Int\n  preco      Decimal\n  quantidade Decimal\n  pesoBruto  Decimal\n  tara       Decimal\n  impureza   Decimal\n  subtotal   Decimal\n  material   Material @relation(fields: [materialID], references: [id])\n  pedido     Pedido   @relation(fields: [pedidoID], references: [id], onDelete: Cascade)\n}\n\nmodel Pedido {\n  id          Int               @id @default(autoincrement())\n  regID       Int?\n  tipo        TipoPedido\n  valor_total Decimal           @default(0)\n  status      TipoStatusPedido  @default(ABERTO)\n  userID      Int\n  criado_em   DateTime          @default(now())\n  atualizado  DateTime          @updatedAt\n  items       ItemPedido[]\n  pagamentos  ContaFinanceira[]\n  registro    Registro?         @relation(fields: [regID], references: [id])\n  user        User              @relation(fields: [userID], references: [id])\n}\n\nmodel ContaFinanceira {\n  id              Int                     @id @default(autoincrement())\n  tipo            TipoConta\n  pedidoID        Int?\n  registroID      Int?\n  descricao       String?\n  valor           Decimal\n  data_documento  DateTime                @default(now())\n  data_vencimento DateTime?\n  data_pagamento  DateTime?\n  forma           FormaPagamento\n  data            DateTime                @default(now())\n  pedido          Pedido?                 @relation(fields: [pedidoID], references: [id])\n  registro        Registro?               @relation(fields: [registroID], references: [id])\n  movimentacao    MovimentacaoFinanceira?\n}\n\nmodel Banco {\n  id            Int                      @id @default(autoincrement())\n  nome          String\n  saldo         Decimal\n  movimentacoes MovimentacaoFinanceira[]\n}\n\nmodel MovimentacaoFinanceira {\n  id                  Int                     @id @default(autoincrement())\n  estornoID           Int?                    @unique\n  bancoID             Int?\n  caixaID             Int\n  contaID             Int?                    @unique\n  categoriaID         Int?\n  tipoMovimentacaoID  Int\n  data                DateTime                @default(now())\n  saldoInicial        Decimal\n  valor               Decimal\n  saldoFinal          Decimal\n  descricao           String?\n  userID              Int\n  estornadoEm         DateTime?\n  banco               Banco?                  @relation(fields: [bancoID], references: [id])\n  caixa               LivroCaixa              @relation(fields: [caixaID], references: [id])\n  conta               ContaFinanceira?        @relation(fields: [contaID], references: [id])\n  categoria           CategoriaCaixa?         @relation(fields: [categoriaID], references: [id])\n  user                User                    @relation(fields: [userID], references: [id])\n  tipoMovimentacao    Caixa_TipoMovimentacao  @relation(fields: [tipoMovimentacaoID], references: [id])\n  estorno             MovimentacaoFinanceira? @relation(\"Estorno\", fields: [estornoID], references: [id])\n  movimentacaoEstorno MovimentacaoFinanceira? @relation(\"Estorno\")\n}\n\nmodel Caixa_TipoMovimentacao {\n  id            Int                      @id @default(autoincrement())\n  nome          String                   @unique\n  tipo          DirecaoMovimentacao\n  movimentacoes MovimentacaoFinanceira[]\n}\n\nmodel CategoriaCaixa {\n  id            Int                      @id @default(autoincrement())\n  nome          String\n  deletedAt     DateTime?\n  movimentacoes MovimentacaoFinanceira[]\n}\n\nmodel MovimentacaoEstoque {\n  id                    Int                       @id @default(autoincrement())\n  materialID            Int\n  tipoMovimentacao      DirecaoMovimentacao\n  origem                OrigemMovimentacaoEstoque\n  origemID              Int?\n  devolucaoID           Int?                      @unique\n  quantidade            Decimal\n  createdAt             DateTime                  @default(now())\n  devolvidaEm           DateTime?\n  observacao            String?\n  material              Material                  @relation(fields: [materialID], references: [id])\n  devolucao             MovimentacaoEstoque?      @relation(\"Devolucao\", fields: [devolucaoID], references: [id])\n  movimentacaoDevolvida MovimentacaoEstoque?      @relation(\"Devolucao\")\n}\n\nmodel ConversaoEstoque {\n  id            Int      @id @default(autoincrement())\n  mat_origemID  Int\n  mat_destinoID Int\n  quantidade    Decimal\n  descricao     String?\n  createdAt     DateTime @default(now())\n}\n\nmodel LivroCaixa {\n  id             Int                      @id @default(autoincrement())\n  dataAbertura   DateTime                 @default(now())\n  dataFechamento DateTime?\n  abertoPorID    Int\n  saldoInicial   Decimal\n  saldoFinal     Decimal\n  status         StatusCaixa              @default(ABERTO)\n  abertoPor      User                     @relation(\"CaixaAbertoPor\", fields: [abertoPorID], references: [id])\n  movimentacoes  MovimentacaoFinanceira[]\n  fechamento     Fechamento?\n}\n\nmodel Fechamento {\n  id                   Int        @id @default(autoincrement())\n  caixaID              Int        @unique\n  caixa                LivroCaixa @relation(fields: [caixaID], references: [id])\n  valor_abertura       Decimal\n  valor_abastecimentos Decimal\n  valor_despesas       Decimal\n  data_abertura        DateTime\n  data_fechamento      DateTime\n  userID_fechamento    Int\n  user_fechamento      User       @relation(fields: [userID_fechamento], references: [id])\n  valor_esperado       Decimal\n  valor_conferido      Decimal\n  valor_diferenca      Decimal?\n  //valor_pago Decimal\n  //valor_recebido Decimal\n  //valor_total_compras Decimal\n  //valor_total_vendas Decimal\n  //peso_total_compras Decimal\n  //peso_total_vendas Decimal\n  //lucro_total Decimal\n  //proj_lucro Decimal\n  //proj_venda Decimal\n  //qnt_compras Decimal\n  //qnt_vendas Decimal\n}\n\nenum DirecaoMovimentacao {\n  ENTRADA\n  SAIDA\n}\n\nenum TipoConta {\n  PAGAR\n  RECEBER\n}\n\nenum StatusCaixa {\n  ABERTO\n  FECHADO\n}\n\nenum TipoRegistro {\n  FISICA\n  JURIDICA\n}\n\nenum TipoPedido {\n  COMPRA\n  VENDA\n}\n\nenum TipoStatusPedido {\n  ABERTO\n  FECHADO\n}\n\nenum FormaPagamento {\n  DINHEIRO\n  PIX\n  TRANSFERENCIA\n  ABATER\n}\n\nenum TipoMovimentacaoEstoque {\n  VENDA\n  COMPRA\n  ENTRADA_MANUAL\n  SAIDA_MANUAL\n  ENTRADA_CONVERSAO\n  SAIDA_CONVERSAO\n}\n\nenum OrigemMovimentacaoEstoque {\n  PEDIDO\n  CONVERSAO\n  AVULSO\n  AJUSTE\n  DEVOLUCAO\n}\n",
+  "inlineSchemaHash": "67115ce0430cbacc69ba47900a278dfe972264d17539383e9a6706cccc0b680e",
+  "copyEngine": true
+}
+config.dirname = '/'
+
+config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"nome\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"senha\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"telefone\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"cargoID\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"pedidos\",\"kind\":\"object\",\"type\":\"Pedido\",\"relationName\":\"PedidoToUser\"},{\"name\":\"cargo\",\"kind\":\"object\",\"type\":\"Cargo\",\"relationName\":\"CargoToUser\"},{\"name\":\"deletedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"caixasAbertos\",\"kind\":\"object\",\"type\":\"LivroCaixa\",\"relationName\":\"CaixaAbertoPor\"},{\"name\":\"fechamentos\",\"kind\":\"object\",\"type\":\"Fechamento\",\"relationName\":\"FechamentoToUser\"},{\"name\":\"movimentacoesFinanceiras\",\"kind\":\"object\",\"type\":\"MovimentacaoFinanceira\",\"relationName\":\"MovimentacaoFinanceiraToUser\"}],\"dbName\":null},\"Permissoes\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"nome\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"descricao\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"cargos\",\"kind\":\"object\",\"type\":\"Cargo\",\"relationName\":\"UserPermissions\"}],\"dbName\":null},\"Cargo\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"nome\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"permissoes\",\"kind\":\"object\",\"type\":\"Permissoes\",\"relationName\":\"UserPermissions\"},{\"name\":\"users\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"CargoToUser\"}],\"dbName\":null},\"Registro\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"nome_razao\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"apelido\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tipo\",\"kind\":\"enum\",\"type\":\"TipoRegistro\"},{\"name\":\"tabelaID\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"telefone\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"criadoEm\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"dados_pagamento\",\"kind\":\"object\",\"type\":\"DadosPagamento\",\"relationName\":\"DadosPagamentoToRegistro\"},{\"name\":\"endereco\",\"kind\":\"object\",\"type\":\"Endereco\",\"relationName\":\"EnderecoToRegistro\"},{\"name\":\"pedidos\",\"kind\":\"object\",\"type\":\"Pedido\",\"relationName\":\"PedidoToRegistro\"},{\"name\":\"fisica\",\"kind\":\"object\",\"type\":\"PessoaFisica\",\"relationName\":\"PessoaFisicaToRegistro\"},{\"name\":\"juridica\",\"kind\":\"object\",\"type\":\"PessoaJuridica\",\"relationName\":\"PessoaJuridicaToRegistro\"},{\"name\":\"tabela\",\"kind\":\"object\",\"type\":\"Tabela\",\"relationName\":\"RegistroToTabela\"},{\"name\":\"saldo\",\"kind\":\"object\",\"type\":\"SaldoFinanceiro\",\"relationName\":\"RegistroToSaldoFinanceiro\"},{\"name\":\"deletedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"contas\",\"kind\":\"object\",\"type\":\"ContaFinanceira\",\"relationName\":\"ContaFinanceiraToRegistro\"}],\"dbName\":null},\"PessoaFisica\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"cpf\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"nascimento\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"registroID\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"registro\",\"kind\":\"object\",\"type\":\"Registro\",\"relationName\":\"PessoaFisicaToRegistro\"}],\"dbName\":null},\"PessoaJuridica\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"cnpj\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"ie\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"fantasia\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"registroID\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"registro\",\"kind\":\"object\",\"type\":\"Registro\",\"relationName\":\"PessoaJuridicaToRegistro\"}],\"dbName\":null},\"SaldoFinanceiro\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"regID\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"saldo\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"registro\",\"kind\":\"object\",\"type\":\"Registro\",\"relationName\":\"RegistroToSaldoFinanceiro\"}],\"dbName\":null},\"Endereco\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"regID\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"cep\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"estado\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"cidade\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"bairro\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"logradouro\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"numero\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"complemento\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"registro\",\"kind\":\"object\",\"type\":\"Registro\",\"relationName\":\"EnderecoToRegistro\"}],\"dbName\":null},\"DadosPagamento\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"banco\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"agencia\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"conta\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"chave\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"cpf\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"regID\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"registro\",\"kind\":\"object\",\"type\":\"Registro\",\"relationName\":\"DadosPagamentoToRegistro\"}],\"dbName\":null},\"Tabela\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"nome\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"materiais\",\"kind\":\"object\",\"type\":\"PrecoPorTabela\",\"relationName\":\"PrecoPorTabelaToTabela\"},{\"name\":\"registros\",\"kind\":\"object\",\"type\":\"Registro\",\"relationName\":\"RegistroToTabela\"}],\"dbName\":null},\"PrecoPorTabela\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"v_compra\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"materialID\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"tabelaID\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"editadoEm\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"material\",\"kind\":\"object\",\"type\":\"Material\",\"relationName\":\"MaterialToPrecoPorTabela\"},{\"name\":\"tabela\",\"kind\":\"object\",\"type\":\"Tabela\",\"relationName\":\"PrecoPorTabelaToTabela\"}],\"dbName\":null},\"Material\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"nome\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"catID\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"v_venda\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"estoque\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"criado_em\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"editado_em\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"status\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"items\",\"kind\":\"object\",\"type\":\"ItemPedido\",\"relationName\":\"ItemPedidoToMaterial\"},{\"name\":\"categoria\",\"kind\":\"object\",\"type\":\"CategoriaMaterial\",\"relationName\":\"CategoriaMaterialToMaterial\"},{\"name\":\"movimentacoes\",\"kind\":\"object\",\"type\":\"MovimentacaoEstoque\",\"relationName\":\"MaterialToMovimentacaoEstoque\"},{\"name\":\"preco_tabela\",\"kind\":\"object\",\"type\":\"PrecoPorTabela\",\"relationName\":\"MaterialToPrecoPorTabela\"}],\"dbName\":null},\"CategoriaMaterial\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"materiais\",\"kind\":\"object\",\"type\":\"Material\",\"relationName\":\"CategoriaMaterialToMaterial\"}],\"dbName\":null},\"ItemPedido\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"pedidoID\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"materialID\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"preco\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"quantidade\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"pesoBruto\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"tara\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"impureza\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"subtotal\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"material\",\"kind\":\"object\",\"type\":\"Material\",\"relationName\":\"ItemPedidoToMaterial\"},{\"name\":\"pedido\",\"kind\":\"object\",\"type\":\"Pedido\",\"relationName\":\"ItemPedidoToPedido\"}],\"dbName\":null},\"Pedido\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"regID\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"tipo\",\"kind\":\"enum\",\"type\":\"TipoPedido\"},{\"name\":\"valor_total\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"status\",\"kind\":\"enum\",\"type\":\"TipoStatusPedido\"},{\"name\":\"userID\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"criado_em\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"atualizado\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"items\",\"kind\":\"object\",\"type\":\"ItemPedido\",\"relationName\":\"ItemPedidoToPedido\"},{\"name\":\"pagamentos\",\"kind\":\"object\",\"type\":\"ContaFinanceira\",\"relationName\":\"ContaFinanceiraToPedido\"},{\"name\":\"registro\",\"kind\":\"object\",\"type\":\"Registro\",\"relationName\":\"PedidoToRegistro\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"PedidoToUser\"}],\"dbName\":null},\"ContaFinanceira\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"tipo\",\"kind\":\"enum\",\"type\":\"TipoConta\"},{\"name\":\"pedidoID\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"registroID\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"descricao\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"valor\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"data_documento\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"data_vencimento\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"data_pagamento\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"forma\",\"kind\":\"enum\",\"type\":\"FormaPagamento\"},{\"name\":\"data\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"pedido\",\"kind\":\"object\",\"type\":\"Pedido\",\"relationName\":\"ContaFinanceiraToPedido\"},{\"name\":\"registro\",\"kind\":\"object\",\"type\":\"Registro\",\"relationName\":\"ContaFinanceiraToRegistro\"},{\"name\":\"movimentacao\",\"kind\":\"object\",\"type\":\"MovimentacaoFinanceira\",\"relationName\":\"ContaFinanceiraToMovimentacaoFinanceira\"}],\"dbName\":null},\"Banco\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"nome\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"saldo\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"movimentacoes\",\"kind\":\"object\",\"type\":\"MovimentacaoFinanceira\",\"relationName\":\"BancoToMovimentacaoFinanceira\"}],\"dbName\":null},\"MovimentacaoFinanceira\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"estornoID\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"bancoID\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"caixaID\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"contaID\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"categoriaID\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"tipoMovimentacaoID\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"data\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"saldoInicial\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"valor\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"saldoFinal\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"descricao\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userID\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"estornadoEm\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"banco\",\"kind\":\"object\",\"type\":\"Banco\",\"relationName\":\"BancoToMovimentacaoFinanceira\"},{\"name\":\"caixa\",\"kind\":\"object\",\"type\":\"LivroCaixa\",\"relationName\":\"LivroCaixaToMovimentacaoFinanceira\"},{\"name\":\"conta\",\"kind\":\"object\",\"type\":\"ContaFinanceira\",\"relationName\":\"ContaFinanceiraToMovimentacaoFinanceira\"},{\"name\":\"categoria\",\"kind\":\"object\",\"type\":\"CategoriaCaixa\",\"relationName\":\"CategoriaCaixaToMovimentacaoFinanceira\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"MovimentacaoFinanceiraToUser\"},{\"name\":\"tipoMovimentacao\",\"kind\":\"object\",\"type\":\"Caixa_TipoMovimentacao\",\"relationName\":\"Caixa_TipoMovimentacaoToMovimentacaoFinanceira\"},{\"name\":\"estorno\",\"kind\":\"object\",\"type\":\"MovimentacaoFinanceira\",\"relationName\":\"Estorno\"},{\"name\":\"movimentacaoEstorno\",\"kind\":\"object\",\"type\":\"MovimentacaoFinanceira\",\"relationName\":\"Estorno\"}],\"dbName\":null},\"Caixa_TipoMovimentacao\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"nome\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tipo\",\"kind\":\"enum\",\"type\":\"DirecaoMovimentacao\"},{\"name\":\"movimentacoes\",\"kind\":\"object\",\"type\":\"MovimentacaoFinanceira\",\"relationName\":\"Caixa_TipoMovimentacaoToMovimentacaoFinanceira\"}],\"dbName\":null},\"CategoriaCaixa\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"nome\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"deletedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"movimentacoes\",\"kind\":\"object\",\"type\":\"MovimentacaoFinanceira\",\"relationName\":\"CategoriaCaixaToMovimentacaoFinanceira\"}],\"dbName\":null},\"MovimentacaoEstoque\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"materialID\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"tipoMovimentacao\",\"kind\":\"enum\",\"type\":\"DirecaoMovimentacao\"},{\"name\":\"origem\",\"kind\":\"enum\",\"type\":\"OrigemMovimentacaoEstoque\"},{\"name\":\"origemID\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"devolucaoID\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"quantidade\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"devolvidaEm\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"observacao\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"material\",\"kind\":\"object\",\"type\":\"Material\",\"relationName\":\"MaterialToMovimentacaoEstoque\"},{\"name\":\"devolucao\",\"kind\":\"object\",\"type\":\"MovimentacaoEstoque\",\"relationName\":\"Devolucao\"},{\"name\":\"movimentacaoDevolvida\",\"kind\":\"object\",\"type\":\"MovimentacaoEstoque\",\"relationName\":\"Devolucao\"}],\"dbName\":null},\"ConversaoEstoque\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"mat_origemID\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"mat_destinoID\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"quantidade\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"descricao\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"LivroCaixa\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"dataAbertura\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"dataFechamento\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"abertoPorID\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"saldoInicial\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"saldoFinal\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"status\",\"kind\":\"enum\",\"type\":\"StatusCaixa\"},{\"name\":\"abertoPor\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"CaixaAbertoPor\"},{\"name\":\"movimentacoes\",\"kind\":\"object\",\"type\":\"MovimentacaoFinanceira\",\"relationName\":\"LivroCaixaToMovimentacaoFinanceira\"},{\"name\":\"fechamento\",\"kind\":\"object\",\"type\":\"Fechamento\",\"relationName\":\"FechamentoToLivroCaixa\"}],\"dbName\":null},\"Fechamento\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"caixaID\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"caixa\",\"kind\":\"object\",\"type\":\"LivroCaixa\",\"relationName\":\"FechamentoToLivroCaixa\"},{\"name\":\"valor_abertura\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"valor_abastecimentos\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"valor_despesas\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"data_abertura\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"data_fechamento\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"userID_fechamento\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"user_fechamento\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"FechamentoToUser\"},{\"name\":\"valor_esperado\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"valor_conferido\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"valor_diferenca\",\"kind\":\"scalar\",\"type\":\"Decimal\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
+defineDmmfProperty(exports.Prisma, config.runtimeDataModel)
+config.engineWasm = {
+  getRuntime: async () => require('./query_engine_bg.js'),
+  getQueryEngineWasmModule: async () => {
+    const loader = (await import('#wasm-engine-loader')).default
+    const engine = (await loader).default
+    return engine
   }
 }
+config.compilerWasm = undefined
 
+config.injectableEdgeEnv = () => ({
+  parsed: {
+    DATABASE_URL: typeof globalThis !== 'undefined' && globalThis['DATABASE_URL'] || typeof process !== 'undefined' && process.env && process.env.DATABASE_URL || undefined
+  }
+})
+
+if (typeof globalThis !== 'undefined' && globalThis['DEBUG'] || typeof process !== 'undefined' && process.env && process.env.DEBUG || undefined) {
+  Debug.enable(typeof globalThis !== 'undefined' && globalThis['DEBUG'] || typeof process !== 'undefined' && process.env && process.env.DEBUG || undefined)
+}
+
+const PrismaClient = getPrismaClient(config)
 exports.PrismaClient = PrismaClient
-
 Object.assign(exports, Prisma)
+
