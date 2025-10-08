@@ -38,6 +38,73 @@ export const popular = async () => {
       nome: "LUIS CLAUDIO DUARTE ROXO",
       cpf: "13575249784",
     });
+    // movimentacoes do caixa TIPOS
+    const Caixa_TipoMovimentacao =
+      await prisma.caixa_TipoMovimentacao.createMany({
+        data: [
+          { nome: "ABERTURA", tipo: "ENTRADA" },
+          { nome: "ABASTECIMENTO", tipo: "ENTRADA" },
+          { nome: "VENDA", tipo: "ENTRADA" },
+          { nome: "RECEBER", tipo: "ENTRADA" },
+          { nome: "COMPRA", tipo: "SAIDA" },
+          { nome: "EMPRESTAR", tipo: "SAIDA" },
+          { nome: "DESPESA", tipo: "SAIDA" },
+        ],
+      });
+    // CRIA PERMISSOES
+    const permissoes = await prisma.permissoes.createMany({
+      data: [
+        { nome: "read:User" },
+        { nome: "edit:User" },
+        { nome: "create:User" },
+        { nome: "delete:User" },
+        { nome: "create:Role" },
+        { nome: "asign:Permissions" },
+        { nome: "edit:Role" },
+        { nome: "delete:Role" },
+        { nome: "read:Role" },
+        { nome: "read:Transactions" },
+        { nome: "create:Transactions" },
+        { nome: "edit:Transactions" },
+        { nome: "delete:Transactions" },
+        { nome: "create:ClosureCash" },
+        { nome: "edit:ClosureCash" },
+        { nome: "read:Order" },
+        { nome: "edit:Order" },
+        { nome: "create:Order" },
+        { nome: "delete:Order" },
+        { nome: "edit:PriceOnOrder" },
+        { nome: "read:Stock" },
+        { nome: "create:StockMovement" },
+        { nome: "create:StockConversion" },
+        { nome: "delete:TotalStock" },
+        { nome: "delete:ResetAllStock" },
+        { nome: "create:Record" },
+        { nome: "edit:Record" },
+        { nome: "read:Record" },
+        { nome: "delete:Record" },
+        { nome: "create:Unidentified" },
+        { nome: "create:Table" },
+        { nome: "edit:Table" },
+        { nome: "edit:PriceInTable" },
+        { nome: "asign:Table" },
+        { nome: "delete:Table" },
+        { nome: "read:Table" },
+        { nome: "create:Material" },
+        { nome: "edit:Material" },
+        { nome: "create:MaterialGroup" },
+        { nome: "edit:MaterialGroup" },
+        { nome: "delete:Material" },
+        { nome: "delete:MaterialGroup" },
+        { nome: "read:Material" },
+        { nome: "read:MaterialGroup" },
+      ],
+    });
+    // CRIA BANCO PADRAO
+
+    const banco = await prisma.banco.create({
+      data: { nome: "padrao", saldo: 0 },
+    });
   } catch (error) {}
 };
 

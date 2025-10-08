@@ -2,7 +2,7 @@ import { Response } from "express";
 import { ExtendedRequest } from "../types/extended-request";
 import { z } from "zod";
 import { BadRequest, UnAuthorized } from "../error";
-import { abrirCaixa, fecharCaixa } from "../model/caixa";
+import { abrirCaixa, consultaFechamento, fecharCaixa } from "../model/caixa";
 
 export const POST_A = async (req: ExtendedRequest, res: Response) => {
   try {
@@ -31,13 +31,41 @@ export const POST_A = async (req: ExtendedRequest, res: Response) => {
 };
 
 export const POST_F = async (req: ExtendedRequest, res: Response) => {
-  if (!req.user?.id) {
-    throw new UnAuthorized();
-  }
+  try {
+    if (!req.user?.id) {
+      throw new UnAuthorized();
+    }
 
-  const userID = req.user.id;
-  const fechamento = await fecharCaixa(userID);
-  res.json(fechamento);
+    const userID = req.user.id;
+    const fechamento = await fecharCaixa(userID);
+    res.json(fechamento);
+  } catch (error: any) {
+    const status = error?.statusCode || 500;
+    res.status(status).json(error);
+    return;
+  }
 };
 
-export const GET = async (req: ExtendedRequest, res: Response) => {};
+export const GET = async (req: ExtendedRequest, res: Response) => {
+  try {
+    if (!req.user?.id) {
+      throw new UnAuthorized();
+    }
+
+    const caixaID = parseInt(req.params.caixaID as string);
+    const schema = z.number().int().max(2147483646).positive();
+    const dataParsed = schema.safeParse(caixaID);
+    console.log(caixaID);
+    if (!dataParsed.success) {
+      throw new BadRequest("ID do caixa inválido");
+    }
+
+    const userID = req.user.id;
+    const fechamento = await consultaFechamento(caixaID, userID);
+    res.json(fechamento);
+  } catch (error: any) {
+    const status = error?.statusCode || 500;
+    res.status(status).json(error);
+    return;
+  }
+};

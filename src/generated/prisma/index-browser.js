@@ -241,6 +241,7 @@ exports.Prisma.ItemPedidoScalarFieldEnum = {
 exports.Prisma.PedidoScalarFieldEnum = {
   id: 'id',
   regID: 'regID',
+  caixaID: 'caixaID',
   tipo: 'tipo',
   valor_total: 'valor_total',
   status: 'status',
@@ -340,8 +341,12 @@ exports.Prisma.FechamentoScalarFieldEnum = {
   data_fechamento: 'data_fechamento',
   userID_fechamento: 'userID_fechamento',
   valor_esperado: 'valor_esperado',
-  valor_conferido: 'valor_conferido',
-  valor_diferenca: 'valor_diferenca'
+  valor_total_compras: 'valor_total_compras',
+  valor_total_vendas: 'valor_total_vendas',
+  peso_total_compras: 'peso_total_compras',
+  peso_total_vendas: 'peso_total_vendas',
+  qnt_compras: 'qnt_compras',
+  qnt_vendas: 'qnt_vendas'
 };
 
 exports.Prisma.SortOrder = {

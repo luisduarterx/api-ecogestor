@@ -11,6 +11,7 @@ import { materiaisRoutes } from "./routes/materiais";
 import { caixasRoutes } from "./routes/caixa";
 import { movimRoutes } from "./routes/movFinanceiro";
 import { pedidosRoutes } from "./routes/pedidos";
+import { popular } from "./inicial";
 
 const server = express();
 
@@ -31,3 +32,4 @@ server.use("/v1", pedidosRoutes);
 server.listen(4000, () => {
   console.log("EcoGestor API rodando...");
 });
+//server.use(popular);

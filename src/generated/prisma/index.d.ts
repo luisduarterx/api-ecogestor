@@ -3498,10 +3498,12 @@ export namespace Prisma {
 
   export type LivroCaixaCountOutputType = {
     movimentacoes: number
+    pedidos: number
   }
 
   export type LivroCaixaCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     movimentacoes?: boolean | LivroCaixaCountOutputTypeCountMovimentacoesArgs
+    pedidos?: boolean | LivroCaixaCountOutputTypeCountPedidosArgs
   }
 
   // Custom InputTypes
@@ -3520,6 +3522,13 @@ export namespace Prisma {
    */
   export type LivroCaixaCountOutputTypeCountMovimentacoesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: MovimentacaoFinanceiraWhereInput
+  }
+
+  /**
+   * LivroCaixaCountOutputType without action
+   */
+  export type LivroCaixaCountOutputTypeCountPedidosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PedidoWhereInput
   }
 
 
@@ -19489,6 +19498,7 @@ export namespace Prisma {
   export type PedidoAvgAggregateOutputType = {
     id: number | null
     regID: number | null
+    caixaID: number | null
     valor_total: Decimal | null
     userID: number | null
   }
@@ -19496,6 +19506,7 @@ export namespace Prisma {
   export type PedidoSumAggregateOutputType = {
     id: number | null
     regID: number | null
+    caixaID: number | null
     valor_total: Decimal | null
     userID: number | null
   }
@@ -19503,6 +19514,7 @@ export namespace Prisma {
   export type PedidoMinAggregateOutputType = {
     id: number | null
     regID: number | null
+    caixaID: number | null
     tipo: $Enums.TipoPedido | null
     valor_total: Decimal | null
     status: $Enums.TipoStatusPedido | null
@@ -19514,6 +19526,7 @@ export namespace Prisma {
   export type PedidoMaxAggregateOutputType = {
     id: number | null
     regID: number | null
+    caixaID: number | null
     tipo: $Enums.TipoPedido | null
     valor_total: Decimal | null
     status: $Enums.TipoStatusPedido | null
@@ -19525,6 +19538,7 @@ export namespace Prisma {
   export type PedidoCountAggregateOutputType = {
     id: number
     regID: number
+    caixaID: number
     tipo: number
     valor_total: number
     status: number
@@ -19538,6 +19552,7 @@ export namespace Prisma {
   export type PedidoAvgAggregateInputType = {
     id?: true
     regID?: true
+    caixaID?: true
     valor_total?: true
     userID?: true
   }
@@ -19545,6 +19560,7 @@ export namespace Prisma {
   export type PedidoSumAggregateInputType = {
     id?: true
     regID?: true
+    caixaID?: true
     valor_total?: true
     userID?: true
   }
@@ -19552,6 +19568,7 @@ export namespace Prisma {
   export type PedidoMinAggregateInputType = {
     id?: true
     regID?: true
+    caixaID?: true
     tipo?: true
     valor_total?: true
     status?: true
@@ -19563,6 +19580,7 @@ export namespace Prisma {
   export type PedidoMaxAggregateInputType = {
     id?: true
     regID?: true
+    caixaID?: true
     tipo?: true
     valor_total?: true
     status?: true
@@ -19574,6 +19592,7 @@ export namespace Prisma {
   export type PedidoCountAggregateInputType = {
     id?: true
     regID?: true
+    caixaID?: true
     tipo?: true
     valor_total?: true
     status?: true
@@ -19672,6 +19691,7 @@ export namespace Prisma {
   export type PedidoGroupByOutputType = {
     id: number
     regID: number | null
+    caixaID: number
     tipo: $Enums.TipoPedido
     valor_total: Decimal
     status: $Enums.TipoStatusPedido
@@ -19702,6 +19722,7 @@ export namespace Prisma {
   export type PedidoSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     regID?: boolean
+    caixaID?: boolean
     tipo?: boolean
     valor_total?: boolean
     status?: boolean
@@ -19710,6 +19731,7 @@ export namespace Prisma {
     atualizado?: boolean
     items?: boolean | Pedido$itemsArgs<ExtArgs>
     pagamentos?: boolean | Pedido$pagamentosArgs<ExtArgs>
+    caixa?: boolean | LivroCaixaDefaultArgs<ExtArgs>
     registro?: boolean | Pedido$registroArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
     _count?: boolean | PedidoCountOutputTypeDefaultArgs<ExtArgs>
@@ -19718,12 +19740,14 @@ export namespace Prisma {
   export type PedidoSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     regID?: boolean
+    caixaID?: boolean
     tipo?: boolean
     valor_total?: boolean
     status?: boolean
     userID?: boolean
     criado_em?: boolean
     atualizado?: boolean
+    caixa?: boolean | LivroCaixaDefaultArgs<ExtArgs>
     registro?: boolean | Pedido$registroArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["pedido"]>
@@ -19731,12 +19755,14 @@ export namespace Prisma {
   export type PedidoSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     regID?: boolean
+    caixaID?: boolean
     tipo?: boolean
     valor_total?: boolean
     status?: boolean
     userID?: boolean
     criado_em?: boolean
     atualizado?: boolean
+    caixa?: boolean | LivroCaixaDefaultArgs<ExtArgs>
     registro?: boolean | Pedido$registroArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["pedido"]>
@@ -19744,6 +19770,7 @@ export namespace Prisma {
   export type PedidoSelectScalar = {
     id?: boolean
     regID?: boolean
+    caixaID?: boolean
     tipo?: boolean
     valor_total?: boolean
     status?: boolean
@@ -19752,19 +19779,22 @@ export namespace Prisma {
     atualizado?: boolean
   }
 
-  export type PedidoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "regID" | "tipo" | "valor_total" | "status" | "userID" | "criado_em" | "atualizado", ExtArgs["result"]["pedido"]>
+  export type PedidoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "regID" | "caixaID" | "tipo" | "valor_total" | "status" | "userID" | "criado_em" | "atualizado", ExtArgs["result"]["pedido"]>
   export type PedidoInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     items?: boolean | Pedido$itemsArgs<ExtArgs>
     pagamentos?: boolean | Pedido$pagamentosArgs<ExtArgs>
+    caixa?: boolean | LivroCaixaDefaultArgs<ExtArgs>
     registro?: boolean | Pedido$registroArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
     _count?: boolean | PedidoCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type PedidoIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    caixa?: boolean | LivroCaixaDefaultArgs<ExtArgs>
     registro?: boolean | Pedido$registroArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
   }
   export type PedidoIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    caixa?: boolean | LivroCaixaDefaultArgs<ExtArgs>
     registro?: boolean | Pedido$registroArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
   }
@@ -19774,12 +19804,14 @@ export namespace Prisma {
     objects: {
       items: Prisma.$ItemPedidoPayload<ExtArgs>[]
       pagamentos: Prisma.$ContaFinanceiraPayload<ExtArgs>[]
+      caixa: Prisma.$LivroCaixaPayload<ExtArgs>
       registro: Prisma.$RegistroPayload<ExtArgs> | null
       user: Prisma.$UserPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
       regID: number | null
+      caixaID: number
       tipo: $Enums.TipoPedido
       valor_total: Prisma.Decimal
       status: $Enums.TipoStatusPedido
@@ -20182,6 +20214,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     items<T extends Pedido$itemsArgs<ExtArgs> = {}>(args?: Subset<T, Pedido$itemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ItemPedidoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     pagamentos<T extends Pedido$pagamentosArgs<ExtArgs> = {}>(args?: Subset<T, Pedido$pagamentosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContaFinanceiraPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    caixa<T extends LivroCaixaDefaultArgs<ExtArgs> = {}>(args?: Subset<T, LivroCaixaDefaultArgs<ExtArgs>>): Prisma__LivroCaixaClient<$Result.GetResult<Prisma.$LivroCaixaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     registro<T extends Pedido$registroArgs<ExtArgs> = {}>(args?: Subset<T, Pedido$registroArgs<ExtArgs>>): Prisma__RegistroClient<$Result.GetResult<Prisma.$RegistroPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
@@ -20215,6 +20248,7 @@ export namespace Prisma {
   interface PedidoFieldRefs {
     readonly id: FieldRef<"Pedido", 'Int'>
     readonly regID: FieldRef<"Pedido", 'Int'>
+    readonly caixaID: FieldRef<"Pedido", 'Int'>
     readonly tipo: FieldRef<"Pedido", 'TipoPedido'>
     readonly valor_total: FieldRef<"Pedido", 'Decimal'>
     readonly status: FieldRef<"Pedido", 'TipoStatusPedido'>
@@ -29092,6 +29126,7 @@ export namespace Prisma {
     status?: boolean
     abertoPor?: boolean | UserDefaultArgs<ExtArgs>
     movimentacoes?: boolean | LivroCaixa$movimentacoesArgs<ExtArgs>
+    pedidos?: boolean | LivroCaixa$pedidosArgs<ExtArgs>
     fechamento?: boolean | LivroCaixa$fechamentoArgs<ExtArgs>
     _count?: boolean | LivroCaixaCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["livroCaixa"]>
@@ -29132,6 +29167,7 @@ export namespace Prisma {
   export type LivroCaixaInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     abertoPor?: boolean | UserDefaultArgs<ExtArgs>
     movimentacoes?: boolean | LivroCaixa$movimentacoesArgs<ExtArgs>
+    pedidos?: boolean | LivroCaixa$pedidosArgs<ExtArgs>
     fechamento?: boolean | LivroCaixa$fechamentoArgs<ExtArgs>
     _count?: boolean | LivroCaixaCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -29147,6 +29183,7 @@ export namespace Prisma {
     objects: {
       abertoPor: Prisma.$UserPayload<ExtArgs>
       movimentacoes: Prisma.$MovimentacaoFinanceiraPayload<ExtArgs>[]
+      pedidos: Prisma.$PedidoPayload<ExtArgs>[]
       fechamento: Prisma.$FechamentoPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -29553,6 +29590,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     abertoPor<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     movimentacoes<T extends LivroCaixa$movimentacoesArgs<ExtArgs> = {}>(args?: Subset<T, LivroCaixa$movimentacoesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MovimentacaoFinanceiraPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    pedidos<T extends LivroCaixa$pedidosArgs<ExtArgs> = {}>(args?: Subset<T, LivroCaixa$pedidosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PedidoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     fechamento<T extends LivroCaixa$fechamentoArgs<ExtArgs> = {}>(args?: Subset<T, LivroCaixa$fechamentoArgs<ExtArgs>>): Prisma__FechamentoClient<$Result.GetResult<Prisma.$FechamentoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -30010,6 +30048,30 @@ export namespace Prisma {
   }
 
   /**
+   * LivroCaixa.pedidos
+   */
+  export type LivroCaixa$pedidosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Pedido
+     */
+    select?: PedidoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Pedido
+     */
+    omit?: PedidoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PedidoInclude<ExtArgs> | null
+    where?: PedidoWhereInput
+    orderBy?: PedidoOrderByWithRelationInput | PedidoOrderByWithRelationInput[]
+    cursor?: PedidoWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PedidoScalarFieldEnum | PedidoScalarFieldEnum[]
+  }
+
+  /**
    * LivroCaixa.fechamento
    */
   export type LivroCaixa$fechamentoArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -30067,8 +30129,12 @@ export namespace Prisma {
     valor_despesas: Decimal | null
     userID_fechamento: number | null
     valor_esperado: Decimal | null
-    valor_conferido: Decimal | null
-    valor_diferenca: Decimal | null
+    valor_total_compras: Decimal | null
+    valor_total_vendas: Decimal | null
+    peso_total_compras: Decimal | null
+    peso_total_vendas: Decimal | null
+    qnt_compras: Decimal | null
+    qnt_vendas: Decimal | null
   }
 
   export type FechamentoSumAggregateOutputType = {
@@ -30079,8 +30145,12 @@ export namespace Prisma {
     valor_despesas: Decimal | null
     userID_fechamento: number | null
     valor_esperado: Decimal | null
-    valor_conferido: Decimal | null
-    valor_diferenca: Decimal | null
+    valor_total_compras: Decimal | null
+    valor_total_vendas: Decimal | null
+    peso_total_compras: Decimal | null
+    peso_total_vendas: Decimal | null
+    qnt_compras: Decimal | null
+    qnt_vendas: Decimal | null
   }
 
   export type FechamentoMinAggregateOutputType = {
@@ -30093,8 +30163,12 @@ export namespace Prisma {
     data_fechamento: Date | null
     userID_fechamento: number | null
     valor_esperado: Decimal | null
-    valor_conferido: Decimal | null
-    valor_diferenca: Decimal | null
+    valor_total_compras: Decimal | null
+    valor_total_vendas: Decimal | null
+    peso_total_compras: Decimal | null
+    peso_total_vendas: Decimal | null
+    qnt_compras: Decimal | null
+    qnt_vendas: Decimal | null
   }
 
   export type FechamentoMaxAggregateOutputType = {
@@ -30107,8 +30181,12 @@ export namespace Prisma {
     data_fechamento: Date | null
     userID_fechamento: number | null
     valor_esperado: Decimal | null
-    valor_conferido: Decimal | null
-    valor_diferenca: Decimal | null
+    valor_total_compras: Decimal | null
+    valor_total_vendas: Decimal | null
+    peso_total_compras: Decimal | null
+    peso_total_vendas: Decimal | null
+    qnt_compras: Decimal | null
+    qnt_vendas: Decimal | null
   }
 
   export type FechamentoCountAggregateOutputType = {
@@ -30121,8 +30199,12 @@ export namespace Prisma {
     data_fechamento: number
     userID_fechamento: number
     valor_esperado: number
-    valor_conferido: number
-    valor_diferenca: number
+    valor_total_compras: number
+    valor_total_vendas: number
+    peso_total_compras: number
+    peso_total_vendas: number
+    qnt_compras: number
+    qnt_vendas: number
     _all: number
   }
 
@@ -30135,8 +30217,12 @@ export namespace Prisma {
     valor_despesas?: true
     userID_fechamento?: true
     valor_esperado?: true
-    valor_conferido?: true
-    valor_diferenca?: true
+    valor_total_compras?: true
+    valor_total_vendas?: true
+    peso_total_compras?: true
+    peso_total_vendas?: true
+    qnt_compras?: true
+    qnt_vendas?: true
   }
 
   export type FechamentoSumAggregateInputType = {
@@ -30147,8 +30233,12 @@ export namespace Prisma {
     valor_despesas?: true
     userID_fechamento?: true
     valor_esperado?: true
-    valor_conferido?: true
-    valor_diferenca?: true
+    valor_total_compras?: true
+    valor_total_vendas?: true
+    peso_total_compras?: true
+    peso_total_vendas?: true
+    qnt_compras?: true
+    qnt_vendas?: true
   }
 
   export type FechamentoMinAggregateInputType = {
@@ -30161,8 +30251,12 @@ export namespace Prisma {
     data_fechamento?: true
     userID_fechamento?: true
     valor_esperado?: true
-    valor_conferido?: true
-    valor_diferenca?: true
+    valor_total_compras?: true
+    valor_total_vendas?: true
+    peso_total_compras?: true
+    peso_total_vendas?: true
+    qnt_compras?: true
+    qnt_vendas?: true
   }
 
   export type FechamentoMaxAggregateInputType = {
@@ -30175,8 +30269,12 @@ export namespace Prisma {
     data_fechamento?: true
     userID_fechamento?: true
     valor_esperado?: true
-    valor_conferido?: true
-    valor_diferenca?: true
+    valor_total_compras?: true
+    valor_total_vendas?: true
+    peso_total_compras?: true
+    peso_total_vendas?: true
+    qnt_compras?: true
+    qnt_vendas?: true
   }
 
   export type FechamentoCountAggregateInputType = {
@@ -30189,8 +30287,12 @@ export namespace Prisma {
     data_fechamento?: true
     userID_fechamento?: true
     valor_esperado?: true
-    valor_conferido?: true
-    valor_diferenca?: true
+    valor_total_compras?: true
+    valor_total_vendas?: true
+    peso_total_compras?: true
+    peso_total_vendas?: true
+    qnt_compras?: true
+    qnt_vendas?: true
     _all?: true
   }
 
@@ -30290,8 +30392,12 @@ export namespace Prisma {
     data_fechamento: Date
     userID_fechamento: number
     valor_esperado: Decimal
-    valor_conferido: Decimal
-    valor_diferenca: Decimal | null
+    valor_total_compras: Decimal
+    valor_total_vendas: Decimal
+    peso_total_compras: Decimal
+    peso_total_vendas: Decimal
+    qnt_compras: Decimal
+    qnt_vendas: Decimal
     _count: FechamentoCountAggregateOutputType | null
     _avg: FechamentoAvgAggregateOutputType | null
     _sum: FechamentoSumAggregateOutputType | null
@@ -30323,8 +30429,12 @@ export namespace Prisma {
     data_fechamento?: boolean
     userID_fechamento?: boolean
     valor_esperado?: boolean
-    valor_conferido?: boolean
-    valor_diferenca?: boolean
+    valor_total_compras?: boolean
+    valor_total_vendas?: boolean
+    peso_total_compras?: boolean
+    peso_total_vendas?: boolean
+    qnt_compras?: boolean
+    qnt_vendas?: boolean
     caixa?: boolean | LivroCaixaDefaultArgs<ExtArgs>
     user_fechamento?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["fechamento"]>
@@ -30339,8 +30449,12 @@ export namespace Prisma {
     data_fechamento?: boolean
     userID_fechamento?: boolean
     valor_esperado?: boolean
-    valor_conferido?: boolean
-    valor_diferenca?: boolean
+    valor_total_compras?: boolean
+    valor_total_vendas?: boolean
+    peso_total_compras?: boolean
+    peso_total_vendas?: boolean
+    qnt_compras?: boolean
+    qnt_vendas?: boolean
     caixa?: boolean | LivroCaixaDefaultArgs<ExtArgs>
     user_fechamento?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["fechamento"]>
@@ -30355,8 +30469,12 @@ export namespace Prisma {
     data_fechamento?: boolean
     userID_fechamento?: boolean
     valor_esperado?: boolean
-    valor_conferido?: boolean
-    valor_diferenca?: boolean
+    valor_total_compras?: boolean
+    valor_total_vendas?: boolean
+    peso_total_compras?: boolean
+    peso_total_vendas?: boolean
+    qnt_compras?: boolean
+    qnt_vendas?: boolean
     caixa?: boolean | LivroCaixaDefaultArgs<ExtArgs>
     user_fechamento?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["fechamento"]>
@@ -30371,11 +30489,15 @@ export namespace Prisma {
     data_fechamento?: boolean
     userID_fechamento?: boolean
     valor_esperado?: boolean
-    valor_conferido?: boolean
-    valor_diferenca?: boolean
+    valor_total_compras?: boolean
+    valor_total_vendas?: boolean
+    peso_total_compras?: boolean
+    peso_total_vendas?: boolean
+    qnt_compras?: boolean
+    qnt_vendas?: boolean
   }
 
-  export type FechamentoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "caixaID" | "valor_abertura" | "valor_abastecimentos" | "valor_despesas" | "data_abertura" | "data_fechamento" | "userID_fechamento" | "valor_esperado" | "valor_conferido" | "valor_diferenca", ExtArgs["result"]["fechamento"]>
+  export type FechamentoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "caixaID" | "valor_abertura" | "valor_abastecimentos" | "valor_despesas" | "data_abertura" | "data_fechamento" | "userID_fechamento" | "valor_esperado" | "valor_total_compras" | "valor_total_vendas" | "peso_total_compras" | "peso_total_vendas" | "qnt_compras" | "qnt_vendas", ExtArgs["result"]["fechamento"]>
   export type FechamentoInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     caixa?: boolean | LivroCaixaDefaultArgs<ExtArgs>
     user_fechamento?: boolean | UserDefaultArgs<ExtArgs>
@@ -30405,8 +30527,12 @@ export namespace Prisma {
       data_fechamento: Date
       userID_fechamento: number
       valor_esperado: Prisma.Decimal
-      valor_conferido: Prisma.Decimal
-      valor_diferenca: Prisma.Decimal | null
+      valor_total_compras: Prisma.Decimal
+      valor_total_vendas: Prisma.Decimal
+      peso_total_compras: Prisma.Decimal
+      peso_total_vendas: Prisma.Decimal
+      qnt_compras: Prisma.Decimal
+      qnt_vendas: Prisma.Decimal
     }, ExtArgs["result"]["fechamento"]>
     composites: {}
   }
@@ -30841,8 +30967,12 @@ export namespace Prisma {
     readonly data_fechamento: FieldRef<"Fechamento", 'DateTime'>
     readonly userID_fechamento: FieldRef<"Fechamento", 'Int'>
     readonly valor_esperado: FieldRef<"Fechamento", 'Decimal'>
-    readonly valor_conferido: FieldRef<"Fechamento", 'Decimal'>
-    readonly valor_diferenca: FieldRef<"Fechamento", 'Decimal'>
+    readonly valor_total_compras: FieldRef<"Fechamento", 'Decimal'>
+    readonly valor_total_vendas: FieldRef<"Fechamento", 'Decimal'>
+    readonly peso_total_compras: FieldRef<"Fechamento", 'Decimal'>
+    readonly peso_total_vendas: FieldRef<"Fechamento", 'Decimal'>
+    readonly qnt_compras: FieldRef<"Fechamento", 'Decimal'>
+    readonly qnt_vendas: FieldRef<"Fechamento", 'Decimal'>
   }
     
 
@@ -31434,6 +31564,7 @@ export namespace Prisma {
   export const PedidoScalarFieldEnum: {
     id: 'id',
     regID: 'regID',
+    caixaID: 'caixaID',
     tipo: 'tipo',
     valor_total: 'valor_total',
     status: 'status',
@@ -31560,8 +31691,12 @@ export namespace Prisma {
     data_fechamento: 'data_fechamento',
     userID_fechamento: 'userID_fechamento',
     valor_esperado: 'valor_esperado',
-    valor_conferido: 'valor_conferido',
-    valor_diferenca: 'valor_diferenca'
+    valor_total_compras: 'valor_total_compras',
+    valor_total_vendas: 'valor_total_vendas',
+    peso_total_compras: 'peso_total_compras',
+    peso_total_vendas: 'peso_total_vendas',
+    qnt_compras: 'qnt_compras',
+    qnt_vendas: 'qnt_vendas'
   };
 
   export type FechamentoScalarFieldEnum = (typeof FechamentoScalarFieldEnum)[keyof typeof FechamentoScalarFieldEnum]
@@ -32502,10 +32637,10 @@ export namespace Prisma {
 
   export type MaterialWhereUniqueInput = Prisma.AtLeast<{
     id?: number
+    nome?: string
     AND?: MaterialWhereInput | MaterialWhereInput[]
     OR?: MaterialWhereInput[]
     NOT?: MaterialWhereInput | MaterialWhereInput[]
-    nome?: StringFilter<"Material"> | string
     catID?: IntFilter<"Material"> | number
     v_venda?: DecimalFilter<"Material"> | Decimal | DecimalJsLike | number | string
     estoque?: DecimalFilter<"Material"> | Decimal | DecimalJsLike | number | string
@@ -32516,7 +32651,7 @@ export namespace Prisma {
     categoria?: XOR<CategoriaMaterialScalarRelationFilter, CategoriaMaterialWhereInput>
     movimentacoes?: MovimentacaoEstoqueListRelationFilter
     preco_tabela?: PrecoPorTabelaListRelationFilter
-  }, "id">
+  }, "id" | "nome">
 
   export type MaterialOrderByWithAggregationInput = {
     id?: SortOrder
@@ -32676,6 +32811,7 @@ export namespace Prisma {
     NOT?: PedidoWhereInput | PedidoWhereInput[]
     id?: IntFilter<"Pedido"> | number
     regID?: IntNullableFilter<"Pedido"> | number | null
+    caixaID?: IntFilter<"Pedido"> | number
     tipo?: EnumTipoPedidoFilter<"Pedido"> | $Enums.TipoPedido
     valor_total?: DecimalFilter<"Pedido"> | Decimal | DecimalJsLike | number | string
     status?: EnumTipoStatusPedidoFilter<"Pedido"> | $Enums.TipoStatusPedido
@@ -32684,6 +32820,7 @@ export namespace Prisma {
     atualizado?: DateTimeFilter<"Pedido"> | Date | string
     items?: ItemPedidoListRelationFilter
     pagamentos?: ContaFinanceiraListRelationFilter
+    caixa?: XOR<LivroCaixaScalarRelationFilter, LivroCaixaWhereInput>
     registro?: XOR<RegistroNullableScalarRelationFilter, RegistroWhereInput> | null
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
@@ -32691,6 +32828,7 @@ export namespace Prisma {
   export type PedidoOrderByWithRelationInput = {
     id?: SortOrder
     regID?: SortOrderInput | SortOrder
+    caixaID?: SortOrder
     tipo?: SortOrder
     valor_total?: SortOrder
     status?: SortOrder
@@ -32699,6 +32837,7 @@ export namespace Prisma {
     atualizado?: SortOrder
     items?: ItemPedidoOrderByRelationAggregateInput
     pagamentos?: ContaFinanceiraOrderByRelationAggregateInput
+    caixa?: LivroCaixaOrderByWithRelationInput
     registro?: RegistroOrderByWithRelationInput
     user?: UserOrderByWithRelationInput
   }
@@ -32709,6 +32848,7 @@ export namespace Prisma {
     OR?: PedidoWhereInput[]
     NOT?: PedidoWhereInput | PedidoWhereInput[]
     regID?: IntNullableFilter<"Pedido"> | number | null
+    caixaID?: IntFilter<"Pedido"> | number
     tipo?: EnumTipoPedidoFilter<"Pedido"> | $Enums.TipoPedido
     valor_total?: DecimalFilter<"Pedido"> | Decimal | DecimalJsLike | number | string
     status?: EnumTipoStatusPedidoFilter<"Pedido"> | $Enums.TipoStatusPedido
@@ -32717,6 +32857,7 @@ export namespace Prisma {
     atualizado?: DateTimeFilter<"Pedido"> | Date | string
     items?: ItemPedidoListRelationFilter
     pagamentos?: ContaFinanceiraListRelationFilter
+    caixa?: XOR<LivroCaixaScalarRelationFilter, LivroCaixaWhereInput>
     registro?: XOR<RegistroNullableScalarRelationFilter, RegistroWhereInput> | null
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }, "id">
@@ -32724,6 +32865,7 @@ export namespace Prisma {
   export type PedidoOrderByWithAggregationInput = {
     id?: SortOrder
     regID?: SortOrderInput | SortOrder
+    caixaID?: SortOrder
     tipo?: SortOrder
     valor_total?: SortOrder
     status?: SortOrder
@@ -32743,6 +32885,7 @@ export namespace Prisma {
     NOT?: PedidoScalarWhereWithAggregatesInput | PedidoScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"Pedido"> | number
     regID?: IntNullableWithAggregatesFilter<"Pedido"> | number | null
+    caixaID?: IntWithAggregatesFilter<"Pedido"> | number
     tipo?: EnumTipoPedidoWithAggregatesFilter<"Pedido"> | $Enums.TipoPedido
     valor_total?: DecimalWithAggregatesFilter<"Pedido"> | Decimal | DecimalJsLike | number | string
     status?: EnumTipoStatusPedidoWithAggregatesFilter<"Pedido"> | $Enums.TipoStatusPedido
@@ -33268,6 +33411,7 @@ export namespace Prisma {
     status?: EnumStatusCaixaFilter<"LivroCaixa"> | $Enums.StatusCaixa
     abertoPor?: XOR<UserScalarRelationFilter, UserWhereInput>
     movimentacoes?: MovimentacaoFinanceiraListRelationFilter
+    pedidos?: PedidoListRelationFilter
     fechamento?: XOR<FechamentoNullableScalarRelationFilter, FechamentoWhereInput> | null
   }
 
@@ -33281,6 +33425,7 @@ export namespace Prisma {
     status?: SortOrder
     abertoPor?: UserOrderByWithRelationInput
     movimentacoes?: MovimentacaoFinanceiraOrderByRelationAggregateInput
+    pedidos?: PedidoOrderByRelationAggregateInput
     fechamento?: FechamentoOrderByWithRelationInput
   }
 
@@ -33297,6 +33442,7 @@ export namespace Prisma {
     status?: EnumStatusCaixaFilter<"LivroCaixa"> | $Enums.StatusCaixa
     abertoPor?: XOR<UserScalarRelationFilter, UserWhereInput>
     movimentacoes?: MovimentacaoFinanceiraListRelationFilter
+    pedidos?: PedidoListRelationFilter
     fechamento?: XOR<FechamentoNullableScalarRelationFilter, FechamentoWhereInput> | null
   }, "id">
 
@@ -33341,8 +33487,12 @@ export namespace Prisma {
     data_fechamento?: DateTimeFilter<"Fechamento"> | Date | string
     userID_fechamento?: IntFilter<"Fechamento"> | number
     valor_esperado?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
-    valor_conferido?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
-    valor_diferenca?: DecimalNullableFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string | null
+    valor_total_compras?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    valor_total_vendas?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    peso_total_compras?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    peso_total_vendas?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    qnt_compras?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    qnt_vendas?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
     caixa?: XOR<LivroCaixaScalarRelationFilter, LivroCaixaWhereInput>
     user_fechamento?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
@@ -33357,8 +33507,12 @@ export namespace Prisma {
     data_fechamento?: SortOrder
     userID_fechamento?: SortOrder
     valor_esperado?: SortOrder
-    valor_conferido?: SortOrder
-    valor_diferenca?: SortOrderInput | SortOrder
+    valor_total_compras?: SortOrder
+    valor_total_vendas?: SortOrder
+    peso_total_compras?: SortOrder
+    peso_total_vendas?: SortOrder
+    qnt_compras?: SortOrder
+    qnt_vendas?: SortOrder
     caixa?: LivroCaixaOrderByWithRelationInput
     user_fechamento?: UserOrderByWithRelationInput
   }
@@ -33376,8 +33530,12 @@ export namespace Prisma {
     data_fechamento?: DateTimeFilter<"Fechamento"> | Date | string
     userID_fechamento?: IntFilter<"Fechamento"> | number
     valor_esperado?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
-    valor_conferido?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
-    valor_diferenca?: DecimalNullableFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string | null
+    valor_total_compras?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    valor_total_vendas?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    peso_total_compras?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    peso_total_vendas?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    qnt_compras?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    qnt_vendas?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
     caixa?: XOR<LivroCaixaScalarRelationFilter, LivroCaixaWhereInput>
     user_fechamento?: XOR<UserScalarRelationFilter, UserWhereInput>
   }, "id" | "caixaID">
@@ -33392,8 +33550,12 @@ export namespace Prisma {
     data_fechamento?: SortOrder
     userID_fechamento?: SortOrder
     valor_esperado?: SortOrder
-    valor_conferido?: SortOrder
-    valor_diferenca?: SortOrderInput | SortOrder
+    valor_total_compras?: SortOrder
+    valor_total_vendas?: SortOrder
+    peso_total_compras?: SortOrder
+    peso_total_vendas?: SortOrder
+    qnt_compras?: SortOrder
+    qnt_vendas?: SortOrder
     _count?: FechamentoCountOrderByAggregateInput
     _avg?: FechamentoAvgOrderByAggregateInput
     _max?: FechamentoMaxOrderByAggregateInput
@@ -33414,8 +33576,12 @@ export namespace Prisma {
     data_fechamento?: DateTimeWithAggregatesFilter<"Fechamento"> | Date | string
     userID_fechamento?: IntWithAggregatesFilter<"Fechamento"> | number
     valor_esperado?: DecimalWithAggregatesFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
-    valor_conferido?: DecimalWithAggregatesFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
-    valor_diferenca?: DecimalNullableWithAggregatesFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string | null
+    valor_total_compras?: DecimalWithAggregatesFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    valor_total_vendas?: DecimalWithAggregatesFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    peso_total_compras?: DecimalWithAggregatesFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    peso_total_vendas?: DecimalWithAggregatesFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    qnt_compras?: DecimalWithAggregatesFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    qnt_vendas?: DecimalWithAggregatesFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
   }
 
   export type UserCreateInput = {
@@ -34278,6 +34444,7 @@ export namespace Prisma {
     atualizado?: Date | string
     items?: ItemPedidoCreateNestedManyWithoutPedidoInput
     pagamentos?: ContaFinanceiraCreateNestedManyWithoutPedidoInput
+    caixa: LivroCaixaCreateNestedOneWithoutPedidosInput
     registro?: RegistroCreateNestedOneWithoutPedidosInput
     user: UserCreateNestedOneWithoutPedidosInput
   }
@@ -34285,6 +34452,7 @@ export namespace Prisma {
   export type PedidoUncheckedCreateInput = {
     id?: number
     regID?: number | null
+    caixaID: number
     tipo: $Enums.TipoPedido
     valor_total?: Decimal | DecimalJsLike | number | string
     status?: $Enums.TipoStatusPedido
@@ -34303,6 +34471,7 @@ export namespace Prisma {
     atualizado?: DateTimeFieldUpdateOperationsInput | Date | string
     items?: ItemPedidoUpdateManyWithoutPedidoNestedInput
     pagamentos?: ContaFinanceiraUpdateManyWithoutPedidoNestedInput
+    caixa?: LivroCaixaUpdateOneRequiredWithoutPedidosNestedInput
     registro?: RegistroUpdateOneWithoutPedidosNestedInput
     user?: UserUpdateOneRequiredWithoutPedidosNestedInput
   }
@@ -34310,6 +34479,7 @@ export namespace Prisma {
   export type PedidoUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     regID?: NullableIntFieldUpdateOperationsInput | number | null
+    caixaID?: IntFieldUpdateOperationsInput | number
     tipo?: EnumTipoPedidoFieldUpdateOperationsInput | $Enums.TipoPedido
     valor_total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     status?: EnumTipoStatusPedidoFieldUpdateOperationsInput | $Enums.TipoStatusPedido
@@ -34323,6 +34493,7 @@ export namespace Prisma {
   export type PedidoCreateManyInput = {
     id?: number
     regID?: number | null
+    caixaID: number
     tipo: $Enums.TipoPedido
     valor_total?: Decimal | DecimalJsLike | number | string
     status?: $Enums.TipoStatusPedido
@@ -34342,6 +34513,7 @@ export namespace Prisma {
   export type PedidoUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     regID?: NullableIntFieldUpdateOperationsInput | number | null
+    caixaID?: IntFieldUpdateOperationsInput | number
     tipo?: EnumTipoPedidoFieldUpdateOperationsInput | $Enums.TipoPedido
     valor_total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     status?: EnumTipoStatusPedidoFieldUpdateOperationsInput | $Enums.TipoStatusPedido
@@ -34847,6 +35019,7 @@ export namespace Prisma {
     status?: $Enums.StatusCaixa
     abertoPor: UserCreateNestedOneWithoutCaixasAbertosInput
     movimentacoes?: MovimentacaoFinanceiraCreateNestedManyWithoutCaixaInput
+    pedidos?: PedidoCreateNestedManyWithoutCaixaInput
     fechamento?: FechamentoCreateNestedOneWithoutCaixaInput
   }
 
@@ -34859,6 +35032,7 @@ export namespace Prisma {
     saldoFinal: Decimal | DecimalJsLike | number | string
     status?: $Enums.StatusCaixa
     movimentacoes?: MovimentacaoFinanceiraUncheckedCreateNestedManyWithoutCaixaInput
+    pedidos?: PedidoUncheckedCreateNestedManyWithoutCaixaInput
     fechamento?: FechamentoUncheckedCreateNestedOneWithoutCaixaInput
   }
 
@@ -34870,6 +35044,7 @@ export namespace Prisma {
     status?: EnumStatusCaixaFieldUpdateOperationsInput | $Enums.StatusCaixa
     abertoPor?: UserUpdateOneRequiredWithoutCaixasAbertosNestedInput
     movimentacoes?: MovimentacaoFinanceiraUpdateManyWithoutCaixaNestedInput
+    pedidos?: PedidoUpdateManyWithoutCaixaNestedInput
     fechamento?: FechamentoUpdateOneWithoutCaixaNestedInput
   }
 
@@ -34882,6 +35057,7 @@ export namespace Prisma {
     saldoFinal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     status?: EnumStatusCaixaFieldUpdateOperationsInput | $Enums.StatusCaixa
     movimentacoes?: MovimentacaoFinanceiraUncheckedUpdateManyWithoutCaixaNestedInput
+    pedidos?: PedidoUncheckedUpdateManyWithoutCaixaNestedInput
     fechamento?: FechamentoUncheckedUpdateOneWithoutCaixaNestedInput
   }
 
@@ -34920,8 +35096,12 @@ export namespace Prisma {
     data_abertura: Date | string
     data_fechamento: Date | string
     valor_esperado: Decimal | DecimalJsLike | number | string
-    valor_conferido: Decimal | DecimalJsLike | number | string
-    valor_diferenca?: Decimal | DecimalJsLike | number | string | null
+    valor_total_compras: Decimal | DecimalJsLike | number | string
+    valor_total_vendas: Decimal | DecimalJsLike | number | string
+    peso_total_compras: Decimal | DecimalJsLike | number | string
+    peso_total_vendas: Decimal | DecimalJsLike | number | string
+    qnt_compras: Decimal | DecimalJsLike | number | string
+    qnt_vendas: Decimal | DecimalJsLike | number | string
     caixa: LivroCaixaCreateNestedOneWithoutFechamentoInput
     user_fechamento: UserCreateNestedOneWithoutFechamentosInput
   }
@@ -34936,8 +35116,12 @@ export namespace Prisma {
     data_fechamento: Date | string
     userID_fechamento: number
     valor_esperado: Decimal | DecimalJsLike | number | string
-    valor_conferido: Decimal | DecimalJsLike | number | string
-    valor_diferenca?: Decimal | DecimalJsLike | number | string | null
+    valor_total_compras: Decimal | DecimalJsLike | number | string
+    valor_total_vendas: Decimal | DecimalJsLike | number | string
+    peso_total_compras: Decimal | DecimalJsLike | number | string
+    peso_total_vendas: Decimal | DecimalJsLike | number | string
+    qnt_compras: Decimal | DecimalJsLike | number | string
+    qnt_vendas: Decimal | DecimalJsLike | number | string
   }
 
   export type FechamentoUpdateInput = {
@@ -34947,8 +35131,12 @@ export namespace Prisma {
     data_abertura?: DateTimeFieldUpdateOperationsInput | Date | string
     data_fechamento?: DateTimeFieldUpdateOperationsInput | Date | string
     valor_esperado?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    valor_conferido?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    valor_diferenca?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    valor_total_compras?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_total_vendas?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    peso_total_compras?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    peso_total_vendas?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    qnt_compras?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    qnt_vendas?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     caixa?: LivroCaixaUpdateOneRequiredWithoutFechamentoNestedInput
     user_fechamento?: UserUpdateOneRequiredWithoutFechamentosNestedInput
   }
@@ -34963,8 +35151,12 @@ export namespace Prisma {
     data_fechamento?: DateTimeFieldUpdateOperationsInput | Date | string
     userID_fechamento?: IntFieldUpdateOperationsInput | number
     valor_esperado?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    valor_conferido?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    valor_diferenca?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    valor_total_compras?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_total_vendas?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    peso_total_compras?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    peso_total_vendas?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    qnt_compras?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    qnt_vendas?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
   export type FechamentoCreateManyInput = {
@@ -34977,8 +35169,12 @@ export namespace Prisma {
     data_fechamento: Date | string
     userID_fechamento: number
     valor_esperado: Decimal | DecimalJsLike | number | string
-    valor_conferido: Decimal | DecimalJsLike | number | string
-    valor_diferenca?: Decimal | DecimalJsLike | number | string | null
+    valor_total_compras: Decimal | DecimalJsLike | number | string
+    valor_total_vendas: Decimal | DecimalJsLike | number | string
+    peso_total_compras: Decimal | DecimalJsLike | number | string
+    peso_total_vendas: Decimal | DecimalJsLike | number | string
+    qnt_compras: Decimal | DecimalJsLike | number | string
+    qnt_vendas: Decimal | DecimalJsLike | number | string
   }
 
   export type FechamentoUpdateManyMutationInput = {
@@ -34988,8 +35184,12 @@ export namespace Prisma {
     data_abertura?: DateTimeFieldUpdateOperationsInput | Date | string
     data_fechamento?: DateTimeFieldUpdateOperationsInput | Date | string
     valor_esperado?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    valor_conferido?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    valor_diferenca?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    valor_total_compras?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_total_vendas?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    peso_total_compras?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    peso_total_vendas?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    qnt_compras?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    qnt_vendas?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
   export type FechamentoUncheckedUpdateManyInput = {
@@ -35002,8 +35202,12 @@ export namespace Prisma {
     data_fechamento?: DateTimeFieldUpdateOperationsInput | Date | string
     userID_fechamento?: IntFieldUpdateOperationsInput | number
     valor_esperado?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    valor_conferido?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    valor_diferenca?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    valor_total_compras?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_total_vendas?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    peso_total_compras?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    peso_total_vendas?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    qnt_compras?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    qnt_vendas?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
   export type IntFilter<$PrismaModel = never> = {
@@ -35931,6 +36135,11 @@ export namespace Prisma {
     not?: NestedEnumTipoStatusPedidoFilter<$PrismaModel> | $Enums.TipoStatusPedido
   }
 
+  export type LivroCaixaScalarRelationFilter = {
+    is?: LivroCaixaWhereInput
+    isNot?: LivroCaixaWhereInput
+  }
+
   export type RegistroNullableScalarRelationFilter = {
     is?: RegistroWhereInput | null
     isNot?: RegistroWhereInput | null
@@ -35944,6 +36153,7 @@ export namespace Prisma {
   export type PedidoCountOrderByAggregateInput = {
     id?: SortOrder
     regID?: SortOrder
+    caixaID?: SortOrder
     tipo?: SortOrder
     valor_total?: SortOrder
     status?: SortOrder
@@ -35955,6 +36165,7 @@ export namespace Prisma {
   export type PedidoAvgOrderByAggregateInput = {
     id?: SortOrder
     regID?: SortOrder
+    caixaID?: SortOrder
     valor_total?: SortOrder
     userID?: SortOrder
   }
@@ -35962,6 +36173,7 @@ export namespace Prisma {
   export type PedidoMaxOrderByAggregateInput = {
     id?: SortOrder
     regID?: SortOrder
+    caixaID?: SortOrder
     tipo?: SortOrder
     valor_total?: SortOrder
     status?: SortOrder
@@ -35973,6 +36185,7 @@ export namespace Prisma {
   export type PedidoMinOrderByAggregateInput = {
     id?: SortOrder
     regID?: SortOrder
+    caixaID?: SortOrder
     tipo?: SortOrder
     valor_total?: SortOrder
     status?: SortOrder
@@ -35984,6 +36197,7 @@ export namespace Prisma {
   export type PedidoSumOrderByAggregateInput = {
     id?: SortOrder
     regID?: SortOrder
+    caixaID?: SortOrder
     valor_total?: SortOrder
     userID?: SortOrder
   }
@@ -36155,11 +36369,6 @@ export namespace Prisma {
   export type BancoNullableScalarRelationFilter = {
     is?: BancoWhereInput | null
     isNot?: BancoWhereInput | null
-  }
-
-  export type LivroCaixaScalarRelationFilter = {
-    is?: LivroCaixaWhereInput
-    isNot?: LivroCaixaWhereInput
   }
 
   export type ContaFinanceiraNullableScalarRelationFilter = {
@@ -36509,17 +36718,6 @@ export namespace Prisma {
     _max?: NestedEnumStatusCaixaFilter<$PrismaModel>
   }
 
-  export type DecimalNullableFilter<$PrismaModel = never> = {
-    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
-    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    not?: NestedDecimalNullableFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
-  }
-
   export type FechamentoCountOrderByAggregateInput = {
     id?: SortOrder
     caixaID?: SortOrder
@@ -36530,8 +36728,12 @@ export namespace Prisma {
     data_fechamento?: SortOrder
     userID_fechamento?: SortOrder
     valor_esperado?: SortOrder
-    valor_conferido?: SortOrder
-    valor_diferenca?: SortOrder
+    valor_total_compras?: SortOrder
+    valor_total_vendas?: SortOrder
+    peso_total_compras?: SortOrder
+    peso_total_vendas?: SortOrder
+    qnt_compras?: SortOrder
+    qnt_vendas?: SortOrder
   }
 
   export type FechamentoAvgOrderByAggregateInput = {
@@ -36542,8 +36744,12 @@ export namespace Prisma {
     valor_despesas?: SortOrder
     userID_fechamento?: SortOrder
     valor_esperado?: SortOrder
-    valor_conferido?: SortOrder
-    valor_diferenca?: SortOrder
+    valor_total_compras?: SortOrder
+    valor_total_vendas?: SortOrder
+    peso_total_compras?: SortOrder
+    peso_total_vendas?: SortOrder
+    qnt_compras?: SortOrder
+    qnt_vendas?: SortOrder
   }
 
   export type FechamentoMaxOrderByAggregateInput = {
@@ -36556,8 +36762,12 @@ export namespace Prisma {
     data_fechamento?: SortOrder
     userID_fechamento?: SortOrder
     valor_esperado?: SortOrder
-    valor_conferido?: SortOrder
-    valor_diferenca?: SortOrder
+    valor_total_compras?: SortOrder
+    valor_total_vendas?: SortOrder
+    peso_total_compras?: SortOrder
+    peso_total_vendas?: SortOrder
+    qnt_compras?: SortOrder
+    qnt_vendas?: SortOrder
   }
 
   export type FechamentoMinOrderByAggregateInput = {
@@ -36570,8 +36780,12 @@ export namespace Prisma {
     data_fechamento?: SortOrder
     userID_fechamento?: SortOrder
     valor_esperado?: SortOrder
-    valor_conferido?: SortOrder
-    valor_diferenca?: SortOrder
+    valor_total_compras?: SortOrder
+    valor_total_vendas?: SortOrder
+    peso_total_compras?: SortOrder
+    peso_total_vendas?: SortOrder
+    qnt_compras?: SortOrder
+    qnt_vendas?: SortOrder
   }
 
   export type FechamentoSumOrderByAggregateInput = {
@@ -36582,24 +36796,12 @@ export namespace Prisma {
     valor_despesas?: SortOrder
     userID_fechamento?: SortOrder
     valor_esperado?: SortOrder
-    valor_conferido?: SortOrder
-    valor_diferenca?: SortOrder
-  }
-
-  export type DecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
-    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    not?: NestedDecimalNullableWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedDecimalNullableFilter<$PrismaModel>
-    _sum?: NestedDecimalNullableFilter<$PrismaModel>
-    _min?: NestedDecimalNullableFilter<$PrismaModel>
-    _max?: NestedDecimalNullableFilter<$PrismaModel>
+    valor_total_compras?: SortOrder
+    valor_total_vendas?: SortOrder
+    peso_total_compras?: SortOrder
+    peso_total_vendas?: SortOrder
+    qnt_compras?: SortOrder
+    qnt_vendas?: SortOrder
   }
 
   export type PedidoCreateNestedManyWithoutUserInput = {
@@ -37606,6 +37808,12 @@ export namespace Prisma {
     connect?: ContaFinanceiraWhereUniqueInput | ContaFinanceiraWhereUniqueInput[]
   }
 
+  export type LivroCaixaCreateNestedOneWithoutPedidosInput = {
+    create?: XOR<LivroCaixaCreateWithoutPedidosInput, LivroCaixaUncheckedCreateWithoutPedidosInput>
+    connectOrCreate?: LivroCaixaCreateOrConnectWithoutPedidosInput
+    connect?: LivroCaixaWhereUniqueInput
+  }
+
   export type RegistroCreateNestedOneWithoutPedidosInput = {
     create?: XOR<RegistroCreateWithoutPedidosInput, RegistroUncheckedCreateWithoutPedidosInput>
     connectOrCreate?: RegistroCreateOrConnectWithoutPedidosInput
@@ -37666,6 +37874,14 @@ export namespace Prisma {
     update?: ContaFinanceiraUpdateWithWhereUniqueWithoutPedidoInput | ContaFinanceiraUpdateWithWhereUniqueWithoutPedidoInput[]
     updateMany?: ContaFinanceiraUpdateManyWithWhereWithoutPedidoInput | ContaFinanceiraUpdateManyWithWhereWithoutPedidoInput[]
     deleteMany?: ContaFinanceiraScalarWhereInput | ContaFinanceiraScalarWhereInput[]
+  }
+
+  export type LivroCaixaUpdateOneRequiredWithoutPedidosNestedInput = {
+    create?: XOR<LivroCaixaCreateWithoutPedidosInput, LivroCaixaUncheckedCreateWithoutPedidosInput>
+    connectOrCreate?: LivroCaixaCreateOrConnectWithoutPedidosInput
+    upsert?: LivroCaixaUpsertWithoutPedidosInput
+    connect?: LivroCaixaWhereUniqueInput
+    update?: XOR<XOR<LivroCaixaUpdateToOneWithWhereWithoutPedidosInput, LivroCaixaUpdateWithoutPedidosInput>, LivroCaixaUncheckedUpdateWithoutPedidosInput>
   }
 
   export type RegistroUpdateOneWithoutPedidosNestedInput = {
@@ -38141,6 +38357,13 @@ export namespace Prisma {
     connect?: MovimentacaoFinanceiraWhereUniqueInput | MovimentacaoFinanceiraWhereUniqueInput[]
   }
 
+  export type PedidoCreateNestedManyWithoutCaixaInput = {
+    create?: XOR<PedidoCreateWithoutCaixaInput, PedidoUncheckedCreateWithoutCaixaInput> | PedidoCreateWithoutCaixaInput[] | PedidoUncheckedCreateWithoutCaixaInput[]
+    connectOrCreate?: PedidoCreateOrConnectWithoutCaixaInput | PedidoCreateOrConnectWithoutCaixaInput[]
+    createMany?: PedidoCreateManyCaixaInputEnvelope
+    connect?: PedidoWhereUniqueInput | PedidoWhereUniqueInput[]
+  }
+
   export type FechamentoCreateNestedOneWithoutCaixaInput = {
     create?: XOR<FechamentoCreateWithoutCaixaInput, FechamentoUncheckedCreateWithoutCaixaInput>
     connectOrCreate?: FechamentoCreateOrConnectWithoutCaixaInput
@@ -38152,6 +38375,13 @@ export namespace Prisma {
     connectOrCreate?: MovimentacaoFinanceiraCreateOrConnectWithoutCaixaInput | MovimentacaoFinanceiraCreateOrConnectWithoutCaixaInput[]
     createMany?: MovimentacaoFinanceiraCreateManyCaixaInputEnvelope
     connect?: MovimentacaoFinanceiraWhereUniqueInput | MovimentacaoFinanceiraWhereUniqueInput[]
+  }
+
+  export type PedidoUncheckedCreateNestedManyWithoutCaixaInput = {
+    create?: XOR<PedidoCreateWithoutCaixaInput, PedidoUncheckedCreateWithoutCaixaInput> | PedidoCreateWithoutCaixaInput[] | PedidoUncheckedCreateWithoutCaixaInput[]
+    connectOrCreate?: PedidoCreateOrConnectWithoutCaixaInput | PedidoCreateOrConnectWithoutCaixaInput[]
+    createMany?: PedidoCreateManyCaixaInputEnvelope
+    connect?: PedidoWhereUniqueInput | PedidoWhereUniqueInput[]
   }
 
   export type FechamentoUncheckedCreateNestedOneWithoutCaixaInput = {
@@ -38186,6 +38416,20 @@ export namespace Prisma {
     deleteMany?: MovimentacaoFinanceiraScalarWhereInput | MovimentacaoFinanceiraScalarWhereInput[]
   }
 
+  export type PedidoUpdateManyWithoutCaixaNestedInput = {
+    create?: XOR<PedidoCreateWithoutCaixaInput, PedidoUncheckedCreateWithoutCaixaInput> | PedidoCreateWithoutCaixaInput[] | PedidoUncheckedCreateWithoutCaixaInput[]
+    connectOrCreate?: PedidoCreateOrConnectWithoutCaixaInput | PedidoCreateOrConnectWithoutCaixaInput[]
+    upsert?: PedidoUpsertWithWhereUniqueWithoutCaixaInput | PedidoUpsertWithWhereUniqueWithoutCaixaInput[]
+    createMany?: PedidoCreateManyCaixaInputEnvelope
+    set?: PedidoWhereUniqueInput | PedidoWhereUniqueInput[]
+    disconnect?: PedidoWhereUniqueInput | PedidoWhereUniqueInput[]
+    delete?: PedidoWhereUniqueInput | PedidoWhereUniqueInput[]
+    connect?: PedidoWhereUniqueInput | PedidoWhereUniqueInput[]
+    update?: PedidoUpdateWithWhereUniqueWithoutCaixaInput | PedidoUpdateWithWhereUniqueWithoutCaixaInput[]
+    updateMany?: PedidoUpdateManyWithWhereWithoutCaixaInput | PedidoUpdateManyWithWhereWithoutCaixaInput[]
+    deleteMany?: PedidoScalarWhereInput | PedidoScalarWhereInput[]
+  }
+
   export type FechamentoUpdateOneWithoutCaixaNestedInput = {
     create?: XOR<FechamentoCreateWithoutCaixaInput, FechamentoUncheckedCreateWithoutCaixaInput>
     connectOrCreate?: FechamentoCreateOrConnectWithoutCaixaInput
@@ -38210,6 +38454,20 @@ export namespace Prisma {
     deleteMany?: MovimentacaoFinanceiraScalarWhereInput | MovimentacaoFinanceiraScalarWhereInput[]
   }
 
+  export type PedidoUncheckedUpdateManyWithoutCaixaNestedInput = {
+    create?: XOR<PedidoCreateWithoutCaixaInput, PedidoUncheckedCreateWithoutCaixaInput> | PedidoCreateWithoutCaixaInput[] | PedidoUncheckedCreateWithoutCaixaInput[]
+    connectOrCreate?: PedidoCreateOrConnectWithoutCaixaInput | PedidoCreateOrConnectWithoutCaixaInput[]
+    upsert?: PedidoUpsertWithWhereUniqueWithoutCaixaInput | PedidoUpsertWithWhereUniqueWithoutCaixaInput[]
+    createMany?: PedidoCreateManyCaixaInputEnvelope
+    set?: PedidoWhereUniqueInput | PedidoWhereUniqueInput[]
+    disconnect?: PedidoWhereUniqueInput | PedidoWhereUniqueInput[]
+    delete?: PedidoWhereUniqueInput | PedidoWhereUniqueInput[]
+    connect?: PedidoWhereUniqueInput | PedidoWhereUniqueInput[]
+    update?: PedidoUpdateWithWhereUniqueWithoutCaixaInput | PedidoUpdateWithWhereUniqueWithoutCaixaInput[]
+    updateMany?: PedidoUpdateManyWithWhereWithoutCaixaInput | PedidoUpdateManyWithWhereWithoutCaixaInput[]
+    deleteMany?: PedidoScalarWhereInput | PedidoScalarWhereInput[]
+  }
+
   export type FechamentoUncheckedUpdateOneWithoutCaixaNestedInput = {
     create?: XOR<FechamentoCreateWithoutCaixaInput, FechamentoUncheckedCreateWithoutCaixaInput>
     connectOrCreate?: FechamentoCreateOrConnectWithoutCaixaInput
@@ -38230,14 +38488,6 @@ export namespace Prisma {
     create?: XOR<UserCreateWithoutFechamentosInput, UserUncheckedCreateWithoutFechamentosInput>
     connectOrCreate?: UserCreateOrConnectWithoutFechamentosInput
     connect?: UserWhereUniqueInput
-  }
-
-  export type NullableDecimalFieldUpdateOperationsInput = {
-    set?: Decimal | DecimalJsLike | number | string | null
-    increment?: Decimal | DecimalJsLike | number | string
-    decrement?: Decimal | DecimalJsLike | number | string
-    multiply?: Decimal | DecimalJsLike | number | string
-    divide?: Decimal | DecimalJsLike | number | string
   }
 
   export type LivroCaixaUpdateOneRequiredWithoutFechamentoNestedInput = {
@@ -38620,33 +38870,6 @@ export namespace Prisma {
     _max?: NestedEnumStatusCaixaFilter<$PrismaModel>
   }
 
-  export type NestedDecimalNullableFilter<$PrismaModel = never> = {
-    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
-    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    not?: NestedDecimalNullableFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
-  }
-
-  export type NestedDecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null
-    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    not?: NestedDecimalNullableWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedDecimalNullableFilter<$PrismaModel>
-    _sum?: NestedDecimalNullableFilter<$PrismaModel>
-    _min?: NestedDecimalNullableFilter<$PrismaModel>
-    _max?: NestedDecimalNullableFilter<$PrismaModel>
-  }
-
   export type PedidoCreateWithoutUserInput = {
     tipo: $Enums.TipoPedido
     valor_total?: Decimal | DecimalJsLike | number | string
@@ -38655,12 +38878,14 @@ export namespace Prisma {
     atualizado?: Date | string
     items?: ItemPedidoCreateNestedManyWithoutPedidoInput
     pagamentos?: ContaFinanceiraCreateNestedManyWithoutPedidoInput
+    caixa: LivroCaixaCreateNestedOneWithoutPedidosInput
     registro?: RegistroCreateNestedOneWithoutPedidosInput
   }
 
   export type PedidoUncheckedCreateWithoutUserInput = {
     id?: number
     regID?: number | null
+    caixaID: number
     tipo: $Enums.TipoPedido
     valor_total?: Decimal | DecimalJsLike | number | string
     status?: $Enums.TipoStatusPedido
@@ -38703,6 +38928,7 @@ export namespace Prisma {
     saldoFinal: Decimal | DecimalJsLike | number | string
     status?: $Enums.StatusCaixa
     movimentacoes?: MovimentacaoFinanceiraCreateNestedManyWithoutCaixaInput
+    pedidos?: PedidoCreateNestedManyWithoutCaixaInput
     fechamento?: FechamentoCreateNestedOneWithoutCaixaInput
   }
 
@@ -38714,6 +38940,7 @@ export namespace Prisma {
     saldoFinal: Decimal | DecimalJsLike | number | string
     status?: $Enums.StatusCaixa
     movimentacoes?: MovimentacaoFinanceiraUncheckedCreateNestedManyWithoutCaixaInput
+    pedidos?: PedidoUncheckedCreateNestedManyWithoutCaixaInput
     fechamento?: FechamentoUncheckedCreateNestedOneWithoutCaixaInput
   }
 
@@ -38734,8 +38961,12 @@ export namespace Prisma {
     data_abertura: Date | string
     data_fechamento: Date | string
     valor_esperado: Decimal | DecimalJsLike | number | string
-    valor_conferido: Decimal | DecimalJsLike | number | string
-    valor_diferenca?: Decimal | DecimalJsLike | number | string | null
+    valor_total_compras: Decimal | DecimalJsLike | number | string
+    valor_total_vendas: Decimal | DecimalJsLike | number | string
+    peso_total_compras: Decimal | DecimalJsLike | number | string
+    peso_total_vendas: Decimal | DecimalJsLike | number | string
+    qnt_compras: Decimal | DecimalJsLike | number | string
+    qnt_vendas: Decimal | DecimalJsLike | number | string
     caixa: LivroCaixaCreateNestedOneWithoutFechamentoInput
   }
 
@@ -38748,8 +38979,12 @@ export namespace Prisma {
     data_abertura: Date | string
     data_fechamento: Date | string
     valor_esperado: Decimal | DecimalJsLike | number | string
-    valor_conferido: Decimal | DecimalJsLike | number | string
-    valor_diferenca?: Decimal | DecimalJsLike | number | string | null
+    valor_total_compras: Decimal | DecimalJsLike | number | string
+    valor_total_vendas: Decimal | DecimalJsLike | number | string
+    peso_total_compras: Decimal | DecimalJsLike | number | string
+    peso_total_vendas: Decimal | DecimalJsLike | number | string
+    qnt_compras: Decimal | DecimalJsLike | number | string
+    qnt_vendas: Decimal | DecimalJsLike | number | string
   }
 
   export type FechamentoCreateOrConnectWithoutUser_fechamentoInput = {
@@ -38827,6 +39062,7 @@ export namespace Prisma {
     NOT?: PedidoScalarWhereInput | PedidoScalarWhereInput[]
     id?: IntFilter<"Pedido"> | number
     regID?: IntNullableFilter<"Pedido"> | number | null
+    caixaID?: IntFilter<"Pedido"> | number
     tipo?: EnumTipoPedidoFilter<"Pedido"> | $Enums.TipoPedido
     valor_total?: DecimalFilter<"Pedido"> | Decimal | DecimalJsLike | number | string
     status?: EnumTipoStatusPedidoFilter<"Pedido"> | $Enums.TipoStatusPedido
@@ -38915,8 +39151,12 @@ export namespace Prisma {
     data_fechamento?: DateTimeFilter<"Fechamento"> | Date | string
     userID_fechamento?: IntFilter<"Fechamento"> | number
     valor_esperado?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
-    valor_conferido?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
-    valor_diferenca?: DecimalNullableFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string | null
+    valor_total_compras?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    valor_total_vendas?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    peso_total_compras?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    peso_total_vendas?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    qnt_compras?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
+    qnt_vendas?: DecimalFilter<"Fechamento"> | Decimal | DecimalJsLike | number | string
   }
 
   export type MovimentacaoFinanceiraUpsertWithWhereUniqueWithoutUserInput = {
@@ -39156,11 +39396,13 @@ export namespace Prisma {
     atualizado?: Date | string
     items?: ItemPedidoCreateNestedManyWithoutPedidoInput
     pagamentos?: ContaFinanceiraCreateNestedManyWithoutPedidoInput
+    caixa: LivroCaixaCreateNestedOneWithoutPedidosInput
     user: UserCreateNestedOneWithoutPedidosInput
   }
 
   export type PedidoUncheckedCreateWithoutRegistroInput = {
     id?: number
+    caixaID: number
     tipo: $Enums.TipoPedido
     valor_total?: Decimal | DecimalJsLike | number | string
     status?: $Enums.TipoStatusPedido
@@ -40451,6 +40693,7 @@ export namespace Prisma {
     criado_em?: Date | string
     atualizado?: Date | string
     pagamentos?: ContaFinanceiraCreateNestedManyWithoutPedidoInput
+    caixa: LivroCaixaCreateNestedOneWithoutPedidosInput
     registro?: RegistroCreateNestedOneWithoutPedidosInput
     user: UserCreateNestedOneWithoutPedidosInput
   }
@@ -40458,6 +40701,7 @@ export namespace Prisma {
   export type PedidoUncheckedCreateWithoutItemsInput = {
     id?: number
     regID?: number | null
+    caixaID: number
     tipo: $Enums.TipoPedido
     valor_total?: Decimal | DecimalJsLike | number | string
     status?: $Enums.TipoStatusPedido
@@ -40526,6 +40770,7 @@ export namespace Prisma {
     criado_em?: DateTimeFieldUpdateOperationsInput | Date | string
     atualizado?: DateTimeFieldUpdateOperationsInput | Date | string
     pagamentos?: ContaFinanceiraUpdateManyWithoutPedidoNestedInput
+    caixa?: LivroCaixaUpdateOneRequiredWithoutPedidosNestedInput
     registro?: RegistroUpdateOneWithoutPedidosNestedInput
     user?: UserUpdateOneRequiredWithoutPedidosNestedInput
   }
@@ -40533,6 +40778,7 @@ export namespace Prisma {
   export type PedidoUncheckedUpdateWithoutItemsInput = {
     id?: IntFieldUpdateOperationsInput | number
     regID?: NullableIntFieldUpdateOperationsInput | number | null
+    caixaID?: IntFieldUpdateOperationsInput | number
     tipo?: EnumTipoPedidoFieldUpdateOperationsInput | $Enums.TipoPedido
     valor_total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     status?: EnumTipoStatusPedidoFieldUpdateOperationsInput | $Enums.TipoStatusPedido
@@ -40608,6 +40854,34 @@ export namespace Prisma {
   export type ContaFinanceiraCreateManyPedidoInputEnvelope = {
     data: ContaFinanceiraCreateManyPedidoInput | ContaFinanceiraCreateManyPedidoInput[]
     skipDuplicates?: boolean
+  }
+
+  export type LivroCaixaCreateWithoutPedidosInput = {
+    dataAbertura?: Date | string
+    dataFechamento?: Date | string | null
+    saldoInicial: Decimal | DecimalJsLike | number | string
+    saldoFinal: Decimal | DecimalJsLike | number | string
+    status?: $Enums.StatusCaixa
+    abertoPor: UserCreateNestedOneWithoutCaixasAbertosInput
+    movimentacoes?: MovimentacaoFinanceiraCreateNestedManyWithoutCaixaInput
+    fechamento?: FechamentoCreateNestedOneWithoutCaixaInput
+  }
+
+  export type LivroCaixaUncheckedCreateWithoutPedidosInput = {
+    id?: number
+    dataAbertura?: Date | string
+    dataFechamento?: Date | string | null
+    abertoPorID: number
+    saldoInicial: Decimal | DecimalJsLike | number | string
+    saldoFinal: Decimal | DecimalJsLike | number | string
+    status?: $Enums.StatusCaixa
+    movimentacoes?: MovimentacaoFinanceiraUncheckedCreateNestedManyWithoutCaixaInput
+    fechamento?: FechamentoUncheckedCreateNestedOneWithoutCaixaInput
+  }
+
+  export type LivroCaixaCreateOrConnectWithoutPedidosInput = {
+    where: LivroCaixaWhereUniqueInput
+    create: XOR<LivroCaixaCreateWithoutPedidosInput, LivroCaixaUncheckedCreateWithoutPedidosInput>
   }
 
   export type RegistroCreateWithoutPedidosInput = {
@@ -40712,6 +40986,40 @@ export namespace Prisma {
     data: XOR<ContaFinanceiraUpdateManyMutationInput, ContaFinanceiraUncheckedUpdateManyWithoutPedidoInput>
   }
 
+  export type LivroCaixaUpsertWithoutPedidosInput = {
+    update: XOR<LivroCaixaUpdateWithoutPedidosInput, LivroCaixaUncheckedUpdateWithoutPedidosInput>
+    create: XOR<LivroCaixaCreateWithoutPedidosInput, LivroCaixaUncheckedCreateWithoutPedidosInput>
+    where?: LivroCaixaWhereInput
+  }
+
+  export type LivroCaixaUpdateToOneWithWhereWithoutPedidosInput = {
+    where?: LivroCaixaWhereInput
+    data: XOR<LivroCaixaUpdateWithoutPedidosInput, LivroCaixaUncheckedUpdateWithoutPedidosInput>
+  }
+
+  export type LivroCaixaUpdateWithoutPedidosInput = {
+    dataAbertura?: DateTimeFieldUpdateOperationsInput | Date | string
+    dataFechamento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    saldoInicial?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    saldoFinal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumStatusCaixaFieldUpdateOperationsInput | $Enums.StatusCaixa
+    abertoPor?: UserUpdateOneRequiredWithoutCaixasAbertosNestedInput
+    movimentacoes?: MovimentacaoFinanceiraUpdateManyWithoutCaixaNestedInput
+    fechamento?: FechamentoUpdateOneWithoutCaixaNestedInput
+  }
+
+  export type LivroCaixaUncheckedUpdateWithoutPedidosInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    dataAbertura?: DateTimeFieldUpdateOperationsInput | Date | string
+    dataFechamento?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    abertoPorID?: IntFieldUpdateOperationsInput | number
+    saldoInicial?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    saldoFinal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumStatusCaixaFieldUpdateOperationsInput | $Enums.StatusCaixa
+    movimentacoes?: MovimentacaoFinanceiraUncheckedUpdateManyWithoutCaixaNestedInput
+    fechamento?: FechamentoUncheckedUpdateOneWithoutCaixaNestedInput
+  }
+
   export type RegistroUpsertWithoutPedidosInput = {
     update: XOR<RegistroUpdateWithoutPedidosInput, RegistroUncheckedUpdateWithoutPedidosInput>
     create: XOR<RegistroCreateWithoutPedidosInput, RegistroUncheckedCreateWithoutPedidosInput>
@@ -40801,6 +41109,7 @@ export namespace Prisma {
     criado_em?: Date | string
     atualizado?: Date | string
     items?: ItemPedidoCreateNestedManyWithoutPedidoInput
+    caixa: LivroCaixaCreateNestedOneWithoutPedidosInput
     registro?: RegistroCreateNestedOneWithoutPedidosInput
     user: UserCreateNestedOneWithoutPedidosInput
   }
@@ -40808,6 +41117,7 @@ export namespace Prisma {
   export type PedidoUncheckedCreateWithoutPagamentosInput = {
     id?: number
     regID?: number | null
+    caixaID: number
     tipo: $Enums.TipoPedido
     valor_total?: Decimal | DecimalJsLike | number | string
     status?: $Enums.TipoStatusPedido
@@ -40918,6 +41228,7 @@ export namespace Prisma {
     criado_em?: DateTimeFieldUpdateOperationsInput | Date | string
     atualizado?: DateTimeFieldUpdateOperationsInput | Date | string
     items?: ItemPedidoUpdateManyWithoutPedidoNestedInput
+    caixa?: LivroCaixaUpdateOneRequiredWithoutPedidosNestedInput
     registro?: RegistroUpdateOneWithoutPedidosNestedInput
     user?: UserUpdateOneRequiredWithoutPedidosNestedInput
   }
@@ -40925,6 +41236,7 @@ export namespace Prisma {
   export type PedidoUncheckedUpdateWithoutPagamentosInput = {
     id?: IntFieldUpdateOperationsInput | number
     regID?: NullableIntFieldUpdateOperationsInput | number | null
+    caixaID?: IntFieldUpdateOperationsInput | number
     tipo?: EnumTipoPedidoFieldUpdateOperationsInput | $Enums.TipoPedido
     valor_total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     status?: EnumTipoStatusPedidoFieldUpdateOperationsInput | $Enums.TipoStatusPedido
@@ -41106,6 +41418,7 @@ export namespace Prisma {
     saldoFinal: Decimal | DecimalJsLike | number | string
     status?: $Enums.StatusCaixa
     abertoPor: UserCreateNestedOneWithoutCaixasAbertosInput
+    pedidos?: PedidoCreateNestedManyWithoutCaixaInput
     fechamento?: FechamentoCreateNestedOneWithoutCaixaInput
   }
 
@@ -41117,6 +41430,7 @@ export namespace Prisma {
     saldoInicial: Decimal | DecimalJsLike | number | string
     saldoFinal: Decimal | DecimalJsLike | number | string
     status?: $Enums.StatusCaixa
+    pedidos?: PedidoUncheckedCreateNestedManyWithoutCaixaInput
     fechamento?: FechamentoUncheckedCreateNestedOneWithoutCaixaInput
   }
 
@@ -41335,6 +41649,7 @@ export namespace Prisma {
     saldoFinal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     status?: EnumStatusCaixaFieldUpdateOperationsInput | $Enums.StatusCaixa
     abertoPor?: UserUpdateOneRequiredWithoutCaixasAbertosNestedInput
+    pedidos?: PedidoUpdateManyWithoutCaixaNestedInput
     fechamento?: FechamentoUpdateOneWithoutCaixaNestedInput
   }
 
@@ -41346,6 +41661,7 @@ export namespace Prisma {
     saldoInicial?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     saldoFinal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     status?: EnumStatusCaixaFieldUpdateOperationsInput | $Enums.StatusCaixa
+    pedidos?: PedidoUncheckedUpdateManyWithoutCaixaNestedInput
     fechamento?: FechamentoUncheckedUpdateOneWithoutCaixaNestedInput
   }
 
@@ -41944,6 +42260,41 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type PedidoCreateWithoutCaixaInput = {
+    tipo: $Enums.TipoPedido
+    valor_total?: Decimal | DecimalJsLike | number | string
+    status?: $Enums.TipoStatusPedido
+    criado_em?: Date | string
+    atualizado?: Date | string
+    items?: ItemPedidoCreateNestedManyWithoutPedidoInput
+    pagamentos?: ContaFinanceiraCreateNestedManyWithoutPedidoInput
+    registro?: RegistroCreateNestedOneWithoutPedidosInput
+    user: UserCreateNestedOneWithoutPedidosInput
+  }
+
+  export type PedidoUncheckedCreateWithoutCaixaInput = {
+    id?: number
+    regID?: number | null
+    tipo: $Enums.TipoPedido
+    valor_total?: Decimal | DecimalJsLike | number | string
+    status?: $Enums.TipoStatusPedido
+    userID: number
+    criado_em?: Date | string
+    atualizado?: Date | string
+    items?: ItemPedidoUncheckedCreateNestedManyWithoutPedidoInput
+    pagamentos?: ContaFinanceiraUncheckedCreateNestedManyWithoutPedidoInput
+  }
+
+  export type PedidoCreateOrConnectWithoutCaixaInput = {
+    where: PedidoWhereUniqueInput
+    create: XOR<PedidoCreateWithoutCaixaInput, PedidoUncheckedCreateWithoutCaixaInput>
+  }
+
+  export type PedidoCreateManyCaixaInputEnvelope = {
+    data: PedidoCreateManyCaixaInput | PedidoCreateManyCaixaInput[]
+    skipDuplicates?: boolean
+  }
+
   export type FechamentoCreateWithoutCaixaInput = {
     valor_abertura: Decimal | DecimalJsLike | number | string
     valor_abastecimentos: Decimal | DecimalJsLike | number | string
@@ -41951,8 +42302,12 @@ export namespace Prisma {
     data_abertura: Date | string
     data_fechamento: Date | string
     valor_esperado: Decimal | DecimalJsLike | number | string
-    valor_conferido: Decimal | DecimalJsLike | number | string
-    valor_diferenca?: Decimal | DecimalJsLike | number | string | null
+    valor_total_compras: Decimal | DecimalJsLike | number | string
+    valor_total_vendas: Decimal | DecimalJsLike | number | string
+    peso_total_compras: Decimal | DecimalJsLike | number | string
+    peso_total_vendas: Decimal | DecimalJsLike | number | string
+    qnt_compras: Decimal | DecimalJsLike | number | string
+    qnt_vendas: Decimal | DecimalJsLike | number | string
     user_fechamento: UserCreateNestedOneWithoutFechamentosInput
   }
 
@@ -41965,8 +42320,12 @@ export namespace Prisma {
     data_fechamento: Date | string
     userID_fechamento: number
     valor_esperado: Decimal | DecimalJsLike | number | string
-    valor_conferido: Decimal | DecimalJsLike | number | string
-    valor_diferenca?: Decimal | DecimalJsLike | number | string | null
+    valor_total_compras: Decimal | DecimalJsLike | number | string
+    valor_total_vendas: Decimal | DecimalJsLike | number | string
+    peso_total_compras: Decimal | DecimalJsLike | number | string
+    peso_total_vendas: Decimal | DecimalJsLike | number | string
+    qnt_compras: Decimal | DecimalJsLike | number | string
+    qnt_vendas: Decimal | DecimalJsLike | number | string
   }
 
   export type FechamentoCreateOrConnectWithoutCaixaInput = {
@@ -42026,6 +42385,22 @@ export namespace Prisma {
     data: XOR<MovimentacaoFinanceiraUpdateManyMutationInput, MovimentacaoFinanceiraUncheckedUpdateManyWithoutCaixaInput>
   }
 
+  export type PedidoUpsertWithWhereUniqueWithoutCaixaInput = {
+    where: PedidoWhereUniqueInput
+    update: XOR<PedidoUpdateWithoutCaixaInput, PedidoUncheckedUpdateWithoutCaixaInput>
+    create: XOR<PedidoCreateWithoutCaixaInput, PedidoUncheckedCreateWithoutCaixaInput>
+  }
+
+  export type PedidoUpdateWithWhereUniqueWithoutCaixaInput = {
+    where: PedidoWhereUniqueInput
+    data: XOR<PedidoUpdateWithoutCaixaInput, PedidoUncheckedUpdateWithoutCaixaInput>
+  }
+
+  export type PedidoUpdateManyWithWhereWithoutCaixaInput = {
+    where: PedidoScalarWhereInput
+    data: XOR<PedidoUpdateManyMutationInput, PedidoUncheckedUpdateManyWithoutCaixaInput>
+  }
+
   export type FechamentoUpsertWithoutCaixaInput = {
     update: XOR<FechamentoUpdateWithoutCaixaInput, FechamentoUncheckedUpdateWithoutCaixaInput>
     create: XOR<FechamentoCreateWithoutCaixaInput, FechamentoUncheckedCreateWithoutCaixaInput>
@@ -42044,8 +42419,12 @@ export namespace Prisma {
     data_abertura?: DateTimeFieldUpdateOperationsInput | Date | string
     data_fechamento?: DateTimeFieldUpdateOperationsInput | Date | string
     valor_esperado?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    valor_conferido?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    valor_diferenca?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    valor_total_compras?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_total_vendas?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    peso_total_compras?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    peso_total_vendas?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    qnt_compras?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    qnt_vendas?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     user_fechamento?: UserUpdateOneRequiredWithoutFechamentosNestedInput
   }
 
@@ -42058,8 +42437,12 @@ export namespace Prisma {
     data_fechamento?: DateTimeFieldUpdateOperationsInput | Date | string
     userID_fechamento?: IntFieldUpdateOperationsInput | number
     valor_esperado?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    valor_conferido?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    valor_diferenca?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    valor_total_compras?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_total_vendas?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    peso_total_compras?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    peso_total_vendas?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    qnt_compras?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    qnt_vendas?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
   export type LivroCaixaCreateWithoutFechamentoInput = {
@@ -42070,6 +42453,7 @@ export namespace Prisma {
     status?: $Enums.StatusCaixa
     abertoPor: UserCreateNestedOneWithoutCaixasAbertosInput
     movimentacoes?: MovimentacaoFinanceiraCreateNestedManyWithoutCaixaInput
+    pedidos?: PedidoCreateNestedManyWithoutCaixaInput
   }
 
   export type LivroCaixaUncheckedCreateWithoutFechamentoInput = {
@@ -42081,6 +42465,7 @@ export namespace Prisma {
     saldoFinal: Decimal | DecimalJsLike | number | string
     status?: $Enums.StatusCaixa
     movimentacoes?: MovimentacaoFinanceiraUncheckedCreateNestedManyWithoutCaixaInput
+    pedidos?: PedidoUncheckedCreateNestedManyWithoutCaixaInput
   }
 
   export type LivroCaixaCreateOrConnectWithoutFechamentoInput = {
@@ -42137,6 +42522,7 @@ export namespace Prisma {
     status?: EnumStatusCaixaFieldUpdateOperationsInput | $Enums.StatusCaixa
     abertoPor?: UserUpdateOneRequiredWithoutCaixasAbertosNestedInput
     movimentacoes?: MovimentacaoFinanceiraUpdateManyWithoutCaixaNestedInput
+    pedidos?: PedidoUpdateManyWithoutCaixaNestedInput
   }
 
   export type LivroCaixaUncheckedUpdateWithoutFechamentoInput = {
@@ -42148,6 +42534,7 @@ export namespace Prisma {
     saldoFinal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     status?: EnumStatusCaixaFieldUpdateOperationsInput | $Enums.StatusCaixa
     movimentacoes?: MovimentacaoFinanceiraUncheckedUpdateManyWithoutCaixaNestedInput
+    pedidos?: PedidoUncheckedUpdateManyWithoutCaixaNestedInput
   }
 
   export type UserUpsertWithoutFechamentosInput = {
@@ -42189,6 +42576,7 @@ export namespace Prisma {
   export type PedidoCreateManyUserInput = {
     id?: number
     regID?: number | null
+    caixaID: number
     tipo: $Enums.TipoPedido
     valor_total?: Decimal | DecimalJsLike | number | string
     status?: $Enums.TipoStatusPedido
@@ -42214,8 +42602,12 @@ export namespace Prisma {
     data_abertura: Date | string
     data_fechamento: Date | string
     valor_esperado: Decimal | DecimalJsLike | number | string
-    valor_conferido: Decimal | DecimalJsLike | number | string
-    valor_diferenca?: Decimal | DecimalJsLike | number | string | null
+    valor_total_compras: Decimal | DecimalJsLike | number | string
+    valor_total_vendas: Decimal | DecimalJsLike | number | string
+    peso_total_compras: Decimal | DecimalJsLike | number | string
+    peso_total_vendas: Decimal | DecimalJsLike | number | string
+    qnt_compras: Decimal | DecimalJsLike | number | string
+    qnt_vendas: Decimal | DecimalJsLike | number | string
   }
 
   export type MovimentacaoFinanceiraCreateManyUserInput = {
@@ -42242,12 +42634,14 @@ export namespace Prisma {
     atualizado?: DateTimeFieldUpdateOperationsInput | Date | string
     items?: ItemPedidoUpdateManyWithoutPedidoNestedInput
     pagamentos?: ContaFinanceiraUpdateManyWithoutPedidoNestedInput
+    caixa?: LivroCaixaUpdateOneRequiredWithoutPedidosNestedInput
     registro?: RegistroUpdateOneWithoutPedidosNestedInput
   }
 
   export type PedidoUncheckedUpdateWithoutUserInput = {
     id?: IntFieldUpdateOperationsInput | number
     regID?: NullableIntFieldUpdateOperationsInput | number | null
+    caixaID?: IntFieldUpdateOperationsInput | number
     tipo?: EnumTipoPedidoFieldUpdateOperationsInput | $Enums.TipoPedido
     valor_total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     status?: EnumTipoStatusPedidoFieldUpdateOperationsInput | $Enums.TipoStatusPedido
@@ -42260,6 +42654,7 @@ export namespace Prisma {
   export type PedidoUncheckedUpdateManyWithoutUserInput = {
     id?: IntFieldUpdateOperationsInput | number
     regID?: NullableIntFieldUpdateOperationsInput | number | null
+    caixaID?: IntFieldUpdateOperationsInput | number
     tipo?: EnumTipoPedidoFieldUpdateOperationsInput | $Enums.TipoPedido
     valor_total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     status?: EnumTipoStatusPedidoFieldUpdateOperationsInput | $Enums.TipoStatusPedido
@@ -42274,6 +42669,7 @@ export namespace Prisma {
     saldoFinal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     status?: EnumStatusCaixaFieldUpdateOperationsInput | $Enums.StatusCaixa
     movimentacoes?: MovimentacaoFinanceiraUpdateManyWithoutCaixaNestedInput
+    pedidos?: PedidoUpdateManyWithoutCaixaNestedInput
     fechamento?: FechamentoUpdateOneWithoutCaixaNestedInput
   }
 
@@ -42285,6 +42681,7 @@ export namespace Prisma {
     saldoFinal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     status?: EnumStatusCaixaFieldUpdateOperationsInput | $Enums.StatusCaixa
     movimentacoes?: MovimentacaoFinanceiraUncheckedUpdateManyWithoutCaixaNestedInput
+    pedidos?: PedidoUncheckedUpdateManyWithoutCaixaNestedInput
     fechamento?: FechamentoUncheckedUpdateOneWithoutCaixaNestedInput
   }
 
@@ -42304,8 +42701,12 @@ export namespace Prisma {
     data_abertura?: DateTimeFieldUpdateOperationsInput | Date | string
     data_fechamento?: DateTimeFieldUpdateOperationsInput | Date | string
     valor_esperado?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    valor_conferido?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    valor_diferenca?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    valor_total_compras?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_total_vendas?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    peso_total_compras?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    peso_total_vendas?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    qnt_compras?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    qnt_vendas?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     caixa?: LivroCaixaUpdateOneRequiredWithoutFechamentoNestedInput
   }
 
@@ -42318,8 +42719,12 @@ export namespace Prisma {
     data_abertura?: DateTimeFieldUpdateOperationsInput | Date | string
     data_fechamento?: DateTimeFieldUpdateOperationsInput | Date | string
     valor_esperado?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    valor_conferido?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    valor_diferenca?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    valor_total_compras?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_total_vendas?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    peso_total_compras?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    peso_total_vendas?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    qnt_compras?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    qnt_vendas?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
   export type FechamentoUncheckedUpdateManyWithoutUser_fechamentoInput = {
@@ -42331,8 +42736,12 @@ export namespace Prisma {
     data_abertura?: DateTimeFieldUpdateOperationsInput | Date | string
     data_fechamento?: DateTimeFieldUpdateOperationsInput | Date | string
     valor_esperado?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    valor_conferido?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    valor_diferenca?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    valor_total_compras?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    valor_total_vendas?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    peso_total_compras?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    peso_total_vendas?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    qnt_compras?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    qnt_vendas?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
   export type MovimentacaoFinanceiraUpdateWithoutUserInput = {
@@ -42462,6 +42871,7 @@ export namespace Prisma {
 
   export type PedidoCreateManyRegistroInput = {
     id?: number
+    caixaID: number
     tipo: $Enums.TipoPedido
     valor_total?: Decimal | DecimalJsLike | number | string
     status?: $Enums.TipoStatusPedido
@@ -42491,11 +42901,13 @@ export namespace Prisma {
     atualizado?: DateTimeFieldUpdateOperationsInput | Date | string
     items?: ItemPedidoUpdateManyWithoutPedidoNestedInput
     pagamentos?: ContaFinanceiraUpdateManyWithoutPedidoNestedInput
+    caixa?: LivroCaixaUpdateOneRequiredWithoutPedidosNestedInput
     user?: UserUpdateOneRequiredWithoutPedidosNestedInput
   }
 
   export type PedidoUncheckedUpdateWithoutRegistroInput = {
     id?: IntFieldUpdateOperationsInput | number
+    caixaID?: IntFieldUpdateOperationsInput | number
     tipo?: EnumTipoPedidoFieldUpdateOperationsInput | $Enums.TipoPedido
     valor_total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     status?: EnumTipoStatusPedidoFieldUpdateOperationsInput | $Enums.TipoStatusPedido
@@ -42508,6 +42920,7 @@ export namespace Prisma {
 
   export type PedidoUncheckedUpdateManyWithoutRegistroInput = {
     id?: IntFieldUpdateOperationsInput | number
+    caixaID?: IntFieldUpdateOperationsInput | number
     tipo?: EnumTipoPedidoFieldUpdateOperationsInput | $Enums.TipoPedido
     valor_total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     status?: EnumTipoStatusPedidoFieldUpdateOperationsInput | $Enums.TipoStatusPedido
@@ -43111,6 +43524,17 @@ export namespace Prisma {
     estornadoEm?: Date | string | null
   }
 
+  export type PedidoCreateManyCaixaInput = {
+    id?: number
+    regID?: number | null
+    tipo: $Enums.TipoPedido
+    valor_total?: Decimal | DecimalJsLike | number | string
+    status?: $Enums.TipoStatusPedido
+    userID: number
+    criado_em?: Date | string
+    atualizado?: Date | string
+  }
+
   export type MovimentacaoFinanceiraUpdateWithoutCaixaInput = {
     data?: DateTimeFieldUpdateOperationsInput | Date | string
     saldoInicial?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -43158,6 +43582,42 @@ export namespace Prisma {
     descricao?: NullableStringFieldUpdateOperationsInput | string | null
     userID?: IntFieldUpdateOperationsInput | number
     estornadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type PedidoUpdateWithoutCaixaInput = {
+    tipo?: EnumTipoPedidoFieldUpdateOperationsInput | $Enums.TipoPedido
+    valor_total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumTipoStatusPedidoFieldUpdateOperationsInput | $Enums.TipoStatusPedido
+    criado_em?: DateTimeFieldUpdateOperationsInput | Date | string
+    atualizado?: DateTimeFieldUpdateOperationsInput | Date | string
+    items?: ItemPedidoUpdateManyWithoutPedidoNestedInput
+    pagamentos?: ContaFinanceiraUpdateManyWithoutPedidoNestedInput
+    registro?: RegistroUpdateOneWithoutPedidosNestedInput
+    user?: UserUpdateOneRequiredWithoutPedidosNestedInput
+  }
+
+  export type PedidoUncheckedUpdateWithoutCaixaInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    regID?: NullableIntFieldUpdateOperationsInput | number | null
+    tipo?: EnumTipoPedidoFieldUpdateOperationsInput | $Enums.TipoPedido
+    valor_total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumTipoStatusPedidoFieldUpdateOperationsInput | $Enums.TipoStatusPedido
+    userID?: IntFieldUpdateOperationsInput | number
+    criado_em?: DateTimeFieldUpdateOperationsInput | Date | string
+    atualizado?: DateTimeFieldUpdateOperationsInput | Date | string
+    items?: ItemPedidoUncheckedUpdateManyWithoutPedidoNestedInput
+    pagamentos?: ContaFinanceiraUncheckedUpdateManyWithoutPedidoNestedInput
+  }
+
+  export type PedidoUncheckedUpdateManyWithoutCaixaInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    regID?: NullableIntFieldUpdateOperationsInput | number | null
+    tipo?: EnumTipoPedidoFieldUpdateOperationsInput | $Enums.TipoPedido
+    valor_total?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumTipoStatusPedidoFieldUpdateOperationsInput | $Enums.TipoStatusPedido
+    userID?: IntFieldUpdateOperationsInput | number
+    criado_em?: DateTimeFieldUpdateOperationsInput | Date | string
+    atualizado?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 

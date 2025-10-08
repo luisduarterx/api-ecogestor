@@ -77,7 +77,7 @@ model PessoaJuridica {
 model SaldoFinanceiro {
   id       Int      @id @default(autoincrement())
   regID    Int      @unique
-  saldo    Decimal
+  saldo    Decimal @db.Decimal(10,2)
   registro Registro @relation(fields: [regID], references: [id])
 }
 
@@ -115,7 +115,7 @@ model Tabela {
 
 model PrecoPorTabela {
   id         Int      @id @default(autoincrement())
-  v_compra   Decimal
+  v_compra   Decimal @db.Decimal(10,2)
   materialID Int
   tabelaID   Int
   editadoEm  DateTime @default(now()) @updatedAt
@@ -127,8 +127,8 @@ model Material {
   id            Int                   @id @default(autoincrement())
   nome          String                @unique
   catID         Int
-  v_venda       Decimal
-  estoque       Decimal
+  v_venda       Decimal @db.Decimal(10,2)
+  estoque       Decimal @db.Decimal(10,2)
   criado_em     DateTime              @default(now())
   editado_em    DateTime              @default(now()) @updatedAt
   status        Boolean               @default(true)
@@ -148,12 +148,12 @@ model ItemPedido {
   id         Int      @id @default(autoincrement())
   pedidoID   Int
   materialID Int
-  preco      Decimal
-  quantidade Decimal
-  pesoBruto Decimal
-  tara       Decimal
-  impureza   Decimal
-  subtotal    Decimal
+  preco      Decimal @db.Decimal(10,2)
+  quantidade Decimal @db.Decimal(10,2)
+  pesoBruto Decimal @db.Decimal(10,2)
+  tara       Decimal @db.Decimal(10,2)
+  impureza   Decimal @db.Decimal(10,2)
+  subtotal    Decimal @db.Decimal(10,2)
   material   Material @relation(fields: [materialID], references: [id])
   pedido     Pedido   @relation(fields: [pedidoID], references: [id], onDelete: Cascade)
 }
@@ -161,14 +161,16 @@ model ItemPedido {
 model Pedido {
   id          Int              @id @default(autoincrement())
   regID       Int?
+  caixaID     Int             
   tipo        TipoPedido
-  valor_total Decimal          @default(0)
+  valor_total Decimal @db.Decimal(10,2)          @default(0)
   status      TipoStatusPedido @default(ABERTO)
   userID      Int
   criado_em   DateTime         @default(now())
   atualizado  DateTime         @updatedAt
   items       ItemPedido[]
   pagamentos  ContaFinanceira[]
+  caixa       LivroCaixa       @relation(fields: [caixaID],references: [id])
   registro    Registro?        @relation(fields: [regID], references: [id])
   user        User             @relation(fields: [userID], references: [id])
 }
@@ -179,7 +181,7 @@ model ContaFinanceira {
   pedidoID  Int?
   registroID Int?
   descricao   String?
-  valor     Decimal
+  valor     Decimal @db.Decimal(10,2)
   data_documento DateTime     @default(now())
   data_vencimento DateTime?
   data_pagamento DateTime?
@@ -193,7 +195,7 @@ model ContaFinanceira {
 model Banco {
   id            Int                      @id @default(autoincrement())
   nome          String
-  saldo         Decimal
+  saldo         Decimal @db.Decimal(10,2)
   movimentacoes MovimentacaoFinanceira[]
 }
 
@@ -206,9 +208,9 @@ model MovimentacaoFinanceira {
   categoriaID      Int?
   tipoMovimentacaoID Int
   data             DateTime              @default(now())
-  saldoInicial       Decimal
-  valor            Decimal
-  saldoFinal       Decimal
+  saldoInicial       Decimal @db.Decimal(10,2)
+  valor            Decimal @db.Decimal(10,2)
+  saldoFinal       Decimal @db.Decimal(10,2)
   descricao        String?
   userID           Int
   estornadoEm        DateTime?
@@ -246,7 +248,7 @@ model MovimentacaoEstoque {
   origem             OrigemMovimentacaoEstoque
   origemID           Int?
   devolucaoID        Int?                      @unique         
-  quantidade         Decimal
+  quantidade         Decimal @db.Decimal(10,2)
   createdAt          DateTime                  @default(now())
   devolvidaEm        DateTime?
   observacao        String?
@@ -259,7 +261,7 @@ model ConversaoEstoque {
   id            Int                   @id @default(autoincrement())
   mat_origemID  Int
   mat_destinoID Int
-  quantidade    Decimal
+  quantidade    Decimal @db.Decimal(10,2)
   descricao     String?
   createdAt     DateTime              @default(now())
 }
@@ -268,38 +270,37 @@ model LivroCaixa {
   dataAbertura   DateTime                @default(now())
   dataFechamento DateTime?
   abertoPorID    Int
-  saldoInicial   Decimal
-  saldoFinal     Decimal
+  saldoInicial   Decimal @db.Decimal(10,2)
+  saldoFinal     Decimal @db.Decimal(10,2)
   status         StatusCaixa             @default(ABERTO)
   abertoPor      User                    @relation("CaixaAbertoPor",fields: [abertoPorID],references: [id])
   movimentacoes  MovimentacaoFinanceira[]
+  pedidos        Pedido[]
   fechamento Fechamento?
 }
 model Fechamento {
   id      Int  @id @default(autoincrement())
   caixaID   Int @unique
   caixa LivroCaixa @relation(fields: [caixaID],references: [id])
-  valor_abertura  Decimal 
-  valor_abastecimentos Decimal
-  valor_despesas Decimal
+  valor_abertura  Decimal @db.Decimal(10,2)       
+  valor_abastecimentos Decimal @db.Decimal(10,2)
+  valor_despesas Decimal @db.Decimal(10,2)
   data_abertura DateTime
   data_fechamento DateTime
   userID_fechamento Int
   user_fechamento User @relation(fields: [userID_fechamento],references: [id])
-  valor_esperado Decimal
-  valor_conferido Decimal
-  valor_diferenca Decimal?
-  //valor_pago Decimal
-  //valor_recebido Decimal
-  //valor_total_compras Decimal
-  //valor_total_vendas Decimal
-  //peso_total_compras Decimal
-  //peso_total_vendas Decimal
-  //lucro_total Decimal
-  //proj_lucro Decimal
-  //proj_venda Decimal
-  //qnt_compras Decimal
-  //qnt_vendas Decimal
+  valor_esperado Decimal @db.Decimal(10,2)
+  //valor_pago Decimal @db.Decimal(10,2)
+  //valor_recebido Decimal @db.Decimal(10,2)
+  valor_total_compras Decimal @db.Decimal(10,2)
+  valor_total_vendas Decimal @db.Decimal(10,2)
+  peso_total_compras Decimal @db.Decimal(10,2)
+  peso_total_vendas Decimal @db.Decimal(10,2)
+  //lucro_total Decimal @db.Decimal(10,2)
+  //proj_lucro Decimal @db.Decimal(10,2)
+  //proj_venda Decimal @db.Decimal(10,2)
+  qnt_compras Decimal @db.Decimal(10,2)
+  qnt_vendas Decimal @db.Decimal(10,2)
   
 
 

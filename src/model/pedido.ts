@@ -287,7 +287,9 @@ export const createNewOrder = async ({
   regID,
 }: CreateOrderArgs) => {
   try {
-    if (!(await caixaAberto())) {
+    const caixaID = await caixaAberto();
+
+    if (!caixaID) {
       throw new NotPossible("Primeiro você deve abrir um caixa!");
     }
 
@@ -295,6 +297,7 @@ export const createNewOrder = async ({
 
     const pedido = await prisma.pedido.create({
       data: {
+        caixaID: caixaID,
         regID,
         tipo,
         userID,
@@ -471,11 +474,11 @@ export const closeOrder = async (data: CloseOrderArgs) => {
                 data_pagamento: new Date(),
               },
             });
-            const pedidoAlterado = await trx.pedido.update({
-              where: { id: pedido.id },
-              data: { status: "FECHADO" },
-            });
           }
+          const pedidoAlterado = await trx.pedido.update({
+            where: { id: pedido.id },
+            data: { status: "FECHADO" },
+          });
         }
 
         return await findOrderByID(data.pedID);
