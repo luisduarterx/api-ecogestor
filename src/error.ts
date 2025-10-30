@@ -51,7 +51,7 @@ export class UserNotFound extends BaseError {
       "Usuario não Encontrado",
       mensagem,
       "Verifique os dados e tente novamente",
-      404
+      401
     );
   }
 }
@@ -61,7 +61,7 @@ export class UnAuthorized extends BaseError {
       "Acesso não Autorizado",
       mensagem,
       "Verifique suas permissões ou contate um administrador",
-      403
+      401
     );
   }
 }

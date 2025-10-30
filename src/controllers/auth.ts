@@ -11,7 +11,7 @@ export const SIGNIN: RequestHandler = async (req, res) => {
     email: z.string().email(),
     senha: z.string(),
   });
-
+  console.log(req.body);
   try {
     const userLogin = userLoginSchema.safeParse(req.body);
 

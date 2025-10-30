@@ -69,3 +69,6 @@ export const GET = async (req: ExtendedRequest, res: Response) => {
     return;
   }
 };
+
+//ainda falta implementar
+export const GET_DATE = async (req: ExtendedRequest, res: Response) => {};
