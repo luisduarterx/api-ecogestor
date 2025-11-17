@@ -22,6 +22,13 @@ export const SIGNIN: RequestHandler = async (req, res) => {
     const user = await DBUser.validateUser(userLogin.data);
     const JWT = gerarToken(user);
 
+    res.cookie("acess_token", JWT, {
+      httpOnly: true,
+      secure: false,
+      sameSite: "lax",
+      path: "/",
+    });
+
     res.json({ user: user, token: JWT });
   } catch (error: any) {
     const status = error?.statusCode || 500;

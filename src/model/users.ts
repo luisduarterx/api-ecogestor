@@ -89,7 +89,6 @@ export const validateUser = async (data: UserDataAcess) => {
     id: user.id,
     nome: user.nome,
     email: user.email,
-    telefone: user.telefone,
     cargo: user.cargoID,
   };
 
