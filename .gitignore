@@ -11,6 +11,8 @@
 !.yarn/releases
 !.yarn/versions
 src/generated/*
+src/generated/prisma/*
+src/generated/prisma/
 # testing
 /coverage
 
