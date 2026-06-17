@@ -1,3 +1,4 @@
+import "dotenv/config"; // <- ISSO DEVE SER A PRIMEIRA LINHA DO SEU PROJETO
 import express, { Request, Response } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
@@ -13,6 +14,7 @@ import { caixasRoutes } from "./routes/caixa";
 import { movimRoutes } from "./routes/movFinanceiro";
 import { pedidosRoutes } from "./routes/pedidos";
 import { popular } from "./inicial";
+import { statusRouter } from "./routes/status";
 
 const server = express();
 
@@ -36,7 +38,7 @@ server.use(
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization", "X-CSRF-Token"],
     exposedHeaders: ["Set-Cookie"],
-  })
+  }),
 );
 server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({ extended: true }));
@@ -51,6 +53,8 @@ server.use("/v1", materiaisRoutes);
 server.use("/v1", caixasRoutes);
 server.use("/v1", movimRoutes);
 server.use("/v1", pedidosRoutes);
+server.use("/v1", statusRouter);
+// ADICIONE ESSA LINHA PARA TESTAR:
 
 server.listen(4000, () => {
   console.log("EcoGestor API rodando...");
