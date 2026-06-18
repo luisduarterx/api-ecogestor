@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "test:ci": "vitest",
     "test": "node --env-file=.env node_modules/vitest/vitest.mjs",
     "dev": " npm run services:up && npm run wait-for-postgres && npm run migration:up && tsx watch src/server.ts ",
     "services:up": "docker compose -f src/infra/compose.yaml up -d",
