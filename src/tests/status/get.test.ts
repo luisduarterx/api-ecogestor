@@ -1,13 +1,14 @@
-import { expect, test } from "vitest";
+import request from "supertest";
+import { app } from "../../app";
+import { test, beforeEach, expect } from "vitest";
+import orchestrator from "../orchestrator";
 
-interface User {
-  name: string;
-  age: number;
-}
-
+beforeEach(() => {
+  orchestrator.clearDatabase();
+});
 test("GET api/v1/status", async () => {
-  const response = await fetch("http://localhost:4000/v1/status");
-  const responseBody = await response.json();
-  expect(responseBody.database.versao).toBeDefined();
-  expect(response.status).toBe(200);
+  const response = await request(app).get("/v1/status").expect(200);
+  console.log(response.body);
+
+  expect(response.body.database.versao).toBeDefined();
 });

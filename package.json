@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "test": "node --env-file=.env node_modules/vitest/vitest.mjs",
     "dev": " npm run services:up && npm run wait-for-postgres && npm run migration:up && tsx watch src/server.ts ",
     "services:up": "docker compose -f src/infra/compose.yaml up -d",
     "services:stop": "docker compose -f src/infra/compose.yaml down",
@@ -41,9 +42,11 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^22.19.21",
     "@types/pg": "^8.20.0",
+    "@types/supertest": "^7.2.0",
     "dotenv": "^17.4.2",
     "prisma": "^7.8.0",
     "set-cookie-parser": "^3.0.1",
+    "supertest": "^7.2.2",
     "tsx": "^4.19.4",
     "typescript": "^5.8.3",
     "vitest": "^4.1.9"

@@ -3,7 +3,7 @@ import { PrismaClient } from "../../generated/prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 
 // ADICIONE ESSA LINHA PARA TESTAR:
-console.log("SUA URL DE CONEXÃO É:", process.env.DATABASE_URL);
+
 // 2. Crie a instância do Pool passando a string de conexão
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
