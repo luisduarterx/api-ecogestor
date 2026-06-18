@@ -2,6 +2,7 @@ import { prisma } from "../libs/prisma";
 
 import {
   BadRequest,
+  BaseError,
   InternalError,
   UnAuthorized,
   UserNotFound,
@@ -9,8 +10,16 @@ import {
 import { encriptarSenha } from "../services/password";
 import bcrypt from "bcrypt";
 import { error } from "console";
-import { Prisma } from "../generated/prisma";
+import { Cargo, Prisma, User } from "../../generated/prisma/client";
 import { CreateUserArgs, UserDataAcess, UserDataEdit } from "../types/user";
+interface userReturn {
+  id: number;
+  nome: string;
+  telefone: string;
+  email: string;
+  cargoID: number;
+  permissoes: String[];
+}
 
 export const createUser = async (data: CreateUserArgs) => {
   try {
@@ -22,12 +31,28 @@ export const createUser = async (data: CreateUserArgs) => {
         cargoID: data.cargo || 1,
         senha: await encriptarSenha(data.senha),
       },
+      include: {
+        cargo: {
+          include: {
+            permissoes: true,
+          },
+        },
+      },
     });
 
     if (!user) {
       throw new Error("Erro durante o processamento dos dados");
     }
-    return user;
+    return {
+      id: user.id,
+      nome: user.nome,
+      email: user.email,
+      telefone: user.telefone,
+      cargoID: user.cargoID,
+      permissoes: user.cargo.permissoes.map(
+        (item: Cargo) => item.nome,
+      ) as String[],
+    };
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       if (error.code == "P2002") {

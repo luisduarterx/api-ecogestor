@@ -5,7 +5,7 @@ import {
   NotPossible,
   UnAuthorized,
 } from "../error";
-import { Prisma } from "../generated/prisma";
+import { Prisma } from "../../generated/prisma/client";
 import { prisma } from "../libs/prisma";
 
 import { ReqUser } from "../types/user";
@@ -120,7 +120,7 @@ export const removeItemOrder = async (it: DeleteItemOrderArgs) => {
         if (error instanceof Prisma.PrismaClientKnownRequestError) {
           if (error.code === "P2025") {
             throw new NotPossible(
-              "O Item escolhido ja foi deletado ou não existe!"
+              "O Item escolhido ja foi deletado ou não existe!",
             );
           }
         }
@@ -138,7 +138,7 @@ export const addNewItemOrder = async (it: CreateItemOrderArgs) => {
     // verifica se user tem permissao para alterar preco
     const userHasEditPrice = await userHasPermission(
       it.user.id,
-      "edit:PriceOnOrder"
+      "edit:PriceOnOrder",
     );
 
     // verifica se o pedido esta aberto
@@ -182,7 +182,7 @@ export const addNewItemOrder = async (it: CreateItemOrderArgs) => {
         subtotal = Number((quantidade * preco).toFixed(2));
       } else {
         throw new UnAuthorized(
-          "O usuário informado nao possui a permissao 'edit:PriceOnOrder'"
+          "O usuário informado nao possui a permissao 'edit:PriceOnOrder'",
         );
       }
     } else {
@@ -193,8 +193,8 @@ export const addNewItemOrder = async (it: CreateItemOrderArgs) => {
               (await findPriceOnTable(it.item.materialID, tabelaID)) ||
                 (await findPriceOnTable(
                   it.item.materialID,
-                  Number(process.env.TABELA_PADRAO as string)
-                ))
+                  Number(process.env.TABELA_PADRAO as string),
+                )),
             );
 
       subtotal = Number((quantidade * preco).toFixed(2));
@@ -217,7 +217,7 @@ export const addNewItemOrder = async (it: CreateItemOrderArgs) => {
               pesoBruto,
               subtotal,
             },
-          }
+          },
 
           // insere movimentacao de material
         );
@@ -329,7 +329,7 @@ export const closeOrder = async (data: CloseOrderArgs) => {
     // verifica se pedido esta aberto
     if (!pedido || pedido.status === "FECHADO") {
       throw new NotPossible(
-        "Esse pedido não existe ou já foi fechado anteriormente."
+        "Esse pedido não existe ou já foi fechado anteriormente.",
       );
     }
     // verificar se os pagamentos equivalem ao valor total do pedido
@@ -339,7 +339,7 @@ export const closeOrder = async (data: CloseOrderArgs) => {
     }
     if (valorTotal !== Number(pedido?.valor_total)) {
       throw new BadRequest(
-        "A soma dos pagamentos deve ser igual ao valor total do pedido"
+        "A soma dos pagamentos deve ser igual ao valor total do pedido",
       );
     }
 
@@ -374,7 +374,7 @@ export const closeOrder = async (data: CloseOrderArgs) => {
 
         if (TemABATER && !pedido.regID) {
           throw new NotPossible(
-            "Não é possivel utilizar 'ABATER' sem um registro definido"
+            "Não é possivel utilizar 'ABATER' sem um registro definido",
           );
         }
         // criar movimentacoes de financeira de cada item do pedido
@@ -397,7 +397,7 @@ export const closeOrder = async (data: CloseOrderArgs) => {
             });
             if (!findCaixa) {
               throw new NotPossible(
-                "Não é possivel criar um movimento em um caixa fechado ou inexistente!"
+                "Não é possivel criar um movimento em um caixa fechado ou inexistente!",
               );
             }
             const saldoFinal =
@@ -418,8 +418,8 @@ export const closeOrder = async (data: CloseOrderArgs) => {
                       ? 4
                       : 6
                     : pedido.tipo === "COMPRA"
-                    ? 5
-                    : 3,
+                      ? 5
+                      : 3,
                 data: new Date(),
                 saldoInicial: findCaixa?.saldoFinal,
                 valor: pedido.tipo === "COMPRA" ? -pg.valor : pg.valor,

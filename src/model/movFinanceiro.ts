@@ -1,5 +1,5 @@
 import { BadRequest, InternalError, NotPossible } from "../error";
-import { Prisma } from "../generated/prisma";
+import { Prisma } from "../../generated/prisma/client";
 import { prisma } from "../libs/prisma";
 import { findRegisterByID } from "./registros";
 
@@ -28,7 +28,7 @@ export const novaMovimentacao = async (data: inputMovimentacao) => {
 
     if (!caixa) {
       throw new NotPossible(
-        "Verifique se o caixa desejado é valido ou esta aberto."
+        "Verifique se o caixa desejado é valido ou esta aberto.",
       );
     }
 
@@ -38,12 +38,12 @@ export const novaMovimentacao = async (data: inputMovimentacao) => {
 
     if (data.bancoID && !banco) {
       throw new BadRequest(
-        "Não é possivel realizar uma movimentacao em um banco inexistente."
+        "Não é possivel realizar uma movimentacao em um banco inexistente.",
       );
     }
     if (data.tipoMovimentacaoID === 1) {
       throw new BadRequest(
-        "O abastecimento ja foi registrado na abertura de caixa."
+        "O abastecimento ja foi registrado na abertura de caixa.",
       );
     }
     //consultar o tipo de movimentacao
@@ -81,7 +81,7 @@ export const novaMovimentacao = async (data: inputMovimentacao) => {
         //verifica se tem registro e existe ??
         if (!data.regID || !(await findRegisterByID(data.regID))) {
           throw new NotPossible(
-            "Não é possivel utilizar o saldo de um Registro que não existe"
+            "Não é possivel utilizar o saldo de um Registro que não existe",
           );
         }
 
@@ -151,12 +151,12 @@ export const estornarMovimentacao = async (data: inputEstorno) => {
     }
     if (movimentacao.tipoMovimentacaoID === 1) {
       throw new NotPossible(
-        "Não é possivel alterar o valor de abertura, entre em contato com seu gerente."
+        "Não é possivel alterar o valor de abertura, entre em contato com seu gerente.",
       );
     }
     if (movimentacao.contaID) {
       throw new NotPossible(
-        "Para estornar essa movimentação primeiro deve estornar a conta referente."
+        "Para estornar essa movimentação primeiro deve estornar a conta referente.",
       );
     }
     if (movimentacao.estornadoEm) {
@@ -175,7 +175,7 @@ export const estornarMovimentacao = async (data: inputEstorno) => {
     }
     if (caixa.status === "FECHADO") {
       throw new NotPossible(
-        "Para alterar uma movimentacao de um caixa anterior, primeiro deverá reabrir-lo."
+        "Para alterar uma movimentacao de um caixa anterior, primeiro deverá reabrir-lo.",
       );
     }
 

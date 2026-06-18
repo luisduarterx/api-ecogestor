@@ -1,5 +1,5 @@
 import { Pool } from "pg"; // 1. Importe o Pool do pacote 'pg'
-import { PrismaClient } from "../generated/prisma/client";
+import { PrismaClient } from "../../generated/prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 
 // ADICIONE ESSA LINHA PARA TESTAR:

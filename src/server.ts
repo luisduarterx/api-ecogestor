@@ -15,6 +15,7 @@ import { movimRoutes } from "./routes/movFinanceiro";
 import { pedidosRoutes } from "./routes/pedidos";
 import { popular } from "./inicial";
 import { statusRouter } from "./routes/status";
+import errorHandler from "./middlewares/errorHandler";
 
 const server = express();
 
@@ -56,6 +57,7 @@ server.use("/v1", pedidosRoutes);
 server.use("/v1", statusRouter);
 // ADICIONE ESSA LINHA PARA TESTAR:
 
+server.use("/v1", errorHandler);
 server.listen(4000, () => {
   console.log("EcoGestor API rodando...");
 });
