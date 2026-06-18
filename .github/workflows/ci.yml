@@ -56,5 +56,5 @@ jobs:
         env:
           DATABASE_URL: "postgresql://postgres:password_ci_test@localhost:5432/ecogestor_ci?schema=public"
           # Se seus endpoints precisarem de outras variáveis (ex: JWT_SECRET), adicione-as abaixo:
-          JWT_SECRET: "test_secret_for_ci_environment"
+          JWT_KEY: "test_secret_for_ci_environment"
         run: npm run test:ci -- --watch=false

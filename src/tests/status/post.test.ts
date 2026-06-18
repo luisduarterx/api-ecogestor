@@ -14,7 +14,7 @@ test("POST /api/v1/status", async () => {
 
   expect(response.body).toEqual({
     nome: "MethodNotAllowed",
-    menssagem: "Esse método não é permitido para esse endpoint.",
+    mensagem: "Esse método não é permitido para esse endpoint.",
     acao: "Verifique se o método HTTP enviado é válido para esse endpoint.",
     statusCode: 405,
   });

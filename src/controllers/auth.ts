@@ -6,12 +6,12 @@ import jwt from "jsonwebtoken";
 import { gerarToken } from "../services/jwt";
 import { ExtendedRequest } from "../types/extended-request";
 
-export const SIGNIN: RequestHandler = async (req, res) => {
+export const SIGNIN: RequestHandler = async (req, res, next) => {
   const userLoginSchema = z.object({
     email: z.string().email(),
     senha: z.string(),
   });
-  console.log(req.body);
+
   try {
     const userLogin = userLoginSchema.safeParse(req.body);
 
@@ -31,8 +31,7 @@ export const SIGNIN: RequestHandler = async (req, res) => {
 
     res.json({ user: user, token: JWT });
   } catch (error: any) {
-    const status = error?.statusCode || 500;
-    res.status(status).json(error);
+    next(error);
   }
 };
 

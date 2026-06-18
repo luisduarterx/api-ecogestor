@@ -14,7 +14,7 @@ export default function errorHandler(
     const appErr = err as BaseError;
     const payload = {
       nome: appErr.nome,
-      menssagem: appErr.mensagem,
+      mensagem: appErr.mensagem,
       acao: appErr.acao,
       statusCode: appErr.statusCode,
     };
