@@ -1,9 +1,20 @@
 import { Router } from "express";
 import * as auth from "../controllers/auth";
+import { MethodNotAllowedError } from "../error";
 import { AuthMiddleware } from "../controllers/middleware";
 
 export const authRoutes = Router();
 
-authRoutes.post("/auth/validate", AuthMiddleware, auth.VALIDATE);
+authRoutes
+  .route("/auth/validate")
+  .post(AuthMiddleware, auth.VALIDATE)
+  .all(() => {
+    throw new MethodNotAllowedError();
+  });
 
-authRoutes.post("/auth/signin", auth.SIGNIN);
+authRoutes
+  .route("/auth/signin")
+  .post(auth.SIGNIN)
+  .all(() => {
+    throw new MethodNotAllowedError();
+  });

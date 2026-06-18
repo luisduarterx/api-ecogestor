@@ -1,85 +1,18 @@
-PROXIMOS PASSOS
+CRIAR TESTES AUTOMATIZADOS EM ETAPAS PARA DEPOIS REFATORAR E TERMINAR
+
+/v1/STATUS - OK
+/v1/AUTH
+/v1/CARGOS
+/v1/PERMISSOES
+/v1/USUARIOS
+/v1/TABELA
+/v1/REGISTROS
+/v1/CATEGORIAS
+/v1/MATERIAIS
+/v1/CONTAS
+/v1/MOVIMENTACAO
+/v1/PEDIDOS
 
 
+APOS CRIAR TODOS OS TESTES SEM ALTERAR O CODIGO, PARTIR PARA O REFATORAMENTO DO SCHEMA COM BASE NO ECOGESTOR NEXT 
 
-
-// IMPLEMENTAR RBAC COM PERMISSOES E VERIFICACOES DE PERMISSOES NOS ENDPOINTS JA CRIADOS
-continuar recriacao do schema de movimentacao de estoque
-
-
-entender mais sobre o fluxo de caixa
-
-// lembrete
-
-JA COMECEI A FECHAR O PEDIDO
-
-
-NAO PERMITIR ESTORNO DE MOVIMENTACAO DE PEDIDO/ DEVERA SER FEITO REABERTURA DO PEDIDO OU CANCELAMENTO
-AO ADICIONAR ITEM DE VENDA ELE PRECISA BUSCAR O PRECO DE VENDA E NAO O DE COMPRA    
-
-ADICIONAR A ENTIDADE MOVIMENTACAO DE ESTOQUE QUANTIDADE ANTERIOR E QUANTIDADE APOS a MOVIMENTACAO
-
-PENSAR SOBRE O REABRIR PEDIDO, COMO SE COMPORTARA O SISTEMA EM RELACAO AO ESTOQUE E FINANCEIRO
-
-STATUS DOS PEDIDOS SERÃO{
-    ABERTO : PEDIDO ABERTO
-    FECHADO : PEDIDO FECHADO E NÃO PAGAMENTOS
-    PAGO: PEDIDO FECHADO E PAGO
-}
-PERMISSOES
-
-- USUARIOS
-    * read:User
-    * edit:User
-    * create:User
-    * delete:User
-    * create:Role
-    * asign:Permissions
-    * edit:Role
-    * delete:Role
-    * read:Role
-- FINANCEIRO
-    * read:Transactions
-    * create:Transactions
-    * edit:Transactions
-    * delete:Transactions
-    * create:ClosureCash
-    * edit:ClosureCash
-    
-
-- PEDIDO
-    * read:Order
-    * edit:Order
-    * create:Order
-    * delete:Order
-    * edit:PriceOnOrder
-- ESTOQUE
-    * read:Stock
-    * create:StockMovement
-    * create:StockConversion
-    * delete:TotalStock
-    * delete:ResetAllStock
-
-- REGISTROS
-    * create:Record
-    * edit:Record
-    * read:Record
-    * delete:Record
-    * create:Unidentified
-    
-- TABELAS
-    * create:Table
-    * edit:Table
-    * edit:PriceInTable
-    * asign:Table
-    * delete:Table
-    * read:Table
-- MATERIAIS
-    * create:Material
-    * edit:Material
-    * create:MaterialGroup
-    * edit:MaterialGroup
-    * delete:Material
-    * delete:MaterialGroup
-    * read:Material
-    * read:MaterialGroup
