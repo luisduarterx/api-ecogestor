@@ -23,10 +23,10 @@ const createUser = async (Props: {
   email?: string;
   senha?: string;
 }) => {
-  const senha = await encriptarSenha(Props.senha || faker.internet.password());
+  const senha = await encriptarSenha(Props.senha || "senha");
   return await prisma.user.create({
     data: {
-      nome: Props.nome || faker.internet.username(),
+      nome: Props.nome || faker.person.firstName(),
       email: Props.email || faker.internet.email(),
       senha: senha,
       cargoID: 1,
@@ -38,10 +38,10 @@ const userAuthenticated = async (Props: {
   email?: string;
   senha?: string;
 }) => {
-  const senha = await encriptarSenha(Props.senha || faker.internet.password());
+  const senha = await encriptarSenha(Props.senha || "senha");
   const user = await prisma.user.create({
     data: {
-      nome: Props.nome || faker.internet.username(),
+      nome: Props.nome || faker.person.firstName(),
       email: Props.email || faker.internet.email(),
       senha: senha,
       cargoID: 1,
