@@ -18,19 +18,19 @@ export class InternalError extends BaseError {
       "Erro Interno",
       mensagem,
       "Tente novamento, case persistir, contate um administrador",
-      500
+      500,
     );
   }
 }
 export class BadRequest extends BaseError {
   constructor(
-    mensagem = "Não conseguimos validar os dados enviados, verifique os campos."
+    mensagem = "Não conseguimos validar os dados enviados, verifique os campos.",
   ) {
     super(
       "Erro na Requisição",
       mensagem,
       "Verifique os dados enviados e tente novamente.",
-      400
+      400,
     );
   }
 }
@@ -40,7 +40,7 @@ export class NotFound extends BaseError {
       "Registro não encontrado",
       mensagem,
       "Verifique os dados e tente novamente",
-      404
+      404,
     );
   }
 }
@@ -51,7 +51,7 @@ export class UserNotFound extends BaseError {
       "Usuario não Encontrado",
       mensagem,
       "Verifique os dados e tente novamente",
-      401
+      401,
     );
   }
 }
@@ -61,19 +61,29 @@ export class UnAuthorized extends BaseError {
       "Acesso não Autorizado",
       mensagem,
       "Verifique suas permissões ou contate um administrador",
-      401
+      401,
+    );
+  }
+}
+export class MethodNotAllowedError extends BaseError {
+  constructor(mensagem = "Esse método não é permitido para esse endpoint.") {
+    super(
+      "MethodNotAllowed",
+      mensagem,
+      "Verifique se o método HTTP enviado é válido para esse endpoint.",
+      405,
     );
   }
 }
 export class NotPossible extends BaseError {
   constructor(
-    mensagem = "Por motivos desconhecidos não conseguimos realizar essa operação"
+    mensagem = "Por motivos desconhecidos não conseguimos realizar essa operação",
   ) {
     super(
       "Não foi possivel realizar a operação",
       mensagem,
       "Verifique os dados enviados e tente novamente, caso persistir, contate um administrador.",
-      403
+      403,
     );
   }
 }

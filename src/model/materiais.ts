@@ -1,6 +1,6 @@
 import { ParamsFindMaterial } from "../controllers/materiais";
 import { NotFound, NotPossible } from "../error";
-import { Prisma } from "../generated/prisma";
+import { Prisma } from "../../generated/prisma/client";
 import { prisma } from "../libs/prisma";
 import { EditMaterialType, MaterialType } from "../types/materiais";
 
@@ -38,7 +38,7 @@ export const createMaterial = async (data: MaterialType) => {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       if (error.code === "P2003") {
         return new NotPossible(
-          "Não é possivel criar um material em um categoria inexistente."
+          "Não é possivel criar um material em um categoria inexistente.",
         );
       }
       throw error;
@@ -90,7 +90,7 @@ export const updateMaterial = async (id: number, data: EditMaterialType) => {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       if (error.code === "P2003") {
         return new NotPossible(
-          "Não é possivel criar um material em um categoria inexistente."
+          "Não é possivel criar um material em um categoria inexistente.",
         );
       }
       if (error.code === "P2025") {

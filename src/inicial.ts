@@ -7,17 +7,17 @@ import { createUser } from "./model/users";
 export const popular = async () => {
   try {
     // cria cargo
-    const cargo = await addNewRole({ nome: "Ola", permissoes: [] });
+    await addNewRole({ nome: "Ola", permissoes: [] });
     // criar usuario
-    const user = await createUser({
-      email: "luiscdradm@gmail.com",
-      senha: "1234",
+    await createUser({
+      email: "admin@admin.com",
+      senha: "senha",
       nome: "Luis Claudio",
     });
     // cria tabela
-    const tabela = await prisma.tabela.create({ data: { nome: "Padrão" } });
+    await prisma.tabela.create({ data: { nome: "Padrão" } });
     // cria categorias
-    const CATmateriais = await prisma.categoriaMaterial.createMany({
+    await prisma.categoriaMaterial.createMany({
       data: [
         { name: "PLASTICOS" },
         { name: "METAIS" },
@@ -34,25 +34,25 @@ export const popular = async () => {
       await createMaterial(element);
     });
     //registro
-    const registro = await createNewF({
+    await createNewF({
       nome: "LUIS CLAUDIO DUARTE ROXO",
       cpf: "13575249784",
     });
     // movimentacoes do caixa TIPOS
-    const Caixa_TipoMovimentacao =
-      await prisma.caixa_TipoMovimentacao.createMany({
-        data: [
-          { nome: "ABERTURA", tipo: "ENTRADA" },
-          { nome: "ABASTECIMENTO", tipo: "ENTRADA" },
-          { nome: "VENDA", tipo: "ENTRADA" },
-          { nome: "RECEBER", tipo: "ENTRADA" },
-          { nome: "COMPRA", tipo: "SAIDA" },
-          { nome: "EMPRESTAR", tipo: "SAIDA" },
-          { nome: "DESPESA", tipo: "SAIDA" },
-        ],
-      });
+
+    await prisma.caixa_TipoMovimentacao.createMany({
+      data: [
+        { nome: "ABERTURA", tipo: "ENTRADA" },
+        { nome: "ABASTECIMENTO", tipo: "ENTRADA" },
+        { nome: "VENDA", tipo: "ENTRADA" },
+        { nome: "RECEBER", tipo: "ENTRADA" },
+        { nome: "COMPRA", tipo: "SAIDA" },
+        { nome: "EMPRESTAR", tipo: "SAIDA" },
+        { nome: "DESPESA", tipo: "SAIDA" },
+      ],
+    });
     // CRIA PERMISSOES
-    const permissoes = await prisma.permissoes.createMany({
+    await prisma.permissoes.createMany({
       data: [
         { nome: "read:User" },
         { nome: "edit:User" },
@@ -102,7 +102,7 @@ export const popular = async () => {
     });
     // CRIA BANCO PADRAO
 
-    const banco = await prisma.banco.create({
+    await prisma.banco.create({
       data: { nome: "padrao", saldo: 0 },
     });
   } catch (error) {}

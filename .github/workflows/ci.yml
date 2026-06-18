@@ -1,0 +1,60 @@
+name: Testes Automatizados
+
+# O CI roda sempre que um PR for aberto ou atualizado para as branches principais
+on:
+  pull_request:
+    branches: ["main", "master"]
+
+jobs:
+  test-api:
+    runs-on: ubuntu-latest
+
+    # 1. Levanta o banco de dados PostgreSQL isolado para os testes
+    services:
+      postgres-db:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password_ci_test
+          POSTGRES_DB: ecogestor_ci
+        ports:
+          - 5432:5432
+        # Garante que o Node só vai rodar quando o Postgres estiver 100% pronto para receber conexões
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      # 2. Baixa o código do repositório
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 3. Configura a versão do Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24.x" # Altere para a versão exata que você usa, se necessário
+          cache: "npm"
+
+      # 4. Instala as dependências de forma limpa (baseado no package-lock.json)
+      - name: Install dependencies
+        run: npm ci
+      #5. GERA O CLIENT DO PRISMA (Adicione este passo aqui!)
+      - name: Generate Prisma Client
+        run: npx prisma generate
+
+      # 6. Sincroniza o banco de dados criando as tabelas através das suas Migrations
+      - name: Run Prisma Migrations
+        env:
+          DATABASE_URL: "postgresql://postgres:password_ci_test@localhost:5432/ecogestor_ci?schema=public"
+        run: npx prisma migrate deploy
+
+      # 7. Executa toda a sua suíte de testes (Vitest)
+      - name: Run Vitest Suite
+        env:
+          DATABASE_URL: "postgresql://postgres:password_ci_test@localhost:5432/ecogestor_ci?schema=public"
+          # Se seus endpoints precisarem de outras variáveis (ex: JWT_SECRET), adicione-as abaixo:
+          JWT_SECRET: "test_secret_for_ci_environment"
+        run: npm run test:ci -- --watch=false

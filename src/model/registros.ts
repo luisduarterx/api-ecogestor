@@ -1,5 +1,5 @@
 import { BadRequest, InternalError, NotFound } from "../error";
-import { Prisma } from "../generated/prisma";
+import { Prisma } from "../../generated/prisma/client";
 import { prisma } from "../libs/prisma";
 import { Pessoa, PessoaFisica, PessoaJuridica } from "../types/registros";
 export const createNewF = (p: PessoaFisica) => {
@@ -154,7 +154,7 @@ export const deleteRegister = async (id: number) => {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       if (error.code === "P2025") {
         throw new NotFound(
-          "O id enviado não pertence a nenhum registro existente."
+          "O id enviado não pertence a nenhum registro existente.",
         );
       }
     }
@@ -218,7 +218,7 @@ export const updateRegister = async (id: number, data: Pessoa) => {
 
         if (!registro) {
           throw new InternalError(
-            "Houve um erro enquanto processavamos as informações"
+            "Houve um erro enquanto processavamos as informações",
           );
         }
 
@@ -273,7 +273,7 @@ export const updateRegister = async (id: number, data: Pessoa) => {
         if (error instanceof Prisma.PrismaClientKnownRequestError) {
           if (error.code === "P2025") {
             throw new BadRequest(
-              "O id enviado não pertence a nenhum registro existente."
+              "O id enviado não pertence a nenhum registro existente.",
             );
           }
         }

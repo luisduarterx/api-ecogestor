@@ -1,5 +1,5 @@
 import { BadRequest, NotPossible } from "../error";
-import { Prisma } from "../generated/prisma";
+import { Prisma } from "../../generated/prisma/client";
 import { prisma } from "../libs/prisma";
 
 type UpsertTypeCategory = {
@@ -28,12 +28,12 @@ export const createCategory = async ({ id, nome }: UpsertTypeCategory) => {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       if (error.code == "P2002") {
         throw new NotPossible(
-          "Não é possível criar uma categoria já existente!"
+          "Não é possível criar uma categoria já existente!",
         );
       }
       if (error.code == "P2025") {
         throw new BadRequest(
-          "O id enviado não pertence a nenhum registro existente."
+          "O id enviado não pertence a nenhum registro existente.",
         );
       }
     }
@@ -51,12 +51,12 @@ export const deleteCategory = async (id: number) => {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       if (error.code === "P2025") {
         return new BadRequest(
-          "O id enviado não pertence a nenhum registro existente."
+          "O id enviado não pertence a nenhum registro existente.",
         );
       }
       if (error.code === "P2003") {
         return new NotPossible(
-          "Não é possivel excluir uma categoria qual tenha materiais listados."
+          "Não é possivel excluir uma categoria qual tenha materiais listados.",
         );
       }
       throw error;

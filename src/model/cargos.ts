@@ -1,6 +1,6 @@
 import { connect } from "http2";
 import { BadRequest, InternalError, NotFound } from "../error";
-import { Prisma } from "../generated/prisma";
+import { Prisma } from "../../generated/prisma/client";
 import { prisma } from "../libs/prisma";
 
 export const getAllRoles = async () => {
@@ -71,7 +71,7 @@ export const addNewRole = async (x: roleData) => {
       }
       if (error.code === "P2025") {
         return new BadRequest(
-          "Não conseguimos encontrar alguma permissão associada"
+          "Não conseguimos encontrar alguma permissão associada",
         );
       }
     }

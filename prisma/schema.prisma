@@ -18,8 +18,8 @@ model User {
   nome                     String
   email                    String                   @unique
   senha                    String
-  telefone                 String
-  cargoID                  Int
+  telefone                 String?
+  cargoID                  Int                      @default(1)
   pedidos                  Pedido[]
   cargo                    Cargo                    @relation(fields: [cargoID], references: [id])
   deletedAt                DateTime?
