@@ -23,7 +23,7 @@ describe("POST /v1/auth/sigin", () => {
         senha: "1234",
       })
       .expect("Content-Type", /json/);
-
+    console.log("USER1:", response.body);
     expect(response.body).toEqual({
       user: {
         id: user.id,

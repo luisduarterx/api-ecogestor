@@ -13,7 +13,7 @@ export async function clearDatabase() {
 
 const seedDatabase = async () => {
   await prisma.cargo.upsert({
-    where: { nome: "ADMIN" },
+    where: { nome: "ADMIN", id: 1 },
     update: {},
     create: { nome: "ADMIN" },
   });
