@@ -22,7 +22,7 @@ export interface CreateUserArgs {
   email: string;
   senha: string;
   telefone?: string;
-  cargo?: number;
+  cargoID?: number;
 }
 export interface UserDataAcess {
   email: string;
@@ -30,8 +30,11 @@ export interface UserDataAcess {
 }
 export interface UserDataEdit {
   id: number;
-  email?: string;
-  cargoID?: number;
-  telefone?: string;
+  data: {
+    nome?: string;
+    email?: string;
+    cargoID?: number;
+    telefone?: string;
+  };
   //permissions
 }

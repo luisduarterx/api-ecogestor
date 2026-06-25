@@ -1,11 +1,14 @@
 import { prisma } from "../libs/prisma";
-
+import dotenv from "dotenv";
+dotenv.config();
 import {
   BadRequest,
   BaseError,
   InternalError,
+  NotFound,
   UnAuthorized,
   UserNotFound,
+  ValidationError,
 } from "../error";
 import { encriptarSenha } from "../services/password";
 import bcrypt from "bcrypt";
@@ -21,62 +24,47 @@ interface userReturn {
   permissoes: String[];
 }
 
-export const createUser = async (data: CreateUserArgs) => {
+const create = async (props: CreateUserArgs) => {
   try {
-    const user = await prisma.user.create({
+    if (!process.env.USER_DEFAULT_PASSWORD) {
+      throw new InternalError("Senha padrão não está configurada.");
+    }
+    const userExist = await prisma.user.findFirst({
+      where: { email: props.email },
+    });
+
+    if (userExist?.nome) {
+      throw new ValidationError();
+    }
+
+    const senhaPadrao = await encriptarSenha(
+      process.env.USER_DEFAULT_PASSWORD as string,
+    );
+
+    const novoUsuario = await prisma.user.create({
       data: {
-        nome: data.nome,
-        email: data.email,
-        telefone: data.telefone || "",
-        cargoID: data.cargo || 1,
-        senha: await encriptarSenha(data.senha),
+        nome: props.nome.toLocaleUpperCase(),
+        email: props.email.toLowerCase(),
+        cargoID: props.cargoID,
+        senha: senhaPadrao,
       },
-      include: {
-        cargo: {
-          include: {
-            permissoes: true,
-          },
-        },
+
+      select: {
+        id: true,
+        nome: true,
+        email: true,
+        telefone: true,
+
+        cargo: true,
       },
     });
 
-    if (!user) {
-      throw new Error("Erro durante o processamento dos dados");
-    }
-    return {
-      id: user.id,
-      nome: user.nome,
-      email: user.email,
-      telefone: user.telefone,
-      cargoID: user.cargoID,
-      permissoes: user.cargo.permissoes.map(
-        (item: Cargo) => item.nome,
-      ) as String[],
-    };
+    return novoUsuario;
   } catch (error) {
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      if (error.code == "P2002") {
-        return {
-          nome: "ErroProcessamento",
-          mensagem: "Ja existe um usuário com esse email",
-          acao: "Escolha outro email ou contate um administrador",
-        };
-      }
-      if (error.code == "P2003") {
-        return {
-          nome: "ErroProcessamento",
-          mensagem: "Cargo inexistente ",
-          acao: "Escolha um cargo valido ou o cargo padrão",
-        };
-      }
-
-      throw error;
-    }
-
     throw error;
   }
 };
-export const findUserByEmail = async (email: string) => {
+const findUserByEmail = async (email: string) => {
   try {
     const user = await prisma.user.findFirst({
       where: {
@@ -95,7 +83,7 @@ export const findUserByEmail = async (email: string) => {
   }
 };
 
-export const validateUser = async (data: UserDataAcess) => {
+const validateUser = async (data: UserDataAcess) => {
   const user = await prisma.user.findFirst({
     where: { AND: { email: data.email, deletedAt: null } },
   });
@@ -120,13 +108,82 @@ export const validateUser = async (data: UserDataAcess) => {
   return dataUser;
 };
 
-export const getAllUsers = async () => {
+const findAll = async (
+  props: {
+    nome?: string;
+    email?: string;
+    cargoID?: number;
+    cargoNome?: string;
+    filter?: string;
+  } = {},
+) => {
   try {
-    const users = await prisma.user.findMany({
-      where: {
-        deletedAt: null,
-      },
+    const conditions: Prisma.UserWhereInput[] = [{ deletedAt: null }];
 
+    if (props.nome) {
+      conditions.push({
+        nome: {
+          contains: props.nome,
+          mode: "insensitive",
+        },
+      });
+    }
+
+    if (props.email) {
+      conditions.push({
+        email: {
+          contains: props.email,
+          mode: "insensitive",
+        },
+      });
+    }
+
+    if (props.cargoID) {
+      conditions.push({
+        cargoID: props.cargoID,
+      });
+    }
+
+    if (props.cargoNome) {
+      conditions.push({
+        cargo: {
+          nome: {
+            contains: props.cargoNome,
+            mode: "insensitive",
+          },
+        },
+      });
+    }
+
+    if (props.filter) {
+      conditions.push({
+        OR: [
+          {
+            nome: {
+              contains: props.filter,
+              mode: "insensitive",
+            },
+          },
+          {
+            email: {
+              contains: props.filter,
+              mode: "insensitive",
+            },
+          },
+          {
+            cargo: {
+              nome: {
+                contains: props.filter,
+                mode: "insensitive",
+              },
+            },
+          },
+        ],
+      });
+    }
+
+    const users = await prisma.user.findMany({
+      where: conditions.length > 1 ? { AND: conditions } : conditions[0],
       select: {
         id: true,
         nome: true,
@@ -141,21 +198,30 @@ export const getAllUsers = async () => {
     throw error;
   }
 };
-export const deleteUserByID = async (id: number) => {
+const deleteUnique = async (id: number) => {
   try {
-    const user = prisma.user.update({
+    const userExist = await prisma.user.findFirst({ where: { id } });
+
+    if (!userExist?.nome) {
+      throw new NotFound();
+    }
+
+    const user = await prisma.user.update({
       where: { id: id, deletedAt: null },
       data: {
         deletedAt: new Date(),
       },
     });
 
-    return user;
+    return {
+      id: user.id,
+      deletedAt: user.deletedAt,
+    };
   } catch (error) {
     throw error;
   }
 };
-export const getUserByID = async (id: number) => {
+const getUserByID = async (id: number) => {
   try {
     const user = await prisma.user.findFirst({
       where: { AND: { id: id, deletedAt: null } },
@@ -164,56 +230,58 @@ export const getUserByID = async (id: number) => {
         nome: true,
         email: true,
         telefone: true,
-        cargoID: true,
+        cargo: true,
       },
     });
 
     return user;
   } catch (error) {
-    console.log(error);
-    return null;
+    throw error;
   }
 };
-export const editUserData = async (data: UserDataEdit) => {
+const update = async ({ id, data }: UserDataEdit) => {
   try {
-    console.log(data);
-    const user = await prisma.user.update({
-      where: { id: data.id },
-      data: {
-        email: data.email,
-        cargoID: data.cargoID,
-        telefone: data.telefone,
+    const userExist = await prisma.user.findFirst({
+      where: {
+        id,
+        AND: {
+          deletedAt: null,
+        },
       },
+    });
+
+    if (!userExist?.nome) {
+      throw new NotFound();
+    }
+    if (data.email) {
+      const emailExist = await prisma.user.findFirst({
+        where: { email: data.email, NOT: { id } },
+      });
+
+      if (emailExist?.nome) {
+        throw new ValidationError(
+          "Esse email já está sendo utilizado por outro usuário.",
+        );
+      }
+    }
+    const user = await prisma.user.update({
+      where: { id },
+      data,
       select: {
         id: true,
         nome: true,
         email: true,
         telefone: true,
-        cargoID: true,
+        cargo: true,
       },
     });
 
-    if (!user) {
-      return null;
-    }
-
     return user;
   } catch (error: any) {
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      if (error.code === "P2003") {
-        throw new BadRequest("Cargo inexistente. Escolha um cargo válido.");
-      }
-
-      if (error.code === "P2002") {
-        throw new BadRequest("Email já cadastrado.");
-      }
-    }
-
-    console.error("Erro inesperado:", error);
-    throw new InternalError("Erro inesperado no servidor.");
+    throw error;
   }
 };
-export const userHasPermission = async (userID: number, permission: string) => {
+const userHasPermission = async (userID: number, permission: string) => {
   try {
     const user = await prisma.user.findUnique({
       where: { id: userID },
@@ -234,3 +302,16 @@ export const userHasPermission = async (userID: number, permission: string) => {
     return user.cargo.permissoes.some((p) => p.nome === permission);
   } catch (error) {}
 };
+
+const user = {
+  create,
+  findUserByEmail,
+  validateUser,
+  findAll,
+  deleteUnique,
+  getUserByID,
+  update,
+  userHasPermission,
+};
+
+export default user;

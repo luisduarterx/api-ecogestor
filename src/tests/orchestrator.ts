@@ -1,10 +1,8 @@
-import type { User } from "../../generated/prisma/client";
-import { popular } from "../inicial";
 import { prisma } from "../libs/prisma";
-import { Prisma } from "../../generated/prisma/client";
+
 import { encriptarSenha } from "../services/password";
 import { faker } from "@faker-js/faker";
-import * as DBUser from "../model/users";
+
 import { gerarToken } from "../services/jwt";
 import cargo from "../model/cargos";
 
@@ -23,15 +21,17 @@ const createUserWithoutPermission = async (Props: {
 }) => {
   const cargo = await prisma.cargo.create({
     data: {
-      nome: "cargo sem permissao",
+      nome: faker.internet.displayName().toUpperCase(),
     },
   });
 
   const senha = await encriptarSenha(Props.senha || "senha");
   const user = await prisma.user.create({
     data: {
-      nome: Props.nome || faker.person.firstName(),
-      email: Props.email || faker.internet.email(),
+      nome: Props.nome?.toUpperCase() || faker.person.firstName().toUpperCase(),
+      email:
+        Props.email?.toLocaleLowerCase() ||
+        faker.internet.email().toLowerCase(),
       senha: senha,
       cargoID: cargo.id,
     },
@@ -66,6 +66,11 @@ const userAuthenticated = async (Props: {
       { nome: "read:cargos" },
       { nome: "update:cargo" },
       { nome: "delete:cargo" },
+      { nome: "read:usuario" },
+      { nome: "read:usuarios" },
+      { nome: "create:usuario" },
+      { nome: "delete:usuario" },
+      { nome: "update:usuario" },
     ],
     skipDuplicates: true, // Evita erros se rodar o teste localmente pela segunda vez
   });
