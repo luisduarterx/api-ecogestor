@@ -1,117 +1,96 @@
-import { connect } from "http2";
-import { BadRequest, InternalError, NotFound } from "../error";
 import { Prisma } from "../../generated/prisma/client";
+import { BadRequest, NotFound, ValidationError } from "../error";
 import { prisma } from "../libs/prisma";
 
-export const getAllRoles = async () => {
-  try {
-    const roles = await prisma.cargo.findMany({
-      select: {
-        id: true,
-        nome: true,
-      },
-    });
-
-    if (!roles) {
-      throw new InternalError();
-    }
-
-    return roles;
-  } catch (error) {
-    throw error;
-  }
-};
-export const getRoleByID = async (id: number) => {
-  try {
-    const role = await prisma.cargo.findFirst({
-      where: { id },
-      select: {
-        id: true,
-        nome: true,
-        permissoes: true,
-      },
-    });
-
-    return role;
-  } catch (error) {
-    throw error;
-  }
-};
-type roleData = {
+interface CargoProps {
   nome: string;
   permissoes: number[];
-};
-export const addNewRole = async (x: roleData) => {
+}
+
+const create = async (props: CargoProps) => {
   try {
-    const role = await prisma.cargo.upsert({
-      where: {
-        nome: x.nome,
-      },
-      update: {
+    const existCargo = await prisma.cargo.findFirst({
+      where: { nome: props.nome },
+    });
+
+    if (existCargo?.nome) {
+      throw new BadRequest("Já existe um cargo com esse nome.");
+    }
+
+    const novoCargo = await prisma.cargo.create({
+      data: {
+        nome: props.nome.toUpperCase(),
         permissoes: {
-          set: [],
-          connect: x.permissoes.map((id) => ({ id })),
+          connect: props.permissoes.map((item) => ({ id: item })),
         },
-      },
-      create: {
-        nome: x.nome,
-        permissoes: x.permissoes
-          ? { connect: x.permissoes.map((id) => ({ id })) }
-          : undefined,
       },
       include: {
         permissoes: true,
       },
     });
-    return role;
+
+    return novoCargo;
   } catch (error) {
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      if (error.code === "P2002") {
-        return new BadRequest("Já existe um cargo com o nome informado");
-      }
-      if (error.code === "P2025") {
-        return new BadRequest(
-          "Não conseguimos encontrar alguma permissão associada",
-        );
-      }
-    }
     throw error;
   }
 };
-export const deleteRoleByID = async (id: number) => {
+const findAll = async () => {
   try {
-    const roleUsers = await prisma.cargo.findFirst({
-      where: { id },
-      select: {
-        users: {
-          select: {
-            id: true,
-          },
-        },
+    return await prisma.cargo.findMany({
+      include: {
+        permissoes: true,
       },
     });
-
-    if (!roleUsers) {
-      throw new InternalError();
-    }
-
-    if (roleUsers?.users.length > 0) {
-      throw new InternalError("Não foi possivel deletar esse registro.");
-    }
-
-    const role = await prisma.cargo.delete({ where: { id } });
-
-    if (!role) {
-      throw new InternalError();
-    }
-
-    return role;
   } catch (error) {
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      if (error.code === "P2025") {
-        return new BadRequest("Não conseguimos encontrar nenhum registro.");
-      }
-    }
     throw error;
   }
 };
+const getByID = async (props: { id: number }) => {
+  try {
+    const result = await prisma.cargo.findFirst({
+      where: { id: props.id },
+      include: { permissoes: true },
+    });
+
+    if (!result) {
+      throw new NotFound();
+    }
+
+    return result;
+  } catch (error) {
+    throw error;
+  }
+};
+const deleteUnique = async (props: { id: number }) => {
+  try {
+    const cargo = await prisma.cargo.findFirst({ where: { id: props.id } });
+
+    if (!cargo) {
+      throw new NotFound();
+    }
+    const usuarioUtilizandoCargo = await prisma.user.findFirst({
+      where: { cargoID: props.id },
+    });
+
+    if (usuarioUtilizandoCargo?.nome) {
+      throw new ValidationError(
+        "Não é possível deletar um cargo que está sendo utilizado.",
+      );
+    }
+    const cargoDeletado = await prisma.cargo.deleteMany({
+      where: { id: props.id },
+    });
+
+    return { deletado: cargoDeletado.count };
+  } catch (error) {
+    throw error;
+  }
+};
+const cargo = {
+  create,
+  findAll,
+  getByID,
+  deleteUnique,
+};
+
+export default cargo;

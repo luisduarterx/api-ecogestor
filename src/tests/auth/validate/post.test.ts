@@ -6,7 +6,6 @@ import { gerarToken } from "../../../services/jwt";
 
 beforeEach(async () => {
   await orchestrator.clearDatabase();
-  await orchestrator.seedDatabase();
 });
 
 describe("POST /v1/auth/validate", () => {

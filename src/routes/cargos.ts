@@ -1,14 +1,38 @@
 import { Response, Router } from "express";
 import * as cargo from "../controllers/cargos";
 import { AuthMiddleware } from "../controllers/middleware";
+import { authorize } from "../controllers/auth-middleware";
 
 export const cargosRoutes = Router();
 
 //Lida com o Cargos
-cargosRoutes.get("/cargos", AuthMiddleware, cargo.GET);
+cargosRoutes.get(
+  "/cargos",
+  AuthMiddleware,
+  AuthMiddleware,
+  authorize("read:cargos"),
+  cargo.GET,
+);
 
-cargosRoutes.get("/cargos/:roleID", AuthMiddleware, cargo.GETUNIQUE);
+cargosRoutes.get(
+  "/cargos/:roleID",
+  AuthMiddleware,
+  authorize("read:cargo"),
+  cargo.GETUNIQUE,
+);
 
-cargosRoutes.post("/cargos", AuthMiddleware, cargo.POST);
+cargosRoutes.post(
+  "/cargos",
 
-cargosRoutes.delete("/cargos/:roleID", AuthMiddleware, cargo.DELETE);
+  AuthMiddleware,
+  authorize("create:cargo"),
+  cargo.POST,
+);
+
+cargosRoutes.delete(
+  "/cargos/:roleID",
+  AuthMiddleware,
+  AuthMiddleware,
+  authorize("delete:cargo"),
+  cargo.DELETE,
+);

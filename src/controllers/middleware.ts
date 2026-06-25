@@ -8,7 +8,7 @@ import { getUserByID } from "../model/users";
 export const AuthMiddleware = async (
   req: ExtendedRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   const token = req.headers.authorization?.split(" ")[1];
   try {
@@ -26,6 +26,7 @@ export const AuthMiddleware = async (
     if (!userExist) {
       throw new UnAuthorized();
     }
+
     const RequestUser: ReqUser = {
       id: user.id,
       nome: user.nome,
@@ -33,10 +34,9 @@ export const AuthMiddleware = async (
     };
 
     req.user = RequestUser;
+
     next();
   } catch (error: any) {
-    const status = error?.statusCode || 500;
-
-    res.status(status).json(error);
+    next(error);
   }
 };

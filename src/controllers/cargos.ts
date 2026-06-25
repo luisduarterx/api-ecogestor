@@ -1,19 +1,16 @@
 import { Response } from "express";
 import { ExtendedRequest } from "../types/extended-request";
-import * as dbCargo from "../model/cargos";
+import cargo from "../model/cargos";
 import { z } from "zod";
 import { BadRequest, InternalError, NotFound } from "../error";
 
 export const GET = async (req: ExtendedRequest, res: Response) => {
   try {
-    const cargos = await dbCargo.getAllRoles();
+    const cargos = await cargo.findAll();
 
     res.status(200).json(cargos);
   } catch (error: any) {
-    console.log(error);
-    const status = error?.statusCode || 500;
-    res.status(status).json(error);
-    return;
+    throw error;
   }
 };
 export const GETUNIQUE = async (req: ExtendedRequest, res: Response) => {
@@ -27,16 +24,14 @@ export const GETUNIQUE = async (req: ExtendedRequest, res: Response) => {
       throw new BadRequest();
     }
 
-    const cargo = await dbCargo.getRoleByID(id.data);
-    if (!cargo) {
+    const found = await cargo.getByID({ id: id.data });
+    if (!found) {
       throw new NotFound();
     }
 
-    res.status(200).json(cargo);
+    res.status(200).json(found);
   } catch (error: any) {
-    const status = error?.statusCode || 500;
-    res.status(status).json(error);
-    return;
+    throw error;
   }
 };
 export const POST = async (req: ExtendedRequest, res: Response) => {
@@ -52,18 +47,11 @@ export const POST = async (req: ExtendedRequest, res: Response) => {
       throw new BadRequest();
     }
 
-    const cargo = await dbCargo.addNewRole(data.data);
+    const novoCargo = await cargo.create(data.data);
 
-    if (!cargo) {
-      throw new InternalError();
-    }
-
-    res.status(201).json(cargo);
-  } catch (error: any) {
-    console.log(error);
-    const status = error?.statusCode || 500;
-    res.status(status).json(error);
-    return;
+    res.status(201).json(novoCargo);
+  } catch (error: unknown) {
+    throw error;
   }
 };
 export const DELETE = async (req: ExtendedRequest, res: Response) => {
@@ -76,17 +64,10 @@ export const DELETE = async (req: ExtendedRequest, res: Response) => {
       throw new BadRequest("O id informado não é válido!");
     }
 
-    const cargo = await dbCargo.deleteRoleByID(id.data);
+    const deleted = await cargo.deleteUnique({ id: id.data });
 
-    if (!cargo) {
-      throw new InternalError();
-    }
-
-    res.status(200).json(cargo);
+    res.status(200).json(deleted);
   } catch (error: any) {
-    console.log(error);
-    const status = error?.statusCode || 500;
-    res.status(status).json(error);
-    return;
+    throw error;
   }
 };

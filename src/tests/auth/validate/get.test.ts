@@ -5,7 +5,6 @@ import orchestrator from "../../orchestrator";
 
 beforeEach(async () => {
   await orchestrator.clearDatabase();
-  await orchestrator.seedDatabase();
 });
 
 describe("GET /v1/auth/validate", () => {
