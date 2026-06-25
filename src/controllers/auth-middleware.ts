@@ -8,16 +8,23 @@ export function authorize(requiredPermissions: string) {
       if (!req.user?.id) {
         return res.status(401).json({ message: "Unauthorized" });
       }
+
       const userPermission = await userHasPermission(
         req.user?.id,
-        requiredPermissions
+        requiredPermissions,
       );
+
       if (!userPermission) {
-        return res.status(403).json({ message: "Forbidden" });
+        return res.status(401).json({
+          nome: "Acesso não Autorizado",
+          mensagem: "Você não tem permissão para acessar essa página",
+          acao: "Verifique suas permissões ou contate um administrador",
+          statusCode: 401,
+        });
       }
       next();
     } catch (error) {
-      res.status(500).json({ message: "Internal Server Error" });
+      next(error);
     }
   };
 }

@@ -38,13 +38,11 @@ export const SIGNIN: RequestHandler = async (req, res, next) => {
 export const VALIDATE = async (req: ExtendedRequest, res: Response) => {
   try {
     const user = req.user;
-    console.log(user);
 
     if (!user) {
       throw new UnAuthorized("Token inválido ou expirado");
     }
     const userValid = await DBUser.getUserByID(user.id);
-    console.log(userValid);
 
     if (!userValid) {
       throw new UnAuthorized("Token inválido ou expirado");

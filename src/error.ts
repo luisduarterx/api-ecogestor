@@ -35,12 +35,24 @@ export class BadRequest extends BaseError {
   }
 }
 export class NotFound extends BaseError {
-  constructor(mensagem = "Não foi encontrado nenhum registro") {
+  constructor(mensagem = "Não foi encontrado nenhum registro.") {
     super(
-      "Registro não encontrado",
+      "NotFoundError",
       mensagem,
-      "Verifique os dados e tente novamente",
+      "Verifique os dados e tente novamente.",
       404,
+    );
+  }
+}
+export class ValidationError extends BaseError {
+  constructor(
+    mensagem = "Um erro de validação ocorreu ao processar a operação.",
+  ) {
+    super(
+      "ValidationError",
+      mensagem,
+      "Verifique os dados e tente novamente, caso persista, contate um administrador.",
+      400,
     );
   }
 }

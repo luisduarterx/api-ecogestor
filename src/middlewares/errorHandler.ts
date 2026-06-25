@@ -1,5 +1,6 @@
 import type { NextFunction, Request, Response } from "express";
 import type { BaseError } from "../error";
+import { Prisma } from "../../generated/prisma/client";
 
 export default function errorHandler(
   err: unknown,
@@ -18,7 +19,19 @@ export default function errorHandler(
       acao: appErr.acao,
       statusCode: appErr.statusCode,
     };
+
     return res.status(appErr.statusCode || 500).json(payload);
+  }
+  if (err instanceof Prisma.PrismaClientKnownRequestError) {
+    console.log("PRISMA:", err.message);
+    const payload = {
+      nome: "ValidationError",
+      mensagem: "Um erro de validação ocorreu ao processar a operação.",
+      acao: "Verifique os dados e tente novamente, caso persista, contate um administrador.",
+      statusCode: 400,
+    };
+
+    return res.status(payload.statusCode || 500).json(payload);
   }
 
   return res.status(500).json({

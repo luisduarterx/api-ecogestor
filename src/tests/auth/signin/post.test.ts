@@ -5,12 +5,11 @@ import orchestrator from "../../orchestrator";
 
 beforeEach(async () => {
   await orchestrator.clearDatabase();
-  await orchestrator.seedDatabase();
 });
 
 describe("POST /v1/auth/sigin", () => {
   test("Com dados validos.", async () => {
-    const user = await orchestrator.createUser({
+    const user = await orchestrator.createUserWithoutPermission({
       nome: "Luis",
 
       senha: "1234",
@@ -23,7 +22,7 @@ describe("POST /v1/auth/sigin", () => {
         senha: "1234",
       })
       .expect("Content-Type", /json/);
-    console.log("USER1:", response.body);
+
     expect(response.body).toEqual({
       user: {
         id: user.id,
@@ -36,7 +35,7 @@ describe("POST /v1/auth/sigin", () => {
   });
 
   test("Com email correto e senha incorreta.", async () => {
-    const user = await orchestrator.createUser({
+    const user = await orchestrator.createUserWithoutPermission({
       nome: "Luis",
 
       senha: "1234",
@@ -58,7 +57,7 @@ describe("POST /v1/auth/sigin", () => {
     });
   });
   test("Com email incorreto e senha correta.", async () => {
-    const user = await orchestrator.createUser({
+    const user = await orchestrator.createUserWithoutPermission({
       nome: "Luis",
 
       senha: "1234",

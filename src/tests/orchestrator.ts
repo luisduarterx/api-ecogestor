@@ -6,45 +6,91 @@ import { encriptarSenha } from "../services/password";
 import { faker } from "@faker-js/faker";
 import * as DBUser from "../model/users";
 import { gerarToken } from "../services/jwt";
+import cargo from "../model/cargos";
 
 export async function clearDatabase() {
   await prisma.user.deleteMany();
+  await prisma.permissoes.deleteMany();
+  await prisma.cargo.deleteMany();
+
+  // Apaga os dados e reinicia o contador do ID automático
 }
 
-const seedDatabase = async () => {
-  await prisma.cargo.upsert({
-    where: { nome: "ADMIN", id: 1 },
-    update: {},
-    create: { nome: "ADMIN" },
-  });
-};
-const createUser = async (Props: {
+const createUserWithoutPermission = async (Props: {
   nome?: string;
   email?: string;
   senha?: string;
 }) => {
-  const senha = await encriptarSenha(Props.senha || "senha");
-  return await prisma.user.create({
+  const cargo = await prisma.cargo.create({
     data: {
-      nome: Props.nome || faker.person.firstName(),
-      email: Props.email || faker.internet.email(),
-      senha: senha,
-      cargoID: 1,
+      nome: "cargo sem permissao",
     },
   });
-};
-const userAuthenticated = async (Props: {
-  nome?: string;
-  email?: string;
-  senha?: string;
-}) => {
+
   const senha = await encriptarSenha(Props.senha || "senha");
   const user = await prisma.user.create({
     data: {
       nome: Props.nome || faker.person.firstName(),
       email: Props.email || faker.internet.email(),
       senha: senha,
-      cargoID: 1,
+      cargoID: cargo.id,
+    },
+  });
+  const jwt = gerarToken({
+    id: user.id,
+    nome: user.nome,
+    email: user.email,
+    cargo: user.cargoID,
+  });
+
+  return {
+    id: user.id,
+    nome: user.nome,
+    email: user.email,
+    cargo: user.cargoID,
+    jwt,
+  };
+};
+const findPermissions = async () => {
+  return await prisma.permissoes.findMany({});
+};
+const userAuthenticated = async (Props: {
+  nome?: string;
+  email?: string;
+  senha?: string;
+}) => {
+  await prisma.permissoes.createManyAndReturn({
+    data: [
+      { nome: "create:cargo" },
+      { nome: "read:cargo" },
+      { nome: "read:cargos" },
+      { nome: "update:cargo" },
+      { nome: "delete:cargo" },
+    ],
+    skipDuplicates: true, // Evita erros se rodar o teste localmente pela segunda vez
+  });
+  const permissoes = await prisma.permissoes.findMany();
+  const mapPermissions = permissoes.map((item) => ({ id: item.id }));
+
+  const cargoAdmin = await prisma.cargo.create({
+    data: {
+      nome: "ADMIN",
+      permissoes: {
+        connect: mapPermissions,
+      },
+    },
+    include: {
+      permissoes: true,
+    },
+  });
+
+  const senha = await encriptarSenha(Props.senha || "senha");
+  const user = await prisma.user.create({
+    data: {
+      nome: Props.nome || faker.person.firstName(),
+      email: Props.email || faker.internet.email(),
+      senha,
+      cargoID: cargoAdmin.id,
     },
   });
 
@@ -63,12 +109,15 @@ const userAuthenticated = async (Props: {
     jwt,
   };
 };
-
+const createCargo = async (Props: { nome: string; permissoes: number[] }) => {
+  return await cargo.create(Props);
+};
 const orchestrator = {
   clearDatabase,
-  seedDatabase,
-  createUser,
+  createCargo,
+  createUserWithoutPermission,
   userAuthenticated,
+  findPermissions,
 };
 
 export default orchestrator;
