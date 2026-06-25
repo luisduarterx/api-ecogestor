@@ -13,7 +13,7 @@ export function authorize(requiredPermissions: string) {
         req.user?.id,
         requiredPermissions,
       );
-      console.log("HASPERMISSION", userPermission);
+
       if (!userPermission) {
         return res.status(401).json({
           nome: "Acesso não Autorizado",

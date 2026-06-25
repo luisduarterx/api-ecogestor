@@ -1,82 +1,88 @@
 import request from "supertest";
-import { app } from "../../app";
+import { app } from "../../../app";
 import { test, beforeEach, expect, describe } from "vitest";
-import orchestrator from "../orchestrator";
-import { gerarToken } from "../../services/jwt";
+import orchestrator from "../../orchestrator";
+import { gerarToken } from "../../../services/jwt";
+import { prisma } from "../../../libs/prisma";
 
 beforeEach(async () => {
   await orchestrator.clearDatabase();
 });
 
-describe("GET /v1/cargos/[id]/", () => {
-  test("Deve trazer todos os resultados", async () => {
+describe("DELETE /v1/cargos/[id]/", () => {
+  test("Com id válido, nome válido", async () => {
     const user = await orchestrator.userAuthenticated({
       nome: "ADMINISTRADOR",
     });
-    const p = await orchestrator.findPermissions();
-
-    await orchestrator.createCargo({
-      nome: "CARGO 1",
-      permissoes: [p[0].id, p[1].id, p[2].id],
-    });
-    await orchestrator.createCargo({
-      nome: "CARGO 2",
-      permissoes: [p[1].id],
-    });
-    await orchestrator.createCargo({
-      nome: "CARGO 3",
-      permissoes: [p[3].id, p[4].id],
+    const cargo = await orchestrator.createCargo({
+      nome: "CARGO NOVO",
+      permissoes: [],
     });
 
     const response = await request(app)
-      .get("/v1/cargos/")
+      .delete(`/v1/cargos/${cargo.id}`)
       .expect(200)
       .auth(user.jwt, { type: "bearer" })
       .expect("Content-Type", /json/);
 
-    expect(Array.isArray(response.body)).toBe(true);
-    expect(response.body.length).toBe(4);
+    expect(response.body).toEqual({
+      deletado: 1,
+    });
   });
-  test("Deve trazer todos os resultados", async () => {
+  test("Com usuário utilizando cargo", async () => {
     const user = await orchestrator.userAuthenticated({
       nome: "ADMINISTRADOR",
     });
-    const p = await orchestrator.findPermissions();
-
-    await orchestrator.createCargo({
-      nome: "RANK 1",
-      permissoes: [p[0].id, p[1].id, p[2].id],
+    const cargo = await orchestrator.createCargo({
+      nome: "CARGO NOVO",
+      permissoes: [],
     });
-    await orchestrator.createCargo({
-      nome: "rank 2",
-      permissoes: [p[1].id],
-    });
-    await orchestrator.createCargo({
-      nome: "CARGO 3",
-      permissoes: [p[3].id, p[4].id],
+    await prisma.user.create({
+      data: {
+        nome: "TESTADOR",
+        email: "teste@test.com",
+        senha: "1234",
+        cargoID: cargo.id,
+      },
     });
 
     const response = await request(app)
-      .get("/v1/cargos?search=cargo")
-      .expect(200)
+      .delete(`/v1/cargos/${cargo.id}`)
+      .expect(400)
       .auth(user.jwt, { type: "bearer" })
       .expect("Content-Type", /json/);
 
-    expect(Array.isArray(response.body)).toBe(true);
-    expect(response.body.length).toBe(1);
-    expect(response.body[0]).toEqual({
-      id: response.body[0].id,
-      nome: "CARGO 3",
-      descricao: response.body[0].descricao,
-      permissoes: response.body[0].permissoes,
+    expect(response.body).toEqual({
+      nome: "ValidationError",
+      mensagem: "Não é possível deletar um cargo que está sendo utilizado.",
+      acao: "Verifique os dados e tente novamente, caso persista, contate um administrador.",
+      statusCode: 400,
     });
   });
 
+  test("Com id inválido", async () => {
+    const user = await orchestrator.userAuthenticated({
+      nome: "ADMINISTRADOR",
+    });
+
+    const response = await request(app)
+      .delete("/v1/cargos/9999123")
+      .auth(user.jwt, { type: "bearer" })
+      .expect("Content-Type", /json/)
+      .expect(404);
+
+    expect(response.body).toEqual({
+      nome: "NotFoundError",
+      mensagem: "Não foi encontrado nenhum registro.",
+      acao: "Verifique os dados e tente novamente.",
+      statusCode: 404,
+    });
+  });
   test("Com token JWT valido e usuario inexistente", async () => {
     const token = gerarToken({ nome: "luis" });
 
     const response = await request(app)
-      .get("/v1/cargos/")
+      .delete("/v1/cargos/2")
       .auth(token, { type: "bearer" })
       .expect("Content-Type", /json/)
       .expect(401);
@@ -90,7 +96,7 @@ describe("GET /v1/cargos/[id]/", () => {
   });
   test("Com token JWT invalido", async () => {
     const response = await request(app)
-      .get("/v1/cargos/1")
+      .delete("/v1/cargos/1")
       .auth("werwefa3w4t534tqwefwq", { type: "bearer" })
       .expect("Content-Type", /json/)
       .expect(401);
@@ -107,7 +113,7 @@ describe("GET /v1/cargos/[id]/", () => {
       nome: "SEM PERMISSAO",
     });
     const response = await request(app)
-      .get("/v1/cargos/")
+      .delete("/v1/cargos/2")
       .auth(user.jwt, { type: "bearer" })
       .expect("Content-Type", /json/)
       .expect(401);
@@ -122,8 +128,7 @@ describe("GET /v1/cargos/[id]/", () => {
 
   test("Sem um Bearer token", async () => {
     const response = await request(app)
-      .get("/v1/cargos/")
-
+      .delete("/v1/cargos/1")
       .expect("Content-Type", /json/)
       .expect(401);
 

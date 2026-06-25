@@ -6,7 +6,9 @@ import { BadRequest, InternalError, NotFound } from "../error";
 
 export const GET = async (req: ExtendedRequest, res: Response) => {
   try {
-    const cargos = await cargo.findAll();
+    const search = z.string().max(50).safeParse(req.query.search);
+
+    const cargos = await cargo.findAll({ filter: search.data });
 
     res.status(200).json(cargos);
   } catch (error: any) {
@@ -25,6 +27,34 @@ export const GETUNIQUE = async (req: ExtendedRequest, res: Response) => {
     }
 
     const found = await cargo.getByID({ id: id.data });
+    if (!found) {
+      throw new NotFound();
+    }
+
+    res.status(200).json(found);
+  } catch (error: any) {
+    throw error;
+  }
+};
+export const PATCH = async (req: ExtendedRequest, res: Response) => {
+  try {
+    const roleID = parseInt(req.params.roleID);
+
+    const idSchema = z.number().int().max(2147483646).positive();
+    const id = idSchema.safeParse(roleID);
+
+    const body = z
+      .object({
+        nome: z.string().optional(),
+        permissoes: z.number().array().optional(),
+      })
+      .safeParse(req.body);
+
+    if (!id.success || !body.success) {
+      throw new BadRequest();
+    }
+
+    const found = await cargo.update({ id: id.data, data: body.data });
     if (!found) {
       throw new NotFound();
     }

@@ -34,9 +34,17 @@ const create = async (props: CargoProps) => {
     throw error;
   }
 };
-const findAll = async () => {
+const findAll = async (props: { filter?: string }) => {
   try {
     return await prisma.cargo.findMany({
+      where: props.filter
+        ? {
+            nome: {
+              contains: props.filter,
+              mode: "insensitive",
+            },
+          }
+        : {},
       include: {
         permissoes: true,
       },
@@ -86,11 +94,63 @@ const deleteUnique = async (props: { id: number }) => {
     throw error;
   }
 };
+const update = async (props: {
+  id: number;
+  data: { nome?: string; permissoes?: number[] };
+}) => {
+  try {
+    const cargoExist = await prisma.cargo.findFirst({
+      where: { id: props.id },
+    });
+
+    if (!cargoExist) {
+      throw new NotFound();
+    }
+
+    if (props.data.nome) {
+      const nomeUpper = props.data.nome.toUpperCase();
+
+      const cargoWithSameName = await prisma.cargo.findFirst({
+        where: {
+          nome: nomeUpper,
+          NOT: { id: props.id },
+        },
+      });
+
+      if (cargoWithSameName) {
+        throw new BadRequest("Já existe um cargo com esse nome.");
+      }
+    }
+
+    const data: Prisma.CargoUpdateInput = {};
+
+    if (props.data.nome) {
+      data.nome = props.data.nome.toUpperCase();
+    }
+
+    if (props.data.permissoes) {
+      data.permissoes = {
+        set: props.data.permissoes.map((id) => ({ id })),
+      };
+    }
+
+    const cargoAtualizado = await prisma.cargo.update({
+      where: { id: props.id },
+      data,
+      include: { permissoes: true },
+    });
+
+    return cargoAtualizado;
+  } catch (error) {
+    throw error;
+  }
+};
 const cargo = {
   create,
   findAll,
   getByID,
   deleteUnique,
+  update,
 };
 
 export default cargo;

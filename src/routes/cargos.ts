@@ -13,7 +13,13 @@ cargosRoutes.get(
   authorize("read:cargos"),
   cargo.GET,
 );
-
+cargosRoutes.patch(
+  "/cargos/:roleID",
+  AuthMiddleware,
+  AuthMiddleware,
+  authorize("update:cargo"),
+  cargo.PATCH,
+);
 cargosRoutes.get(
   "/cargos/:roleID",
   AuthMiddleware,
