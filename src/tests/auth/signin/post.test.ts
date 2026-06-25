@@ -26,7 +26,7 @@ describe("POST /v1/auth/sigin", () => {
     expect(response.body).toEqual({
       user: {
         id: user.id,
-        nome: "Luis",
+        nome: "LUIS",
         email: user.email,
         cargo: response.body.user.cargo,
       },

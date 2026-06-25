@@ -1,38 +1,46 @@
 import { RequestHandler } from "express";
 import { z } from "zod";
-import { BadRequest, BaseError, InternalError, UserNotFound } from "../error";
-import * as DBUser from "../model/users";
-import { UserResult } from "../types/user";
+import {
+  BadRequest,
+  BaseError,
+  InternalError,
+  NotFound,
+  UserNotFound,
+  ValidationError,
+} from "../error";
+import user from "../model/users";
+import { ExtendedRequest } from "../types/extended-request";
 
 export const POST: RequestHandler = async (req, res) => {
-  const body = req.body;
-
-  const userSchema = z.object({
-    nome: z.string(),
-    email: z.string().email(),
-    senha: z.string(),
-    cargo: z.number(),
-    telefone: z.string().optional(),
-  });
-
   try {
+    const body = req.body;
+
+    const userSchema = z.object({
+      nome: z.string(),
+      email: z.string().email(),
+      senha: z.string(),
+      cargoID: z.number(),
+      telefone: z.string().optional(),
+    });
+
     const userData = userSchema.safeParse(req.body);
 
     if (!userData.success) {
       throw new BadRequest();
     }
 
-    const user = await DBUser.createUser(userData.data);
+    const usuario = await user.create(userData.data);
 
-    res.status(201).json(user);
+    res.status(201).json(usuario);
   } catch (error: any) {
-    const status = error?.statusCode || 500;
-    res.status(status).json(error);
+    throw error;
   }
 };
 export const GET: RequestHandler = async (req, res) => {
   try {
-    const users = await DBUser.getAllUsers();
+    const search = z.string().max(50).safeParse(req.query.search);
+
+    const users = await user.findAll({ filter: search.data });
     if (!users) {
       throw new Error("Não foi possivel buscar por usuarios");
     }
@@ -42,65 +50,55 @@ export const GET: RequestHandler = async (req, res) => {
     res.status(500).json(error);
   }
 };
-export const DELETE: RequestHandler = async (req, res) => {
+export const DELETE: RequestHandler = async (req: ExtendedRequest, res) => {
   try {
-    const userID = parseInt(req.params.userID);
+    const userID = z
+      .number()
+      .int()
+      .positive()
+      .safeParse(Number(req.params.userID));
 
-    const userIDSchema = z.number().int().max(2147483646);
-
-    const userIDParsed = userIDSchema.safeParse(userID);
-
-    if (!userIDParsed.success) {
-      throw new UserNotFound("O ID informado não é valido");
+    if (userID.data === req.user?.id) {
+      throw new ValidationError("Não é possivel deletar o próprio usuário.");
+    }
+    if (!userID.success) {
+      throw new BadRequest();
     }
 
-    const user = await DBUser.getUserByID(userIDParsed.data);
-    if (!user) {
-      throw new UserNotFound("O ID informado não pertence a nenhum usuário.");
-    }
-
-    const deletedUser = await DBUser.deleteUserByID(userIDParsed.data);
+    const deletedUser = await user.deleteUnique(userID.data);
     res.status(200).json(deletedUser);
   } catch (error: any) {
-    console.log(error);
-    const status = error?.statusCode || 500;
-    res.status(status).json(error);
-    return;
+    throw error;
   }
 };
-export const PUT: RequestHandler = async (req, res) => {
+export const PATCH: RequestHandler = async (req, res) => {
   try {
-    const userID = parseInt(req.params.userID);
-    console.log(userID);
-    const userIDSchema = z.number().int().max(2147483646);
-    const userIDParsed = userIDSchema.safeParse(userID);
-    console.log(userIDParsed);
-    if (!userIDParsed.success) {
-      throw new UserNotFound("O ID informado não é valido");
+    const userID = z
+      .number()
+      .int()
+      .positive()
+      .safeParse(parseInt(req.params.userID));
+
+    if (!userID.success) {
+      throw new BadRequest();
     }
 
-    const user: UserResult = await DBUser.getUserByID(userIDParsed.data);
+    const userData = z
+      .object({
+        nome: z.string().max(205).optional(),
+        email: z.string().email().optional(),
+        telefone: z.string().optional(),
+        cargoID: z.number().optional(),
+      })
+      .safeParse(req.body);
 
-    if (!user) {
-      throw new UserNotFound();
-    } //parei aqui
-
-    const userDataSchema = z.object({
-      email: z.string().email().optional(),
-      telefone: z.string().optional(),
-      cargoID: z.number().optional(),
-    });
-    const userData = userDataSchema.safeParse(req.body);
-    console.log("data:", userData.data);
     if (!userData.success) {
       throw new BadRequest();
     }
 
-    const updatedUser = await DBUser.editUserData({
-      id: user.id,
-      email: userData.data.email,
-      cargoID: userData.data.cargoID,
-      telefone: userData.data.telefone,
+    const updatedUser = await user.update({
+      id: userID.data,
+      data: userData.data,
     });
 
     if (!updatedUser) {
@@ -116,4 +114,28 @@ export const PUT: RequestHandler = async (req, res) => {
   }
 
   //parei aqui
+};
+
+export const GET_UNIQUE: RequestHandler = async (req, res) => {
+  try {
+    const id = z
+      .number()
+      .positive()
+      .int()
+      .safeParse(parseInt(req.params.userID));
+
+    if (!id.success) {
+      throw new BadRequest();
+    }
+
+    const usuario = await user.getUserByID(id.data);
+
+    if (!usuario) {
+      throw new NotFound();
+    }
+
+    res.json(usuario);
+  } catch (error) {
+    throw error;
+  }
 };

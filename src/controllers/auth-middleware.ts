@@ -1,6 +1,6 @@
 import { ExtendedRequest } from "../types/extended-request";
 import { Response, NextFunction } from "express";
-import { userHasPermission } from "../model/users";
+import user from "../model/users";
 
 export function authorize(requiredPermissions: string) {
   return async (req: ExtendedRequest, res: Response, next: NextFunction) => {
@@ -9,7 +9,7 @@ export function authorize(requiredPermissions: string) {
         return res.status(401).json({ message: "Unauthorized" });
       }
 
-      const userPermission = await userHasPermission(
+      const userPermission = await user.userHasPermission(
         req.user?.id,
         requiredPermissions,
       );

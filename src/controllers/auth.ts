@@ -1,7 +1,7 @@
 import { RequestHandler, Response } from "express";
 import { z } from "zod";
 import { BadRequest, UnAuthorized, UserNotFound } from "../error";
-import * as DBUser from "../model/users";
+import user from "../model/users";
 import jwt from "jsonwebtoken";
 import { gerarToken } from "../services/jwt";
 import { ExtendedRequest } from "../types/extended-request";
@@ -19,8 +19,8 @@ export const SIGNIN: RequestHandler = async (req, res, next) => {
       throw new BadRequest();
     }
 
-    const user = await DBUser.validateUser(userLogin.data);
-    const JWT = gerarToken(user);
+    const usuario = await user.validateUser(userLogin.data);
+    const JWT = gerarToken(usuario);
 
     res.cookie("acess_token", JWT, {
       httpOnly: true,
@@ -29,7 +29,7 @@ export const SIGNIN: RequestHandler = async (req, res, next) => {
       path: "/",
     });
 
-    res.json({ user: user, token: JWT });
+    res.json({ user: usuario, token: JWT });
   } catch (error: any) {
     next(error);
   }
@@ -37,12 +37,12 @@ export const SIGNIN: RequestHandler = async (req, res, next) => {
 
 export const VALIDATE = async (req: ExtendedRequest, res: Response) => {
   try {
-    const user = req.user;
+    const usuario = req.user;
 
-    if (!user) {
+    if (!usuario) {
       throw new UnAuthorized("Token inválido ou expirado");
     }
-    const userValid = await DBUser.getUserByID(user.id);
+    const userValid = await user.getUserByID(usuario.id);
 
     if (!userValid) {
       throw new UnAuthorized("Token inválido ou expirado");

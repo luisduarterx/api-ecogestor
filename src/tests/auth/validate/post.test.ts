@@ -26,7 +26,7 @@ describe("POST /v1/auth/validate", () => {
       id: user.id,
       nome: "luis",
       email: user.email,
-      cargoID: response.body.cargoID,
+      cargo: response.body.cargo,
       telefone: response.body.telefone,
     });
   });

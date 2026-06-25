@@ -3,7 +3,7 @@ import { UnAuthorized } from "../error";
 import { verificarToken } from "../services/jwt";
 import { ReqUser, UserData } from "../types/user";
 import { ExtendedRequest } from "../types/extended-request";
-import { getUserByID } from "../model/users";
+import user from "../model/users";
 
 export const AuthMiddleware = async (
   req: ExtendedRequest,
@@ -16,21 +16,21 @@ export const AuthMiddleware = async (
       throw new UnAuthorized();
     }
 
-    const user = verificarToken(token) as UserData;
+    const usuario = verificarToken(token) as UserData;
 
-    if (!user.id) {
+    if (!usuario.id) {
       throw new UnAuthorized();
     }
-    const userExist = await getUserByID(user.id);
+    const userExist = await user.getUserByID(usuario.id);
 
     if (!userExist) {
       throw new UnAuthorized();
     }
 
     const RequestUser: ReqUser = {
-      id: user.id,
-      nome: user.nome,
-      cargoID: user.cargo,
+      id: usuario.id,
+      nome: usuario.nome,
+      cargoID: usuario.cargo,
     };
 
     req.user = RequestUser;
