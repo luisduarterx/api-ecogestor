@@ -1,4 +1,4 @@
-import { BadRequest, NotPossible } from "../error";
+import { BadRequest, NotFound, NotPossible, ValidationError } from "../error";
 import { Prisma } from "../../generated/prisma/client";
 import { prisma } from "../libs/prisma";
 
@@ -6,67 +6,102 @@ type UpsertTypeCategory = {
   id?: number;
   nome: string;
 };
-export const createCategory = async ({ id, nome }: UpsertTypeCategory) => {
+const create = async (props: { nome: string }) => {
   try {
-    if (id) {
-      const categoria = await prisma.categoriaMaterial.update({
-        where: { id },
+    const catExist = await prisma.categoriaMaterial.findFirst({
+      where: {
+        nome: props.nome,
+      },
+    });
 
-        data: {
-          name: nome,
+    if (catExist?.nome) {
+      throw new ValidationError(
+        "Já existe uma categoria com esse nome cadastrado.",
+      );
+    }
+
+    const newCat = await prisma.categoriaMaterial.create({
+      data: {
+        nome: props.nome,
+      },
+    });
+    return newCat;
+  } catch (error) {
+    throw error;
+  }
+};
+const update = async ({ id, nome }: UpsertTypeCategory) => {
+  try {
+    const catExist = await prisma.categoriaMaterial.findFirst({
+      where: { id },
+    });
+
+    const nomeExist = await prisma.categoriaMaterial.findFirst({
+      where: {
+        nome,
+        NOT: {
+          id,
         },
-      });
+      },
+    });
+    if (nomeExist?.nome) {
+      throw new ValidationError(
+        "O nome dessa categoria já esta sendo utilizada.",
+      );
+    }
 
-      return categoria;
-    } else {
-      const categoria = await prisma.categoriaMaterial.create({
-        data: { name: nome },
-      });
-      return categoria;
+    if (!catExist?.id) {
+      throw new NotFound();
     }
+    const novaCat = await prisma.categoriaMaterial.update({
+      where: { id },
+      data: {
+        nome,
+      },
+    });
+    return novaCat;
   } catch (error) {
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      if (error.code == "P2002") {
-        throw new NotPossible(
-          "Não é possível criar uma categoria já existente!",
-        );
-      }
-      if (error.code == "P2025") {
-        throw new BadRequest(
-          "O id enviado não pertence a nenhum registro existente.",
-        );
-      }
-    }
-    console.log(error);
     throw error;
   }
 };
-export const deleteCategory = async (id: number) => {
+const deleteUnique = async (id: number) => {
   try {
-    const deletar = await prisma.categoriaMaterial.delete({ where: { id } });
+    const catExist = await prisma.categoriaMaterial.findFirst({
+      where: { id },
+      include: { materiais: true },
+    });
 
-    return deletar;
-  } catch (error) {
-    console.log(error);
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      if (error.code === "P2025") {
-        return new BadRequest(
-          "O id enviado não pertence a nenhum registro existente.",
-        );
-      }
-      if (error.code === "P2003") {
-        return new NotPossible(
-          "Não é possivel excluir uma categoria qual tenha materiais listados.",
-        );
-      }
-      throw error;
+    if (!catExist?.id) {
+      throw new NotFound();
     }
+
+    if (catExist.materiais.length > 0) {
+      throw new ValidationError(
+        "Não é possivel deletar uma categoria com materiais associados.",
+      );
+    }
+
+    const deletar = await prisma.categoriaMaterial.delete({
+      where: { id },
+    });
+
+    return {
+      id: deletar.id,
+      count: 1,
+    };
+  } catch (error) {
     throw error;
   }
 };
-export const findAllCategories = async () => {
+const findAll = async (props: { filter?: string }) => {
   try {
-    const categorias = await prisma.categoriaMaterial.findMany();
+    const categorias = await prisma.categoriaMaterial.findMany({
+      where: {
+        OR: props.filter
+          ? [{ nome: { contains: props.filter, mode: "insensitive" } }]
+          : undefined,
+      },
+    });
 
     return categorias;
   } catch (error) {
@@ -74,12 +109,15 @@ export const findAllCategories = async () => {
     throw error;
   }
 };
-export const findUniqueCategory = async (id: number) => {
+const getByID = async (id: number) => {
   try {
     const categoria = await prisma.categoriaMaterial.findFirst({
       where: { id },
-      include: { materiais: { select: { nome: true } } },
     });
+
+    if (!categoria?.nome) {
+      throw new NotFound();
+    }
 
     return categoria;
   } catch (error) {
@@ -87,3 +125,13 @@ export const findUniqueCategory = async (id: number) => {
     throw error;
   }
 };
+
+const categoria = {
+  create,
+  update,
+  deleteUnique,
+  findAll,
+  getByID,
+};
+
+export default categoria;

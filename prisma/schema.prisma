@@ -145,7 +145,7 @@ model Material {
 
 model CategoriaMaterial {
   id        Int        @id @default(autoincrement())
-  name      String     @unique
+  nome      String     @unique
   materiais Material[]
 }
 
