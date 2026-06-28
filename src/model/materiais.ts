@@ -61,7 +61,17 @@ export const create = async (data: MaterialType) => {
 };
 export const update = async (id: number, data: EditMaterialType) => {
   try {
-    console.log(data);
+    const defaultTable = await findDefaultTable();
+
+    const findMaterial = await prisma.material.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!findMaterial?.id) {
+      throw new NotFound();
+    }
     const result = await prisma.$transaction(async (trx) => {
       const material = await trx.material.update({
         where: {
@@ -70,46 +80,57 @@ export const update = async (id: number, data: EditMaterialType) => {
         data: {
           catID: data.catID,
           nome: data.nome,
-          v_venda: data.v_venda,
-          status: data.status,
+          preco_venda: data.preco_venda,
+        },
+        include: {
+          categoria: true,
+          preco_tabela: {
+            where: {
+              tabelaID: defaultTable.id,
+            },
+            select: {
+              v_compra: true,
+            },
+          },
         },
       });
 
-      if (data.v_compra) {
-        const tabela = await trx.precoPorTabela.updateMany({
+      if (data.preco_compra) {
+        const findMaterial = await prisma.precoPorTabela.findFirst({
+          where: { materialID: material.id, tabelaID: defaultTable.id },
+        });
+        const precoDeTabela = await trx.precoPorTabela.update({
           where: {
-            materialID: material.id,
-            tabelaID: 1,
+            id: findMaterial?.id,
           },
           data: {
-            v_compra: data.v_compra,
+            v_compra: data.preco_compra,
           },
         });
+
+        return {
+          id: material.id,
+          nome: material.nome,
+          categoria: material.categoria,
+          preco_compra: Number(precoDeTabela.v_compra),
+          preco_venda: Number(material.preco_venda),
+          status: material.status,
+          editado_em: material.editado_em,
+        };
       }
 
       return {
         id: material.id,
         nome: material.nome,
-        catID: material.catID,
-        v_venda: parseFloat(material.preco_venda.toString()),
-        v_compra: data.v_compra,
+        categoria: material.categoria,
+        preco_compra: Number(material.preco_tabela[0].v_compra),
+        preco_venda: Number(material.preco_venda),
         status: material.status,
+        editado_em: material.editado_em,
       };
     });
     return result;
   } catch (error) {
-    console.log(error);
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      if (error.code === "P2003") {
-        return new NotPossible(
-          "Não é possivel criar um material em um categoria inexistente.",
-        );
-      }
-      if (error.code === "P2025") {
-        return new NotFound();
-      }
-      throw error;
-    }
     throw error;
   }
 };
@@ -197,7 +218,29 @@ export const getByID = async (id: number) => {
     throw error;
   }
 };
-export const deleteUnique = async (id: number) => {};
+export const deleteUnique = async (id: number) => {
+  try {
+    const materialExist = await prisma.material.findUnique({ where: { id } });
+
+    if (!materialExist?.id) {
+      throw new NotFound();
+    }
+
+    const materialDeletado = await prisma.material.update({
+      where: { id },
+      data: {
+        status: false,
+      },
+    });
+
+    return {
+      id: materialDeletado.id,
+      status: materialDeletado.status,
+    };
+  } catch (error) {
+    throw error;
+  }
+};
 
 async function findDefaultTable() {
   const defaultTable = await prisma.tabela.findFirst({

@@ -17,6 +17,12 @@ materiaisRoutes.get(
   authorize("read:material"),
   materiais.GET_UNIQUE,
 );
+materiaisRoutes.delete(
+  "/materiais/:matID",
+  AuthMiddleware,
+  authorize("delete:material"),
+  materiais.DELETE,
+);
 
 materiaisRoutes.post(
   "/materiais",
@@ -25,9 +31,9 @@ materiaisRoutes.post(
   materiais.POST,
 );
 
-materiaisRoutes.put(
+materiaisRoutes.patch(
   "/materiais/:matID",
   AuthMiddleware,
   authorize("update:material"),
-  materiais.PUT,
+  materiais.PATCH,
 );

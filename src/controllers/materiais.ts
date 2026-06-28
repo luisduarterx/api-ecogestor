@@ -25,34 +25,30 @@ export const POST = async (req: ExtendedRequest, res: Response) => {
     throw error;
   }
 };
-export const PUT = async (req: ExtendedRequest, res: Response) => {
+export const PATCH = async (req: ExtendedRequest, res: Response) => {
   try {
-    const matID = parseInt(req.params.matID as string);
-    const matSchema = z.number().int().max(2147483646);
-    const id = matSchema.safeParse(matID);
+    const matID = z.coerce
+      .number()
+      .positive()
+      .int()
+      .safeParse(req.params.matID);
 
     const dataSchema = z.object({
       catID: z.number().max(2147483646).optional(),
       nome: z.string().toUpperCase().min(3).optional(),
-      v_compra: z.number().positive().min(0).optional(),
-      v_venda: z.number().positive().min(0).optional(),
-      status: z.boolean().optional(),
+      preco_compra: z.number().positive().min(0).optional(),
+      preco_venda: z.number().positive().min(0).optional(),
     });
-    const data = dataSchema.safeParse(req.body);
+    const body = dataSchema.safeParse(req.body);
 
-    if (!data.success) {
+    if (!body.success || !matID.success) {
       throw new BadRequest();
     }
 
-    const materialAtualizado = await material.update(
-      id.data as number,
-      data.data,
-    );
-    res.status(200).json(material);
+    const materialAtualizado = await material.update(matID.data, body.data);
+    res.status(200).json(materialAtualizado);
   } catch (error: any) {
-    const status = error?.statusCode || 500;
-    res.status(status).json(error);
-    return;
+    throw error;
   }
 };
 export const GETS = async (req: ExtendedRequest, res: Response) => {
@@ -92,6 +88,21 @@ export const GET_UNIQUE = async (req: ExtendedRequest, res: Response) => {
     const materialEncontrado = await material.getByID(id.data);
 
     res.status(200).json(materialEncontrado);
+  } catch (error) {
+    throw error;
+  }
+};
+export const DELETE = async (req: ExtendedRequest, res: Response) => {
+  try {
+    const id = z.coerce.number().positive().safeParse(req.params.matID);
+
+    if (!id.success) {
+      throw new BadRequest();
+    }
+
+    const materialDeletado = await material.deleteUnique(id.data);
+
+    res.status(200).json(materialDeletado);
   } catch (error) {
     throw error;
   }

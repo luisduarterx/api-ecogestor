@@ -7,7 +7,7 @@ export interface MaterialType {
 export type EditMaterialType = {
   catID?: number;
   nome?: string;
-  v_compra?: number;
-  v_venda?: number;
+  preco_compra?: number;
+  preco_venda?: number;
   status?: boolean;
 };

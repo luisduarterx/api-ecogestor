@@ -10,8 +10,8 @@ beforeEach(async () => {
   await orchestrator.createDefaultTable();
 });
 
-describe("GET to /v1/materiais/:id", async () => {
-  test("Deve retornar um material válido", async () => {
+describe("DELETE to /v1/materiais/:id", async () => {
+  test("Deve deletar um material", async () => {
     const user = await orchestrator.userAuthenticated({
       nome: "ADMINISTRADOR",
     });
@@ -23,22 +23,14 @@ describe("GET to /v1/materiais/:id", async () => {
     });
 
     const response = await request(app)
-      .get(`/v1/materiais/${mat.id}`)
+      .delete(`/v1/materiais/${mat.id}`)
       .auth(user.jwt, { type: "bearer" })
       .expect("Content-Type", /json/)
       .expect(200);
 
     expect(response.body).toEqual({
       id: mat.id,
-      status: true,
-      nome: mat.nome,
-      preco_compra: mat.preco_compra,
-      preco_venda: mat.preco_venda,
-      editado_em: response.body.editado_em,
-      categoria: {
-        id: cat.id,
-        nome: cat.nome,
-      },
+      status: false,
     });
   });
   test("Com id inexistente", async () => {
@@ -47,7 +39,7 @@ describe("GET to /v1/materiais/:id", async () => {
     });
 
     const response = await request(app)
-      .get(`/v1/materiais/989987`)
+      .delete(`/v1/materiais/989987`)
       .auth(user.jwt, { type: "bearer" })
       .expect("Content-Type", /json/)
       .expect(404);
@@ -65,7 +57,7 @@ describe("GET to /v1/materiais/:id", async () => {
     });
 
     const response = await request(app)
-      .get(`/v1/materiais/invalid-id`)
+      .delete(`/v1/materiais/invalid-id`)
       .auth(user.jwt, { type: "bearer" })
       .expect("Content-Type", /json/)
       .expect(400);
@@ -80,7 +72,7 @@ describe("GET to /v1/materiais/:id", async () => {
   });
   test("Com token JWT invalido", async () => {
     const response = await request(app)
-      .get("/v1/materiais/12")
+      .delete("/v1/materiais/767")
       .auth("werwefa3w4t534tqwefwq", { type: "bearer" })
       .expect("Content-Type", /json/)
       .expect(401);
@@ -97,7 +89,7 @@ describe("GET to /v1/materiais/:id", async () => {
       nome: "SEM PERMISSAO",
     });
     const response = await request(app)
-      .get("/v1/materiais/12")
+      .delete("/v1/materiais/776")
       .auth(user.jwt, { type: "bearer" })
       .expect("Content-Type", /json/)
       .expect(401);
@@ -111,7 +103,7 @@ describe("GET to /v1/materiais/:id", async () => {
   });
   test("Sem um Bearer token", async () => {
     const response = await request(app)
-      .get("/v1/materiais/12")
+      .delete("/v1/materiais/12")
 
       .expect("Content-Type", /json/)
       .expect(401);
