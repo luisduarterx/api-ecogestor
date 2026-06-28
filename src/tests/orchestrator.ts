@@ -10,6 +10,8 @@ export async function clearDatabase() {
   await prisma.user.deleteMany();
   await prisma.permissoes.deleteMany();
   await prisma.cargo.deleteMany();
+  await prisma.material.deleteMany();
+  await prisma.categoriaMaterial.deleteMany();
 
   // Apaga os dados e reinicia o contador do ID automático
 }
@@ -71,6 +73,11 @@ const userAuthenticated = async (Props: {
       { nome: "create:usuario" },
       { nome: "delete:usuario" },
       { nome: "update:usuario" },
+      { nome: "read:categoria_materiais" },
+      { nome: "read:categorias_materiais" },
+      { nome: "create:categoria_materiais" },
+      { nome: "delete:categoria_materiais" },
+      { nome: "update:categoria_materiais" },
     ],
     skipDuplicates: true, // Evita erros se rodar o teste localmente pela segunda vez
   });
@@ -117,12 +124,17 @@ const userAuthenticated = async (Props: {
 const createCargo = async (Props: { nome: string; permissoes: number[] }) => {
   return await cargo.create(Props);
 };
+
+const createCatMaterial = async (Props: { nome: string }) => {
+  return await prisma.categoriaMaterial.create({ data: { nome: Props.nome } });
+};
 const orchestrator = {
   clearDatabase,
   createCargo,
   createUserWithoutPermission,
   userAuthenticated,
   findPermissions,
+  createCatMaterial,
 };
 
 export default orchestrator;
