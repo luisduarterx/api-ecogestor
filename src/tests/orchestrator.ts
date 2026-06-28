@@ -5,11 +5,14 @@ import { faker } from "@faker-js/faker";
 
 import { gerarToken } from "../services/jwt";
 import cargo from "../model/cargos";
+import material from "../model/materiais";
 
 export async function clearDatabase() {
   await prisma.user.deleteMany();
   await prisma.permissoes.deleteMany();
   await prisma.cargo.deleteMany();
+  await prisma.precoPorTabela.deleteMany();
+  await prisma.tabela.deleteMany();
   await prisma.material.deleteMany();
   await prisma.categoriaMaterial.deleteMany();
 
@@ -78,6 +81,11 @@ const userAuthenticated = async (Props: {
       { nome: "create:categoria_materiais" },
       { nome: "delete:categoria_materiais" },
       { nome: "update:categoria_materiais" },
+      { nome: "create:material" },
+      { nome: "read:material" },
+      { nome: "update:material" },
+      { nome: "delete:material" },
+      { nome: "read:materiais" },
     ],
     skipDuplicates: true, // Evita erros se rodar o teste localmente pela segunda vez
   });
@@ -128,6 +136,21 @@ const createCargo = async (Props: { nome: string; permissoes: number[] }) => {
 const createCatMaterial = async (Props: { nome: string }) => {
   return await prisma.categoriaMaterial.create({ data: { nome: Props.nome } });
 };
+const createDefaultTable = async () => {
+  return await prisma.tabela.create({
+    data: {
+      nome: "PADRAO",
+    },
+  });
+};
+const createMaterial = async (Props: { nome: string; catID: number }) => {
+  return await material.create({
+    nome: Props.nome,
+    catID: Props.catID,
+    preco_compra: 1,
+    preco_venda: 2,
+  });
+};
 const orchestrator = {
   clearDatabase,
   createCargo,
@@ -135,6 +158,8 @@ const orchestrator = {
   userAuthenticated,
   findPermissions,
   createCatMaterial,
+  createDefaultTable,
+  createMaterial,
 };
 
 export default orchestrator;

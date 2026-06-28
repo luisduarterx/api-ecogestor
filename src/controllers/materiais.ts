@@ -2,19 +2,15 @@ import { Response } from "express";
 import { ExtendedRequest } from "../types/extended-request";
 import { z } from "zod";
 import { BadRequest } from "../error";
-import {
-  createMaterial,
-  findAllMateriais,
-  updateMaterial,
-} from "../model/materiais";
+import material from "../model/materiais";
 
 export const POST = async (req: ExtendedRequest, res: Response) => {
   try {
     const dataSchema = z.object({
       catID: z.number(),
       nome: z.string().toUpperCase().min(3),
-      v_compra: z.number().positive().min(0),
-      v_venda: z.number().positive().min(0),
+      preco_compra: z.number().nonnegative().min(0),
+      preco_venda: z.number().nonnegative().min(0),
     });
     const data = dataSchema.safeParse(req.body);
 
@@ -22,62 +18,95 @@ export const POST = async (req: ExtendedRequest, res: Response) => {
       throw new BadRequest();
     }
 
-    const material = await createMaterial(data.data);
+    const novoMaterial = await material.create(data.data);
 
-    res.status(201).json(material);
+    res.status(201).json(novoMaterial);
   } catch (error: any) {
-    const status = error?.statusCode || 500;
-    res.status(status).json(error);
-    return;
+    throw error;
   }
 };
-export const PUT = async (req: ExtendedRequest, res: Response) => {
+export const PATCH = async (req: ExtendedRequest, res: Response) => {
   try {
-    const matID = parseInt(req.params.matID as string);
-    const matSchema = z.number().int().max(2147483646);
-    const id = matSchema.safeParse(matID);
+    const matID = z.coerce
+      .number()
+      .positive()
+      .int()
+      .safeParse(req.params.matID);
 
     const dataSchema = z.object({
       catID: z.number().max(2147483646).optional(),
       nome: z.string().toUpperCase().min(3).optional(),
-      v_compra: z.number().positive().min(0).optional(),
-      v_venda: z.number().positive().min(0).optional(),
-      status: z.boolean().optional(),
+      preco_compra: z.number().positive().min(0).optional(),
+      preco_venda: z.number().positive().min(0).optional(),
     });
-    const data = dataSchema.safeParse(req.body);
+    const body = dataSchema.safeParse(req.body);
 
-    if (!data.success) {
+    if (!body.success || !matID.success) {
       throw new BadRequest();
     }
 
-    const material = await updateMaterial(id.data as number, data.data);
-    res.status(200).json(material);
+    const materialAtualizado = await material.update(matID.data, body.data);
+    res.status(200).json(materialAtualizado);
   } catch (error: any) {
-    const status = error?.statusCode || 500;
-    res.status(status).json(error);
-    return;
+    throw error;
   }
 };
 export const GETS = async (req: ExtendedRequest, res: Response) => {
   try {
-    const { catID, order, search }: ParamsFindMaterial = req.query;
+    const filters = z
+      .object({
+        catID: z.coerce.number().positive().int().optional(),
+        order: z.enum(["nome", "id"]).optional(),
+        search: z.string().optional(),
+      })
+      .safeParse(req.query);
 
-    const orderSchema = z.enum(["nome", "id"]).optional();
-    const orderBy = orderSchema.safeParse(order);
-
-    if (!orderBy.success) {
+    if (!filters.success) {
+      console.log("ERRO ZOD:", filters.error);
       throw new BadRequest();
     }
 
-    const materiais = await findAllMateriais({ catID, order, search });
+    const materiais = await material.findAll({
+      catID: filters.data.catID,
+      order: filters.data.order,
+      search: filters.data.search,
+    });
+
     res.json(materiais);
   } catch (error: any) {
-    const status = error?.statusCode || 500;
-    res.status(status).json(error);
-    return;
+    throw error;
   }
 };
-export const GET_UNIQUE = (req: ExtendedRequest, res: Response) => {};
+export const GET_UNIQUE = async (req: ExtendedRequest, res: Response) => {
+  try {
+    const id = z.coerce.number().positive().safeParse(req.params.matID);
+
+    if (!id.success) {
+      throw new BadRequest();
+    }
+
+    const materialEncontrado = await material.getByID(id.data);
+
+    res.status(200).json(materialEncontrado);
+  } catch (error) {
+    throw error;
+  }
+};
+export const DELETE = async (req: ExtendedRequest, res: Response) => {
+  try {
+    const id = z.coerce.number().positive().safeParse(req.params.matID);
+
+    if (!id.success) {
+      throw new BadRequest();
+    }
+
+    const materialDeletado = await material.deleteUnique(id.data);
+
+    res.status(200).json(materialDeletado);
+  } catch (error) {
+    throw error;
+  }
+};
 
 export type ParamsFindMaterial = {
   catID?: number;
