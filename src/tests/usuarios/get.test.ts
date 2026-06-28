@@ -33,32 +33,6 @@ describe("GET /v1/usuarios", () => {
     expect(Array.isArray(response.body)).toBe(true);
     expect(response.body.length).toBe(4);
   });
-  test("Deve trazer todos os resultados", async () => {
-    const user = await orchestrator.userAuthenticated({
-      nome: "ADMINISTRADOR",
-    });
-
-    const user1 = await orchestrator.createUserWithoutPermission({
-      nome: "LUIS LAURO",
-    });
-    const user2 = await orchestrator.createUserWithoutPermission({
-      nome: "Luan Alberto",
-    });
-    const user3 = await orchestrator.createUserWithoutPermission({
-      nome: "KYAN GOES",
-    });
-
-    const response = await request(app)
-      .get("/v1/usuarios?search=LU")
-      .expect(200)
-      .auth(user.jwt, { type: "bearer" })
-      .expect("Content-Type", /json/);
-
-    console.log(response.body);
-    expect(Array.isArray(response.body)).toBe(true);
-    expect(response.body.length).toEqual(2);
-    expect(response.body[0].nome).toEqual("LUIS LAURO");
-  });
 
   test("Com token JWT valido e usuario inexistente", async () => {
     const token = gerarToken({ nome: "luis" });

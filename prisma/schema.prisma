@@ -132,8 +132,8 @@ model Material {
   id            Int                   @id @default(autoincrement())
   nome          String                @unique
   catID         Int
-  v_venda       Decimal               @db.Decimal(10, 2)
-  estoque       Decimal               @db.Decimal(10, 2)
+  preco_venda   Decimal               @db.Decimal(10, 2)
+  estoque       Decimal               @db.Decimal(10, 2) @default(0)
   criado_em     DateTime              @default(now())
   editado_em    DateTime              @default(now()) @updatedAt
   status        Boolean               @default(true)
