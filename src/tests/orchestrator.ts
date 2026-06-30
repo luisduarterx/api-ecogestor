@@ -6,11 +6,19 @@ import { faker } from "@faker-js/faker";
 import { gerarToken } from "../services/jwt";
 import cargo from "../model/cargos";
 import material from "../model/materiais";
+import registro from "../model/registros";
+import { RegistroCreateInput } from "../types/registros";
 
 export async function clearDatabase() {
   await prisma.user.deleteMany();
   await prisma.permissoes.deleteMany();
   await prisma.cargo.deleteMany();
+  await prisma.dadosPagamento.deleteMany();
+  await prisma.endereco.deleteMany();
+  await prisma.saldoFinanceiro.deleteMany();
+  await prisma.pessoaFisica.deleteMany();
+  await prisma.pessoaJuridica.deleteMany();
+  await prisma.registro.deleteMany();
   await prisma.precoPorTabela.deleteMany();
   await prisma.tabela.deleteMany();
   await prisma.material.deleteMany();
@@ -86,6 +94,11 @@ const userAuthenticated = async (Props: {
       { nome: "update:material" },
       { nome: "delete:material" },
       { nome: "read:materiais" },
+      { nome: "read:registro" },
+      { nome: "read:registros" },
+      { nome: "create:registros" },
+      { nome: "update:registros" },
+      { nome: "delete:registros" },
     ],
     skipDuplicates: true, // Evita erros se rodar o teste localmente pela segunda vez
   });
@@ -151,6 +164,9 @@ const createMaterial = async (Props: { nome: string; catID: number }) => {
     preco_venda: 2,
   });
 };
+const createRegistro = async (Props: RegistroCreateInput) => {
+  return await registro.create(Props);
+};
 const orchestrator = {
   clearDatabase,
   createCargo,
@@ -160,6 +176,7 @@ const orchestrator = {
   createCatMaterial,
   createDefaultTable,
   createMaterial,
+  createRegistro,
 };
 
 export default orchestrator;

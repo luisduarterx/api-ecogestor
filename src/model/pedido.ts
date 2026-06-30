@@ -61,7 +61,7 @@ type CloseOrderArgs = {
 
 export const findOrderByID = async (id: number) => {
   try {
-    const pedido = prisma.pedido.findUnique({
+    const pedido = await prisma.pedido.findUnique({
       where: { id },
       include: {
         items: {
@@ -96,7 +96,7 @@ export const removeItemOrder = async (it: DeleteItemOrderArgs) => {
       throw new NotPossible(`Esse pedido esta ${pedido.status}`);
     }
 
-    const result = prisma.$transaction(async (trx) => {
+    const result = await prisma.$transaction(async (trx) => {
       try {
         const item = await trx.itemPedido.delete({ where: { id: it.itemID } });
         const pedidoAlterado = trx.pedido.update({
