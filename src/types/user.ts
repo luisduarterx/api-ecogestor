@@ -20,7 +20,7 @@ export type UserResult = {
 export interface CreateUserArgs {
   nome: string;
   email: string;
-  senha: string;
+  senha?: string;
   telefone?: string;
   cargoID?: number;
 }

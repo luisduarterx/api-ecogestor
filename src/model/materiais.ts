@@ -160,6 +160,7 @@ export const findAll = async ({ catID, order, search }: ParamsFindMaterial) => {
         },
       },
       include: {
+        categoria: true,
         preco_tabela: {
           where: {
             tabelaID: defaultTable.id,
@@ -172,7 +173,7 @@ export const findAll = async ({ catID, order, search }: ParamsFindMaterial) => {
     return materiais.map((mat) => ({
       id: mat.id,
       nome: mat.nome,
-      catID: mat.catID,
+      catID: mat.categoria.id,
       preco_compra: mat.preco_tabela[0].v_compra,
       preco_venda: mat.preco_venda,
       editado_em: mat.editado_em,
