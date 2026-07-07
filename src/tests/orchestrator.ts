@@ -23,6 +23,7 @@ export async function clearDatabase() {
   await prisma.tabela.deleteMany();
   await prisma.material.deleteMany();
   await prisma.categoriaMaterial.deleteMany();
+  await prisma.banco.deleteMany();
 
   // Apaga os dados e reinicia o contador do ID automático
 }
@@ -99,6 +100,11 @@ const userAuthenticated = async (Props: {
       { nome: "create:registros" },
       { nome: "update:registros" },
       { nome: "delete:registros" },
+      { nome: "read:banco" },
+      { nome: "read:bancos" },
+      { nome: "create:banco" },
+      { nome: "update:banco" },
+      { nome: "delete:banco" },
     ],
     skipDuplicates: true, // Evita erros se rodar o teste localmente pela segunda vez
   });
@@ -167,6 +173,21 @@ const createMaterial = async (Props: { nome: string; catID: number }) => {
 const createRegistro = async (Props: RegistroCreateInput) => {
   return await registro.create(Props);
 };
+const createBanco = async (Props: {
+  descricao: string;
+  status?: boolean;
+  nome: string;
+  valor_inicial: number;
+}) => {
+  return await prisma.banco.create({
+    data: {
+      nome: Props.nome,
+      descricao: Props.descricao,
+      status: Props.status ?? undefined,
+      saldo: Props.valor_inicial,
+    },
+  });
+};
 const orchestrator = {
   clearDatabase,
   createCargo,
@@ -177,6 +198,7 @@ const orchestrator = {
   createDefaultTable,
   createMaterial,
   createRegistro,
+  createBanco,
 };
 
 export default orchestrator;

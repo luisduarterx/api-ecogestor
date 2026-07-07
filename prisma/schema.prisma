@@ -200,7 +200,9 @@ model ContaFinanceira {
 model Banco {
   id            Int                      @id @default(autoincrement())
   nome          String
+  descricao     String
   saldo         Decimal                  @db.Decimal(10, 2)
+  status        Boolean                  @default(true)
   movimentacoes MovimentacaoFinanceira[]
 }
 

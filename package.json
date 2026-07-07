@@ -2,11 +2,14 @@
   "name": "api-ecogestor",
   "version": "1.0.0",
   "main": "index.js",
+  "prisma": {
+    "seed": "npx tsx prisma/seed.ts"
+  },
   "scripts": {
     "test:ci": "vitest",
     "test": " node --env-file=.env node_modules/vitest/vitest.mjs",
     "test:full": "npm run services:delete && npm run services:up && npm run wait-for-postgres && prisma migrate deploy && node --env-file=.env node_modules/vitest/vitest.mjs",
-    "dev": " npm run services:up && npm run wait-for-postgres && npm run migration:up && tsx watch src/server.ts ",
+    "dev": " npm run services:up && npm run wait-for-postgres && npm run migration:up && prisma db seed && tsx watch src/server.ts ",
     "services:up": "docker compose -f src/infra/compose.yaml up -d",
     "services:stop": "docker compose -f src/infra/compose.yaml down",
     "services:delete": "npm run services:stop && docker system prune -a",
@@ -24,6 +27,7 @@
     "@prisma/adapter-pg": "^7.8.0",
     "@prisma/client": "^7.8.0",
     "@types/cookie-parser": "^1.4.10",
+    "@types/js-cookie": "^3.0.6",
     "async-retry": "^1.3.3",
     "bcrypt": "^5.1.1",
     "body-parser": "^2.2.0",
