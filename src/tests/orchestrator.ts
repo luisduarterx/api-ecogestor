@@ -9,6 +9,7 @@ import material from "../model/materiais";
 import registro from "../model/registros";
 import { RegistroCreateInput } from "../types/registros";
 import tabela, { TableInput } from "../model/tabela";
+import contaFinanceira from "../model/contaFinanceira";
 
 export async function clearDatabase() {
   await prisma.user.deleteMany();
@@ -24,7 +25,7 @@ export async function clearDatabase() {
   await prisma.tabela.deleteMany();
   await prisma.material.deleteMany();
   await prisma.categoriaMaterial.deleteMany();
-  await prisma.banco.deleteMany();
+  await prisma.contaFinanceira.deleteMany();
 
   // Apaga os dados e reinicia o contador do ID automático
 }
@@ -101,11 +102,11 @@ const userAuthenticated = async (Props: {
       { nome: "create:registros" },
       { nome: "update:registros" },
       { nome: "delete:registros" },
-      { nome: "read:banco" },
-      { nome: "read:bancos" },
-      { nome: "create:banco" },
-      { nome: "update:banco" },
-      { nome: "delete:banco" },
+      { nome: "read:conta" },
+      { nome: "read:contas" },
+      { nome: "create:conta" },
+      { nome: "update:conta" },
+      { nome: "delete:conta" },
       { nome: "read:tabela" },
       { nome: "read:tabelas" },
       { nome: "create:tabelas" },
@@ -180,19 +181,17 @@ const createMaterial = async (Props: { nome: string; catID: number }) => {
 const createRegistro = async (Props: RegistroCreateInput) => {
   return await registro.create(Props);
 };
-const createBanco = async (Props: {
-  descricao: string;
+const createConta = async (Props: {
   status?: boolean;
+  conta_padrao: boolean;
   nome: string;
-  valor_inicial: number;
+  saldo_inicial: number;
 }) => {
-  return await prisma.banco.create({
-    data: {
-      nome: Props.nome,
-      descricao: Props.descricao,
-      status: Props.status ?? undefined,
-      saldo: Props.valor_inicial,
-    },
+  return await contaFinanceira.create({
+    nome: Props.nome,
+    saldo_inicial: Props.saldo_inicial,
+    conta_padrao: Props.conta_padrao,
+    status: Props.status || undefined,
   });
 };
 
@@ -213,7 +212,7 @@ const orchestrator = {
   createDefaultTable,
   createMaterial,
   createRegistro,
-  createBanco,
+  createConta,
   createTabela,
 };
 

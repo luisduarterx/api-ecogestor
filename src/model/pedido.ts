@@ -11,7 +11,7 @@ import { prisma } from "../libs/prisma";
 import { ReqUser } from "../types/user";
 import { caixaAberto } from "./caixa";
 import { getMaterialByID } from "./materiais";
-import { inputMovimentacao, novaMovimentacao } from "./movFinanceiro";
+import { inputMovimentacao, novaMovimentacao } from "./movFinanceira";
 
 import { findRegisterByID, findRegisterTable } from "./registros";
 import { findPriceOnTable } from "./tabela";

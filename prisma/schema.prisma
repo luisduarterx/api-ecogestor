@@ -23,9 +23,12 @@ model User {
   pedidos                  Pedido[]
   cargo                    Cargo                    @relation(fields: [cargoID], references: [id])
   deletedAt                DateTime?
-  caixasAbertos            LivroCaixa[]             @relation("CaixaAbertoPor")
-  fechamentos              Fechamento[]
-  movimentacoesFinanceiras MovimentacaoFinanceira[]
+  movimentacoes_financeiras MovimentacaoFinanceira[]
+  transferencias_financeiras TransferenciaFinanceira[]
+  lancamentos_financeiros LancamentoFinanceiro[]
+  caixas_abertos Caixa[] @relation("UsuarioAbertura")
+  caixas_fechados Caixa[] @relation("UsuarioFechamento")
+  
 }
 
 model Permissoes {
@@ -39,7 +42,7 @@ model Cargo {
   id         Int          @id @default(autoincrement())
   nome       String       @unique
   permissoes Permissoes[] @relation("UserPermissions")
-  users      User[]
+  User      User[]
 }
 
 model Registro {
@@ -59,7 +62,7 @@ model Registro {
   tabela          Tabela            @relation(fields: [tabelaID], references: [id])
   saldo           SaldoFinanceiro?
   deletedAt       DateTime?
-  contas          ContaFinanceira[]
+  lancamentos     LancamentoFinanceiro[]
 }
 
 model PessoaFisica {
@@ -177,81 +180,18 @@ model Pedido {
   criado_em   DateTime          @default(now())
   atualizado  DateTime          @updatedAt
   items       ItemPedido[]
-  pagamentos  ContaFinanceira[]
-  caixa       LivroCaixa        @relation(fields: [caixaID], references: [id])
+  lancamentos  LancamentoFinanceiro[]
+  caixa       Caixa        @relation(fields: [caixaID], references: [id])
   registro    Registro?         @relation(fields: [regID], references: [id])
   user        User              @relation(fields: [userID], references: [id])
 }
 
-model ContaFinanceira {
-  id              Int                     @id @default(autoincrement())
-  tipo            TipoConta
-  pedidoID        Int?
-  registroID      Int?
-  descricao       String?
-  valor           Decimal                 @db.Decimal(10, 2)
-  data_documento  DateTime                @default(now())
-  data_vencimento DateTime?
-  data_pagamento  DateTime?
-  forma           FormaPagamento
-  data            DateTime                @default(now())
-  pedido          Pedido?                 @relation(fields: [pedidoID], references: [id])
-  registro        Registro?               @relation(fields: [registroID], references: [id])
-  movimentacao    MovimentacaoFinanceira?
-}
 
-model Banco {
-  id            Int                      @id @default(autoincrement())
-  nome          String
-  descricao     String
-  saldo         Decimal                  @db.Decimal(10, 2)
-  status        Boolean                  @default(true)
-  movimentacoes MovimentacaoFinanceira[]
-}
-
-model MovimentacaoFinanceira {
-  id                  Int                     @id @default(autoincrement())
-  estornoID           Int?                    @unique
-  bancoID             Int?
-  caixaID             Int
-  contaID             Int?                    @unique
-  categoriaID         Int?
-  tipoMovimentacaoID  Int
-  data                DateTime                @default(now())
-  saldoInicial        Decimal                 @db.Decimal(10, 2)
-  valor               Decimal                 @db.Decimal(10, 2)
-  saldoFinal          Decimal                 @db.Decimal(10, 2)
-  descricao           String?
-  userID              Int
-  estornadoEm         DateTime?
-  banco               Banco?                  @relation(fields: [bancoID], references: [id])
-  caixa               LivroCaixa              @relation(fields: [caixaID], references: [id])
-  conta               ContaFinanceira?        @relation(fields: [contaID], references: [id])
-  categoria           CategoriaCaixa?         @relation(fields: [categoriaID], references: [id])
-  user                User                    @relation(fields: [userID], references: [id])
-  tipoMovimentacao    Caixa_TipoMovimentacao  @relation(fields: [tipoMovimentacaoID], references: [id])
-  estorno             MovimentacaoFinanceira? @relation("Estorno", fields: [estornoID], references: [id])
-  movimentacaoEstorno MovimentacaoFinanceira? @relation("Estorno")
-}
-
-model Caixa_TipoMovimentacao {
-  id            Int                      @id @default(autoincrement())
-  nome          String                   @unique
-  tipo          DirecaoMovimentacao
-  movimentacoes MovimentacaoFinanceira[]
-}
-
-model CategoriaCaixa {
-  id            Int                      @id @default(autoincrement())
-  nome          String
-  deletedAt     DateTime?
-  movimentacoes MovimentacaoFinanceira[]
-}
 
 model MovimentacaoEstoque {
   id                    Int                       @id @default(autoincrement())
   materialID            Int
-  tipoMovimentacao      DirecaoMovimentacao
+  tipoMovimentacao      TipoMovimentacaoEstoque
   origem                OrigemMovimentacaoEstoque
   origemID              Int?
   devolucaoID           Int?                      @unique
@@ -273,59 +213,125 @@ model ConversaoEstoque {
   createdAt     DateTime @default(now())
 }
 
-model LivroCaixa {
-  id             Int                      @id @default(autoincrement())
-  dataAbertura   DateTime                 @default(now())
-  dataFechamento DateTime?
-  abertoPorID    Int
-  saldoInicial   Decimal                  @db.Decimal(10, 2)
-  saldoFinal     Decimal                  @db.Decimal(10, 2)
-  status         StatusCaixa              @default(ABERTO)
-  abertoPor      User                     @relation("CaixaAbertoPor", fields: [abertoPorID], references: [id])
-  movimentacoes  MovimentacaoFinanceira[]
-  pedidos        Pedido[]
-  fechamento     Fechamento?
+
+model ContaFinanceira{
+  id Int @id @default(autoincrement())
+  nome String @unique
+  criado_em DateTime @default(now())
+  atualizado_em DateTime @updatedAt
+  conta_padrao Boolean @default(false)
+  saldo_atual Decimal @db.Decimal(10,2)
+  saldo_inicial Decimal @db.Decimal(10,2)
+  status Boolean @default(true)
+  movimentacoes MovimentacaoFinanceira[]
+  transferencias_origem TransferenciaFinanceira[] @relation("ContaOrigem")
+  transferencias_destino TransferenciaFinanceira[] @relation("ContaDestino")
+  caixas Caixa[]
+
+}
+model CategoriaLancamento{
+  id Int @id @default(autoincrement())
+  nome String
+  criado_em DateTime @default(now())
+  TipoCategoria TipoCategoria
+  lancamentos LancamentoFinanceiro[]
+
 }
 
-model Fechamento {
-  id                   Int        @id @default(autoincrement())
-  caixaID              Int        @unique
-  caixa                LivroCaixa @relation(fields: [caixaID], references: [id])
-  valor_abertura       Decimal    @db.Decimal(10, 2)
-  valor_abastecimentos Decimal    @db.Decimal(10, 2)
-  valor_despesas       Decimal    @db.Decimal(10, 2)
-  data_abertura        DateTime
-  data_fechamento      DateTime
-  userID_fechamento    Int
-  user_fechamento      User       @relation(fields: [userID_fechamento], references: [id])
-  valor_esperado       Decimal    @db.Decimal(10, 2)
-  //valor_pago Decimal @db.Decimal(10,2)
-  //valor_recebido Decimal @db.Decimal(10,2)
-  valor_total_compras  Decimal    @db.Decimal(10, 2)
-  valor_total_vendas   Decimal    @db.Decimal(10, 2)
-  peso_total_compras   Decimal    @db.Decimal(10, 2)
-  peso_total_vendas    Decimal    @db.Decimal(10, 2)
-  //lucro_total Decimal @db.Decimal(10,2)
-  //proj_lucro Decimal @db.Decimal(10,2)
-  //proj_venda Decimal @db.Decimal(10,2)
-  qnt_compras          Decimal    @db.Decimal(10, 2)
-  qnt_vendas           Decimal    @db.Decimal(10, 2)
+model LancamentoFinanceiro{
+  id Int @id @default(autoincrement())
+  valor Decimal @db.Decimal(10,2)
+  descricao String
+  tipo TipoLancamento
+  titulo String
+  parcela Int?
+  status StatusLancamento
+  categoria_id Int
+  categoria CategoriaLancamento @relation(fields: [categoria_id], references: [id])
+  vencimento DateTime 
+  data_baixa DateTime?
+  criado_em DateTime @default(now())
+  atualizado_em DateTime @updatedAt
+  desconto Decimal @default(0) @db.Decimal(10,2)
+  acrescimo Decimal @default(0) @db.Decimal(10,2)
+  user_id Int
+  usuario User @relation(fields: [user_id],references: [id])
+  movimentacoes MovimentacaoFinanceira[]
+  registro_id  Int?       
+  registro     Registro? @relation(fields: [registro_id], references: [id])
+  pedido_id Int?
+  pedido Pedido? @relation(fields: [pedido_id],references: [id])
+  
+  
 }
 
-enum DirecaoMovimentacao {
-  ENTRADA
-  SAIDA
+model MovimentacaoFinanceira{
+  id Int @id @default(autoincrement())
+  conta_id Int
+  conta ContaFinanceira @relation(fields: [conta_id],references: [id])
+  origem OrigemMovimentacao
+  origem_id Int?
+  descricao String
+  direcao DirecaoFinanceira
+  saldo_inical Decimal @db.Decimal(10,2)
+  valor Decimal @db.Decimal(10,2)
+  saldo_final Decimal @db.Decimal(10,2)
+  user_id Int
+  usuario User @relation(fields: [user_id], references: [id])
+  lancamento_id Int?
+  lancamento LancamentoFinanceiro? @relation(fields: [lancamento_id],references: [id])
+  transferencia_id Int?
+  transferencia TransferenciaFinanceira? @relation(fields: [transferencia_id],references: [id])
+  motivo_ajuste String?
+  estornada Boolean @default(false)
+  estorno_de_id Int?
+  estorno_de MovimentacaoFinanceira? @relation("EstornoMovimentacao", fields: [estorno_de_id], references: [id])
+  estornos MovimentacaoFinanceira[] @relation("EstornoMovimentacao")
+  caixa_id Int?
+  caixa Caixa? @relation(fields: [caixa_id],references: [id])
 }
 
-enum TipoConta {
-  PAGAR
-  RECEBER
+model TransferenciaFinanceira{
+  id Int @id @default(autoincrement())
+  conta_origem_id Int
+  conta_origem ContaFinanceira @relation("ContaOrigem", fields: [conta_origem_id],references: [id])
+  conta_destino_id Int
+  conta_destino ContaFinanceira @relation("ContaDestino",fields: [conta_destino_id],references: [id])
+  valor Decimal @db.Decimal(10,2)
+  descricao String
+  criado_em DateTime @default(now())
+  user_id Int
+  usuario User @relation(fields: [user_id],references: [id])
+  movimentacoes MovimentacaoFinanceira[]
+  caixa_id Int?
+  caixa Caixa? @relation(fields: [caixa_id],references: [id])
 }
 
-enum StatusCaixa {
-  ABERTO
-  FECHADO
+model Caixa {
+  id Int @id @default(autoincrement())
+  conta_id Int
+  conta ContaFinanceira @relation(fields: [conta_id],references: [id])
+  usuario_abertura_id Int
+  usuario_abertura User @relation("UsuarioAbertura", fields: [usuario_abertura_id],references: [id])
+  usuario_fechamento_id Int?
+  usuario_fechamento User? @relation("UsuarioFechamento", fields: [usuario_fechamento_id],references: [id])
+  status StatusCaixa @default(ABERTO)
+  saldo_inicial Decimal @db.Decimal(10,2)
+  saldo_final_sistema Decimal? @db.Decimal(10,2)
+  saldo_final_informado Decimal? @db.Decimal(10,2)
+  diferenca Decimal? @db.Decimal(10,2)
+  aberto_em DateTime @default(now())
+  fechado_em DateTime?
+  observacao_abertura String?
+  observacao_fechamento String?
+  movimentacoes MovimentacaoFinanceira[]
+  transferencias TransferenciaFinanceira[]
+  pedidos       Pedido[]
+
 }
+
+
+
 
 enum TipoRegistro {
   FISICA
@@ -364,4 +370,36 @@ enum OrigemMovimentacaoEstoque {
   AVULSO
   AJUSTE
   DEVOLUCAO
+}
+enum StatusLancamento {
+  ABERTO
+  PAGO
+  CANCELADO
+}
+enum TipoLancamento {
+  PAGAR
+  RECEBER
+}
+enum OrigemMovimentacao {
+  PEDIDO_COMPRA
+  PEDIDO_VENDA
+  TRANSFERENCIA
+  LANCAMENTO_PAGAR
+  LANCAMENTO_RECEBER
+  AJUSTE_MANUAL
+  ABERTURA_CAIXA
+  FECHAMENTO_CAIXA
+  ESTORNO
+}
+enum DirecaoFinanceira {
+  ENTRADA
+  SAIDA
+}
+enum TipoCategoria {
+  RECEITA
+  DESPESA
+}
+enum StatusCaixa {
+  ABERTO
+  FECHADO
 }

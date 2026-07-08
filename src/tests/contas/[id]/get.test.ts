@@ -9,28 +9,31 @@ beforeEach(async () => {
   await orchestrator.clearDatabase();
 });
 
-describe("GET /v1/bancos/[id]/", () => {
+describe("GET /v1/contas/[id]/", () => {
   test("Com id válido, sem permissões", async () => {
     const user = await orchestrator.userAuthenticated({
       nome: "ADMINISTRADOR",
     });
-    const b1 = await orchestrator.createBanco({
+    const b1 = await orchestrator.createConta({
       nome: "b1",
-      valor_inicial: 2,
-      descricao: "BANCO DE TESTE",
+      saldo_inicial: 2,
+      conta_padrao: false,
     });
 
     const response = await request(app)
-      .get(`/v1/bancos/${b1.id}`)
+      .get(`/v1/contas/${b1.id}`)
       .expect(200)
       .auth(user.jwt, { type: "bearer" })
       .expect("Content-Type", /json/);
 
     expect(response.body).toEqual({
       id: response.body.id,
-      nome: b1.nome,
-      descricao: b1.descricao,
+      conta_padrao: false,
+      criado_em: response.body.criado_em,
+      atualizado_em: response.body.atualizado_em,
+      nome: "b1",
       saldo_inicial: 2,
+      saldo_atual: 2,
       status: true,
     });
   });
@@ -41,7 +44,7 @@ describe("GET /v1/bancos/[id]/", () => {
     });
 
     const response = await request(app)
-      .get("/v1/bancos/9999123")
+      .get("/v1/contas/9999123")
       .auth(user.jwt, { type: "bearer" })
       .expect("Content-Type", /json/)
       .expect(404);
@@ -57,7 +60,7 @@ describe("GET /v1/bancos/[id]/", () => {
     const token = gerarToken({ nome: "luis" });
 
     const response = await request(app)
-      .get("/v1/bancos/2")
+      .get("/v1/contas/2")
       .auth(token, { type: "bearer" })
       .expect("Content-Type", /json/)
       .expect(401);
@@ -71,7 +74,7 @@ describe("GET /v1/bancos/[id]/", () => {
   });
   test("Com token JWT invalido", async () => {
     const response = await request(app)
-      .get("/v1/bancos/1")
+      .get("/v1/contas/1")
       .auth("werwefa3w4t534tqwefwq", { type: "bearer" })
       .expect("Content-Type", /json/)
       .expect(401);
@@ -88,7 +91,7 @@ describe("GET /v1/bancos/[id]/", () => {
       nome: "SEM PERMISSAO",
     });
     const response = await request(app)
-      .get("/v1/bancos/2")
+      .get("/v1/contas/2")
       .auth(user.jwt, { type: "bearer" })
       .expect("Content-Type", /json/)
       .expect(401);
@@ -103,7 +106,7 @@ describe("GET /v1/bancos/[id]/", () => {
 
   test("Sem um Bearer token", async () => {
     const response = await request(app)
-      .get("/v1/bancos/1")
+      .get("/v1/contas/1")
 
       .expect("Content-Type", /json/)
       .expect(401);
