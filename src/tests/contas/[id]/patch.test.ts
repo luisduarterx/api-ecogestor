@@ -8,19 +8,19 @@ beforeEach(async () => {
   await orchestrator.clearDatabase();
 });
 
-describe("PATCH /v1/bancos/[id]/", () => {
+describe("PATCH /v1/contas/[id]/", () => {
   test("Com id válido, nome válido", async () => {
     const user = await orchestrator.userAuthenticated({
       nome: "ADMINISTRADOR",
     });
-    const b1 = await orchestrator.createBanco({
+    const b1 = await orchestrator.createConta({
       nome: "b1",
-      valor_inicial: 2,
-      descricao: "BANCO DE TESTE",
+      saldo_inicial: 2,
+      conta_padrao: false,
     });
 
     const response = await request(app)
-      .patch(`/v1/bancos/${b1.id}`)
+      .patch(`/v1/contas/${b1.id}`)
       .send({ nome: "NOME NOVO" })
       .expect(200)
       .auth(user.jwt, { type: "bearer" })
@@ -28,9 +28,12 @@ describe("PATCH /v1/bancos/[id]/", () => {
 
     expect(response.body).toEqual({
       id: response.body.id,
+      conta_padrao: false,
+      criado_em: response.body.criado_em,
+      atualizado_em: response.body.atualizado_em,
       nome: "NOME NOVO",
-      descricao: b1.descricao,
       saldo_inicial: 2,
+      saldo_atual: 2,
       status: true,
     });
   });
@@ -38,14 +41,14 @@ describe("PATCH /v1/bancos/[id]/", () => {
     const user = await orchestrator.userAuthenticated({
       nome: "ADMINISTRADOR",
     });
-    const b1 = await orchestrator.createBanco({
+    const b1 = await orchestrator.createConta({
       nome: "b1",
-      valor_inicial: 2,
-      descricao: "BANCO DE TESTE",
+      saldo_inicial: 2,
+      conta_padrao: false,
     });
 
     const response = await request(app)
-      .patch(`/v1/bancos/${b1.id}`)
+      .patch(`/v1/contas/${b1.id}`)
       .send({ status: false })
       .expect(200)
       .auth(user.jwt, { type: "bearer" })
@@ -53,9 +56,12 @@ describe("PATCH /v1/bancos/[id]/", () => {
 
     expect(response.body).toEqual({
       id: response.body.id,
-      nome: b1.nome,
-      descricao: b1.descricao,
+      conta_padrao: false,
+      criado_em: response.body.criado_em,
+      atualizado_em: response.body.atualizado_em,
+      nome: "b1",
       saldo_inicial: 2,
+      saldo_atual: 2,
       status: false,
     });
   });
@@ -66,7 +72,7 @@ describe("PATCH /v1/bancos/[id]/", () => {
     });
 
     const response = await request(app)
-      .patch("/v1/bancos/9999123")
+      .patch("/v1/contas/9999123")
       .send({})
       .auth(user.jwt, { type: "bearer" })
       .expect("Content-Type", /json/)
@@ -83,7 +89,7 @@ describe("PATCH /v1/bancos/[id]/", () => {
     const token = gerarToken({ nome: "luis" });
 
     const response = await request(app)
-      .patch("/v1/bancos/2")
+      .patch("/v1/contas/2")
       .send({})
       .auth(token, { type: "bearer" })
       .expect("Content-Type", /json/)
@@ -98,7 +104,7 @@ describe("PATCH /v1/bancos/[id]/", () => {
   });
   test("Com token JWT invalido", async () => {
     const response = await request(app)
-      .patch("/v1/bancos/1")
+      .patch("/v1/contas/1")
       .auth("werwefa3w4t534tqwefwq", { type: "bearer" })
       .expect("Content-Type", /json/)
       .expect(401);
@@ -115,7 +121,7 @@ describe("PATCH /v1/bancos/[id]/", () => {
       nome: "SEM PERMISSAO",
     });
     const response = await request(app)
-      .patch("/v1/bancos/2")
+      .patch("/v1/contas/2")
       .send({})
       .auth(user.jwt, { type: "bearer" })
       .expect("Content-Type", /json/)
@@ -131,7 +137,7 @@ describe("PATCH /v1/bancos/[id]/", () => {
 
   test("Sem um Bearer token", async () => {
     const response = await request(app)
-      .patch("/v1/bancos/1")
+      .patch("/v1/contas/1")
       .send({})
       .expect("Content-Type", /json/)
       .expect(401);

@@ -16,7 +16,7 @@ import { popular } from "./inicial";
 import { statusRouter } from "./routes/status";
 
 import errorHandler from "./middlewares/errorHandler";
-import { bancoRoutes } from "./routes/bancos";
+import { contaRoutes } from "./routes/contas";
 import { tabelasRoutes } from "./routes/tabelas";
 
 export const app = express();
@@ -57,7 +57,7 @@ app.use("/v1", caixasRoutes);
 app.use("/v1", movimRoutes);
 app.use("/v1", pedidosRoutes);
 app.use("/v1", statusRouter);
-app.use("/v1", bancoRoutes);
+app.use("/v1", contaRoutes);
 app.use("/v1", tabelasRoutes);
 // ADICIONE ESSA LINHA PARA TESTAR:
 

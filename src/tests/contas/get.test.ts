@@ -1,60 +1,49 @@
 import request from "supertest";
-import { app } from "../../../app";
+import { app } from "../../app";
 import { test, beforeEach, expect, describe } from "vitest";
-import orchestrator from "../../orchestrator";
-import { gerarToken } from "../../../services/jwt";
-import { prisma } from "../../../libs/prisma";
+import orchestrator from "../orchestrator";
+import { gerarToken } from "../../services/jwt";
 
 beforeEach(async () => {
   await orchestrator.clearDatabase();
 });
 
-describe("DELETE /v1/bancos/[id]/", () => {
-  test("Com id válido", async () => {
+describe("GET /v1/contas", () => {
+  test("Deve trazer todos os resultados", async () => {
     const user = await orchestrator.userAuthenticated({
       nome: "ADMINISTRADOR",
     });
-    const b1 = await orchestrator.createBanco({
+    const b1 = await orchestrator.createConta({
       nome: "b1",
-      valor_inicial: 2,
-      descricao: "BANCO DE TESTE",
+      saldo_inicial: 2,
+      conta_padrao: false,
+    });
+    const b2 = await orchestrator.createConta({
+      nome: "b2",
+      saldo_inicial: 0,
+      conta_padrao: false,
+    });
+    const b3 = await orchestrator.createConta({
+      nome: "b3",
+      saldo_inicial: 100.53,
+      conta_padrao: false,
     });
 
     const response = await request(app)
-      .delete(`/v1/bancos/${b1.id}`)
+      .get("/v1/contas")
       .expect(200)
       .auth(user.jwt, { type: "bearer" })
       .expect("Content-Type", /json/);
-
-    expect(response.body).toEqual({
-      status: false,
-      id: b1.id,
-    });
+    console.log(response.body);
+    expect(Array.isArray(response.body)).toBe(true);
+    expect(response.body.length).toBe(3);
   });
 
-  test("Com id inexistente", async () => {
-    const user = await orchestrator.userAuthenticated({
-      nome: "ADMINISTRADOR",
-    });
-
-    const response = await request(app)
-      .delete("/v1/bancos/9999123")
-      .auth(user.jwt, { type: "bearer" })
-      .expect("Content-Type", /json/)
-      .expect(404);
-
-    expect(response.body).toEqual({
-      nome: "NotFoundError",
-      mensagem: "Não foi encontrado nenhum registro.",
-      acao: "Verifique os dados e tente novamente.",
-      statusCode: 404,
-    });
-  });
   test("Com token JWT valido e usuario inexistente", async () => {
     const token = gerarToken({ nome: "luis" });
 
     const response = await request(app)
-      .delete("/v1/bancos/2")
+      .get("/v1/contas")
       .auth(token, { type: "bearer" })
       .expect("Content-Type", /json/)
       .expect(401);
@@ -68,7 +57,7 @@ describe("DELETE /v1/bancos/[id]/", () => {
   });
   test("Com token JWT invalido", async () => {
     const response = await request(app)
-      .delete("/v1/bancos/1")
+      .get("/v1/contas")
       .auth("werwefa3w4t534tqwefwq", { type: "bearer" })
       .expect("Content-Type", /json/)
       .expect(401);
@@ -85,7 +74,7 @@ describe("DELETE /v1/bancos/[id]/", () => {
       nome: "SEM PERMISSAO",
     });
     const response = await request(app)
-      .delete("/v1/bancos/2")
+      .get("/v1/contas")
       .auth(user.jwt, { type: "bearer" })
       .expect("Content-Type", /json/)
       .expect(401);
@@ -100,7 +89,8 @@ describe("DELETE /v1/bancos/[id]/", () => {
 
   test("Sem um Bearer token", async () => {
     const response = await request(app)
-      .delete("/v1/bancos/1")
+      .get("/v1/cargos/")
+
       .expect("Content-Type", /json/)
       .expect(401);
 
