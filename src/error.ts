@@ -99,3 +99,11 @@ export class NotPossible extends BaseError {
     );
   }
 }
+export class ConflictError extends BaseError {
+  constructor(
+    mensagem = "Encontramos um conflito ao realizar a operação.",
+    action = "Refaça a operação, caso persista contate um administrador.",
+  ) {
+    super("ConflictError", mensagem, action, 409);
+  }
+}

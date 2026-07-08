@@ -113,6 +113,7 @@ model DadosPagamento {
 model Tabela {
   id        Int              @id @default(autoincrement())
   nome      String           @unique
+  padrao    Boolean          @default(false)
   updatedAt DateTime         @default(now()) @updatedAt
   materiais PrecoPorTabela[]
   registros Registro[]
@@ -126,6 +127,8 @@ model PrecoPorTabela {
   editadoEm  DateTime @default(now()) @updatedAt
   material   Material @relation(fields: [materialID], references: [id])
   tabela     Tabela   @relation(fields: [tabelaID], references: [id])
+
+  @@unique([tabelaID, materialID])
 }
 
 model Material {
