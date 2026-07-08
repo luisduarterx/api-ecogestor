@@ -8,6 +8,7 @@ import cargo from "../model/cargos";
 import material from "../model/materiais";
 import registro from "../model/registros";
 import { RegistroCreateInput } from "../types/registros";
+import tabela, { TableInput } from "../model/tabela";
 
 export async function clearDatabase() {
   await prisma.user.deleteMany();
@@ -105,6 +106,11 @@ const userAuthenticated = async (Props: {
       { nome: "create:banco" },
       { nome: "update:banco" },
       { nome: "delete:banco" },
+      { nome: "read:tabela" },
+      { nome: "read:tabelas" },
+      { nome: "create:tabelas" },
+      { nome: "update:tabelas" },
+      { nome: "delete:tabelas" },
     ],
     skipDuplicates: true, // Evita erros se rodar o teste localmente pela segunda vez
   });
@@ -159,6 +165,7 @@ const createDefaultTable = async () => {
   return await prisma.tabela.create({
     data: {
       nome: "PADRAO",
+      padrao: true,
     },
   });
 };
@@ -188,6 +195,14 @@ const createBanco = async (Props: {
     },
   });
 };
+
+const createTabela = async (Props: TableInput) => {
+  return await tabela.create({
+    nome: Props.nome,
+    padrao: Props.padrao,
+    materiais: Props.materiais,
+  });
+};
 const orchestrator = {
   clearDatabase,
   createCargo,
@@ -199,6 +214,7 @@ const orchestrator = {
   createMaterial,
   createRegistro,
   createBanco,
+  createTabela,
 };
 
 export default orchestrator;

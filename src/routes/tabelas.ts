@@ -1,23 +1,41 @@
 import { Request, Response, Router } from "express";
+import { AuthMiddleware } from "../controllers/middleware";
+import { authorize } from "../controllers/auth-middleware";
+import * as tabelas from "../controllers/tabela";
 
 export const tabelasRoutes = Router();
 
-// //Lida com as tabelas
-// tabelasRoutes.get("/tabelas", async (req:Request,res:Response)=>{
+//Lida com as tabelas
+tabelasRoutes.get(
+  "/tabelas",
+  AuthMiddleware,
+  authorize("read:tabelas"),
+  tabelas.GET,
+);
+tabelasRoutes.get(
+  "/tabelas/:tabID",
+  AuthMiddleware,
+  authorize("read:tabela"),
+  tabelas.GET_UNIQUE,
+);
 
-// })
-// tabelasRoutes.get("/tabelas/:id", async (req:Request,res:Response)=>{
+tabelasRoutes.post(
+  "/tabelas",
+  AuthMiddleware,
+  authorize("create:tabelas"),
+  tabelas.POST,
+);
 
-// })
+tabelasRoutes.patch(
+  "/tabelas/:tabID",
+  AuthMiddleware,
+  authorize("update:tabelas"),
+  tabelas.PATCH,
+);
 
-// tabelasRoutes.post("/tabelas", async (req:Request,res:Response)=>{
-
-// })
-
-// tabelasRoutes.put("/tabelas/:id", async (req:Request,res:Response)=>{
-
-// })
-
-// tabelasRoutes.delete("/tabelas/:id", async (req:Request,res:Response)=>{
-
-// })
+tabelasRoutes.delete(
+  "/tabelas/:tabID",
+  AuthMiddleware,
+  authorize("delete:tabelas"),
+  tabelas.DELETE,
+);
