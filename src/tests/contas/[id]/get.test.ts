@@ -3,13 +3,12 @@ import { app } from "../../../app";
 import { test, beforeEach, expect, describe } from "vitest";
 import orchestrator from "../../orchestrator";
 import { gerarToken } from "../../../services/jwt";
-import banco from "../../../model/bancos";
 
 beforeEach(async () => {
   await orchestrator.clearDatabase();
 });
 
-describe("GET /v1/contas/[id]/", () => {
+describe("GET /v1/financeiro/contas/[id]/", () => {
   test("Com id válido, sem permissões", async () => {
     const user = await orchestrator.userAuthenticated({
       nome: "ADMINISTRADOR",
@@ -21,7 +20,7 @@ describe("GET /v1/contas/[id]/", () => {
     });
 
     const response = await request(app)
-      .get(`/v1/contas/${b1.id}`)
+      .get(`/v1/financeiro/contas/${b1.id}`)
       .expect(200)
       .auth(user.jwt, { type: "bearer" })
       .expect("Content-Type", /json/);
@@ -44,7 +43,7 @@ describe("GET /v1/contas/[id]/", () => {
     });
 
     const response = await request(app)
-      .get("/v1/contas/9999123")
+      .get("/v1/financeiro/contas/9999123")
       .auth(user.jwt, { type: "bearer" })
       .expect("Content-Type", /json/)
       .expect(404);
@@ -60,7 +59,7 @@ describe("GET /v1/contas/[id]/", () => {
     const token = gerarToken({ nome: "luis" });
 
     const response = await request(app)
-      .get("/v1/contas/2")
+      .get("/v1/financeiro/contas/2")
       .auth(token, { type: "bearer" })
       .expect("Content-Type", /json/)
       .expect(401);
@@ -74,7 +73,7 @@ describe("GET /v1/contas/[id]/", () => {
   });
   test("Com token JWT invalido", async () => {
     const response = await request(app)
-      .get("/v1/contas/1")
+      .get("/v1/financeiro/contas/1")
       .auth("werwefa3w4t534tqwefwq", { type: "bearer" })
       .expect("Content-Type", /json/)
       .expect(401);
@@ -91,7 +90,7 @@ describe("GET /v1/contas/[id]/", () => {
       nome: "SEM PERMISSAO",
     });
     const response = await request(app)
-      .get("/v1/contas/2")
+      .get("/v1/financeiro/contas/2")
       .auth(user.jwt, { type: "bearer" })
       .expect("Content-Type", /json/)
       .expect(401);
@@ -106,7 +105,7 @@ describe("GET /v1/contas/[id]/", () => {
 
   test("Sem um Bearer token", async () => {
     const response = await request(app)
-      .get("/v1/contas/1")
+      .get("/v1/financeiro/contas/1")
 
       .expect("Content-Type", /json/)
       .expect(401);

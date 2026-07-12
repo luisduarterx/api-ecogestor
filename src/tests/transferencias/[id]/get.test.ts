@@ -8,8 +8,8 @@ beforeEach(async () => {
   await orchestrator.clearDatabase();
 });
 
-describe("PATCH /v1/financeiro/contas/[id]/", () => {
-  test("Com id válido, nome válido", async () => {
+describe("GET /v1/financeiro/transferencia/[id]/", () => {
+  test("Deve retornar uma transferencia válida.", async () => {
     const user = await orchestrator.userAuthenticated({
       nome: "ADMINISTRADOR",
     });
@@ -18,62 +18,46 @@ describe("PATCH /v1/financeiro/contas/[id]/", () => {
       saldo_inicial: 2,
       conta_padrao: false,
     });
+    const b2 = await orchestrator.createConta({
+      nome: "b2",
+      saldo_inicial: 2,
+      conta_padrao: false,
+    });
+    const transferencia = await orchestrator.createTransferencia({
+      conta_destino_id: b2.id,
+      conta_origem_id: b1.id,
+      valor: 100,
+      user_id: user.id,
+      descricao: "TESTE",
+    });
 
     const response = await request(app)
-      .patch(`/v1/financeiro/contas/${b1.id}`)
-      .send({ nome: "NOME NOVO" })
+      .get(`/v1/financeiro/transferencia/${transferencia.id}`)
       .expect(200)
       .auth(user.jwt, { type: "bearer" })
       .expect("Content-Type", /json/);
 
-    expect(response.body).toEqual({
-      id: response.body.id,
-      conta_padrao: false,
-      criado_em: response.body.criado_em,
-      atualizado_em: response.body.atualizado_em,
-      nome: "NOME NOVO",
-      saldo_inicial: 2,
-      saldo_atual: 2,
-      status: true,
-    });
-  });
-  test("Com id válido, altera status", async () => {
-    const user = await orchestrator.userAuthenticated({
-      nome: "ADMINISTRADOR",
-    });
-    const b1 = await orchestrator.createConta({
-      nome: "b1",
-      saldo_inicial: 2,
-      conta_padrao: false,
+    expect(response.body).toMatchObject({
+      id: expect.any(Number),
+      conta_origem_id: expect.any(Number),
+      conta_destino_id: expect.any(Number),
+      valor: expect.any(Number),
+      descricao: expect.any(String),
+      criado_em: expect.any(String),
+      user_id: expect.any(Number),
+      caixa_id: null,
     });
 
-    const response = await request(app)
-      .patch(`/v1/financeiro/contas/${b1.id}`)
-      .send({ status: false })
-      .expect(200)
-      .auth(user.jwt, { type: "bearer" })
-      .expect("Content-Type", /json/);
-
-    expect(response.body).toEqual({
-      id: response.body.id,
-      conta_padrao: false,
-      criado_em: response.body.criado_em,
-      atualizado_em: response.body.atualizado_em,
-      nome: "b1",
-      saldo_inicial: 2,
-      saldo_atual: 2,
-      status: false,
-    });
+    expect(Date.parse(response.body.criado_em)).not.toBeNaN();
   });
 
-  test("Com id inválido", async () => {
+  test("Com id inexistente", async () => {
     const user = await orchestrator.userAuthenticated({
       nome: "ADMINISTRADOR",
     });
 
     const response = await request(app)
-      .patch("/v1/financeiro/contas/9999123")
-      .send({})
+      .get("/v1/financeiro/transferencia/9999123")
       .auth(user.jwt, { type: "bearer" })
       .expect("Content-Type", /json/)
       .expect(404);
@@ -89,8 +73,7 @@ describe("PATCH /v1/financeiro/contas/[id]/", () => {
     const token = gerarToken({ nome: "luis" });
 
     const response = await request(app)
-      .patch("/v1/financeiro/contas/2")
-      .send({})
+      .get("/v1/financeiro/transferencia/2")
       .auth(token, { type: "bearer" })
       .expect("Content-Type", /json/)
       .expect(401);
@@ -104,7 +87,7 @@ describe("PATCH /v1/financeiro/contas/[id]/", () => {
   });
   test("Com token JWT invalido", async () => {
     const response = await request(app)
-      .patch("/v1/financeiro/contas/1")
+      .get("/v1/financeiro/transferencia/1")
       .auth("werwefa3w4t534tqwefwq", { type: "bearer" })
       .expect("Content-Type", /json/)
       .expect(401);
@@ -121,8 +104,7 @@ describe("PATCH /v1/financeiro/contas/[id]/", () => {
       nome: "SEM PERMISSAO",
     });
     const response = await request(app)
-      .patch("/v1/financeiro/contas/2")
-      .send({})
+      .get("/v1/financeiro/transferencia/2")
       .auth(user.jwt, { type: "bearer" })
       .expect("Content-Type", /json/)
       .expect(401);
@@ -137,8 +119,8 @@ describe("PATCH /v1/financeiro/contas/[id]/", () => {
 
   test("Sem um Bearer token", async () => {
     const response = await request(app)
-      .patch("/v1/financeiro/contas/1")
-      .send({})
+      .get("/v1/financeiro/transferencia/1")
+
       .expect("Content-Type", /json/)
       .expect(401);
 

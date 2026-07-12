@@ -8,7 +8,7 @@ import {
 import { Prisma } from "../../generated/prisma/client";
 import { prisma } from "../libs/prisma";
 import { EditMaterialType, MaterialType } from "../types/materiais";
-import categoria from "./categorias";
+import categoria from "./categoria";
 
 export const create = async (data: MaterialType) => {
   try {

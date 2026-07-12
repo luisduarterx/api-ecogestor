@@ -8,7 +8,7 @@ beforeEach(async () => {
   await orchestrator.clearDatabase();
 });
 
-describe("GET /v1/contas", () => {
+describe("GET /v1/financeiro/contas", () => {
   test("Deve trazer todos os resultados", async () => {
     const user = await orchestrator.userAuthenticated({
       nome: "ADMINISTRADOR",
@@ -30,7 +30,7 @@ describe("GET /v1/contas", () => {
     });
 
     const response = await request(app)
-      .get("/v1/contas")
+      .get("/v1/financeiro/contas")
       .expect(200)
       .auth(user.jwt, { type: "bearer" })
       .expect("Content-Type", /json/);
@@ -43,7 +43,7 @@ describe("GET /v1/contas", () => {
     const token = gerarToken({ nome: "luis" });
 
     const response = await request(app)
-      .get("/v1/contas")
+      .get("/v1/financeiro/contas")
       .auth(token, { type: "bearer" })
       .expect("Content-Type", /json/)
       .expect(401);
@@ -57,7 +57,7 @@ describe("GET /v1/contas", () => {
   });
   test("Com token JWT invalido", async () => {
     const response = await request(app)
-      .get("/v1/contas")
+      .get("/v1/financeiro/contas")
       .auth("werwefa3w4t534tqwefwq", { type: "bearer" })
       .expect("Content-Type", /json/)
       .expect(401);
@@ -74,7 +74,7 @@ describe("GET /v1/contas", () => {
       nome: "SEM PERMISSAO",
     });
     const response = await request(app)
-      .get("/v1/contas")
+      .get("/v1/financeiro/contas")
       .auth(user.jwt, { type: "bearer" })
       .expect("Content-Type", /json/)
       .expect(401);

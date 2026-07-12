@@ -1,9 +1,10 @@
 import { Response } from "express";
 import { ExtendedRequest } from "../types/extended-request";
 import { z } from "zod";
-import { BadRequest } from "../error";
-import material from "../model/materiais";
+import { BadRequest, UnAuthorized } from "../error";
+import material from "../model/material";
 import contaFinanceira from "../model/contaFinanceira";
+import transferenciaFinanceira from "../model/transferencia";
 
 export const conta = {
   POST: async (req: ExtendedRequest, res: Response) => {
@@ -93,6 +94,103 @@ export const conta = {
       const contaDeletada = await contaFinanceira.deleteUnique(id.data);
 
       res.status(200).json(contaDeletada);
+    } catch (error) {
+      throw error;
+    }
+  },
+};
+export const transferencia = {
+  POST: async (req: ExtendedRequest, res: Response) => {
+    try {
+      const data = z
+        .object({
+          descricao: z.string().max(30).toUpperCase().optional(),
+          valor: z.coerce.number().positive(),
+          conta_origem_id: z.coerce.number().positive().int(),
+          conta_destino_id: z.coerce.number().positive().int(),
+        })
+        .safeParse(req.body);
+
+      console.log(data.error);
+      if (!data.success) {
+        throw new BadRequest();
+      }
+      if (!req.user?.id) {
+        throw new UnAuthorized();
+      }
+      const novaTransferencia = await transferenciaFinanceira.create({
+        ...data.data,
+        user_id: req.user?.id,
+      });
+
+      res.status(201).json(novaTransferencia);
+    } catch (error) {
+      throw error;
+    }
+  },
+  GET: async (req: ExtendedRequest, res: Response) => {
+    try {
+      const dataInicial = z.coerce.date().safeParse(req.query.dataInicial);
+      const dataFinal = z.coerce.date().safeParse(req.query.dataFinal);
+
+      if (!dataFinal.success || !dataInicial.success) {
+        console.log(dataFinal.error, dataInicial.error);
+        throw new BadRequest();
+      }
+      if (!req.user?.id) {
+        throw new UnAuthorized();
+      }
+      console.log(dataInicial, dataFinal);
+
+      const transferenciasEncontradas = await transferenciaFinanceira.findAll({
+        dataFinal: dataFinal.data,
+        dataInicial: dataInicial.data,
+      });
+
+      res.status(200).json(transferenciasEncontradas);
+    } catch (error) {
+      throw error;
+    }
+  },
+  GET_UNIQUE: async (req: ExtendedRequest, res: Response) => {
+    try {
+      const id = z.coerce.number().int().positive().safeParse(req.params.id);
+
+      if (!id.success) {
+        throw new BadRequest();
+      }
+
+      const transferenciaEncontrada = await transferenciaFinanceira.getByID(
+        id.data,
+      );
+
+      res.status(200).json(transferenciaEncontrada);
+    } catch (error) {
+      throw error;
+    }
+  },
+  POST_ESTORNO: async (req: ExtendedRequest, res: Response) => {
+    try {
+      const id = z.coerce.number().positive().int().safeParse(req.params.id);
+      const data = z
+        .object({
+          motivo: z.string().max(30).min(3).toUpperCase(),
+        })
+        .safeParse(req.body);
+
+      if (!data.success || !id.success) {
+        throw new BadRequest();
+      }
+      if (!req.user?.id) {
+        throw new UnAuthorized();
+      }
+      const transferenciaEstornada = await transferenciaFinanceira.reverse({
+        ...data.data,
+        id: id.data,
+        user_id: req.user?.id,
+      });
+      console.log(transferenciaEstornada);
+      res.status(201).json(transferenciaEstornada);
     } catch (error) {
       throw error;
     }

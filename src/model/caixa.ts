@@ -1,6 +1,6 @@
 import { NotFound, NotPossible, UnAuthorized } from "../error";
 import { prisma } from "../libs/prisma";
-import { getUserByID, userHasPermission } from "./users";
+import { getUserByID, userHasPermission } from "./user";
 
 export const abrirCaixa = async (userID: number, valor: number) => {
   try {
@@ -10,7 +10,7 @@ export const abrirCaixa = async (userID: number, valor: number) => {
     console.log(caixaAberto);
     if (caixaAberto.length > 0) {
       throw new NotPossible(
-        "É necessário fechar o caixa anterior para abrir um novo caixa."
+        "É necessário fechar o caixa anterior para abrir um novo caixa.",
       );
     }
 

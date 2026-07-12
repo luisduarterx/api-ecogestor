@@ -1,7 +1,7 @@
 import { RequestHandler, Response } from "express";
 import { z } from "zod";
 import { BadRequest, UnAuthorized, UserNotFound } from "../error";
-import user from "../model/users";
+import user from "../model/user";
 import jwt from "jsonwebtoken";
 import { gerarToken } from "../services/jwt";
 import { ExtendedRequest } from "../types/extended-request";

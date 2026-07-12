@@ -9,7 +9,7 @@ import {
   NotPossible,
   UnAuthorized,
 } from "../error";
-import { findRegisterByID } from "../model/registros";
+import { findRegisterByID } from "../model/registro";
 import {
   addNewItemOrder,
   closeOrder,
@@ -69,7 +69,7 @@ export const PED_POST_FECHA = async (req: ExtendedRequest, res: Response) => {
           z.object({
             metodo: z.enum(["DINHEIRO", "TRANSFERENCIA", "ABATER"]),
             valor: z.number().nonnegative().positive(),
-          })
+          }),
         )
         .nonempty("É necessário ao menos um meio de pagamento!"),
       baixarAgora: z.boolean().optional().default(false),

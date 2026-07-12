@@ -9,7 +9,7 @@ beforeEach(async () => {
   await orchestrator.clearDatabase();
 });
 
-describe("DELETE /v1/contas/[id]/", () => {
+describe("DELETE /v1/financeiro/contas/[id]/", () => {
   test("Com id válido", async () => {
     const user = await orchestrator.userAuthenticated({
       nome: "ADMINISTRADOR",
@@ -21,7 +21,7 @@ describe("DELETE /v1/contas/[id]/", () => {
     });
 
     const response = await request(app)
-      .delete(`/v1/contas/${b1.id}`)
+      .delete(`/v1/financeiro/contas/${b1.id}`)
       .expect(200)
       .auth(user.jwt, { type: "bearer" })
       .expect("Content-Type", /json/);
@@ -38,7 +38,7 @@ describe("DELETE /v1/contas/[id]/", () => {
     });
 
     const response = await request(app)
-      .delete("/v1/contas/9999123")
+      .delete("/v1/financeiro/contas/9999123")
       .auth(user.jwt, { type: "bearer" })
       .expect("Content-Type", /json/)
       .expect(404);
@@ -54,7 +54,7 @@ describe("DELETE /v1/contas/[id]/", () => {
     const token = gerarToken({ nome: "luis" });
 
     const response = await request(app)
-      .delete("/v1/contas/2")
+      .delete("/v1/financeiro/contas/2")
       .auth(token, { type: "bearer" })
       .expect("Content-Type", /json/)
       .expect(401);
@@ -68,7 +68,7 @@ describe("DELETE /v1/contas/[id]/", () => {
   });
   test("Com token JWT invalido", async () => {
     const response = await request(app)
-      .delete("/v1/contas/1")
+      .delete("/v1/financeiro/contas/1")
       .auth("werwefa3w4t534tqwefwq", { type: "bearer" })
       .expect("Content-Type", /json/)
       .expect(401);
@@ -85,7 +85,7 @@ describe("DELETE /v1/contas/[id]/", () => {
       nome: "SEM PERMISSAO",
     });
     const response = await request(app)
-      .delete("/v1/contas/2")
+      .delete("/v1/financeiro/contas/2")
       .auth(user.jwt, { type: "bearer" })
       .expect("Content-Type", /json/)
       .expect(401);
@@ -100,7 +100,7 @@ describe("DELETE /v1/contas/[id]/", () => {
 
   test("Sem um Bearer token", async () => {
     const response = await request(app)
-      .delete("/v1/contas/1")
+      .delete("/v1/financeiro/contas/1")
       .expect("Content-Type", /json/)
       .expect(401);
 

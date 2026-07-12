@@ -8,74 +8,105 @@ beforeEach(async () => {
   await orchestrator.clearDatabase();
 });
 
-describe("POST /v1/financeiro/contas", () => {
-  test("Com dados válidos", async () => {
+describe("POST /v1/financeiro/transferencia", () => {
+  test("Deve criar uma transferencia entre duas contas normais.", async () => {
     const user = await orchestrator.userAuthenticated({
       nome: "ADMINISTRADOR",
     });
-    const banco = {
-      nome: "BANCO NoVO",
-      saldo_inicial: 1000.45,
-    };
-
-    const response = await request(app)
-      .post("/v1/financeiro/contas")
-      .send(banco)
-      .expect(201)
-      .auth(user.jwt, { type: "bearer" })
-      .expect("Content-Type", /json/);
-
-    expect(response.body).toEqual({
-      id: response.body.id,
+    const c1 = await orchestrator.createConta({
+      nome: "CONTA 1",
       conta_padrao: false,
-      criado_em: response.body.criado_em,
-      atualizado_em: response.body.atualizado_em,
-      nome: "BANCO NOVO",
-      saldo_inicial: 1000.45,
-      saldo_atual: 1000.45,
-      status: true,
+      saldo_inicial: 100,
     });
-  });
-  test("Deve criar uma conta padrão", async () => {
-    const user = await orchestrator.userAuthenticated({
-      nome: "ADMINISTRADOR",
+    const c2 = await orchestrator.createConta({
+      nome: "CONTA 2",
+      conta_padrao: false,
+      saldo_inicial: 100,
     });
-    const banco = {
-      nome: "BANCO NoVO",
-      saldo_inicial: 1000.45,
-      conta_padrao: true,
+
+    const transferencia = {
+      valor: 50.0,
+      conta_origem_id: c1.id,
+      conta_destino_id: c2.id,
     };
 
     const response = await request(app)
-      .post("/v1/financeiro/contas")
-      .send(banco)
+      .post("/v1/financeiro/transferencia")
+      .send(transferencia)
       .expect(201)
       .auth(user.jwt, { type: "bearer" })
       .expect("Content-Type", /json/);
 
-    expect(response.body).toEqual({
-      id: response.body.id,
-      conta_padrao: true,
-      criado_em: response.body.criado_em,
-      atualizado_em: response.body.atualizado_em,
-      nome: "BANCO NOVO",
-      saldo_inicial: 1000.45,
-      saldo_atual: 1000.45,
-      status: true,
+    expect(response.body).toMatchObject({
+      id: expect.any(Number),
+      conta_origem_id: expect.any(Number),
+      conta_destino_id: expect.any(Number),
+      valor: expect.any(Number),
+      descricao: expect.any(String),
+      criado_em: expect.any(String),
+      user_id: expect.any(Number),
+      caixa_id: null,
+      movimentacoes: expect.any(Object),
     });
+    expect(response.body.movimentacoes.length).toBe(2);
+    expect(Date.parse(response.body.criado_em)).not.toBeNaN();
+    expect(response.body.movimentacoes[0].saldo_final).toBe(50);
+    expect(response.body.movimentacoes[1].saldo_final).toBe(150);
   });
-  test("Com valor inicial negativo", async () => {
+  // test("Deve criar uma transferencia entre uma conta padrao e uma normal", async () => {
+  //   const user = await orchestrator.userAuthenticated({
+  //     nome: "ADMINISTRADOR",
+  //   });
+  //   const c1 = await orchestrator.createConta({
+  //     nome: "CONTA 1",
+  //     conta_padrao: true,
+  //     saldo_inicial: 100,
+  //   });
+  //   const c2 = await orchestrator.createConta({
+  //     nome: "CONTA 2",
+  //     conta_padrao: false,
+  //     saldo_inicial: 100,
+  //   });
+
+  //   const transferencia = {
+  //     valor: 50.0,
+  //     conta_origem_id: c1.id,
+  //     conta_destino_id: c2.id,
+  //   };
+
+  //   const response = await request(app)
+  //     .post("/v1/financeiro/transferencia")
+  //     .send(transferencia)
+  //     .expect(201)
+  //     .auth(user.jwt, { type: "bearer" })
+  //     .expect("Content-Type", /json/);
+
+  //   expect(response.body).toMatchObject({
+  //     id: expect.any(Number),
+  //     conta_origem_id: expect.any(Number),
+  //     conta_destino_id: expect.any(Number),
+  //     valor: expect.any(Number),
+  //     descricao: expect.any(String),
+  //     criado_em: expect.any(String),
+  //     user_id: expect.any(Number),
+  //     caixa_id: null,
+  //     movimentacoes: expect.any(Object),
+  //   });
+  // });
+  test("Tenta criar uma transferencia com valor 0", async () => {
     const user = await orchestrator.userAuthenticated({
       nome: "ADMINISTRADOR",
     });
-    const banco = {
-      nome: "BANCO NoVO",
-      saldo_inicial: -1000.45,
+
+    const transferencia = {
+      valor: 0,
+      conta_origem_id: 2,
+      conta_destino_id: 1,
     };
 
     const response = await request(app)
-      .post("/v1/financeiro/contas")
-      .send(banco)
+      .post("/v1/financeiro/transferencia")
+      .send(transferencia)
       .expect(400)
       .auth(user.jwt, { type: "bearer" })
       .expect("Content-Type", /json/);
@@ -88,41 +119,42 @@ describe("POST /v1/financeiro/contas", () => {
       statusCode: 400,
     });
   });
-  test("Tentativa de criar uma conta padrão um uma ja existente", async () => {
+  test("Tenta criar uma transferencia com contas iguais", async () => {
     const user = await orchestrator.userAuthenticated({
       nome: "ADMINISTRADOR",
     });
-    await orchestrator.createConta({
-      nome: "TESTE",
-      saldo_inicial: 0,
-      conta_padrao: true,
+    const c1 = await orchestrator.createConta({
+      nome: "CONTA 1",
+      conta_padrao: false,
+      saldo_inicial: 100,
     });
-    const banco = {
-      nome: "BANCO NoVO",
-      conta_padrao: true,
-      saldo_inicial: 1000.45,
+
+    const transferencia = {
+      valor: 50.0,
+      conta_origem_id: c1.id,
+      conta_destino_id: c1.id,
     };
 
     const response = await request(app)
-      .post("/v1/financeiro/contas")
-      .send(banco)
+      .post("/v1/financeiro/transferencia")
+      .send(transferencia)
       .expect(409)
       .auth(user.jwt, { type: "bearer" })
       .expect("Content-Type", /json/);
 
     expect(response.body).toEqual({
       acao: "Refaça a operação, caso persista contate um administrador.",
-      mensagem:
-        "Não é possivel criar a conta. Já existe uma conta padrão definida.",
+      mensagem: "A conta de origem e a conta de destino devem ser diferentes.",
       nome: "ConflictError",
       statusCode: 409,
     });
   });
+
   test("Com token JWT valido e usuario inexistente", async () => {
     const token = gerarToken({ nome: "luis" });
 
     const response = await request(app)
-      .post("/v1/financeiro/contas")
+      .post("/v1/financeiro/transferencia")
       .auth(token, { type: "bearer" })
       .expect("Content-Type", /json/)
       .expect(401);
@@ -136,7 +168,7 @@ describe("POST /v1/financeiro/contas", () => {
   });
   test("Com token JWT invalido", async () => {
     const response = await request(app)
-      .post("/v1/financeiro/contas")
+      .post("/v1/financeiro/transferencia")
       .auth("werwefa3w4t534tqwefwq", { type: "bearer" })
       .expect("Content-Type", /json/)
       .expect(401);
@@ -153,7 +185,7 @@ describe("POST /v1/financeiro/contas", () => {
       nome: "SEM PERMISSAO",
     });
     const response = await request(app)
-      .post("/v1/financeiro/contas")
+      .post("/v1/financeiro/transferencia")
       .auth(user.jwt, { type: "bearer" })
       .expect("Content-Type", /json/)
       .expect(401);
@@ -168,7 +200,7 @@ describe("POST /v1/financeiro/contas", () => {
 
   test("Sem um Bearer token", async () => {
     const response = await request(app)
-      .post("/v1/financeiro/contas")
+      .post("/v1/financeiro/transferencia")
 
       .expect("Content-Type", /json/)
       .expect(401);

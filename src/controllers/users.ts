@@ -8,7 +8,7 @@ import {
   UserNotFound,
   ValidationError,
 } from "../error";
-import user from "../model/users";
+import user from "../model/user";
 import { ExtendedRequest } from "../types/extended-request";
 
 export const POST: RequestHandler = async (req, res) => {

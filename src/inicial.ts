@@ -1,8 +1,8 @@
 import { prisma } from "./libs/prisma";
-import { addNewRole } from "./model/cargos";
-import { createMaterial } from "./model/materiais";
-import { createNewF } from "./model/registros";
-import { createUser } from "./model/users";
+import { addNewRole } from "./model/cargo";
+import { createMaterial } from "./model/material";
+import { createNewF } from "./model/registro";
+import { createUser } from "./model/user";
 
 export const popular = async () => {
   try {
