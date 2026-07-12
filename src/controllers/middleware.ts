@@ -3,7 +3,7 @@ import { UnAuthorized } from "../error";
 import { verificarToken } from "../services/jwt";
 import { ReqUser, UserData } from "../types/user";
 import { ExtendedRequest } from "../types/extended-request";
-import user from "../model/users";
+import user from "../model/user";
 
 export const AuthMiddleware = async (
   req: ExtendedRequest,

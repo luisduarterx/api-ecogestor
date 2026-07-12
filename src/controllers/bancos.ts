@@ -2,7 +2,7 @@ import { Response } from "express";
 import { ExtendedRequest } from "../types/extended-request";
 import { z } from "zod";
 import { BadRequest, NotFound } from "../error";
-import categoria from "../model/categorias";
+import categoria from "../model/categoria";
 import banco from "../model/bancos";
 
 export const POST = async (req: ExtendedRequest, res: Response) => {

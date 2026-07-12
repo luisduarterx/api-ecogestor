@@ -2,7 +2,7 @@ import { Response } from "express";
 import { ExtendedRequest } from "../types/extended-request";
 import { z } from "zod";
 import { BadRequest, InternalError, UnAuthorized } from "../error";
-import { estornarMovimentacao, novaMovimentacao } from "../model/movFinanceira";
+import { estornarMovimentacao, novaMovimentacao } from "../model/transferencia";
 import { Console } from "console";
 
 export const POST = async (req: ExtendedRequest, res: Response) => {

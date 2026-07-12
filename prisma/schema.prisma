@@ -273,7 +273,7 @@ model MovimentacaoFinanceira{
   origem_id Int?
   descricao String
   direcao DirecaoFinanceira
-  saldo_inical Decimal @db.Decimal(10,2)
+  saldo_inicial Decimal @db.Decimal(10,2)///
   valor Decimal @db.Decimal(10,2)
   saldo_final Decimal @db.Decimal(10,2)
   user_id Int
@@ -284,9 +284,9 @@ model MovimentacaoFinanceira{
   transferencia TransferenciaFinanceira? @relation(fields: [transferencia_id],references: [id])
   motivo_ajuste String?
   estornada Boolean @default(false)
-  estorno_de_id Int?
+  estorno_de_id Int? @unique
   estorno_de MovimentacaoFinanceira? @relation("EstornoMovimentacao", fields: [estorno_de_id], references: [id])
-  estornos MovimentacaoFinanceira[] @relation("EstornoMovimentacao")
+  estornos MovimentacaoFinanceira? @relation("EstornoMovimentacao")
   caixa_id Int?
   caixa Caixa? @relation(fields: [caixa_id],references: [id])
 }
@@ -305,6 +305,10 @@ model TransferenciaFinanceira{
   movimentacoes MovimentacaoFinanceira[]
   caixa_id Int?
   caixa Caixa? @relation(fields: [caixa_id],references: [id])
+  estornada Boolean @default(false)
+  estorno_de_id Int? @unique
+  estorno_de TransferenciaFinanceira? @relation("EstornoTransferencia", fields: [estorno_de_id], references: [id])
+  estorno TransferenciaFinanceira? @relation("EstornoTransferencia")
 }
 
 model Caixa {

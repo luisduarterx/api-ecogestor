@@ -2,7 +2,7 @@ import { Response } from "express";
 import { ExtendedRequest } from "../types/extended-request";
 import { z } from "zod";
 import { BadRequest } from "../error";
-import material from "../model/materiais";
+import material from "../model/material";
 
 export const POST = async (req: ExtendedRequest, res: Response) => {
   try {

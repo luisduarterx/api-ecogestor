@@ -1,6 +1,6 @@
 import { Response } from "express";
 import { ExtendedRequest } from "../types/extended-request";
-import cargo from "../model/cargos";
+import cargo from "../model/cargo";
 import { z } from "zod";
 import { BadRequest, InternalError, NotFound } from "../error";
 

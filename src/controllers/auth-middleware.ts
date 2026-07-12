@@ -1,6 +1,6 @@
 import { ExtendedRequest } from "../types/extended-request";
 import { Response, NextFunction } from "express";
-import user from "../model/users";
+import user from "../model/user";
 
 export function authorize(requiredPermissions: string) {
   return async (req: ExtendedRequest, res: Response, next: NextFunction) => {

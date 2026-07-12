@@ -2,7 +2,7 @@ import { Response } from "express";
 import { ExtendedRequest } from "../types/extended-request";
 import { z } from "zod";
 import { BadRequest } from "../error";
-import registro from "../model/registros";
+import registro from "../model/registro";
 import { sk } from "@faker-js/faker";
 
 const pessoa = z.object({

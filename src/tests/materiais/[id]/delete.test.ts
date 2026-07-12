@@ -3,7 +3,7 @@ import { app } from "../../../app";
 import { test, beforeEach, expect, describe } from "vitest";
 import orchestrator from "../../orchestrator";
 import { gerarToken } from "../../../services/jwt";
-import categoria from "../../../model/categorias";
+import categoria from "../../../model/categoria";
 
 beforeEach(async () => {
   await orchestrator.clearDatabase();

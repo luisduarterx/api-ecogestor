@@ -10,12 +10,12 @@ import { prisma } from "../libs/prisma";
 
 import { ReqUser } from "../types/user";
 import { caixaAberto } from "./caixa";
-import { getMaterialByID } from "./materiais";
-import { inputMovimentacao, novaMovimentacao } from "./movFinanceira";
+import { getMaterialByID } from "./material";
+import { inputMovimentacao, novaMovimentacao } from "./transferencia";
 
-import { findRegisterByID, findRegisterTable } from "./registros";
+import { findRegisterByID, findRegisterTable } from "./registro";
 import { findPriceOnTable } from "./tabela";
-import { userHasPermission } from "./users";
+import { userHasPermission } from "./user";
 
 type CreateOrderArgs = {
   userID: number;

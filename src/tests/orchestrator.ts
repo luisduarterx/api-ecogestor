@@ -4,14 +4,20 @@ import { encriptarSenha } from "../services/password";
 import { faker } from "@faker-js/faker";
 
 import { gerarToken } from "../services/jwt";
-import cargo from "../model/cargos";
-import material from "../model/materiais";
-import registro from "../model/registros";
+import cargo from "../model/cargo";
+import material from "../model/material";
+import registro from "../model/registro";
 import { RegistroCreateInput } from "../types/registros";
 import tabela, { TableInput } from "../model/tabela";
 import contaFinanceira from "../model/contaFinanceira";
+import transferenciaFinanceira, {
+  EstornoTransferenciaInput,
+  TransferenciaInput,
+} from "../model/transferencia";
 
 export async function clearDatabase() {
+  await prisma.movimentacaoFinanceira.deleteMany();
+  await prisma.transferenciaFinanceira.deleteMany();
   await prisma.user.deleteMany();
   await prisma.permissoes.deleteMany();
   await prisma.cargo.deleteMany();
@@ -202,6 +208,12 @@ const createTabela = async (Props: TableInput) => {
     materiais: Props.materiais,
   });
 };
+const createTransferencia = async (props: TransferenciaInput) => {
+  return await transferenciaFinanceira.create(props);
+};
+const createEstorno = async (props: EstornoTransferenciaInput) => {
+  return await transferenciaFinanceira.reverse(props);
+};
 const orchestrator = {
   clearDatabase,
   createCargo,
@@ -214,6 +226,8 @@ const orchestrator = {
   createRegistro,
   createConta,
   createTabela,
+  createTransferencia,
+  createEstorno,
 };
 
 export default orchestrator;
