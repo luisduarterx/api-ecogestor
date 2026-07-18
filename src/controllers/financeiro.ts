@@ -5,6 +5,7 @@ import { BadRequest, UnAuthorized } from "../error";
 import material from "../model/material";
 import contaFinanceira from "../model/contaFinanceira";
 import transferenciaFinanceira from "../model/transferencia";
+import caixaFinanceiro from "../model/caixa";
 
 export const conta = {
   POST: async (req: ExtendedRequest, res: Response) => {
@@ -130,8 +131,26 @@ export const transferencia = {
   },
   GET: async (req: ExtendedRequest, res: Response) => {
     try {
-      const dataInicial = z.coerce.date().safeParse(req.query.dataInicial);
-      const dataFinal = z.coerce.date().safeParse(req.query.dataFinal);
+      const dataInicial = z
+
+        .string()
+
+        .regex(/^\d{4}-\d{2}-\d{2}$/, {
+          message: "dataInicial deve estar no formato YYYY-MM-DD",
+        })
+
+        .optional()
+        .safeParse(req.query.dataInicial);
+      const dataFinal = z
+
+        .string()
+
+        .regex(/^\d{4}-\d{2}-\d{2}$/, {
+          message: "dataInicial deve estar no formato YYYY-MM-DD",
+        })
+
+        .optional()
+        .safeParse(req.query.dataFinal);
 
       if (!dataFinal.success || !dataInicial.success) {
         console.log(dataFinal.error, dataInicial.error);
@@ -195,4 +214,44 @@ export const transferencia = {
       throw error;
     }
   },
+};
+export const caixa = {
+  POST: async (req: ExtendedRequest, res: Response) => {
+    try {
+      if (!req.user?.id) {
+        throw new UnAuthorized();
+      }
+      const body = z
+        .object({
+          observacao: z.string().max(150).optional(),
+        })
+        .optional()
+        .safeParse(req.body);
+
+      if (!body.success) {
+        throw new BadRequest();
+      }
+
+      const caixaAberto = await caixaFinanceiro.abrir({
+        user_id: req.user.id,
+        ...body.data,
+      });
+
+      res.status(201).json(caixaAberto);
+    } catch (error) {
+      throw error;
+    }
+  },
+  POST_F: async (req: ExtendedRequest, res: Response) => {},
+  GET: async (req: ExtendedRequest, res: Response) => {},
+  GET_CONSULTA: async (req: ExtendedRequest, res: Response) => {
+    try {
+      const caixaAberto = await caixaFinanceiro.consultaFechamento();
+
+      res.status(200).json(caixaAberto);
+    } catch (error) {
+      throw error;
+    }
+  },
+  GET_UNIQUE: async (req: ExtendedRequest, res: Response) => {},
 };

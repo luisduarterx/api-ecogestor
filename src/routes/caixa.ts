@@ -1,5 +1,5 @@
-import { Request, Response, Router } from "express";
-import * as caixa from "../controllers/caixa";
+import { Router } from "express";
+import { caixa } from "../controllers/financeiro";
 import { AuthMiddleware } from "../controllers/middleware";
 import { authorize } from "../controllers/auth-middleware";
 
@@ -7,17 +7,33 @@ export const caixasRoutes = Router();
 
 //Lida com o Caixa
 caixasRoutes.get(
-  "/caixas/:caixaID",
+  "/caixa/consulta",
   AuthMiddleware,
-
-  caixa.GET
+  authorize("read:caixa"),
+  caixa.GET_CONSULTA,
+);
+caixasRoutes.get(
+  "/caixa/:id",
+  AuthMiddleware,
+  authorize("read:caixa"),
+  caixa.GET_UNIQUE,
+);
+caixasRoutes.get(
+  "/caixas/",
+  AuthMiddleware,
+  authorize("read:caixas"),
+  caixa.GET_UNIQUE,
+);
+caixasRoutes.post(
+  "/caixa/abrir",
+  AuthMiddleware,
+  authorize("create:caixa"),
+  caixa.POST,
 );
 
-caixasRoutes.post("/caixas/abrir", AuthMiddleware, caixa.POST_A);
-
 caixasRoutes.post(
-  "/caixas/fechar",
+  "/caixa/fechar",
   AuthMiddleware,
-
-  caixa.POST_F
+  authorize("update:caixa"),
+  caixa.POST_F,
 );
