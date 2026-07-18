@@ -19,10 +19,10 @@ caixasRoutes.get(
   caixa.GET_UNIQUE,
 );
 caixasRoutes.get(
-  "/caixas/",
+  "/caixas",
   AuthMiddleware,
   authorize("read:caixas"),
-  caixa.GET_UNIQUE,
+  caixa.GET,
 );
 caixasRoutes.post(
   "/caixa/abrir",
