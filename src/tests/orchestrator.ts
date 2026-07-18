@@ -215,7 +215,7 @@ const createConta = async (Props: {
     nome: Props.nome,
     saldo_inicial: Props.saldo_inicial,
     conta_padrao: Props.conta_padrao,
-    status: Props.status || undefined,
+    status: Props.status ?? undefined,
   });
 };
 

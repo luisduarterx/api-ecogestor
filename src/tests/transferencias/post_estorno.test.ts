@@ -56,6 +56,44 @@ describe("POST /v1/financeiro/transferencia/estorno/${transferencia.id}", () => 
     expect(response.body.movimentacoes[0].saldo_final).toBe(100);
     expect(response.body.movimentacoes[1].saldo_final).toBe(100);
   });
+  test("Bloqueia estorno na conta padrão sem caixa aberto", async () => {
+    const user = await orchestrator.userAuthenticated({});
+    const contaPadrao = await orchestrator.createConta({
+      nome: "CONTA PADRAO",
+      conta_padrao: true,
+      saldo_inicial: 100,
+    });
+    const destino = await orchestrator.createConta({
+      nome: "CONTA DESTINO",
+      conta_padrao: false,
+      saldo_inicial: 100,
+    });
+    await orchestrator.abrirCaixa({
+      user_id: user.id,
+      conta_id: contaPadrao.id,
+    });
+    const transferencia = await orchestrator.createTransferencia({
+      valor: 50,
+      conta_origem_id: contaPadrao.id,
+      conta_destino_id: destino.id,
+      user_id: user.id,
+    });
+    await request(app)
+      .post("/v1/financeiro/caixa/fechar")
+      .send({ saldo_informado: 50 })
+      .auth(user.jwt, { type: "bearer" })
+      .expect(200);
+
+    const response = await request(app)
+      .post(`/v1/financeiro/transferencia/estorno/${transferencia.id}`)
+      .send({ motivo: "ESTORNO FORA DO CAIXA" })
+      .auth(user.jwt, { type: "bearer" })
+      .expect(409);
+
+    expect(response.body.mensagem).toBe(
+      "A conta padrão não pode ser movimentada sem um caixa aberto.",
+    );
+  });
   // test("Deve criar um estorno de uma conta com caixa aberto", async () => {
   //   const user = await orchestrator.userAuthenticated({
   //     nome: "ADMINISTRADOR",

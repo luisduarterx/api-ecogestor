@@ -1,4 +1,4 @@
-import { Response, Router } from "express";
+import { Router } from "express";
 import { transferencia } from "../controllers/financeiro";
 import { AuthMiddleware } from "../controllers/middleware";
 import { authorize } from "../controllers/auth-middleware";
@@ -9,13 +9,11 @@ export const finTransfRoutes = Router();
 finTransfRoutes.get(
   "/transferencia",
   AuthMiddleware,
-  AuthMiddleware,
   authorize("read:contas"),
   transferencia.GET,
 );
 finTransfRoutes.get(
   "/transferencia/:id",
-  AuthMiddleware,
   AuthMiddleware,
   authorize("read:contas"),
   transferencia.GET_UNIQUE,

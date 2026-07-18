@@ -1,4 +1,4 @@
-import { Response, Router } from "express";
+import { Router } from "express";
 import { conta } from "../controllers/financeiro";
 import { AuthMiddleware } from "../controllers/middleware";
 import { authorize } from "../controllers/auth-middleware";
@@ -9,13 +9,11 @@ export const contaRoutes = Router();
 contaRoutes.get(
   "/contas",
   AuthMiddleware,
-  AuthMiddleware,
   authorize("read:contas"),
   conta.GET,
 );
 contaRoutes.patch(
   "/contas/:id",
-  AuthMiddleware,
   AuthMiddleware,
   authorize("update:conta"),
   conta.PATCH,
@@ -37,7 +35,6 @@ contaRoutes.post(
 
 contaRoutes.delete(
   "/contas/:id",
-  AuthMiddleware,
   AuthMiddleware,
   authorize("delete:conta"),
   conta.DELETE,

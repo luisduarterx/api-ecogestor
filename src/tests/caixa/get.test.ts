@@ -74,7 +74,8 @@ describe("consultas de caixa", () => {
       conta: { id: conta.id, nome: conta.nome },
       saldo_inicial: 1000,
     });
-    expect(response.body.movimentacoes).toHaveLength(2);
+    expect(response.body.movimentacoes).toHaveLength(1);
+    expect(response.body.movimentacoes[0].conta_id).toBe(conta.id);
     expect(
       response.body.movimentacoes.every(
         (movimentacao: { valor: unknown }) =>
