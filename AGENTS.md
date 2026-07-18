@@ -47,6 +47,7 @@ para empresas de compra e venda de materiais recicláveis.
 - Estornos devem gerar movimentos inversos e preservar histórico.
 - Não apagar movimentações financeiras para representar um estorno.
 - Respostas de endpoint que são relacionados a valor monetario e peso devem ser retornados em tipo numérico
+- Não haverá baixa parcial e nem uso do saldo do Registro na V1.
 
 ## Regras de pedidos
 
@@ -57,6 +58,17 @@ para empresas de compra e venda de materiais recicláveis.
 - O fechamento deve validar itens e pagamentos.
 - A soma dos pagamentos deve corresponder ao total do pedido.
 - Cancelamentos e estornos devem preservar rastreabilidade.
+- Pedido nasce em rascunho sem registro e sem caixa.
+- Registro é obrigatorio no fechamento.
+- Cada pedido gera um ou mais lancamentos integrais.
+- Cada lancamento pode ser baixado imediatamente ou permanecer aberto.
+
+## Regras de Estoque
+
+- Conversão terá quantidades distintas de origem e destino.
+- Estoque negativo será permitido temporariamente.
+- Reabertura de pedido ou cancelamento de conversão preservará historico por movimentos inversos.
+- Entradas/Saidas Avulsas são permitidas com motivo obrigatório.
 
 ## Forma de trabalho
 
