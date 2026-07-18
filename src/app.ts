@@ -10,8 +10,7 @@ import { registRoutes } from "./routes/registros";
 import { categoriasRoutes } from "./routes/categorias";
 import { materiaisRoutes } from "./routes/materiais";
 import { caixasRoutes } from "./routes/caixa";
-import { movimRoutes } from "./routes/movFinanceiro";
-import { pedidosRoutes } from "./routes/pedidos";
+
 import { popular } from "./inicial";
 import { statusRouter } from "./routes/status";
 
@@ -55,8 +54,6 @@ app.use("/v1", registRoutes);
 app.use("/v1", categoriasRoutes);
 app.use("/v1", materiaisRoutes);
 
-app.use("/v1", movimRoutes);
-app.use("/v1", pedidosRoutes);
 app.use("/v1", statusRouter);
 
 //financeiro

@@ -74,6 +74,23 @@ describe("GET /v1/financeiro/caixa/consulta", () => {
     ).toBe(true);
   });
 
+  test("Retorna 404 quando não existe caixa aberto", async () => {
+    const user = await orchestrator.userAuthenticated({
+      nome: "ADMINISTRADOR",
+    });
+
+    const response = await request(app)
+      .get("/v1/financeiro/caixa/consulta")
+      .auth(user.jwt, { type: "bearer" })
+      .expect("Content-Type", /json/)
+      .expect(404);
+
+    expect(response.body).toMatchObject({
+      mensagem: "Não foi encontrado nenhum caixa aberto!",
+      statusCode: 404,
+    });
+  });
+
   // test("Tenta criar um caixa, com um caixa já aberto", async () => {
   //   const user = await orchestrator.userAuthenticated({
   //     nome: "ADMINISTRADOR",

@@ -225,6 +225,7 @@ export const caixa = {
         .object({
           observacao: z.string().max(150).optional(),
         })
+        .strict()
         .optional()
         .safeParse(req.body);
 
@@ -242,8 +243,55 @@ export const caixa = {
       throw error;
     }
   },
-  POST_F: async (req: ExtendedRequest, res: Response) => {},
-  GET: async (req: ExtendedRequest, res: Response) => {},
+  POST_F: async (req: ExtendedRequest, res: Response) => {
+    if (!req.user?.id) {
+      throw new UnAuthorized();
+    }
+
+    const body = z
+      .object({
+        saldo_informado: z.union([
+          z.number().nonnegative(),
+          z.string().regex(/^\d+(?:\.\d{1,2})?$/),
+        ]),
+        motivo: z.string().max(250).optional(),
+        observacao: z.string().max(250).optional(),
+      })
+      .strict()
+      .safeParse(req.body);
+
+    if (!body.success) {
+      throw new BadRequest();
+    }
+
+    const caixaFechado = await caixaFinanceiro.fechar({
+      ...body.data,
+      user_id: req.user.id,
+    });
+
+    res.status(200).json(caixaFechado);
+  },
+  GET: async (req: ExtendedRequest, res: Response) => {
+    const query = z
+      .object({
+        dataInicial: z.coerce.date().optional(),
+        dataFinal: z.coerce.date().optional(),
+      })
+      .strict()
+      .refine(
+        ({ dataFinal, dataInicial }) =>
+          !dataFinal || !dataInicial || dataInicial <= dataFinal,
+        { message: "A data inicial deve ser anterior à data final." },
+      )
+      .safeParse(req.query);
+
+    if (!query.success) {
+      throw new BadRequest();
+    }
+
+    const caixas = await caixaFinanceiro.findAll(query.data);
+    res.status(200).json(caixas);
+  },
   GET_CONSULTA: async (req: ExtendedRequest, res: Response) => {
     try {
       const caixaAberto = await caixaFinanceiro.consultaFechamento();
@@ -253,5 +301,14 @@ export const caixa = {
       throw error;
     }
   },
-  GET_UNIQUE: async (req: ExtendedRequest, res: Response) => {},
+  GET_UNIQUE: async (req: ExtendedRequest, res: Response) => {
+    const id = z.coerce.number().int().positive().safeParse(req.params.id);
+
+    if (!id.success) {
+      throw new BadRequest();
+    }
+
+    const caixaEncontrado = await caixaFinanceiro.getByID(id.data);
+    res.status(200).json(caixaEncontrado);
+  },
 };

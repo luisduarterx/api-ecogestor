@@ -3,7 +3,6 @@ import { app } from "../../../app";
 import { test, beforeEach, expect, describe } from "vitest";
 import orchestrator from "../../orchestrator";
 import { gerarToken } from "../../../services/jwt";
-import banco from "../../../model/bancos";
 import { TableInput } from "../../../model/tabela";
 
 beforeEach(async () => {
