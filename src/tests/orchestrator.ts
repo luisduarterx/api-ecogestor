@@ -21,6 +21,8 @@ export async function clearDatabase() {
   await prisma.movimentacaoFinanceira.deleteMany();
   await prisma.transferenciaFinanceira.deleteMany();
   await prisma.caixa.deleteMany();
+  await prisma.lancamentoFinanceiro.deleteMany();
+  await prisma.categoriaLancamento.deleteMany();
   await prisma.user.deleteMany();
   await prisma.permissoes.deleteMany();
   await prisma.cargo.deleteMany();
@@ -125,6 +127,15 @@ const userAuthenticated = async (Props: {
       { nome: "read:caixas" },
       { nome: "create:caixa" },
       { nome: "update:caixa" },
+      { nome: "create:categoria_lancamento" },
+      { nome: "read:categorias_lancamento" },
+      { nome: "read:categoria_lancamento" },
+      { nome: "update:categoria_lancamento" },
+      { nome: "delete:categoria_lancamento" },
+      { nome: "create:lancamento" },
+      { nome: "read:lancamentos" },
+      { nome: "read:lancamento" },
+      { nome: "update:lancamento" },
     ],
     skipDuplicates: true, // Evita erros se rodar o teste localmente pela segunda vez
   });
