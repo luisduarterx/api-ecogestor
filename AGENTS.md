@@ -51,17 +51,28 @@ para empresas de compra e venda de materiais recicláveis.
 
 ## Regras de pedidos
 
-- Pedido em rascunho não movimenta estoque nem financeiro.''
-- Pedido pode ser aberto sem definir um Registro
+- Pedido em rascunho não movimenta estoque nem financeiro.
+- Pedido só pode ser aberto com um caixa aberto e deve ser vinculado a ele.
+- Pedido pode ser aberto sem definir um Registro.
 - Pedido ao ser reaberto, as movimentacoes(financeiras,estoque) referentes a ele devem ser estornadas mantendo a rastreabilidade.
 - A tabela de precos do registro informado deve ser utilizada, na falta de uma tabela, utilizar a tabela padrao.
 - O fechamento deve validar itens e pagamentos.
 - A soma dos pagamentos deve corresponder ao total do pedido.
 - Cancelamentos e estornos devem preservar rastreabilidade.
-- Pedido nasce em rascunho sem registro e sem caixa.
+- Pedido nasce em rascunho sem registro, vinculado obrigatoriamente ao caixa aberto.
 - Registro é obrigatorio no fechamento.
 - Cada pedido gera um ou mais lancamentos integrais.
 - Cada lancamento pode ser baixado imediatamente ou permanecer aberto.
+- O caixa não pode ser fechado enquanto possuir pedido aberto.
+- Pedido cancelado deve permanecer armazenado para preservar histórico.
+- Cancelamento é permitido somente para pedido aberto e com seu caixa ainda aberto.
+- Reabertura é permitida somente para pedido fechado e com seu caixa ainda aberto.
+- Pedido vinculado a caixa fechado não pode ser cancelado nem reaberto.
+- Peso bruto, tara, percentual de impureza e preço são informados pelo usuário.
+- A quantidade do item é o peso após tara e desconto percentual da impureza.
+- O backend valida o preço informado, mas não escolhe nem recalcula o preço do item.
+- Ao finalizar, todos os lançamentos devem ser vinculados ao caixa do pedido, mesmo quando permanecerem abertos.
+- Pode conter mais de um mesmo material por pedido.
 
 ## Regras de Estoque
 

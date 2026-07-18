@@ -20,8 +20,10 @@ import caixaFinanceiro from "../model/caixa";
 export async function clearDatabase() {
   await prisma.movimentacaoFinanceira.deleteMany();
   await prisma.transferenciaFinanceira.deleteMany();
-  await prisma.caixa.deleteMany();
+  await prisma.movimentacaoEstoque.deleteMany();
   await prisma.lancamentoFinanceiro.deleteMany();
+  await prisma.pedido.deleteMany();
+  await prisma.caixa.deleteMany();
   await prisma.categoriaLancamento.deleteMany();
   await prisma.user.deleteMany();
   await prisma.permissoes.deleteMany();
@@ -136,6 +138,13 @@ const userAuthenticated = async (Props: {
       { nome: "read:lancamentos" },
       { nome: "read:lancamento" },
       { nome: "update:lancamento" },
+      { nome: "create:pedido" },
+      { nome: "read:pedidos" },
+      { nome: "read:pedido" },
+      { nome: "update:pedido" },
+      { nome: "finalize:pedido" },
+      { nome: "cancel:pedido" },
+      { nome: "reopen:pedido" },
     ],
     skipDuplicates: true, // Evita erros se rodar o teste localmente pela segunda vez
   });

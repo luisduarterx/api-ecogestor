@@ -20,6 +20,7 @@ import { tabelasRoutes } from "./routes/tabelas";
 import { finTransfRoutes } from "./routes/transferenciaFin";
 import { lancamentosFinanceirosRoutes } from "./routes/lancamentosFinanceiros";
 import { categoriasLancamentoRoutes } from "./routes/categoriasLancamento";
+import { pedidosRoutes } from "./routes/pedidos";
 
 export const app = express();
 
@@ -65,6 +66,7 @@ app.use("/v1", tabelasRoutes);
 app.use("/v1/financeiro", caixasRoutes);
 app.use("/v1/financeiro", lancamentosFinanceirosRoutes);
 app.use("/v1/financeiro", categoriasLancamentoRoutes);
+app.use("/v1", pedidosRoutes);
 // ADICIONE ESSA LINHA PARA TESTAR:
 
 app.use("/v1", errorHandler);

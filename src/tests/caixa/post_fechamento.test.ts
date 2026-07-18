@@ -14,6 +14,33 @@ beforeEach(async () => {
 });
 
 describe("POST /v1/financeiro/caixa/fechar", () => {
+  test("não fecha o caixa enquanto existir pedido aberto vinculado", async () => {
+    const user = await orchestrator.userAuthenticated({ nome: "ADMIN" });
+    const conta = await orchestrator.createConta({
+      conta_padrao: true,
+      saldo_inicial: 1000,
+      nome: "DINHEIRO",
+    });
+    const caixa = await orchestrator.abrirCaixa({
+      user_id: user.id,
+      conta_id: conta.id,
+    });
+    await prisma.pedido.create({
+      data: { tipo: "COMPRA", userID: user.id, caixaID: caixa.id },
+    });
+
+    await request(app)
+      .post("/v1/financeiro/caixa/fechar")
+      .send({ saldo_informado: 1000 })
+      .auth(user.jwt, { type: "bearer" })
+      .expect(409);
+
+    const caixaPersistido = await prisma.caixa.findUniqueOrThrow({
+      where: { id: caixa.id },
+    });
+    expect(caixaPersistido.status).toBe(StatusCaixa.ABERTO);
+  });
+
   test("fecha o caixa sem criar correção quando não existe diferença", async () => {
     const user = await orchestrator.userAuthenticated({ nome: "ADMIN" });
     const conta = await orchestrator.createConta({
