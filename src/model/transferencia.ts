@@ -1,15 +1,5 @@
-import {
-  BadRequest,
-  ConflictError,
-  InternalError,
-  NotFound,
-  NotPossible,
-} from "../error";
-import {
-  DirecaoFinanceira,
-  OrigemMovimentacao,
-  Prisma,
-} from "../../generated/prisma/client";
+import { Prisma } from "../../generated/prisma/client";
+import { ConflictError, NotFound } from "../error";
 import { prisma } from "../libs/prisma";
 
 export type TransferenciaInput = {
@@ -19,10 +9,46 @@ export type TransferenciaInput = {
   user_id: number;
   descricao?: string;
 };
+
 export type EstornoTransferenciaInput = {
   id: number;
   motivo: string;
   user_id: number;
+};
+
+type FindAllTransferenciasInput = {
+  dataInicial?: string;
+  dataFinal?: string;
+};
+
+const serializarMovimentacao = <T extends {
+  saldo_inicial: Prisma.Decimal;
+  valor: Prisma.Decimal;
+  saldo_final: Prisma.Decimal;
+}>(movimentacao: T) => ({
+  ...movimentacao,
+  saldo_inicial: movimentacao.saldo_inicial.toNumber(),
+  valor: movimentacao.valor.toNumber(),
+  saldo_final: movimentacao.saldo_final.toNumber(),
+});
+
+const caixaDaContaPadrao = async (
+  trx: Prisma.TransactionClient,
+  contas: Array<{ id: number; conta_padrao: boolean }>,
+) => {
+  const contaPadrao = contas.find((conta) => conta.conta_padrao);
+  if (!contaPadrao) return null;
+
+  const caixa = await trx.caixa.findFirst({
+    where: { conta_id: contaPadrao.id, status: "ABERTO" },
+    orderBy: { id: "desc" },
+  });
+  if (!caixa) {
+    throw new ConflictError(
+      "A conta padrão não pode ser movimentada sem um caixa aberto.",
+    );
+  }
+  return caixa;
 };
 
 const create = async ({
@@ -37,67 +63,56 @@ const create = async ({
       "A conta de origem e a conta de destino devem ser diferentes.",
     );
   }
-
   if (valor <= 0) {
     throw new ConflictError(
       "O valor da transferência deve ser maior que zero.",
     );
   }
 
-  try {
-    return await prisma.$transaction(async (trx) => {
-      const contaOrigemAtual = await trx.contaFinanceira.findUnique({
-        where: {
-          id: conta_origem_id,
-        },
-      });
-
-      const contaDestinoAtual = await trx.contaFinanceira.findUnique({
-        where: {
-          id: conta_destino_id,
-        },
-      });
+  return prisma.$transaction(
+    async (trx) => {
+      const [contaOrigemAtual, contaDestinoAtual] = await Promise.all([
+        trx.contaFinanceira.findUnique({ where: { id: conta_origem_id } }),
+        trx.contaFinanceira.findUnique({ where: { id: conta_destino_id } }),
+      ]);
 
       if (!contaOrigemAtual || !contaDestinoAtual) {
         throw new NotFound("A conta selecionada não foi encontrada.");
       }
+      if (!contaOrigemAtual.status || !contaDestinoAtual.status) {
+        throw new ConflictError(
+          "Não é possível transferir valores utilizando uma conta inativa.",
+        );
+      }
 
+      const caixa = await caixaDaContaPadrao(trx, [
+        contaOrigemAtual,
+        contaDestinoAtual,
+      ]);
       const contaOrigem = await trx.contaFinanceira.update({
-        where: {
-          id: conta_origem_id,
-        },
-        data: {
-          saldo_atual: { decrement: valor },
-        },
+        where: { id: conta_origem_id },
+        data: { saldo_atual: { decrement: valor } },
       });
       const contaDestino = await trx.contaFinanceira.update({
-        where: {
-          id: conta_destino_id,
-        },
-        data: {
-          saldo_atual: { increment: valor },
-        },
+        where: { id: conta_destino_id },
+        data: { saldo_atual: { increment: valor } },
       });
-
-      const caixaAberto = await trx.caixa.findFirst({
-        where: {
-          status: "ABERTO",
-          conta_id: { in: [conta_destino_id, conta_origem_id] },
-        },
-      });
-      let caixa_id = caixaAberto?.id;
+      const caixaOrigemId = contaOrigemAtual.conta_padrao ? caixa?.id : null;
+      const caixaDestinoId = contaDestinoAtual.conta_padrao ? caixa?.id : null;
+      const descricaoNormalizada = descricao?.trim();
 
       const novaTransferencia = await trx.transferenciaFinanceira.create({
         data: {
           conta_origem_id,
           conta_destino_id,
           valor,
-          descricao: `de ID ${conta_origem_id} P/ ID ${conta_destino_id} - ${descricao}`,
+          descricao: `de ID ${conta_origem_id} P/ ID ${conta_destino_id}${
+            descricaoNormalizada ? ` - ${descricaoNormalizada}` : ""
+          }`,
           user_id,
-          caixa_id,
+          caixa_id: caixa?.id,
           movimentacoes: {
             create: [
-              //ORIGEM
               {
                 conta_id: conta_origem_id,
                 direcao: "SAIDA",
@@ -106,7 +121,7 @@ const create = async ({
                 saldo_inicial: contaOrigemAtual.saldo_atual,
                 saldo_final: contaOrigem.saldo_atual,
                 valor,
-                caixa_id,
+                caixa_id: caixaOrigemId,
                 user_id,
               },
               {
@@ -117,7 +132,7 @@ const create = async ({
                 saldo_inicial: contaDestinoAtual.saldo_atual,
                 saldo_final: contaDestino.saldo_atual,
                 valor,
-                caixa_id,
+                caixa_id: caixaDestinoId,
                 user_id,
               },
             ],
@@ -125,117 +140,87 @@ const create = async ({
         },
         include: { movimentacoes: true },
       });
+
       return {
-        id: novaTransferencia.id,
-        conta_origem_id,
-        conta_destino_id,
-        valor: Number(novaTransferencia.valor),
-        descricao: novaTransferencia.descricao,
-        criado_em: novaTransferencia.criado_em,
-        user_id,
-        caixa_id: novaTransferencia.caixa_id,
-        movimentacoes: novaTransferencia.movimentacoes.map((mov) => ({
-          ...mov,
-          saldo_final: Number(mov.saldo_final),
-          saldo_inicial: Number(mov.saldo_inicial),
-          valor: Number(mov.valor),
-        })),
+        ...novaTransferencia,
+        valor: novaTransferencia.valor.toNumber(),
+        movimentacoes: novaTransferencia.movimentacoes.map(
+          serializarMovimentacao,
+        ),
       };
-    });
-  } catch (error) {
-    throw error;
-  }
+    },
+    { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
+  );
 };
+
 const reverse = async ({ id, motivo, user_id }: EstornoTransferenciaInput) => {
-  try {
-    if (!motivo.trim()) {
-      throw new ConflictError("O motivo do estorno deve ser informado.");
-    }
-    return prisma.$transaction(async (trx) => {
+  if (!motivo.trim()) {
+    throw new ConflictError("O motivo do estorno deve ser informado.");
+  }
+
+  return prisma.$transaction(
+    async (trx) => {
       const transferenciaOriginal =
         await trx.transferenciaFinanceira.findUnique({
-          where: {
-            id,
-          },
-          include: {
-            movimentacoes: true,
-          },
+          where: { id },
+          include: { movimentacoes: true },
         });
       if (!transferenciaOriginal) {
         throw new NotFound("Transferência não encontrada.");
       }
-
       if (transferenciaOriginal.estorno_de_id) {
         throw new ConflictError(
           "Uma transferência de estorno não pode ser estornada diretamente.",
         );
       }
-
       if (transferenciaOriginal.estornada) {
         throw new ConflictError("Esta transferência já foi estornada.");
       }
 
-      const contaOrigemEstorno = await trx.contaFinanceira.findUnique({
-        where: {
-          id: transferenciaOriginal.conta_destino_id,
-        },
-      });
-      const contaDestinoEstorno = await trx.contaFinanceira.findUnique({
-        where: {
-          id: transferenciaOriginal.conta_origem_id,
-        },
-      });
-
+      const [contaOrigemEstorno, contaDestinoEstorno] = await Promise.all([
+        trx.contaFinanceira.findUnique({
+          where: { id: transferenciaOriginal.conta_destino_id },
+        }),
+        trx.contaFinanceira.findUnique({
+          where: { id: transferenciaOriginal.conta_origem_id },
+        }),
+      ]);
       if (!contaOrigemEstorno || !contaDestinoEstorno) {
         throw new NotFound(
           "Uma das contas vinculadas à transferência não foi encontrada.",
         );
       }
+      if (!contaOrigemEstorno.status || !contaDestinoEstorno.status) {
+        throw new ConflictError(
+          "Não é possível estornar a transferência utilizando uma conta inativa.",
+        );
+      }
+
+      const caixa = await caixaDaContaPadrao(trx, [
+        contaOrigemEstorno,
+        contaDestinoEstorno,
+      ]);
       const valor = transferenciaOriginal.valor;
-
       const contaOrigemAtualizada = await trx.contaFinanceira.update({
-        where: {
-          id: contaOrigemEstorno.id,
-        },
-
-        data: {
-          saldo_atual: {
-            decrement: valor,
-          },
-        },
+        where: { id: contaOrigemEstorno.id },
+        data: { saldo_atual: { decrement: valor } },
       });
-
       const contaDestinoAtualizada = await trx.contaFinanceira.update({
-        where: {
-          id: contaDestinoEstorno.id,
-        },
-
-        data: {
-          saldo_atual: {
-            increment: valor,
-          },
-        },
+        where: { id: contaDestinoEstorno.id },
+        data: { saldo_atual: { increment: valor } },
       });
-
-      const caixaAberto = await trx.caixa.findFirst({
-        where: {
-          status: "ABERTO",
-          conta_id: {
-            in: [contaOrigemAtualizada.id, contaDestinoAtualizada.id],
-          },
-        },
-      });
-      let caixa_id = caixaAberto?.id;
+      const caixaOrigemId = contaOrigemEstorno.conta_padrao ? caixa?.id : null;
+      const caixaDestinoId = contaDestinoEstorno.conta_padrao ? caixa?.id : null;
 
       const transferenciaEstorno = await trx.transferenciaFinanceira.create({
         data: {
           conta_origem_id: contaOrigemEstorno.id,
           conta_destino_id: contaDestinoEstorno.id,
           valor,
-          descricao: `Estorno da transferência #${transferenciaOriginal.id}: ${motivo}`,
+          descricao: `Estorno da transferência #${transferenciaOriginal.id}: ${motivo.trim()}`,
           user_id,
           estorno_de_id: transferenciaOriginal.id,
-          caixa_id,
+          caixa_id: caixa?.id,
           movimentacoes: {
             create: [
               {
@@ -246,7 +231,7 @@ const reverse = async ({ id, motivo, user_id }: EstornoTransferenciaInput) => {
                 valor,
                 saldo_inicial: contaOrigemEstorno.saldo_atual,
                 saldo_final: contaOrigemAtualizada.saldo_atual,
-                caixa_id,
+                caixa_id: caixaOrigemId,
                 user_id,
               },
               {
@@ -257,16 +242,13 @@ const reverse = async ({ id, motivo, user_id }: EstornoTransferenciaInput) => {
                 valor,
                 saldo_inicial: contaDestinoEstorno.saldo_atual,
                 saldo_final: contaDestinoAtualizada.saldo_atual,
-                caixa_id,
+                caixa_id: caixaDestinoId,
                 user_id,
               },
             ],
           },
         },
-
-        include: {
-          movimentacoes: true,
-        },
+        include: { movimentacoes: true },
       });
 
       await trx.transferenciaFinanceira.update({
@@ -274,92 +256,67 @@ const reverse = async ({ id, motivo, user_id }: EstornoTransferenciaInput) => {
         data: {
           estornada: true,
           movimentacoes: {
-            updateMany: [
-              {
-                where: { origem: "TRANSFERENCIA" },
-                data: {
-                  estornada: true,
-                },
-              },
-            ],
+            updateMany: {
+              where: { origem: "TRANSFERENCIA" },
+              data: { estornada: true },
+            },
           },
         },
       });
-      return {
-        id: transferenciaEstorno.id,
-        conta_origem_id: contaOrigemAtualizada.id,
-        conta_destino_id: contaDestinoAtualizada.id,
-        valor: Number(transferenciaEstorno.valor),
-        descricao: transferenciaEstorno.descricao,
-        criado_em: transferenciaEstorno.criado_em,
-        user_id,
-        caixa_id: transferenciaEstorno.caixa_id,
-        movimentacoes: transferenciaEstorno.movimentacoes.map((mov) => ({
-          ...mov,
-          saldo_final: Number(mov.saldo_final),
-          saldo_inicial: Number(mov.saldo_inicial),
-          valor: Number(mov.valor),
-        })),
-      };
-    });
-  } catch (error) {
-    throw error;
-  }
-};
 
-type FindAllTransferenciasInput = {
-  dataInicial?: string;
-  dataFinal?: string;
+      return {
+        ...transferenciaEstorno,
+        valor: transferenciaEstorno.valor.toNumber(),
+        movimentacoes: transferenciaEstorno.movimentacoes.map(
+          serializarMovimentacao,
+        ),
+      };
+    },
+    { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
+  );
 };
 
 const findAll = async ({
   dataInicial,
   dataFinal,
 }: FindAllTransferenciasInput) => {
-  if (!dataFinal || !dataInicial) {
-    throw new InternalError();
-  }
-  const dataInicialParse = `${dataInicial}T00:00:00.000Z`;
-  const dataFinalParse = `${dataFinal}T23:59:59.999Z`;
-  console.log("DATAS", dataFinalParse, dataInicialParse);
-
   const transferencias = await prisma.transferenciaFinanceira.findMany({
     where: {
-      criado_em: {
-        gte: dataInicialParse,
-        lte: dataFinalParse,
-      },
+      criado_em:
+        dataInicial || dataFinal
+          ? {
+              gte: dataInicial
+                ? new Date(`${dataInicial}T00:00:00.000Z`)
+                : undefined,
+              lte: dataFinal
+                ? new Date(`${dataFinal}T23:59:59.999Z`)
+                : undefined,
+            }
+          : undefined,
     },
-
-    orderBy: {
-      criado_em: "desc",
-    },
+    orderBy: { criado_em: "desc" },
   });
 
-  return transferencias;
+  return transferencias.map((transferencia) => ({
+    ...transferencia,
+    valor: transferencia.valor.toNumber(),
+  }));
 };
+
 const getByID = async (id: number) => {
-  try {
-    const transfExist = await prisma.transferenciaFinanceira.findUnique({
-      where: { id },
-    });
-
-    if (!transfExist?.id) {
-      throw new NotFound();
-    }
-
-    return { ...transfExist, valor: Number(transfExist.valor) };
-  } catch (error) {
-    throw error;
+  const transferencia = await prisma.transferenciaFinanceira.findUnique({
+    where: { id },
+    include: { movimentacoes: { orderBy: { id: "asc" } } },
+  });
+  if (!transferencia) {
+    throw new NotFound();
   }
+
+  return {
+    ...transferencia,
+    valor: transferencia.valor.toNumber(),
+    movimentacoes: transferencia.movimentacoes.map(serializarMovimentacao),
+  };
 };
 
-const transferenciaFinanceira = {
-  create,
-  reverse,
-  findAll,
-  getByID,
-};
-
-export default transferenciaFinanceira;
-// parei aqui nas asteracoes feitas em tipomovimentacao
+export default { create, reverse, findAll, getByID };

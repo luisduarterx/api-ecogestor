@@ -66,6 +66,46 @@ describe("PATCH /v1/financeiro/contas/[id]/", () => {
     });
   });
 
+  test("promove uma conta para padrão quando não existe outra padrão", async () => {
+    const user = await orchestrator.userAuthenticated({});
+    const conta = await orchestrator.createConta({
+      nome: "CONTA",
+      saldo_inicial: 0,
+      conta_padrao: false,
+    });
+
+    const response = await request(app)
+      .patch(`/v1/financeiro/contas/${conta.id}`)
+      .send({ conta_padrao: true })
+      .auth(user.jwt, { type: "bearer" })
+      .expect(200);
+
+    expect(response.body.conta_padrao).toBe(true);
+  });
+
+  test("não permite alterar a conta padrão com caixa aberto", async () => {
+    const user = await orchestrator.userAuthenticated({});
+    const conta = await orchestrator.createConta({
+      nome: "CONTA PADRAO",
+      saldo_inicial: 100,
+      conta_padrao: true,
+    });
+    await orchestrator.abrirCaixa({
+      user_id: user.id,
+      conta_id: conta.id,
+    });
+
+    const response = await request(app)
+      .patch(`/v1/financeiro/contas/${conta.id}`)
+      .send({ conta_padrao: false })
+      .auth(user.jwt, { type: "bearer" })
+      .expect(409);
+
+    expect(response.body.mensagem).toBe(
+      "A conta padrão não pode ser alterada enquanto houver caixa aberto.",
+    );
+  });
+
   test("Com id inválido", async () => {
     const user = await orchestrator.userAuthenticated({
       nome: "ADMINISTRADOR",

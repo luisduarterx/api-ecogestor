@@ -2,7 +2,6 @@ import { Response } from "express";
 import { ExtendedRequest } from "../types/extended-request";
 import { z } from "zod";
 import { BadRequest, UnAuthorized } from "../error";
-import material from "../model/material";
 import contaFinanceira from "../model/contaFinanceira";
 import transferenciaFinanceira from "../model/transferencia";
 import caixaFinanceiro from "../model/caixa";
@@ -13,7 +12,7 @@ export const conta = {
       const data = z
         .object({
           nome: z.string().toUpperCase().min(3),
-          saldo_inicial: z.coerce.number().positive(),
+          saldo_inicial: z.coerce.number().nonnegative(),
           conta_padrao: z.boolean().optional(),
         })
         .strict()
@@ -26,7 +25,7 @@ export const conta = {
       const novaConta = await contaFinanceira.create(data.data);
 
       res.status(201).json(novaConta);
-    } catch (error: any) {
+    } catch (error: unknown) {
       throw error;
     }
   },
@@ -46,7 +45,6 @@ export const conta = {
         })
         .strict()
         .safeParse(req.body);
-      console.log(req.body);
       if (!body.success || !contaID.success) {
         throw new BadRequest();
       }
@@ -56,7 +54,7 @@ export const conta = {
         data: body.data,
       });
       res.status(200).json(contaAtualizada);
-    } catch (error: any) {
+    } catch (error: unknown) {
       throw error;
     }
   },
@@ -65,7 +63,7 @@ export const conta = {
       const contasEncontradas = await contaFinanceira.findAll();
 
       res.json(contasEncontradas);
-    } catch (error: any) {
+    } catch (error: unknown) {
       throw error;
     }
   },
@@ -87,7 +85,6 @@ export const conta = {
   DELETE: async (req: ExtendedRequest, res: Response) => {
     try {
       const id = z.coerce.number().positive().safeParse(req.params.id);
-      console.log(id);
       if (!id.success) {
         throw new BadRequest();
       }
@@ -112,7 +109,6 @@ export const transferencia = {
         })
         .safeParse(req.body);
 
-      console.log(data.error);
       if (!data.success) {
         throw new BadRequest();
       }
@@ -131,39 +127,27 @@ export const transferencia = {
   },
   GET: async (req: ExtendedRequest, res: Response) => {
     try {
-      const dataInicial = z
-
-        .string()
-
-        .regex(/^\d{4}-\d{2}-\d{2}$/, {
-          message: "dataInicial deve estar no formato YYYY-MM-DD",
+      const query = z
+        .object({
+          dataInicial: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+          dataFinal: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
         })
+        .strict()
+        .refine(
+          ({ dataInicial, dataFinal }) =>
+            !dataInicial || !dataFinal || dataInicial <= dataFinal,
+        )
+        .safeParse(req.query);
 
-        .optional()
-        .safeParse(req.query.dataInicial);
-      const dataFinal = z
-
-        .string()
-
-        .regex(/^\d{4}-\d{2}-\d{2}$/, {
-          message: "dataInicial deve estar no formato YYYY-MM-DD",
-        })
-
-        .optional()
-        .safeParse(req.query.dataFinal);
-
-      if (!dataFinal.success || !dataInicial.success) {
-        console.log(dataFinal.error, dataInicial.error);
+      if (!query.success) {
         throw new BadRequest();
       }
       if (!req.user?.id) {
         throw new UnAuthorized();
       }
-      console.log(dataInicial, dataFinal);
-
       const transferenciasEncontradas = await transferenciaFinanceira.findAll({
-        dataFinal: dataFinal.data,
-        dataInicial: dataInicial.data,
+        dataFinal: query.data.dataFinal,
+        dataInicial: query.data.dataInicial,
       });
 
       res.status(200).json(transferenciasEncontradas);
@@ -208,7 +192,6 @@ export const transferencia = {
         id: id.data,
         user_id: req.user?.id,
       });
-      console.log(transferenciaEstornada);
       res.status(201).json(transferenciaEstornada);
     } catch (error) {
       throw error;

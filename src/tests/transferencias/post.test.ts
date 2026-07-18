@@ -53,6 +53,101 @@ describe("POST /v1/financeiro/transferencia", () => {
     expect(response.body.movimentacoes[0].saldo_final).toBe(50);
     expect(response.body.movimentacoes[1].saldo_final).toBe(150);
   });
+  test("Bloqueia transferência da conta padrão sem caixa aberto", async () => {
+    const user = await orchestrator.userAuthenticated({});
+    const contaPadrao = await orchestrator.createConta({
+      nome: "CONTA PADRAO",
+      conta_padrao: true,
+      saldo_inicial: 100,
+    });
+    const destino = await orchestrator.createConta({
+      nome: "CONTA DESTINO",
+      conta_padrao: false,
+      saldo_inicial: 100,
+    });
+
+    const response = await request(app)
+      .post("/v1/financeiro/transferencia")
+      .send({
+        valor: 50,
+        conta_origem_id: contaPadrao.id,
+        conta_destino_id: destino.id,
+      })
+      .auth(user.jwt, { type: "bearer" })
+      .expect(409);
+
+    expect(response.body.mensagem).toBe(
+      "A conta padrão não pode ser movimentada sem um caixa aberto.",
+    );
+  });
+
+  test("Vincula ao caixa somente o movimento da conta padrão", async () => {
+    const user = await orchestrator.userAuthenticated({});
+    const contaPadrao = await orchestrator.createConta({
+      nome: "CONTA PADRAO",
+      conta_padrao: true,
+      saldo_inicial: 100,
+    });
+    const destino = await orchestrator.createConta({
+      nome: "CONTA DESTINO",
+      conta_padrao: false,
+      saldo_inicial: 100,
+    });
+    const caixa = await orchestrator.abrirCaixa({
+      user_id: user.id,
+      conta_id: contaPadrao.id,
+    });
+
+    const response = await request(app)
+      .post("/v1/financeiro/transferencia")
+      .send({
+        valor: 50,
+        conta_origem_id: contaPadrao.id,
+        conta_destino_id: destino.id,
+      })
+      .auth(user.jwt, { type: "bearer" })
+      .expect(201);
+
+    expect(response.body.caixa_id).toBe(caixa.id);
+    expect(response.body.movimentacoes).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          conta_id: contaPadrao.id,
+          caixa_id: caixa.id,
+        }),
+        expect.objectContaining({ conta_id: destino.id, caixa_id: null }),
+      ]),
+    );
+  });
+
+  test("Bloqueia transferência com conta inativa", async () => {
+    const user = await orchestrator.userAuthenticated({});
+    const origem = await orchestrator.createConta({
+      nome: "CONTA INATIVA",
+      conta_padrao: false,
+      saldo_inicial: 100,
+      status: false,
+    });
+    const destino = await orchestrator.createConta({
+      nome: "CONTA ATIVA",
+      conta_padrao: false,
+      saldo_inicial: 100,
+    });
+
+    const response = await request(app)
+      .post("/v1/financeiro/transferencia")
+      .send({
+        valor: 50,
+        conta_origem_id: origem.id,
+        conta_destino_id: destino.id,
+      })
+      .auth(user.jwt, { type: "bearer" })
+      .expect(409);
+
+    expect(response.body.mensagem).toBe(
+      "Não é possível transferir valores utilizando uma conta inativa.",
+    );
+  });
   // test("Deve criar uma transferencia entre uma conta padrao e uma normal", async () => {
   //   const user = await orchestrator.userAuthenticated({
   //     nome: "ADMINISTRADOR",

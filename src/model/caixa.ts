@@ -211,7 +211,9 @@ const getByID = async (id: number) => {
       conta: { select: { id: true, nome: true } },
       usuario_abertura: { select: { id: true, nome: true } },
       usuario_fechamento: { select: { id: true, nome: true } },
-      movimentacoes: { orderBy: { id: "asc" } },
+      movimentacoes: {
+        orderBy: { id: "asc" },
+      },
     },
   });
 
@@ -231,12 +233,14 @@ const getByID = async (id: number) => {
         ? null
         : Number(caixa.saldo_final_informado),
     diferenca: caixa.diferenca === null ? null : Number(caixa.diferenca),
-    movimentacoes: caixa.movimentacoes.map((movimentacao) => ({
-      ...movimentacao,
-      saldo_inicial: Number(movimentacao.saldo_inicial),
-      valor: Number(movimentacao.valor),
-      saldo_final: Number(movimentacao.saldo_final),
-    })),
+    movimentacoes: caixa.movimentacoes
+      .filter((movimentacao) => movimentacao.conta_id === caixa.conta_id)
+      .map((movimentacao) => ({
+        ...movimentacao,
+        saldo_inicial: Number(movimentacao.saldo_inicial),
+        valor: Number(movimentacao.valor),
+        saldo_final: Number(movimentacao.saldo_final),
+      })),
   };
 };
 
