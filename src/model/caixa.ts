@@ -1,242 +1,216 @@
-import { NotFound, NotPossible, UnAuthorized } from "../error";
+import { no } from "zod/v4/locales";
+import { Prisma } from "../../generated/prisma/client";
+import {
+  DirecaoFinanceira,
+  OrigemMovimentacao,
+  StatusCaixa,
+} from "../../generated/prisma/enums";
+import {
+  ConflictError,
+  InternalError,
+  NotFound,
+  NotPossible,
+  UnAuthorized,
+} from "../error";
 import { prisma } from "../libs/prisma";
-import { getUserByID, userHasPermission } from "./user";
 
-export const abrirCaixa = async (userID: number, valor: number) => {
+type CaixaInput = {
+  observacao?: string;
+  user_id: number;
+};
+type FechamentoCaixaInput = {
+  user_id: number;
+  observacao?: string;
+  saldo_informado: number;
+};
+const abrir = async ({ user_id, observacao }: CaixaInput) => {
   try {
-    const caixaAberto = await prisma.livroCaixa.findMany({
-      where: { status: "ABERTO" },
+    const contaPadrao = await prisma.contaFinanceira.findFirst({
+      where: {
+        conta_padrao: true,
+      },
     });
-    console.log(caixaAberto);
-    if (caixaAberto.length > 0) {
-      throw new NotPossible(
-        "É necessário fechar o caixa anterior para abrir um novo caixa.",
+    if (!contaPadrao?.id) {
+      throw new ConflictError(
+        "O sistema não tem uma conta padrão definida.",
+        "Defina uma conta padrão nos parametros do sistema.",
       );
     }
-
-    const result = await prisma.$transaction(async (trx) => {
-      const caixa = await trx.livroCaixa.create({
-        data: {
-          abertoPorID: userID,
-          saldoInicial: valor,
-          saldoFinal: valor,
-        },
-      });
-      const movimentacao = await trx.movimentacaoFinanceira.create({
-        data: {
-          descricao: "ABERTURA",
-          userID: userID,
-          tipoMovimentacaoID: 1,
-          valor: caixa.saldoInicial,
-          caixaID: caixa.id,
-          saldoInicial: 0,
-          saldoFinal: caixa.saldoFinal,
-        },
-      });
-
-      return {
-        id: caixa.id,
-        abertoPor: caixa.abertoPorID,
-        data: caixa.dataAbertura,
-        saldoInicial: caixa.saldoInicial,
-      };
+    const caixaAberto = await prisma.caixa.findFirst({
+      where: {
+        status: StatusCaixa.ABERTO,
+      },
     });
 
-    return result;
+    if (caixaAberto?.id) {
+      throw new ConflictError(
+        "Feche o caixa aberto para abrir outro novamente.",
+      );
+    }
+    const novoCaixa = await prisma.caixa.create({
+      data: {
+        usuario_abertura_id: user_id,
+        conta_id: contaPadrao.id,
+        saldo_inicial: contaPadrao.saldo_atual,
+        observacao_abertura: observacao ?? "",
+      },
+    });
+
+    return { ...novoCaixa, saldo_inicial: Number(novoCaixa.saldo_inicial) };
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };
-export const consultaFechamento = async (caixaID: number, userID: number) => {
+const consultaFechamento = async () => {
   try {
-    // Consulta usuario de fechamento
-    const userFechamento = await getUserByID(userID);
-    if (!userFechamento) {
-      throw new UnAuthorized("Usuário não encontrado para fechamento do caixa");
-    }
-
     // Consulta caixa DEFINE (VALOR ABERTURA,DATA ABERTURA )
-    const result = await prisma.$transaction(async (trx) => {
-      const caixa = await trx.livroCaixa.findFirst({
-        where: { id: caixaID },
+    return await prisma.$transaction(async (trx) => {
+      const caixa = await trx.caixa.findFirst({
+        where: {
+          status: StatusCaixa.ABERTO,
+        },
       });
-      console.log(`CAIXA ID: ${caixa?.id}`);
+
       if (!caixa) {
         throw new NotFound("Não foi encontrado nenhum caixa aberto!");
       }
-      const valorAbertura = Number(caixa.saldoInicial.toFixed(2));
-      const dataAbertura = caixa.dataAbertura;
-      const valorEsperado = Number(caixa.saldoFinal.toFixed(2));
 
-      console.log(`valor Abertura: ${valorAbertura}`);
-      console.log(`data Abertura: ${dataAbertura}`);
-      console.log(`valor Esperado: ${valorEsperado}`);
-
-      // Consulta ABASTECIMENTOS
-
-      const somaAbastecimentos = await trx.movimentacaoFinanceira.aggregate({
-        _sum: { valor: true },
-        where: { tipoMovimentacaoID: 2, estornadoEm: null, estornoID: null },
-      });
-      const totalAbastecimento =
-        Number(somaAbastecimentos._sum.valor?.toFixed(2)) ?? 0;
-
-      console.log(`ABASTECIMENTOS:  ${totalAbastecimento}`);
-      // CONSULTA DESPESAS
-      const somaDespesas = await trx.movimentacaoFinanceira.aggregate({
-        _sum: { valor: true },
-        where: { tipoMovimentacaoID: 7, estornadoEm: null, estornoID: null },
-      });
-      const totalDespesas =
-        Number(somaDespesas._sum.valor?.abs().toFixed(2)) ?? 0;
-      console.log(`DESPESAS: ${totalDespesas}`);
-      // CONSULTA VALOR PAGO COMPRAS NO CAIXA
-      const somaComprasCAIXA = await trx.movimentacaoFinanceira.aggregate({
-        _sum: { valor: true },
+      const data_abertura = caixa.aberto_em;
+      const compra_total = await trx.movimentacaoFinanceira.aggregate({
         where: {
-          tipoMovimentacaoID: 5,
-          conta: {
-            forma: "DINHEIRO",
-            pedido: {
-              tipo: "COMPRA",
-            },
-          },
+          origem: OrigemMovimentacao.PEDIDO_COMPRA,
+          direcao: DirecaoFinanceira.SAIDA,
+          caixa_id: caixa.id,
+          conta_id: caixa.conta_id,
         },
-      });
-      const totalComprasCAIXA =
-        Number(somaComprasCAIXA._sum.valor?.abs().toFixed(2)) ?? 0;
-
-      console.log(`SOMA COMPRAS DINH: ${totalComprasCAIXA}`);
-      // CONSULTA VALOR COMPRA POR TRANSFERENCIA
-      const somaComprasTRANSF = await trx.movimentacaoFinanceira.aggregate({
-        _sum: { valor: true },
-        where: {
-          tipoMovimentacaoID: 5,
-          conta: {
-            forma: "TRANSFERENCIA",
-            pedido: {
-              tipo: "COMPRA",
-            },
-          },
-        },
-      });
-      const totalComprasTRANSF =
-        Number(somaComprasTRANSF._sum.valor?.abs().toFixed(2)) ?? 0;
-      console.log(`SOMA COMPRAS TRANSF: ${totalComprasTRANSF}`);
-      // CONSULTA VALOR TOTAL DE COMPRAS
-      const totalCompras = await trx.movimentacaoFinanceira.aggregate({
-        _sum: { valor: true },
-        where: {
-          tipoMovimentacaoID: 5,
-          conta: {
-            pedido: {
-              tipo: "COMPRA",
-            },
-          },
-        },
-      });
-      const valorTotalCompras =
-        Number(totalCompras._sum.valor?.abs().toFixed(2)) ?? 0;
-      console.log(`SOMA VALOR TOTAL COMPRAS: ${valorTotalCompras}`);
-      //SOMA VALOR TOTAL DE VENDAS
-      const totalVendas = await trx.movimentacaoFinanceira.aggregate({
-        _sum: { valor: true },
-        where: {
-          tipoMovimentacaoID: 3,
-          conta: {
-            pedido: { tipo: "VENDA" },
-          },
-        },
-      });
-      const valorTotalVendas =
-        Number(totalVendas._sum.valor?.abs().toFixed(2)) ?? 0;
-      console.log(`SOMA VALOR TOTAL VENDAS: ${valorTotalVendas}`);
-      // CONSULTA QUANTIDADE DE PEDIDOS DE COMPRA
-      const countPedidosCompra = await trx.pedido.count({
-        where: { tipo: "COMPRA", caixaID: caixa.id },
-      });
-      const numeroPedidosCompra = countPedidosCompra ?? 0;
-      // CONSULTA QUANTIDADE DE PEDIDOS DE VENDA
-      const countPedidosVenda = await trx.pedido.count({
-        where: { tipo: "VENDA", caixaID: caixa.id },
-      });
-      const numeroPedidosVenda = countPedidosVenda ?? 0;
-      console.log(`PEDIDOS DE VENDA: ${numeroPedidosVenda}`);
-      console.log(`PEDIDOS DE COMPRA: ${numeroPedidosCompra}`);
-      // CONSULTA QUANTIDADE DE MATERIAL (KG) COMPRADO E VALOR PAGO
-      const materiaisComprados = await trx.itemPedido.groupBy({
-        by: ["materialID"],
         _sum: {
-          quantidade: true,
-          subtotal: true,
-        },
-        where: {
-          pedido: {
-            tipo: "COMPRA",
-            caixaID: caixa.id,
-          },
+          valor: true,
         },
       });
-      console.log(materiaisComprados);
-      // CONSULTA QUANTIDADE DE MATERIAL (KG) VENDIDO E VALOR PAGO
-      const materiaisVendidos = await trx.itemPedido.groupBy({
-        by: ["materialID"],
-        _sum: {
-          quantidade: true,
-          subtotal: true,
-        },
-        where: {
-          pedido: {
-            tipo: "VENDA",
-            caixaID: caixa.id,
-          },
-        },
-      });
-      console.log(materiaisVendidos);
 
-      // PESO TOTAL DE COMPRA E TOTAL DE VENDA DE ACORDO COM CONSULTA ACIMA
-      const pesoTotalComprado = materiaisComprados.reduce((acc, item) => {
-        return acc + (Number(item._sum.quantidade) ?? 0);
-      }, 0);
-      console.log(`PESO TOTAL COMPRADO: ${pesoTotalComprado} KG`);
-      const pesoTotalVendido = materiaisVendidos.reduce((acc, item) => {
-        return acc + (Number(item._sum.quantidade) ?? 0);
-      }, 0);
-      console.log(`PESO TOTAL VENDIDO: ${pesoTotalVendido} KG`);
+      const venda_total = await trx.movimentacaoFinanceira.aggregate({
+        where: {
+          origem: OrigemMovimentacao.PEDIDO_VENDA,
+          direcao: DirecaoFinanceira.ENTRADA,
+          caixa_id: caixa.id,
+          conta_id: caixa.conta_id,
+        },
+        _sum: {
+          valor: true,
+        },
+      });
+
+      const despesa_total = await trx.movimentacaoFinanceira.aggregate({
+        where: {
+          origem: OrigemMovimentacao.LANCAMENTO_PAGAR,
+          direcao: DirecaoFinanceira.SAIDA,
+          caixa_id: caixa.id,
+          conta_id: caixa.conta_id,
+        },
+        _sum: {
+          valor: true,
+        },
+      });
+
+      const abastecimento_total = await trx.movimentacaoFinanceira.aggregate({
+        where: {
+          origem: OrigemMovimentacao.TRANSFERENCIA,
+          direcao: DirecaoFinanceira.ENTRADA,
+          caixa_id: caixa.id,
+          conta_id: caixa.conta_id,
+        },
+        _sum: {
+          valor: true,
+        },
+      });
+
+      const retiradas_total = await trx.movimentacaoFinanceira.aggregate({
+        where: {
+          origem: OrigemMovimentacao.TRANSFERENCIA,
+          direcao: DirecaoFinanceira.SAIDA,
+          caixa_id: caixa.id,
+          conta_id: caixa.conta_id,
+        },
+        _sum: {
+          valor: true,
+        },
+      });
+
+      const credito_total = await trx.movimentacaoFinanceira.aggregate({
+        where: {
+          direcao: "ENTRADA",
+          caixa_id: caixa.id,
+          conta_id: caixa.conta_id,
+        },
+        _sum: {
+          valor: true,
+        },
+      });
+
+      const debito_total = await trx.movimentacaoFinanceira.aggregate({
+        where: {
+          direcao: "SAIDA",
+          caixa_id: caixa.id,
+          conta_id: caixa.conta_id,
+        },
+        _sum: {
+          valor: true,
+        },
+      });
+
+      const valor_abertura = new Prisma.Decimal(caixa.saldo_inicial);
+
+      const total_creditos = credito_total._sum.valor ?? new Prisma.Decimal(0);
+
+      const total_debitos = debito_total._sum.valor ?? new Prisma.Decimal(0);
+
+      const valor_esperado = valor_abertura
+        .plus(total_creditos)
+        .minus(total_debitos);
+      const movimentacoes = await trx.movimentacaoFinanceira.findMany({
+        where: {
+          caixa_id: caixa.id,
+          conta_id: caixa.conta_id,
+        },
+      });
+
       return {
-        caixaID: caixa.id,
-        valorAbertura,
-        dataAbertura,
-        valorEsperado,
-        totalAbastecimento,
-        totalDespesas,
-        totalComprasCAIXA,
-        totalComprasTRANSF,
-        valorTotalCompras,
-        valorTotalVendas,
-        numeroPedidosCompra,
-        numeroPedidosVenda,
-        pesoTotalComprado,
-        pesoTotalVendido,
-        materiaisComprados,
-        materiaisVendidos,
+        caixa_id: caixa.id,
+        valor_abertura: Number(valor_abertura),
+        data_abertura,
+        compra_total: Number(compra_total._sum.valor) ?? 0,
+        venda_total: Number(venda_total._sum.valor) ?? 0,
+        despesa_total: Number(despesa_total._sum.valor) ?? 0,
+        abastecimento_total: Number(abastecimento_total._sum.valor) ?? 0,
+        retiradas_total: Number(retiradas_total._sum.valor) ?? 0,
+        total_creditos: Number(total_creditos),
+        total_debitos: Number(total_debitos),
+        valor_esperado: Number(valor_esperado),
+        movimentacoes,
       };
     });
-    return result;
-  } catch (error) {}
-};
-
-export const fecharCaixa = async (userID: number) => {};
-export const caixaAberto = async () => {
-  try {
-    const caixa = await prisma.livroCaixa.findFirst({
-      where: { status: "ABERTO" },
-    });
-
-    return caixa ? caixa.id : false;
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };
+const findAll = async ({
+  dataFinal,
+  dataInicial,
+}: {
+  dataFinal: string;
+  dataInicial: string;
+}) => {};
+
+export const fecharCaixa = async ({
+  user_id,
+  observacao,
+  saldo_informado,
+}: FechamentoCaixaInput) => {};
+
+const caixaFinanceiro = {
+  abrir,
+  consultaFechamento,
+  fecharCaixa,
+};
+
+export default caixaFinanceiro;

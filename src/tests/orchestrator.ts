@@ -14,10 +14,13 @@ import transferenciaFinanceira, {
   EstornoTransferenciaInput,
   TransferenciaInput,
 } from "../model/transferencia";
+import { caixa } from "../controllers/financeiro";
+import caixaFinanceiro from "../model/caixa";
 
 export async function clearDatabase() {
   await prisma.movimentacaoFinanceira.deleteMany();
   await prisma.transferenciaFinanceira.deleteMany();
+  await prisma.caixa.deleteMany();
   await prisma.user.deleteMany();
   await prisma.permissoes.deleteMany();
   await prisma.cargo.deleteMany();
@@ -118,6 +121,10 @@ const userAuthenticated = async (Props: {
       { nome: "create:tabelas" },
       { nome: "update:tabelas" },
       { nome: "delete:tabelas" },
+      { nome: "read:caixa" },
+      { nome: "read:caixas" },
+      { nome: "create:caixa" },
+      { nome: "update:caixa" },
     ],
     skipDuplicates: true, // Evita erros se rodar o teste localmente pela segunda vez
   });
@@ -214,6 +221,17 @@ const createTransferencia = async (props: TransferenciaInput) => {
 const createEstorno = async (props: EstornoTransferenciaInput) => {
   return await transferenciaFinanceira.reverse(props);
 };
+const abrirCaixa = async ({
+  user_id,
+  conta_id,
+  observacao,
+}: {
+  user_id: number;
+  conta_id: number;
+  observacao?: string;
+}) => {
+  return await caixaFinanceiro.abrir({ user_id, observacao });
+};
 const orchestrator = {
   clearDatabase,
   createCargo,
@@ -228,6 +246,7 @@ const orchestrator = {
   createTabela,
   createTransferencia,
   createEstorno,
+  abrirCaixa,
 };
 
 export default orchestrator;

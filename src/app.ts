@@ -54,7 +54,7 @@ app.use("/v1", cargosRoutes);
 app.use("/v1", registRoutes);
 app.use("/v1", categoriasRoutes);
 app.use("/v1", materiaisRoutes);
-app.use("/v1", caixasRoutes);
+
 app.use("/v1", movimRoutes);
 app.use("/v1", pedidosRoutes);
 app.use("/v1", statusRouter);
@@ -63,6 +63,7 @@ app.use("/v1", statusRouter);
 app.use("/v1/financeiro", contaRoutes);
 app.use("/v1/financeiro", finTransfRoutes);
 app.use("/v1", tabelasRoutes);
+app.use("/v1/financeiro", caixasRoutes);
 // ADICIONE ESSA LINHA PARA TESTAR:
 
 app.use("/v1", errorHandler);

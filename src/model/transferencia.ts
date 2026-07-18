@@ -308,42 +308,26 @@ const reverse = async ({ id, motivo, user_id }: EstornoTransferenciaInput) => {
 };
 
 type FindAllTransferenciasInput = {
-  dataInicial?: Date;
-
-  dataFinal?: Date;
+  dataInicial?: string;
+  dataFinal?: string;
 };
 
 const findAll = async ({
   dataInicial,
-
   dataFinal,
 }: FindAllTransferenciasInput) => {
   if (!dataFinal || !dataInicial) {
     throw new InternalError();
   }
-  dataInicial = new Date(dataInicial?.setUTCHours(0, 0, 0, 0));
-  dataFinal = new Date(dataFinal?.setUTCHours(23, 59, 59, 999));
-  console.log("DATAS", dataFinal, dataInicial);
-
-  const where: Prisma.TransferenciaFinanceiraWhereInput = {};
-
-  if (dataInicial || dataFinal) {
-    where.criado_em = {
-      ...(dataInicial && {
-        gte: dataInicial,
-      }),
-
-      ...(dataFinal && {
-        lt: dataFinal,
-      }),
-    };
-  }
+  const dataInicialParse = `${dataInicial}T00:00:00.000Z`;
+  const dataFinalParse = `${dataFinal}T23:59:59.999Z`;
+  console.log("DATAS", dataFinalParse, dataInicialParse);
 
   const transferencias = await prisma.transferenciaFinanceira.findMany({
     where: {
       criado_em: {
-        gte: dataInicial,
-        lte: dataFinal,
+        gte: dataInicialParse,
+        lte: dataFinalParse,
       },
     },
 

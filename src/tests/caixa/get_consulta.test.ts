@@ -3,62 +3,112 @@ import { app } from "../../app";
 import { test, beforeEach, expect, describe } from "vitest";
 import orchestrator from "../orchestrator";
 import { gerarToken } from "../../services/jwt";
-import { prisma } from "../../libs/prisma";
+import { StatusCaixa } from "../../../generated/prisma/enums";
 
 beforeEach(async () => {
   await orchestrator.clearDatabase();
 });
 
-describe("GET /v1/financeiro/transferencia", () => {
-  test("Deve trazer todos os resultados filtrados ", async () => {
+describe("GET /v1/financeiro/caixa/consulta", () => {
+  test("Consulta um caixa", async () => {
     const user = await orchestrator.userAuthenticated({
       nome: "ADMINISTRADOR",
     });
-    const b1 = await orchestrator.createConta({
-      nome: "b1",
-      saldo_inicial: 2,
-      conta_padrao: false,
+    const conta = await orchestrator.createConta({
+      nome: "PADRAO",
+      conta_padrao: true,
+      saldo_inicial: 1000,
     });
-    const b2 = await orchestrator.createConta({
-      nome: "b2",
-      saldo_inicial: 0,
+    const c2 = await orchestrator.createConta({
+      nome: "DUA",
       conta_padrao: false,
+      saldo_inicial: 1000,
     });
-    await orchestrator.createTransferencia({
-      valor: 50.0,
-      conta_origem_id: b1.id,
-      conta_destino_id: b2.id,
+    const caixa = await orchestrator.abrirCaixa({
+      user_id: user.id,
+      conta_id: conta.id,
+    });
+
+    const t1 = await orchestrator.createTransferencia({
+      conta_destino_id: c2.id,
+      conta_origem_id: conta.id,
+      valor: 250,
       user_id: user.id,
     });
-    await orchestrator.createTransferencia({
-      valor: 50.0,
-      conta_origem_id: b1.id,
-      conta_destino_id: b2.id,
+    const t2 = await orchestrator.createTransferencia({
+      conta_destino_id: conta.id,
+      conta_origem_id: c2.id,
+      valor: 120,
       user_id: user.id,
     });
 
-    const todasTransferencias = await prisma.transferenciaFinanceira.findMany();
-
-    console.log("TODAS TRANSFERENCIAS:", todasTransferencias);
-    const data = new Date().toISOString();
-    const dataHoje = data.substring(0, 10);
     const response = await request(app)
-      .get(
-        `/v1/financeiro/transferencia?dataInicial=${dataHoje}&dataFinal=${dataHoje}`,
-      )
+      .get("/v1/financeiro/caixa/consulta")
       .expect(200)
       .auth(user.jwt, { type: "bearer" })
       .expect("Content-Type", /json/);
-    console.log("RESULTADO:", response.body);
-    expect(Array.isArray(response.body)).toBe(true);
-    expect(response.body.length).toEqual(2);
+
+    console.log("BODY", response.body);
+
+    expect(response.body).toMatchObject({
+      valor_abertura: 1000,
+
+      abastecimento_total: 120,
+
+      retiradas_total: 250,
+
+      total_creditos: 120,
+
+      total_debitos: 250,
+
+      valor_esperado: 870,
+    });
+
+    expect(response.body.movimentacoes).toHaveLength(2);
+
+    expect(
+      response.body.movimentacoes.every(
+        (movimentacao: { conta_id: number }) =>
+          movimentacao.conta_id === conta.id,
+      ),
+    ).toBe(true);
   });
 
+  // test("Tenta criar um caixa, com um caixa já aberto", async () => {
+  //   const user = await orchestrator.userAuthenticated({
+  //     nome: "ADMINISTRADOR",
+  //   });
+  //   const conta = await orchestrator.createConta({
+  //     conta_padrao: true,
+  //     saldo_inicial: 1000,
+  //     nome: "DINHEIRO",
+  //   });
+
+  //   await orchestrator.abrirCaixa({
+  //     user_id: user.id,
+  //     conta_id: conta.id,
+  //     observacao: "",
+  //   });
+  //   const response = await request(app)
+  //     .get("/v1/financeiro/caixa/consulta")
+  //     .expect(409)
+  //     .auth(user.jwt, { type: "bearer" })
+  //     .expect("Content-Type", /json/);
+
+  //   console.log(response.body);
+
+  //   expect(response.body).toEqual({
+  //     acao: "Refaça a operação, caso persista contate um administrador.",
+  //     mensagem: "Feche o caixa aberto para abrir outro novamente.",
+  //     nome: "ConflictError",
+  //     statusCode: 409,
+  //   });
+  // });
   test("Com token JWT valido e usuario inexistente", async () => {
     const token = gerarToken({ nome: "luis" });
 
     const response = await request(app)
-      .get("/v1/financeiro/transferencia")
+      .get("/v1/financeiro/caixa/consulta")
       .auth(token, { type: "bearer" })
       .expect("Content-Type", /json/)
       .expect(401);
@@ -72,7 +122,7 @@ describe("GET /v1/financeiro/transferencia", () => {
   });
   test("Com token JWT invalido", async () => {
     const response = await request(app)
-      .get("/v1/financeiro/transferencia")
+      .get("/v1/financeiro/caixa/consulta")
       .auth("werwefa3w4t534tqwefwq", { type: "bearer" })
       .expect("Content-Type", /json/)
       .expect(401);
@@ -89,7 +139,7 @@ describe("GET /v1/financeiro/transferencia", () => {
       nome: "SEM PERMISSAO",
     });
     const response = await request(app)
-      .get("/v1/financeiro/transferencia")
+      .get("/v1/financeiro/caixa/consulta")
       .auth(user.jwt, { type: "bearer" })
       .expect("Content-Type", /json/)
       .expect(401);
@@ -104,7 +154,7 @@ describe("GET /v1/financeiro/transferencia", () => {
 
   test("Sem um Bearer token", async () => {
     const response = await request(app)
-      .get("/v1/cargos/")
+      .get("/v1/financeiro/caixa/consulta")
 
       .expect("Content-Type", /json/)
       .expect(401);
