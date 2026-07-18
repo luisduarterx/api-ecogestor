@@ -260,6 +260,16 @@ const fechar = async ({
         throw new NotFound("Não foi encontrado nenhum caixa aberto!");
       }
 
+      const pedidoAberto = await trx.pedido.findFirst({
+        where: { caixaID: caixa.id, status: "ABERTO" },
+        select: { id: true },
+      });
+      if (pedidoAberto) {
+        throw new ConflictError(
+          `O caixa não pode ser fechado enquanto o pedido #${pedidoAberto.id} estiver aberto.`,
+        );
+      }
+
       const totais = await trx.movimentacaoFinanceira.groupBy({
         by: ["direcao"],
         where: {
